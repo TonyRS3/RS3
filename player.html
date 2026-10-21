@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
@@ -20,34 +20,38 @@ body{
 
 .player-box{
     width:90%;
-    max-width:450px;
+    max-width:500px;
     padding:30px;
     border-radius:20px;
     background:#111;
-    box-shadow:0 0 30px rgba(241,90,36,.4);
+    box-shadow:0 0 30px rgba(241,90,36,.5);
 }
 
 .logo{
-    width:180px;
+    width:220px;
     max-width:80%;
+    height:auto;
+}
+
+h1{
+    margin:20px 0;
 }
 
 .live{
     color:#f15a24;
+    font-size:24px;
     font-weight:bold;
-    margin:15px 0;
-    animation:pulse 1.5s infinite;
+    margin:20px 0;
 }
 
 audio{
     width:100%;
-    margin-top:20px;
+    margin:20px 0;
 }
 
-@keyframes pulse{
-    0%{opacity:1;}
-    50%{opacity:.4;}
-    100%{opacity:1;}
+.footer{
+    color:#ccc;
+    margin-top:15px;
 }
 </style>
 </head>
@@ -56,19 +60,23 @@ audio{
 
 <div class="player-box">
 
-RADIO SISTEMA 3.jpeg
+<img src="SISTEMA RADIO 3.jpeg" alt="Radio Sistema 3" class="logo">
 
-<h2>RADIO SISTEMA 3.jpeg</h2>
+<h1>RADIO SISTEMA 3</h1>
 
 <div class="live">🔴 IN DIRETTA</div>
 
 <audio controls autoplay>
-http://manage.myshoutca.st:8046/stream
+    <source src="http://manage.myshoutca.st:8046/stream" type="audio/mpeg">
+    Il tuo browser non supporta l'audio.
 </audio>
 
-<p>La tua radio sempre con te</p>
+<div class="footer">
+    La tua radio sempre con te
+</div>
 
 </div>
 
 </body>
 </html>
+ 
