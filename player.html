@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
@@ -11,11 +11,11 @@ body{
     background:#000;
     color:#fff;
     font-family:Arial,sans-serif;
-    text-align:center;
     display:flex;
     justify-content:center;
     align-items:center;
     min-height:100vh;
+    text-align:center;
 }
 
 .player-box{
@@ -44,14 +44,21 @@ h1{
     margin:20px 0;
 }
 
-audio{
-    width:100%;
-    margin:20px 0;
+.play-btn{
+    display:inline-block;
+    margin-top:20px;
+    padding:18px 35px;
+    background:#f15a24;
+    color:white;
+    text-decoration:none;
+    border-radius:40px;
+    font-size:22px;
+    font-weight:bold;
 }
 
 .footer{
     color:#ccc;
-    margin-top:15px;
+    margin-top:20px;
 }
 </style>
 </head>
@@ -59,19 +66,18 @@ audio{
 <body>
 
 <div class="player-box">
+
 <img src="SISTEMA RADIO 3.jpeg" alt="Radio Sistema 3" class="logo">
- 
- 
 
 <h1>RADIO SISTEMA 3</h1>
 
 <div class="live">🔴 IN DIRETTA</div>
 
- <audio controls>
-    <source src="http://manage.myshoutca.st:8046/stream" type="audio/mpeg">
-    Il tuo browser non supporta l'audio.
-</audio>
- 
+<a class="play-btn"
+   href="http://manage.myshoutca.st:8046/stream"
+   target="_blank">
+   ▶ ASCOLTA ORA
+</a>
 
 <div class="footer">
     La tua radio sempre con te
@@ -81,4 +87,3 @@ audio{
 
 </body>
 </html>
- 
