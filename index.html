@@ -16,13 +16,13 @@ body{
 
     background:
         linear-gradient(
-            rgba(0,0,0,0.35),
-            rgba(0,0,0,0.35)
+            rgba(0,0,0,0.25),
+            rgba(0,0,0,0.25)
         ),
         url("studio-radio.jpeg");
 
     background-size:cover;
-    background-position:center center;
+    background-position:center;
     background-repeat:no-repeat;
     background-attachment:fixed;
 }
@@ -42,7 +42,7 @@ body{
 h1{
     margin:20px 0 10px;
     font-size:3rem;
-    color:#ffffff;
+    color:#fff;
 }
 
 .slogan{
@@ -68,60 +68,64 @@ h1{
     font-size:24px;
     font-weight:bold;
     box-shadow:0 0 20px rgba(241,90,36,.8);
-    transition:all .3s ease;
-}
-
-.btn:hover{
-    transform:scale(1.05);
 }
 
 .footer{
-    margin:25px 0 10px 0;
+    margin:25px 0 15px;
     font-size:18px;
 }
 
-/* WIDGET BRANO */
+/* Widget brano */
 
 .cc_recenttracks_list{
-    width:100% !important;
+    margin-top:15px !important;
     text-align:center !important;
-    margin-top:20px !important;
+    color:#fff !important;
+    font-weight:bold !important;
+    width:100% !important;
 }
 
 .cc_recenttracks_list *{
-    color:#ffffff !important;
+    color:#fff !important;
     text-align:center !important;
 }
 
-/* COPERTINA */
+/* Nasconde la copertina */
 
 .cc_recenttracks_list img{
-    display:block !important;
-    margin:15px auto !important;
-    max-width:90px !important;
-    width:auto !important;
-    height:auto !important;
-    border-radius:6px !important;
+    display:none !important;
 }
 
-/* TESTI */
-
-.cc_recenttracks_list strong{
-    display:block !important;
-    text-align:center !important;
-    font-size:22px !important;
-    font-weight:bold !important;
-}
-
-.cc_recenttracks_list span,
-.cc_recenttracks_list div{
-    text-align:center !important;
-}
-
-/* NASCONDE BUY THIS ALBUM */
+/* Nasconde BUY THIS ALBUM */
 
 .cc_recenttracks_list a{
     display:none !important;
+}
+
+/* Elimina layout laterali */
+
+.cc_recenttracks_list table,
+.cc_recenttracks_list tbody,
+.cc_recenttracks_list tr,
+.cc_recenttracks_list td{
+    display:block !important;
+    width:100% !important;
+    text-align:center !important;
+    border:none !important;
+}
+
+/* Titolo */
+
+.cc_recenttracks_list strong,
+.cc_recenttracks_list b{
+    font-size:24px !important;
+    display:block !important;
+}
+
+/* Artista */
+
+.cc_recenttracks_list{
+    font-size:18px !important;
 }
 
 </style>
