@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Radio Sistema 3</title>
 
 <style>
@@ -46,29 +45,26 @@ h1{
 
 .btn{
     display:inline-block;
-    margin-top:15px;
-    padding:18px 40px;
-    background:#f15a24;
+    margin-top:20px;
+    padding:20px 50px;
+    background:linear-gradient(135deg,#f15a24,#ff7a45);
     color:#fff;
     text-decoration:none;
-    border-radius:40px;
-    font-size:24px;
+    border-radius:50px;
+    font-size:26px;
     font-weight:bold;
+    box-shadow:0 0 25px rgba(241,90,36,.8);
+    transition:all .3s ease;
 }
 
 .btn:hover{
-    background:#ff733a;
+    transform:scale(1.05);
+    box-shadow:0 0 35px rgba(241,90,36,1);
 }
 
 .footer{
     margin:30px 0 20px;
     font-size:18px;
-}
-
-audio{
-    width:320px;
-    max-width:90%;
-    margin:20px auto;
 }
 
 /* Widget brano */
@@ -102,9 +98,6 @@ audio{
 }
 
 </style>
-
-<script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
-
 </head>
 
 <body>
@@ -118,7 +111,7 @@ audio{
 <h1>RADIO SISTEMA 3</h1>
 
 <div class="slogan">
-Musica, informazione e intrattenimento.
+Musica, informazione e intrattenimento
 </div>
 
 <div class="live">
@@ -128,29 +121,23 @@ Musica, informazione e intrattenimento.
 <a class="btn"
    href="http://manage.myshoutca.st:8046/stream"
    target="_blank">
-   ▶ ASCOLTA LIVE
+   🎧 ASCOLTA RADIO SISTEMA 3
 </a>
 
 <div class="footer">
 La radio delle tue emozioni
 </div>
 
-<!-- PLAYER AUDIO -->
-<audio controls style="width:320px;max-width:90%;">
-    <source src="http://manage.myshoutca.st:8046/stream" type="audio/mpeg">
-    Il tuo browser non supporta l'audio HTML5.
-</audio>
-    
- 
-<!-- BRANO IN RIPRODUZIONE -->
-
 <div class="cc_recenttracks_list"
      data-username="bomyydij">
 </div>
+
+<script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 
 </div>
 
 </body>
 </html>
+
 
  
