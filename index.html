@@ -1,6 +1,5 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="it">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +12,7 @@ body{
     margin:0;
     background:#000;
     color:#fff;
-    font-family:Arial,sans-serif;
+    font-family:Arial, sans-serif;
     text-align:center;
 }
 
@@ -30,6 +29,7 @@ body{
 h1{
     font-size:55px;
     margin:20px 0 10px;
+    color:#fff;
 }
 
 .slogan{
@@ -65,80 +65,37 @@ h1{
     font-size:22px;
 }
 
-/* COPERTINA BRANO */
+/* Widget brano corrente */
 
-.cc_streaminfo[data-type="trackimageurl"]{
-    display:block !important;
-    width:250px !important;
-    max-width:90%;
-    margin:30px auto 20px auto !important;
-    border-radius:12px;
-    box-shadow:0 0 25px #f15a24;
-}
-
-/* TITOLO BRANO */
-
-.cc_streaminfo[data-type="tracktitle"]{
-    display:block !important;
-    font-size:42px !important;
-    font-weight:900 !important;
-    color:#ffffff !important;
-    text-align:center !important;
-    text-shadow:
-        0 0 10px #ffffff,
-        0 0 20px #ffffff;
-    margin-top:15px !important;
-}
-
-/* ARTISTA */
-
-.cc_streaminfo[data-type="trackartist"]{
-    display:block !important;
-    font-size:32px !important;
-    font-weight:bold !important;
-    color:#f15a24 !important;
-    text-align:center !important;
-    text-shadow:
-        0 0 8px #f15a24,
-        0 0 16px #f15a24;
-}
-
-/* GENERE */
-
-.cc_streaminfo[data-type="trackgenre"]{
-    font-size:16px !important;
-    color:#888 !important;
-}
-
-/* NASCONDE BUY THIS ALBUM */
-
-.cc_streaminfo[data-type="trackbuyurl"],
-a.cc_streaminfo[data-type="trackbuyurl"]{
-    display:none !important;
-}
-
-a[href*="album"]{
-    display:none !important;
-}
-/* FORZA TESTO BRANO IN BIANCO */
-
-.cc_recenttracks_list *{
-    color:#ffffff !important;
-}
-
-/* TITOLO */
-
- .cc_recenttracks_list{
+.cc_recenttracks_list{
+    color:#fff !important;
     font-size:18px !important;
     font-weight:bold !important;
-    color:#ffffff !important;
+    text-align:center !important;
     line-height:1.3 !important;
 }
-/* LINK BUY THIS ALBUM */
+
+.cc_recenttracks_list *{
+    color:#fff !important;
+}
+
+/* Copertina */
+
+.cc_recenttracks_list img{
+    width:180px !important;
+    height:auto !important;
+    border-radius:10px;
+    box-shadow:0 0 20px #f15a24;
+    margin:20px auto !important;
+    display:block !important;
+}
+
+/* Nasconde Buy This Album */
 
 .cc_recenttracks_list a{
     display:none !important;
 }
+
 </style>
 
 </head>
@@ -147,9 +104,7 @@ a[href*="album"]{
 
 <div class="container">
 
-<img src="RADIO SISTEMA 3.jpeg"
-alt="Radio Sistema 3"
-class="logo">
+RADIO SISTEMA 3.jpeg
 
 <h1>RADIO SISTEMA 3</h1>
 
@@ -161,9 +116,7 @@ Musica, informazione e intrattenimento.
 🔴 IN DIRETTA
 </div>
 
-<a class="btn"
-href="http://manage.myshoutca.st:8046/stream"
-target="_blank">
+http://manage.myshoutca.st:8046/stream
 ▶ ASCOLTA LIVE
 </a>
 
@@ -171,12 +124,11 @@ target="_blank">
 La radio delle tue emozioni
 </div>
 
-<script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
-
 <div class="cc_recenttracks_list"
-data-username="bomyydij">
-Caricamento...
+     data-username="bomyydij">
 </div>
+
+<script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 
 </div>
 
