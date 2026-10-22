@@ -12,7 +12,7 @@ body{
     margin:0;
     background:#000;
     color:#fff;
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
     text-align:center;
 }
 
@@ -21,20 +21,20 @@ body{
 }
 
 .logo{
-    width:280px;
-    max-width:80%;
-    margin-top:10px;
+    width:320px;
+    max-width:85%;
+    height:auto;
 }
 
 h1{
-    font-size:55px;
     margin:20px 0 10px;
+    font-size:4rem;
     color:#fff;
 }
 
 .slogan{
-    font-size:24px;
-    margin-bottom:20px;
+    font-size:18px;
+    margin-bottom:25px;
 }
 
 .live{
@@ -61,18 +61,18 @@ h1{
 }
 
 .footer{
-    margin:25px 0;
-    font-size:22px;
+    margin:30px 0;
+    font-size:18px;
 }
 
-/* Widget brano corrente */
+/* Widget brano */
 
 .cc_recenttracks_list{
     color:#fff !important;
-    font-size:18px !important;
-    font-weight:bold !important;
     text-align:center !important;
-    line-height:1.3 !important;
+    font-weight:bold !important;
+    font-size:16px !important;
+    line-height:1.2 !important;
 }
 
 .cc_recenttracks_list *{
@@ -82,12 +82,11 @@ h1{
 /* Copertina */
 
 .cc_recenttracks_list img{
-    width:180px !important;
-    height:auto !important;
-    border-radius:10px;
-    box-shadow:0 0 20px #f15a24;
-    margin:20px auto !important;
     display:block !important;
+    margin:15px auto !important;
+    max-width:180px !important;
+    border-radius:8px;
+    box-shadow:0 0 20px rgba(241,90,36,.5);
 }
 
 /* Nasconde Buy This Album */
@@ -97,14 +96,15 @@ h1{
 }
 
 </style>
-
 </head>
 
 <body>
 
 <div class="container">
 
-RADIO SISTEMA 3.jpeg
+<img src="RADIO SISTEMA 3.jpeg"
+     alt="Radio Sistema 3"
+     class="logo">
 
 <h1>RADIO SISTEMA 3</h1>
 
@@ -116,8 +116,10 @@ Musica, informazione e intrattenimento.
 🔴 IN DIRETTA
 </div>
 
-http://manage.myshoutca.st:8046/stream
-▶ ASCOLTA LIVE
+<a class="btn"
+   href="http://manage.myshoutca.st:8046/stream"
+   target="_blank">
+   ▶ ASCOLTA LIVE
 </a>
 
 <div class="footer">
@@ -134,3 +136,4 @@ La radio delle tue emozioni
 
 </body>
 </html>
+ 
