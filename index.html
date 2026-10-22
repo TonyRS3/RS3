@@ -144,7 +144,42 @@ p{
          data-type="trackartist"
          data-username="bomyydij">
     </div>
+/* Nasconde BUY THIS ALBUM */
+a.cc_streaminfo[data-type="trackbuyurl"]{
+    display:none !important;
+}
 
+/* Nasconde genere musicale */
+.cc_streaminfo[data-type="trackgenre"]{
+    display:none !important;
+}
+
+/* Titolo brano */
+.cc_streaminfo[data-type="tracktitle"]{
+    display:block !important;
+    font-size:36px !important;
+    font-weight:bold !important;
+    color:#ffffff !important;
+    margin-top:15px !important;
+    text-shadow:0 0 10px rgba(255,255,255,.7);
+}
+
+/* Artista */
+.cc_streaminfo[data-type="trackartist"]{
+    display:block !important;
+    font-size:28px !important;
+    font-weight:bold !important;
+    color:#f15a24 !important;
+    margin-top:10px !important;
+}
+
+/* Copertina */
+.cc_streaminfo[data-type="trackimageurl"]{
+    width:250px !important;
+    max-width:90%;
+    border-radius:12px;
+    box-shadow:0 0 20px rgba(241,90,36,.5);
+}
 </div>
 
 </body>
