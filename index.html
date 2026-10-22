@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,30 +13,28 @@ body{
     margin:0;
     background:#000;
     color:#fff;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:Arial, sans-serif;
     text-align:center;
 }
 
 .container{
-    max-width:900px;
-    margin:auto;
-    padding:30px 20px;
+    padding:20px;
 }
 
 .logo{
     width:250px;
     max-width:80%;
-    height:auto;
+    margin-top:10px;
 }
 
 h1{
+    font-size:55px;
     margin:20px 0 10px;
-    font-size:3rem;
-    font-weight:bold;
+    color:white;
 }
 
 .slogan{
-    font-size:22px;
+    font-size:24px;
     margin-bottom:20px;
 }
 
@@ -48,15 +47,14 @@ h1{
 
 .btn{
     display:inline-block;
+    margin-top:20px;
+    padding:18px 40px;
     background:#f15a24;
-    color:#fff;
+    color:white;
     text-decoration:none;
-    padding:15px 40px;
     border-radius:40px;
-    font-size:24px;
+    font-size:26px;
     font-weight:bold;
-    margin:20px 0;
-    transition:.3s;
 }
 
 .btn:hover{
@@ -64,53 +62,68 @@ h1{
 }
 
 .footer{
-    margin:20px 0 30px 0;
-    font-size:20px;
+    margin:20px 0 40px;
+    font-size:22px;
 }
 
 /* COPERTINA */
+
 .cc_streaminfo[data-type="trackimageurl"]{
-    width:280px !important;
+    display:block !important;
+    width:320px !important;
     max-width:90%;
-    margin-top:25px;
-    border-radius:12px;
-    box-shadow:0 0 25px rgba(241,90,36,.7);
+    margin:20px auto !important;
+    border-radius:15px;
+    box-shadow:0 0 30px #f15a24;
 }
 
-/* TITOLO BRANO */
+/* TITOLO */
+
+.song-title,
 .cc_streaminfo[data-type="tracktitle"]{
+
     display:block !important;
-    font-size:42px !important;
-    font-weight:900 !important;
+
     color:#ffffff !important;
+
+    font-size:54px !important;
+
+    font-weight:900 !important;
+
+    line-height:1.2 !important;
+
+    text-shadow:
+        0 0 10px #ffffff,
+        0 0 20px #ffffff,
+        0 0 30px #ffffff;
+
     margin:20px auto 10px auto !important;
-    text-shadow:0 0 12px rgba(255,255,255,.8);
-    line-height:1.2;
 }
 
 /* ARTISTA */
+
+.song-artist,
 .cc_streaminfo[data-type="trackartist"]{
+
     display:block !important;
-    font-size:30px !important;
+
+    color:#ff6a2a !important;
+
+    font-size:38px !important;
+
     font-weight:bold !important;
-    color:#f15a24 !important;
+
+    text-shadow:
+        0 0 10px #ff6a2a,
+        0 0 20px #ff6a2a;
+
     margin-bottom:20px !important;
 }
 
-/* NASCONDE BUY THIS ALBUM */
-a.cc_streaminfo[data-type="trackbuyurl"]{
-    display:none !important;
-}
+/* ELIMINA BUY THIS ALBUM */
 
-/* NASCONDE EVENTUALI LINK ACQUISTO */
-a[href*="buy"],
-a[href*="amazon"],
-a[href*="itunes"]{
-    display:none !important;
-}
-
-/* NASCONDE IL GENERE */
-.cc_streaminfo[data-type="trackgenre"]{
+a,
+.cc_streaminfo[data-type="trackbuyurl"]{
     display:none !important;
 }
 
@@ -121,59 +134,54 @@ a[href*="itunes"]{
 
 <div class="container">
 
-    <img src="RADIO SISTEMA 3.jpeg"
-         alt="Radio Sistema 3"
-         class="logo">
+<img src="RADIO SISTEMA 3.jpeg"
+alt="Radio Sistema 3"
+class="logo">
 
-    <h1>RADIO SISTEMA 3</h1>
+<h1>RADIO SISTEMA 3</h1>
 
-    <div class="slogan">
-        Musica, informazione e intrattenimento
-    </div>
+<div class="slogan">
+Musica, informazione e intrattenimento
+</div>
 
-    <div class="live">
-        🔴 IN DIRETTA
-    </div>
+<div class="live">
+🔴 IN DIRETTA
+</div>
 
-    <a class="btn"
-       href="http://manage.myshoutca.st:8046/stream"
-       target="_blank">
-       ▶ ASCOLTA LIVE
-    </a>
+<a class="btn"
+href="http://manage.myshoutca.st:8046/stream"
+target="_blank">
+▶ ASCOLTA LIVE
+</a>
 
-    <div class="footer">
-        La radio delle tue emozioni
-    </div>
+<div class="footer">
+La radio delle tue emozioni
+</div>
 
-    <div class="cc_recenttracks_list"
-         data-username="bomyydij">
-         Caricamento...
-    </div>
+<!-- COPERTINA -->
 
-    <script
-      src="https://manage.myshoutca.st/system/recenttracks.js">
-    </script>
+<img
+class="cc_streaminfo"
+data-type="trackimageurl"
+data-username="bomyydij">
 
-    <br><br>
+<!-- TITOLO -->
 
-    <img
-       class="cc_streaminfo"
-       data-type="trackimageurl"
-       data-username="bomyydij">
+<div
+class="cc_streaminfo song-title"
+data-type="tracktitle"
+data-username="bomyydij">
+</div>
 
-    <div
-       class="cc_streaminfo"
-       data-type="tracktitle"
-       data-username="bomyydij">
-    </div>
+<!-- ARTISTA -->
 
-    <div
-       class="cc_streaminfo"
-       data-type="trackartist"
-       data-username="bomyydij">
-    </div>
+<div
+class="cc_streaminfo song-artist"
+data-type="trackartist"
+data-username="bomyydij">
+</div>
 
 </div>
 
 </body>
-</html> 
+</html>
