@@ -1,16 +1,18 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Radio Sistema 3</title>
 
 <style>
+
 body{
     margin:0;
     background:#000;
     color:#fff;
-    font-family:Arial,sans-serif;
+    font-family:Arial, sans-serif;
     text-align:center;
 }
 
@@ -26,24 +28,67 @@ body{
 
 h1{
     margin:20px 0 10px;
-    font-size:2.2rem;
+    font-size:2.8rem;
 }
 
 p{
     font-size:18px;
 }
 
+.live{
+    margin:20px 0;
+    font-size:24px;
+    color:#ff4d4d;
+    font-weight:bold;
+}
+
 .btn{
     display:inline-block;
-    margin-top:25px;
-    padding:15px 30px;
+    margin-top:20px;
+    padding:15px 35px;
     background:#f15a24;
     color:#fff;
     text-decoration:none;
     border-radius:30px;
     font-weight:bold;
+    font-size:22px;
+}
+
+.btn:hover{
+    background:#ff6f3c;
+}
+
+.footer{
+    margin-top:15px;
     font-size:18px;
 }
+
+/* Copertina album */
+.cc_streaminfo[data-type="trackimageurl"]{
+    width:220px;
+    max-width:90%;
+    margin-top:25px;
+    border-radius:12px;
+    box-shadow:0 0 20px rgba(241,90,36,0.6);
+}
+
+/* Titolo brano */
+.track-title{
+    margin-top:20px;
+    font-size:34px;
+    font-weight:bold;
+    color:#ffffff;
+    text-shadow:0 0 10px rgba(255,255,255,0.5);
+}
+
+/* Artista */
+.track-artist{
+    margin-top:10px;
+    font-size:26px;
+    font-weight:bold;
+    color:#f15a24;
+}
+
 </style>
 </head>
 
@@ -51,31 +96,57 @@ p{
 
 <div class="container">
 
-<img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo">
+    <img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo">
 
-<h1>RADIO SISTEMA 3</h1>
+    <h1>RADIO SISTEMA 3</h1>
 
- <p>Musica, informazione e intrattenimento.</p>
- 
- <div class="live">🔴 IN DIRETTA</div>
- 
-<a class="btn" href="http://manage.myshoutca.st:8046/stream" target="_blank">
-▶ ASCOLTA LIVE
-</a>
-<div class="footer">
-    La radio delle tue emozioni
- 
-</div class="footer">
-<div class="cc_recenttracks_list" data-username="bomyydij">Caricamento ... 
- </div>
- <script language="javascript" type="text/javascript" src="https://manage.myshoutca.st/system/recenttracks.js">
- </script>
- 
- 
-<br />
- <img class="cc_streaminfo" data-type="trackimageurl" data-username="bomyydij" /><br /><a href="#" class="cc_streaminfo" data-type="trackbuyurl" data-username="bomyydij </a>
-<br />  
- 
+    <p>Musica, informazione e intrattenimento.</p>
+
+    <div class="live">🔴 IN DIRETTA</div>
+
+    <a class="btn"
+       href="http://manage.myshoutca.st:8046/stream"
+       target="_blank">
+       ▶ ASCOLTA LIVE
+    </a>
+
+    <div class="footer">
+        La radio delle tue emozioni
+    </div>
+
+    <br><br>
+
+    <!-- Ultimi brani -->
+    <div class="cc_recenttracks_list"
+         data-username="bomyydij">
+         Caricamento...
+    </div>
+
+    <script
+      src="https://manage.myshoutca.st/system/recenttracks.js">
+    </script>
+
+    <br>
+
+    <!-- Copertina -->
+    <img class="cc_streaminfo"
+         data-type="trackimageurl"
+         data-username="bomyydij">
+
+    <!-- Titolo -->
+    <div class="cc_streaminfo track-title"
+         data-type="tracktitle"
+         data-username="bomyydij">
+    </div>
+
+    <!-- Artista -->
+    <div class="cc_streaminfo track-artist"
+         data-type="trackartist"
+         data-username="bomyydij">
+    </div>
+
+</div>
+
 </body>
- 
 </html>
+ 
