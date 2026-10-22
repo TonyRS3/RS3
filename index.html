@@ -12,81 +12,106 @@ body{
     margin:0;
     background:#000;
     color:#fff;
-    font-family:Arial, sans-serif;
+    font-family:Arial, Helvetica, sans-serif;
     text-align:center;
 }
 
 .container{
+    max-width:900px;
+    margin:auto;
     padding:30px 20px;
 }
 
 .logo{
-    width:220px;
+    width:250px;
     max-width:80%;
     height:auto;
 }
 
 h1{
     margin:20px 0 10px;
-    font-size:2.8rem;
+    font-size:3rem;
+    font-weight:bold;
 }
 
-p{
-    font-size:18px;
+.slogan{
+    font-size:22px;
+    margin-bottom:20px;
 }
 
 .live{
-    margin:20px 0;
-    font-size:24px;
-    color:#ff4d4d;
+    color:#ff3b3b;
+    font-size:28px;
     font-weight:bold;
+    margin:20px 0;
 }
 
 .btn{
     display:inline-block;
-    margin-top:20px;
-    padding:15px 35px;
     background:#f15a24;
     color:#fff;
     text-decoration:none;
-    border-radius:30px;
+    padding:15px 40px;
+    border-radius:40px;
+    font-size:24px;
     font-weight:bold;
-    font-size:22px;
+    margin:20px 0;
+    transition:.3s;
 }
 
 .btn:hover{
-    background:#ff6f3c;
+    background:#ff6d35;
 }
 
 .footer{
-    margin-top:15px;
-    font-size:18px;
+    margin:20px 0 30px 0;
+    font-size:20px;
 }
 
-/* Copertina album */
+/* COPERTINA */
 .cc_streaminfo[data-type="trackimageurl"]{
-    width:220px;
+    width:280px !important;
     max-width:90%;
     margin-top:25px;
     border-radius:12px;
-    box-shadow:0 0 20px rgba(241,90,36,0.6);
+    box-shadow:0 0 25px rgba(241,90,36,.7);
 }
 
-/* Titolo brano */
-.track-title{
-    margin-top:20px;
-    font-size:34px;
-    font-weight:bold;
-    color:#ffffff;
-    text-shadow:0 0 10px rgba(255,255,255,0.5);
+/* TITOLO BRANO */
+.cc_streaminfo[data-type="tracktitle"]{
+    display:block !important;
+    font-size:42px !important;
+    font-weight:900 !important;
+    color:#ffffff !important;
+    margin:20px auto 10px auto !important;
+    text-shadow:0 0 12px rgba(255,255,255,.8);
+    line-height:1.2;
 }
 
-/* Artista */
-.track-artist{
-    margin-top:10px;
-    font-size:26px;
-    font-weight:bold;
-    color:#f15a24;
+/* ARTISTA */
+.cc_streaminfo[data-type="trackartist"]{
+    display:block !important;
+    font-size:30px !important;
+    font-weight:bold !important;
+    color:#f15a24 !important;
+    margin-bottom:20px !important;
+}
+
+/* NASCONDE BUY THIS ALBUM */
+a.cc_streaminfo[data-type="trackbuyurl"]{
+    display:none !important;
+}
+
+/* NASCONDE EVENTUALI LINK ACQUISTO */
+a[href*="buy"],
+a[href*="amazon"],
+a[href*="itunes"]{
+    display:none !important;
+}
+
+/* NASCONDE IL GENERE */
+.cc_streaminfo[data-type="trackgenre"]{
+    display:none !important;
 }
 
 </style>
@@ -96,13 +121,19 @@ p{
 
 <div class="container">
 
-    <img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo">
+    <img src="RADIO SISTEMA 3.jpeg"
+         alt="Radio Sistema 3"
+         class="logo">
 
     <h1>RADIO SISTEMA 3</h1>
 
-    <p>Musica, informazione e intrattenimento.</p>
+    <div class="slogan">
+        Musica, informazione e intrattenimento
+    </div>
 
-    <div class="live">🔴 IN DIRETTA</div>
+    <div class="live">
+        🔴 IN DIRETTA
+    </div>
 
     <a class="btn"
        href="http://manage.myshoutca.st:8046/stream"
@@ -114,9 +145,6 @@ p{
         La radio delle tue emozioni
     </div>
 
-    <br><br>
-
-    <!-- Ultimi brani -->
     <div class="cc_recenttracks_list"
          data-username="bomyydij">
          Caricamento...
@@ -126,62 +154,26 @@ p{
       src="https://manage.myshoutca.st/system/recenttracks.js">
     </script>
 
-    <br>
+    <br><br>
 
-    <!-- Copertina -->
-    <img class="cc_streaminfo"
-         data-type="trackimageurl"
-         data-username="bomyydij">
+    <img
+       class="cc_streaminfo"
+       data-type="trackimageurl"
+       data-username="bomyydij">
 
-    <!-- Titolo -->
-    <div class="cc_streaminfo track-title"
-         data-type="tracktitle"
-         data-username="bomyydij">
+    <div
+       class="cc_streaminfo"
+       data-type="tracktitle"
+       data-username="bomyydij">
     </div>
 
-    <!-- Artista -->
-    <div class="cc_streaminfo track-artist"
-         data-type="trackartist"
-         data-username="bomyydij">
+    <div
+       class="cc_streaminfo"
+       data-type="trackartist"
+       data-username="bomyydij">
     </div>
-/* Nasconde BUY THIS ALBUM */
-a.cc_streaminfo[data-type="trackbuyurl"]{
-    display:none !important;
-}
 
-/* Nasconde genere musicale */
-.cc_streaminfo[data-type="trackgenre"]{
-    display:none !important;
-}
-
-/* Titolo brano */
-.cc_streaminfo[data-type="tracktitle"]{
-    display:block !important;
-    font-size:36px !important;
-    font-weight:bold !important;
-    color:#ffffff !important;
-    margin-top:15px !important;
-    text-shadow:0 0 10px rgba(255,255,255,.7);
-}
-
-/* Artista */
-.cc_streaminfo[data-type="trackartist"]{
-    display:block !important;
-    font-size:28px !important;
-    font-weight:bold !important;
-    color:#f15a24 !important;
-    margin-top:10px !important;
-}
-
-/* Copertina */
-.cc_streaminfo[data-type="trackimageurl"]{
-    width:250px !important;
-    max-width:90%;
-    border-radius:12px;
-    box-shadow:0 0 20px rgba(241,90,36,.5);
-}
 </div>
 
 </body>
-</html>
- 
+</html> 
