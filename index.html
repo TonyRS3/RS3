@@ -16,13 +16,13 @@ body{
 
     background:
         linear-gradient(
-            rgba(0,0,0,0.25),
-            rgba(0,0,0,0.25)
+            rgba(0,0,0,0.35),
+            rgba(0,0,0,0.35)
         ),
         url("studio-radio.jpeg");
 
     background-size:cover;
-    background-position:center;
+    background-position:center center;
     background-repeat:no-repeat;
     background-attachment:fixed;
 }
@@ -42,7 +42,7 @@ body{
 h1{
     margin:20px 0 10px;
     font-size:3rem;
-    color:#fff;
+    color:#ffffff;
 }
 
 .slogan{
@@ -68,6 +68,11 @@ h1{
     font-size:24px;
     font-weight:bold;
     box-shadow:0 0 20px rgba(241,90,36,.8);
+    transition:all .3s ease;
+}
+
+.btn:hover{
+    transform:scale(1.05);
 }
 
 .footer{
@@ -75,57 +80,35 @@ h1{
     font-size:18px;
 }
 
-/* Widget brano */
+/* Widget MyShoutCast */
 
 .cc_recenttracks_list{
-    margin-top:15px !important;
-    text-align:center !important;
-    color:#fff !important;
+    margin-top:20px !important;
+    color:#ffffff !important;
     font-weight:bold !important;
-    width:100% !important;
 }
 
 .cc_recenttracks_list *{
-    color:#fff !important;
-    text-align:center !important;
+    color:#ffffff !important;
 }
 
-/* Nasconde la copertina */
+/* Copertina */
 
 .cc_recenttracks_list img{
-    display:none !important;
+    display:block !important;
+    margin:15px auto !important;
+
+    width:180px !important;
+    max-width:180px !important;
+    height:auto !important;
+
+    border-radius:10px;
 }
 
-/* Nasconde BUY THIS ALBUM */
+/* Nasconde Buy This Album */
 
 .cc_recenttracks_list a{
     display:none !important;
-}
-
-/* Elimina layout laterali */
-
-.cc_recenttracks_list table,
-.cc_recenttracks_list tbody,
-.cc_recenttracks_list tr,
-.cc_recenttracks_list td{
-    display:block !important;
-    width:100% !important;
-    text-align:center !important;
-    border:none !important;
-}
-
-/* Titolo */
-
-.cc_recenttracks_list strong,
-.cc_recenttracks_list b{
-    font-size:24px !important;
-    display:block !important;
-}
-
-/* Artista */
-
-.cc_recenttracks_list{
-    font-size:18px !important;
 }
 
 </style>
