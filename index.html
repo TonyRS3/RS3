@@ -1,11 +1,14 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Radio Sistema 3</title>
 
 <style>
+
 body{
     margin:0;
     background:#000;
@@ -15,72 +18,149 @@ body{
 }
 
 .container{
-    padding:30px 20px;
+    padding:20px;
 }
 
 .logo{
-    width:220px;
+    width:280px;
     max-width:80%;
-    height:auto;
+    margin-top:10px;
 }
 
 h1{
+    font-size:55px;
     margin:20px 0 10px;
-    font-size:2.2rem;
 }
 
-p{
-    font-size:18px;
+.slogan{
+    font-size:24px;
+    margin-bottom:20px;
+}
+
+.live{
+    color:#ff4040;
+    font-size:28px;
+    font-weight:bold;
+    margin:20px 0;
 }
 
 .btn{
     display:inline-block;
-    margin-top:25px;
-    padding:15px 30px;
+    margin-top:15px;
+    padding:18px 40px;
     background:#f15a24;
     color:#fff;
     text-decoration:none;
-    border-radius:30px;
+    border-radius:40px;
+    font-size:24px;
     font-weight:bold;
-    font-size:18px;
 }
+
+.btn:hover{
+    background:#ff733a;
+}
+
+.footer{
+    margin:25px 0;
+    font-size:22px;
+}
+
+/* COPERTINA BRANO */
+
+.cc_streaminfo[data-type="trackimageurl"]{
+    display:block !important;
+    width:250px !important;
+    max-width:90%;
+    margin:30px auto 20px auto !important;
+    border-radius:12px;
+    box-shadow:0 0 25px #f15a24;
+}
+
+/* TITOLO BRANO */
+
+.cc_streaminfo[data-type="tracktitle"]{
+    display:block !important;
+    font-size:42px !important;
+    font-weight:900 !important;
+    color:#ffffff !important;
+    text-align:center !important;
+    text-shadow:
+        0 0 10px #ffffff,
+        0 0 20px #ffffff;
+    margin-top:15px !important;
+}
+
+/* ARTISTA */
+
+.cc_streaminfo[data-type="trackartist"]{
+    display:block !important;
+    font-size:32px !important;
+    font-weight:bold !important;
+    color:#f15a24 !important;
+    text-align:center !important;
+    text-shadow:
+        0 0 8px #f15a24,
+        0 0 16px #f15a24;
+}
+
+/* GENERE */
+
+.cc_streaminfo[data-type="trackgenre"]{
+    font-size:16px !important;
+    color:#888 !important;
+}
+
+/* NASCONDE BUY THIS ALBUM */
+
+.cc_streaminfo[data-type="trackbuyurl"],
+a.cc_streaminfo[data-type="trackbuyurl"]{
+    display:none !important;
+}
+
+a[href*="album"]{
+    display:none !important;
+}
+
 </style>
+
 </head>
 
 <body>
 
 <div class="container">
 
-<img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo">
+<img src="RADIO SISTEMA 3.jpeg"
+alt="Radio Sistema 3"
+class="logo">
 
 <h1>RADIO SISTEMA 3</h1>
 
- <p>Musica, informazione e intrattenimento.</p>
- 
- <div class="live">🔴 IN DIRETTA</div>
- 
-<a class="btn" href="http://manage.myshoutca.st:8046/stream" target="_blank">
+<div class="slogan">
+Musica, informazione e intrattenimento.
+</div>
+
+<div class="live">
+🔴 IN DIRETTA
+</div>
+
+<a class="btn"
+href="http://manage.myshoutca.st:8046/stream"
+target="_blank">
 ▶ ASCOLTA LIVE
 </a>
+
 <div class="footer">
-    La radio delle tue emozioni
- 
-</div class="footer">
-<div class="cc_recenttracks_list" data-username="bomyydij">Caricamento ... 
- </div>
- <script language="javascript" type="text/javascript" src="https://manage.myshoutca.st/system/recenttracks.js">
- </script>
- 
- 
-<br />
- <img class="cc_streaminfo" data-type="trackimageurl" data-username="bomyydij" /><br /><a href="#" class="cc_streaminfo" data-type="trackbuyurl" data-username="bomyydij </a>
-<br />  
- 
+La radio delle tue emozioni
+</div>
+
+<script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
+
+<div class="cc_recenttracks_list"
+data-username="bomyydij">
+Caricamento...
+</div>
+
+</div>
+
 </body>
- 
 </html>
-
-
- 
- 
- 
