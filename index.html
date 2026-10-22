@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
@@ -12,7 +12,7 @@ body{
     margin:0;
     background:#000;
     color:#fff;
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
     text-align:center;
 }
 
@@ -65,18 +65,24 @@ h1{
     font-size:18px;
 }
 
+audio{
+    width:320px;
+    max-width:90%;
+    margin:20px auto;
+}
+
 /* Widget brano */
 
 .cc_recenttracks_list{
     font-size:16px !important;
     font-weight:bold !important;
-    color:#fff !important;
+    color:#ffffff !important;
     text-align:center !important;
     line-height:1.2 !important;
 }
 
 .cc_recenttracks_list *{
-    color:#fff !important;
+    color:#ffffff !important;
 }
 
 /* Copertina */
@@ -89,13 +95,16 @@ h1{
     box-shadow:0 0 20px rgba(241,90,36,.6);
 }
 
-/* Nasconde BUY THIS ALBUM */
+/* Nasconde Buy This Album */
 
 .cc_recenttracks_list a{
     display:none !important;
 }
 
 </style>
+
+<script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
+
 </head>
 
 <body>
@@ -126,20 +135,12 @@ Musica, informazione e intrattenimento.
 La radio delle tue emozioni
 </div>
 
-<!-- PLAYER UFFICIALE -->
+<!-- PLAYER AUDIO -->
 
-<div style="margin:25px 0;">
-
-    <div class="cc_player"
-         data-username="bomyydij"
-         data-size="sm"
-         data-style="light">
-         Loading...
-    </div>
-
-</div>
-
-<script src="https://manage.myshoutca.st/system/player.js"></script>
+<audio controls preload="none">
+    <source src="http://manage.myshoutca.st:8046/stream" type="audio/mpeg">
+    Il tuo browser non supporta l'audio HTML5.
+</audio>
 
 <!-- BRANO IN RIPRODUZIONE -->
 
@@ -147,9 +148,9 @@ La radio delle tue emozioni
      data-username="bomyydij">
 </div>
 
-<script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
-
 </div>
 
 </body>
 </html>
+
+ 
