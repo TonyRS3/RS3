@@ -22,7 +22,7 @@ body{
         url("studio-radio.jpeg");
 
     background-size:cover;
-    background-position:center center;
+    background-position:center;
     background-repeat:no-repeat;
     background-attachment:fixed;
 }
@@ -34,7 +34,7 @@ body{
 }
 
 .logo{
-    width:200px;
+    width:220px;
     max-width:85%;
     height:auto;
 }
@@ -42,7 +42,6 @@ body{
 h1{
     margin:20px 0 10px;
     font-size:3rem;
-    color:#ffffff;
 }
 
 .slogan{
@@ -57,16 +56,13 @@ h1{
     margin:20px 0;
 }
 
-/* PLAYER */
-
 .radio-player{
     max-width:700px;
-    margin:25px auto;
-    padding:20px;
+    margin:30px auto;
+    padding:25px;
     background:rgba(0,0,0,0.45);
     border-radius:15px;
-    backdrop-filter:blur(5px);
-    box-shadow:0 0 20px rgba(0,0,0,0.4);
+    box-shadow:0 0 20px rgba(0,0,0,.4);
 }
 
 .radio-player audio{
@@ -75,36 +71,33 @@ h1{
 }
 
 .footer{
-    margin:25px 0 15px;
+    margin:30px 0;
     font-size:18px;
 }
 
-/* TRACCE RECENTI */
+/* Recent Tracks */
 
 .cc_recenttracks_list{
     margin-top:20px !important;
-    color:#ffffff !important;
+    color:#fff !important;
     font-weight:bold !important;
 }
 
 .cc_recenttracks_list *{
-    color:#ffffff !important;
+    color:#fff !important;
 }
-
-/* COPERTINA */
 
 .cc_recenttracks_list img{
     display:block !important;
     margin:15px auto !important;
     width:100px !important;
-    max-width:100px !important;
     height:auto !important;
     border-radius:10px;
 }
 
-/* NASCONDE LINK ACQUISTO */
+/* nasconde "Acquista questo album" */
 
-.cc_recenttracks_list a{
+.cc_recenttracks_list .ccbuy{
     display:none !important;
 }
 
@@ -118,11 +111,9 @@ h1{
 
 <div class="container">
 
-    <img
-        src="RADIO SISTEMA 3.jpeg"
-        alt="Radio Sistema 3"
-        class="logo"
-    >
+    <img src="RADIO SISTEMA 3.jpeg"
+         alt="Radio Sistema 3"
+         class="logo">
 
     <h1>RADIO SISTEMA 3</h1>
 
@@ -141,22 +132,23 @@ h1{
             Il tuo browser non supporta l'audio HTML5.
         </audio>
 
+        <p>Streaming Live</p>
+
     </div>
 
     <div class="footer">
         La radio delle tue emozioni
     </div>
 
-    <h2>🎵 Ultimi Brani Trasmessi</h2>
+    <h2>🎵 Ultimi brani trasmessi</h2>
 
-    <div
-        class="cc_recenttracks_list"
-        data-username="bomyydij">
+    <div class="cc_recenttracks_list"
+         data-username="bomyydij">
     </div>
 
 </div>
 
 </body>
 </html>
-
+ 
  
