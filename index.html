@@ -57,22 +57,21 @@ h1{
     margin:20px 0;
 }
 
-.btn{
-    display:inline-block;
-    margin:20px 0;
-    padding:18px 45px;
-    background:linear-gradient(135deg,#f15a24,#ff7a45);
-    color:#fff;
-    text-decoration:none;
-    border-radius:50px;
-    font-size:24px;
-    font-weight:bold;
-    box-shadow:0 0 20px rgba(241,90,36,.8);
-    transition:all .3s ease;
+/* PLAYER */
+
+.radio-player{
+    max-width:700px;
+    margin:25px auto;
+    padding:20px;
+    background:rgba(0,0,0,0.45);
+    border-radius:15px;
+    backdrop-filter:blur(5px);
+    box-shadow:0 0 20px rgba(0,0,0,0.4);
 }
 
-.btn:hover{
-    transform:scale(1.05);
+.radio-player audio{
+    width:100%;
+    max-width:600px;
 }
 
 .footer{
@@ -80,7 +79,7 @@ h1{
     font-size:18px;
 }
 
-/* Widget MyShoutCast */
+/* TRACCE RECENTI */
 
 .cc_recenttracks_list{
     margin-top:20px !important;
@@ -92,20 +91,18 @@ h1{
     color:#ffffff !important;
 }
 
-/* Copertina */
+/* COPERTINA */
 
 .cc_recenttracks_list img{
     display:block !important;
     margin:15px auto !important;
-
     width:100px !important;
     max-width:100px !important;
     height:auto !important;
-
     border-radius:10px;
 }
-     
-/* Nasconde Buy This Album */
+
+/* NASCONDE LINK ACQUISTO */
 
 .cc_recenttracks_list a{
     display:none !important;
@@ -121,38 +118,45 @@ h1{
 
 <div class="container">
 
-<img src="RADIO SISTEMA 3.jpeg"
-     alt="Radio Sistema 3"
-     class="logo">
+    <img
+        src="RADIO SISTEMA 3.jpeg"
+        alt="Radio Sistema 3"
+        class="logo"
+    >
 
-<h1>RADIO SISTEMA 3</h1>
+    <h1>RADIO SISTEMA 3</h1>
 
-<div class="slogan">
-Musica, informazione e intrattenimento
-</div>
+    <div class="slogan">
+        Musica, informazione e intrattenimento
+    </div>
 
-<div class="live">
-🔴 IN DIRETTA
-</div>
-    
-    <a class="btn"
-        
-    href="https://listentomystream.com:8046/stream"
-   target="_blank"
-    rel="noopener noreferrer">      
-        
-   🎧 ASCOLTA
-   </a>
+    <div class="live">
+        🔴 IN DIRETTA
+    </div>
 
-<div class="footer">
-La radio delle tue emozioni
-</div>
+    <div class="radio-player">
 
-<div class="cc_recenttracks_list"
-     data-username="bomyydij">
-</div>
+        <audio controls preload="none">
+            <source src="https://listentomystream.com:8046/stream" type="audio/mpeg">
+            Il tuo browser non supporta l'audio HTML5.
+        </audio>
+
+    </div>
+
+    <div class="footer">
+        La radio delle tue emozioni
+    </div>
+
+    <h2>🎵 Ultimi Brani Trasmessi</h2>
+
+    <div
+        class="cc_recenttracks_list"
+        data-username="bomyydij">
+    </div>
 
 </div>
 
 </body>
 </html>
+
+ 
