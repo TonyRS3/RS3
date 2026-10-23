@@ -21,8 +21,8 @@ body{
 
     background:
     linear-gradient(
-        rgba(0,0,0,.35),
-        rgba(0,0,0,.40)
+        rgba(0,0,0,.25),
+        rgba(0,0,0,.30)
     ),
     url("studio-radio.jpeg");
 
@@ -32,20 +32,24 @@ body{
     background-attachment:fixed;
 }
 
+/* Pannello trasparente */
+
 .container{
     max-width:950px;
     margin:40px auto;
     padding:40px;
 
-    background:rgba(0,0,0,.25);
+    background:rgba(0,0,0,.22);
 
     backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
 
     border-radius:25px;
 
     border:1px solid rgba(255,255,255,.20);
 
-    box-shadow:0 8px 35px rgba(0,0,0,.40);
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.35);
 }
 
 .logo{
@@ -55,7 +59,8 @@ body{
 
     border-radius:20px;
 
-    box-shadow:0 0 30px rgba(255,255,255,.35);
+    box-shadow:
+        0 0 30px rgba(255,255,255,.35);
 }
 
 h1{
@@ -64,8 +69,7 @@ h1{
     color:#ffffff;
 
     text-shadow:
-        0 0 15px rgba(0,0,0,.7),
-        0 0 30px rgba(0,0,0,.4);
+        0 2px 10px rgba(0,0,0,.6);
 }
 
 .slogan{
@@ -96,13 +100,17 @@ h1{
 
 .ascolta-btn{
     display:inline-block;
+
     margin-top:30px;
+
     padding:20px 55px;
 
     text-decoration:none;
+
     color:white;
 
     font-size:1.5rem;
+
     font-weight:bold;
 
     border-radius:60px;
@@ -141,7 +149,7 @@ h1{
     padding-top:20px;
 
     border-top:
-    1px solid rgba(255,255,255,.30);
+        1px solid rgba(255,255,255,.30);
 
     color:#ffffff;
 }
@@ -177,7 +185,7 @@ h1{
 
 /* Smartphone */
 
-@media(max-width:768px){
+@media (max-width:768px){
 
     body{
         background-attachment:scroll;
@@ -189,7 +197,7 @@ h1{
     }
 
     h1{
-        font-size:2.4rem;
+        font-size:2.3rem;
     }
 
     .slogan{
@@ -230,4 +238,51 @@ h1{
 <div class="container">
 
     <img src="RADIO SISTEMA 3.jpeg"
-         alt="Radio Sistema 3
+         alt="Radio Sistema 3"
+         class="logo">
+
+    <h1>RADIO SISTEMA 3</h1>
+
+    <div class="slogan">
+        Musica, informazione e intrattenimento
+    </div>
+
+    <div class="tagline">
+        🎙️ La musica che accompagna le tue giornate
+    </div>
+
+    <div class="live">
+        🔴 ON AIR
+    </div>
+
+    <a class="ascolta-btn"
+       href="https://manage.myshoutca.st/start/bomyydij/"
+       target="_blank"
+       rel="noopener noreferrer">
+
+        🎧 ASCOLTA IN DIRETTA
+
+    </a>
+
+    <div class="section-title">
+        🎵 Brano in onda
+    </div>
+
+    <div class="cc_recenttracks_list"
+         data-username="bomyydij">
+    </div>
+
+    <div class="footer">
+
+        © Radio Sistema 3
+
+        <br><br>
+
+        La radio delle tue emozioni
+
+    </div>
+
+</div>
+
+</body>
+</html>
