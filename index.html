@@ -81,22 +81,39 @@ h1{
     font-size:1.1rem;
     color:#fff8d6;
 }
-    
----.istruzioni{
-    margin-top:15px;
-    font-size:1.15rem;
+
+.istruzioni{
+    margin-top:18px;
+    font-size:1.2rem;
     font-weight:bold;
-    color:#ffeb3b;
+    color:#ffffff;
 
     text-shadow:
-        0 0 10px rgba(255,235,59,.8),
-        0 0 20px rgba(255,235,59,.6);
+        0 0 10px rgba(255,255,255,.8);
 
     animation:avvisoBlink 1.8s infinite;
 }
 
-@keyframes avvisoBlink{
+.evidenza{
+    color:#ffd700;
 
+    padding:4px 10px;
+
+    border:2px solid #ff7a00;
+
+    border-radius:10px;
+
+    background:rgba(255,122,0,.15);
+
+    box-shadow:
+        0 0 10px rgba(255,122,0,.9),
+        0 0 20px rgba(255,122,0,.6);
+
+    text-shadow:
+        0 0 8px rgba(255,215,0,1);
+}
+
+@keyframes avvisoBlink{
     0%{
         opacity:1;
     }
@@ -108,6 +125,7 @@ h1{
     100%{
         opacity:1;
     }
+}
 
 .live{
     margin-top:35px;
@@ -230,7 +248,7 @@ h1{
     }
 
     .istruzioni{
-        font-size:.95rem;
+        font-size:1rem;
     }
 
     .live{
@@ -277,7 +295,8 @@ h1{
     </div>
 
     <div class="istruzioni">
-        🎧 Clicca su "Ascolta in Diretta" e premi Play per iniziare.
+        🎧 Clicca su <span class="evidenza">ASCOLTA IN DIRETTA</span>
+        e premi PLAY per iniziare l'ascolto.
     </div>
 
     <div class="live">
@@ -289,7 +308,7 @@ h1{
        target="_blank"
        rel="noopener noreferrer">
 
-        🎧 ASCOLTA IN DIRETTA
+       🎧 ASCOLTA IN DIRETTA
 
     </a>
 
