@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Radio Sistema 3</title>
+<title>Radio Sistema 3 Live</title>
 
 <style>
 
@@ -15,107 +15,104 @@
 }
 
 body{
-    font-family:'Segoe UI',Arial,sans-serif;
-    color:white;
-    text-align:center;
+
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-family:'Segoe UI',sans-serif;
 
     background:
     linear-gradient(
-        rgba(0,0,0,.2),
-        rgba(0,0,0,.3)
+        rgba(0,0,0,.45),
+        rgba(0,0,0,.55)
     ),
     url("studio-radio.jpeg");
 
     background-size:cover;
     background-position:center;
-    background-repeat:no-repeat;
 
-    min-height:100vh;
+    color:white;
 }
 
-.container{
-    width:95%;
-    max-width:950px;
-    margin:20px auto;
-    padding:30px;
+.player-box{
+
+    width:90%;
+    max-width:700px;
+
+    padding:40px;
+
+    text-align:center;
 
     background:rgba(255,255,255,.10);
-    backdrop-filter:blur(6px);
+
+    backdrop-filter:blur(10px);
 
     border-radius:25px;
+
     border:1px solid rgba(255,255,255,.25);
 
-    box-shadow:0 8px 30px rgba(0,0,0,.2);
+    box-shadow:
+    0 10px 40px rgba(0,0,0,.35);
 }
 
 .logo{
-    width:230px;
+
+    width:180px;
     max-width:90%;
-    height:auto;
 
     border-radius:20px;
 
-    box-shadow:0 0 25px rgba(255,255,255,.4);
-
-    animation:glow 3s infinite alternate;
-}
-
-@keyframes glow{
-    from{
-        box-shadow:0 0 15px rgba(255,255,255,.3);
-    }
-    to{
-        box-shadow:0 0 35px rgba(255,255,255,.8);
-    }
+    margin-bottom:20px;
 }
 
 h1{
-    margin-top:20px;
-    font-size:4rem;
 
-    text-shadow:
-    0 2px 10px rgba(0,0,0,.5);
+    margin-bottom:15px;
+
+    font-size:2.5rem;
 }
 
 .slogan{
-    margin-top:10px;
-    font-size:1.3rem;
-}
 
-.tagline{
-    margin-top:15px;
-    font-size:1.1rem;
-    color:#fff8d6;
+    margin-bottom:25px;
+
+    color:#fff4c1;
 }
 
 .live{
-    margin-top:30px;
-    font-size:2rem;
-    color:#ff3a3a;
+
+    color:#ff4040;
+
     font-weight:bold;
+
+    font-size:1.4rem;
+
+    margin-bottom:25px;
+
     animation:pulse 1.5s infinite;
 }
 
-@keyframes pulse{
-    0%{opacity:1;}
-    50%{opacity:.4;}
-    100%{opacity:1;}
+audio{
+
+    width:100%;
 }
 
-.ascolta-btn{
+.back{
+
     display:inline-block;
 
     margin-top:30px;
 
-    padding:20px 50px;
-
-    border-radius:60px;
+    padding:12px 25px;
 
     text-decoration:none;
+
     color:white;
 
-    font-size:1.4rem;
-    font-weight:bold;
+    border-radius:50px;
 
     background:
     linear-gradient(
@@ -123,148 +120,57 @@ h1{
         #ff512f,
         #dd2476
     );
-
-    box-shadow:
-    0 0 25px rgba(255,82,82,.7);
-
-    transition:.3s;
 }
 
-.ascolta-btn:hover{
-    transform:scale(1.05);
-}
+@keyframes pulse{
 
-.section-title{
-    margin-top:50px;
-    margin-bottom:20px;
-
-    font-size:2rem;
-    color:#ffd966;
-}
-
-.footer{
-    margin-top:40px;
-    padding-top:20px;
-
-    border-top:1px solid rgba(255,255,255,.25);
-}
-
-/* Centova Tracks */
-
-.cc_recenttracks_list,
-.cc_recenttracks_list *{
-    color:white !important;
-}
-
-.cc_recenttracks_list a{
-    text-decoration:none !important;
-}
-
-.cc_recenttracks_list img{
-    display:block !important;
-    margin:15px auto !important;
-
-    width:120px !important;
-    height:auto !important;
-
-    border-radius:12px;
-}
-
-.cc_recenttracks_list .ccbuy{
-    display:none !important;
-}
-
-/* MOBILE */
-
-@media(max-width:768px){
-
-    .container{
-        width:95%;
-        padding:20px;
+    0%{
+        opacity:1;
     }
 
-    h1{
-        font-size:2.2rem;
+    50%{
+        opacity:.4;
     }
 
-    .slogan{
-        font-size:1rem;
+    100%{
+        opacity:1;
     }
-
-    .tagline{
-        font-size:.95rem;
-    }
-
-    .live{
-        font-size:1.5rem;
-    }
-
-    .section-title{
-        font-size:1.5rem;
-    }
-
-    .ascolta-btn{
-        display:block;
-        width:100%;
-        padding:18px;
-        font-size:1.2rem;
-    }
-
-    .logo{
-        width:180px;
-    }
-
 }
 
 </style>
-
-<script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
-
 </head>
+
 <body>
 
-<div class="container">
+<div class="player-box">
 
-<img src="RADIO SISTEMA 3.jpeg"
-     alt="Radio Sistema 3"
-     class="logo">
+    <img src="RADIO SISTEMA 3.jpeg"
+         class="logo"
+         alt="Radio Sistema 3">
 
-<h1>RADIO SISTEMA 3</h1>
+    <h1>RADIO SISTEMA 3</h1>
 
-<div class="slogan">
-Musica, informazione e intrattenimento
-</div>
+    <div class="slogan">
+        La radio delle tue emozioni
+    </div>
 
-<div class="tagline">
-🎙️ La musica che accompagna le tue giornate
-</div>
+    <div class="live">
+        🔴 IN DIRETTA
+    </div>
 
-<div class="live">
-🔴 ON AIR
-</div>
+    <audio controls autoplay preload="none">
 
-<a class="ascolta-btn"
-   href="https://manage.myshoutca.st/start/bomyydij/"
-   target="_blank"
-   rel="noopener noreferrer">
+        <source
+        src="URL_DEL_TUO_STREAM"
+        type="audio/mpeg">
 
-🎧 ASCOLTA IN DIRETTA
+    </audio>
 
-</a>
+    <br>
 
-<div class="section-title">
-🎵 Brano in onda
-</div>
-
-<div class="cc_recenttracks_list"
-     data-username="bomyydij">
-</div>
-
-<div class="footer">
-© Radio Sistema 3
-<br><br>
-La radio delle tue emozioni
-</div>
+    <a href="index.html" class="back">
+        ← Torna al sito
+    </a>
 
 </div>
 
