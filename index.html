@@ -14,12 +14,14 @@ body{
     color:#fff;
     font-family:Arial,sans-serif;
     text-align:center;
+
     background:
         linear-gradient(
             rgba(0,0,0,0.35),
             rgba(0,0,0,0.35)
         ),
         url("studio-radio.jpeg");
+
     background-size:cover;
     background-position:center;
     background-repeat:no-repeat;
@@ -41,7 +43,7 @@ body{
 h1{
     margin:20px 0 10px;
     font-size:3rem;
-    color:#fff;
+    color:#ffffff;
 }
 
 .slogan{
@@ -56,13 +58,23 @@ h1{
     margin:20px 0;
 }
 
-.player-box{
-    max-width:700px;
-    margin:30px auto;
-    padding:20px;
-    background:rgba(0,0,0,0.45);
-    border-radius:15px;
-    box-shadow:0 0 20px rgba(0,0,0,.4);
+.ascolta-btn{
+    display:inline-block;
+    margin:30px 0;
+    padding:20px 45px;
+    background:#e53935;
+    color:#fff;
+    text-decoration:none;
+    border-radius:50px;
+    font-size:24px;
+    font-weight:bold;
+    box-shadow:0 0 20px rgba(229,57,53,.7);
+    transition:all .3s ease;
+}
+
+.ascolta-btn:hover{
+    transform:scale(1.05);
+    background:#ff5252;
 }
 
 .footer{
@@ -70,16 +82,16 @@ h1{
     font-size:18px;
 }
 
-/* Widget Tracce Recenti */
+/* Tracce recenti */
 
 .cc_recenttracks_list{
     margin-top:20px !important;
-    color:#fff !important;
+    color:#ffffff !important;
     font-weight:bold !important;
 }
 
 .cc_recenttracks_list *{
-    color:#fff !important;
+    color:#ffffff !important;
 }
 
 .cc_recenttracks_list img{
@@ -94,18 +106,8 @@ h1{
     display:none !important;
 }
 
-/* Centova Player */
-
-.centovaplayer{
-    margin:auto !important;
-}
-
 </style>
 
-<link rel="stylesheet"
-      href="https://manage.myshoutca.st/system/centovaplayer.standalone.css">
-
-<script src="https://manage.myshoutca.st/system/player.js"></script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 
 </head>
@@ -128,16 +130,12 @@ h1{
         🔴 IN DIRETTA
     </div>
 
-    <div class="player-box">
-
-        <div class="cc_player"
-             data-username="bomyydij"
-             data-size="sm"
-             data-style="light">
-             Loading...
-        </div>
-
-    </div>
+    <a class="ascolta-btn"
+       href="https://manage.myshoutca.st/start/bomyydij/"
+       target="_blank"
+       rel="noopener noreferrer">
+       🎧 ASCOLTA RADIO SISTEMA 3
+    </a>
 
     <div class="footer">
         La radio delle tue emozioni
@@ -148,7 +146,8 @@ h1{
     <div class="cc_recenttracks_list"
          data-username="bomyydij">
     </div>
- 
+
+</div>
 
 </body>
 </html>
