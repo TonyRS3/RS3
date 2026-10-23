@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
-
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -9,101 +9,216 @@
 
 <style>
 
-body{
+*{
     margin:0;
-    color:#fff;
-    font-family:Arial,sans-serif;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Segoe UI',Arial,sans-serif;
+    color:white;
     text-align:center;
 
     background:
-        linear-gradient(
-            rgba(0,0,0,0.35),
-            rgba(0,0,0,0.35)
-        ),
-        url("studio-radio.jpeg");
+    linear-gradient(
+        rgba(0,0,0,.65),
+        rgba(0,0,0,.70)
+    ),
+    url("studio-radio.jpeg");
 
     background-size:cover;
     background-position:center;
-    background-repeat:no-repeat;
     background-attachment:fixed;
 }
 
 .container{
-    max-width:900px;
-    margin:20px auto;
-    padding:20px;
+
+    max-width:950px;
+
+    margin:40px auto;
+
+    padding:40px;
+
+    background:rgba(255,255,255,.08);
+
+    backdrop-filter:blur(12px);
+
+    border-radius:25px;
+
+    border:1px solid rgba(255,255,255,.15);
+
+    box-shadow:
+    0 8px 35px rgba(0,0,0,.4);
 }
 
 .logo{
-    width:220px;
-    max-width:85%;
-    height:auto;
+
+    width:230px;
+    max-width:90%;
+
+    border-radius:20px;
+
+    box-shadow:
+    0 0 30px rgba(255,255,255,.25);
 }
 
 h1{
-    margin:20px 0 10px;
-    font-size:3rem;
-    color:#ffffff;
+
+    margin-top:25px;
+
+    font-size:4rem;
+
+    text-shadow:
+    0 0 15px rgba(255,255,255,.3);
 }
 
 .slogan{
-    font-size:18px;
-    margin-bottom:20px;
+
+    font-size:1.3rem;
+
+    margin-top:10px;
+
+    color:#e8e8e8;
+}
+
+.tagline{
+
+    margin-top:15px;
+
+    font-size:1.1rem;
+
+    color:#ffd966;
 }
 
 .live{
-    color:#ff4040;
-    font-size:28px;
+
+    margin-top:35px;
+
+    font-size:2rem;
+
+    color:#ff4d4d;
+
     font-weight:bold;
-    margin:20px 0;
+
+    animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+
+    0%{
+        opacity:1;
+    }
+
+    50%{
+        opacity:.4;
+    }
+
+    100%{
+        opacity:1;
+    }
 }
 
 .ascolta-btn{
+
     display:inline-block;
-    margin:30px 0;
-    padding:20px 45px;
-    background:#e53935;
-    color:#fff;
+
+    margin-top:30px;
+
+    padding:20px 55px;
+
     text-decoration:none;
-    border-radius:50px;
-    font-size:24px;
+
+    color:white;
+
+    font-size:1.5rem;
+
     font-weight:bold;
-    box-shadow:0 0 20px rgba(229,57,53,.7);
-    transition:all .3s ease;
+
+    border-radius:60px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #ff512f,
+        #dd2476
+    );
+
+    box-shadow:
+    0 0 25px rgba(255,82,82,.7);
+
+    transition:.3s ease;
 }
 
 .ascolta-btn:hover{
-    transform:scale(1.05);
-    background:#ff5252;
+
+    transform:scale(1.08);
+
+    box-shadow:
+    0 0 35px rgba(255,82,82,1);
+}
+
+.section-title{
+
+    margin-top:50px;
+
+    margin-bottom:20px;
+
+    font-size:2rem;
+
+    color:#ffd966;
+
+    text-shadow:
+    0 0 10px rgba(255,217,102,.5);
 }
 
 .footer{
-    margin:30px 0;
-    font-size:18px;
+
+    margin-top:40px;
+
+    padding-top:20px;
+
+    border-top:
+    1px solid rgba(255,255,255,.2);
+
+    color:#dcdcdc;
 }
 
 /* Tracce recenti */
 
 .cc_recenttracks_list{
-    margin-top:20px !important;
-    color:#ffffff !important;
-    font-weight:bold !important;
+    color:white !important;
 }
 
 .cc_recenttracks_list *{
-    color:#ffffff !important;
+    color:white !important;
 }
 
 .cc_recenttracks_list img{
+
     display:block !important;
+
     margin:15px auto !important;
-    width:100px !important;
+
+    width:120px !important;
+
     height:auto !important;
-    border-radius:10px;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 0 15px rgba(0,0,0,.4);
 }
 
 .cc_recenttracks_list .ccbuy{
     display:none !important;
+}
+
+/* Nasconde eventuali link inutili */
+
+.cc_recenttracks_list a{
+    text-decoration:none;
 }
 
 </style>
@@ -116,9 +231,10 @@ h1{
 
 <div class="container">
 
-    <img src="RADIO SISTEMA 3.jpeg"
-         alt="Radio Sistema 3"
-         class="logo">
+    <img
+        src="RADIO SISTEMA 3.jpeg"
+        alt="Radio Sistema 3"
+        class="logo">
 
     <h1>RADIO SISTEMA 3</h1>
 
@@ -126,25 +242,41 @@ h1{
         Musica, informazione e intrattenimento
     </div>
 
-    <div class="live">
-        🔴 IN DIRETTA
+    <div class="tagline">
+        🎙️ La musica che accompagna le tue giornate
     </div>
 
-    <a class="ascolta-btn"
+    <div class="live">
+        🔴 ON AIR
+    </div>
+
+    <a
+       class="ascolta-btn"
        href="https://manage.myshoutca.st/start/bomyydij/"
        target="_blank"
        rel="noopener noreferrer">
-       🎧 ASCOLTA
+
+       🎧 ASCOLTA ORA
+
     </a>
 
-    <div class="footer">
-        La radio delle tue emozioni
+    <div class="section-title">
+        🎵 Ultimi Brani Trasmessi
     </div>
 
-    <h2>      🎵 Ultimo brano on air</h2>
+    <div
+      class="cc_recenttracks_list"
+      data-username="bomyydij">
+    </div>
 
-    <div class="cc_recenttracks_list"
-         data-username="bomyydij">
+    <div class="footer">
+
+        © Radio Sistema 3
+
+        <br><br>
+
+        La radio delle tue emozioni
+
     </div>
 
 </div>
