@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
-<head>
 
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -16,47 +16,44 @@
 }
 
 body{
-
-    font-family:'Segoe UI',Arial,sans-serif;
+    font-family:'Segoe UI', Arial, sans-serif;
     color:white;
     text-align:center;
 
     background:
     linear-gradient(
-        rgba(0,0,0,.65),
-        rgba(0,0,0,.70)
+        rgba(0,0,0,.30),
+        rgba(0,0,0,.35)
     ),
     url("studio-radio.jpeg");
 
     background-size:cover;
     background-position:center;
+    background-repeat:no-repeat;
     background-attachment:fixed;
 }
 
 .container{
-
     max-width:950px;
-
     margin:40px auto;
-
     padding:40px;
 
-    background:rgba(255,255,255,.08);
+    background:rgba(255,255,255,.18);
 
-    backdrop-filter:blur(12px);
+    backdrop-filter:blur(10px);
 
     border-radius:25px;
 
-    border:1px solid rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.20);
 
     box-shadow:
-    0 8px 35px rgba(0,0,0,.4);
+    0 8px 35px rgba(0,0,0,.25);
 }
 
 .logo{
-
     width:230px;
     max-width:90%;
+    height:auto;
 
     border-radius:20px;
 
@@ -65,9 +62,7 @@ body{
 }
 
 h1{
-
     margin-top:25px;
-
     font-size:4rem;
 
     text-shadow:
@@ -75,31 +70,25 @@ h1{
 }
 
 .slogan{
-
     font-size:1.3rem;
-
     margin-top:10px;
+    color:#ffffff;
 
-    color:#e8e8e8;
+    text-shadow:
+    0 0 10px rgba(0,0,0,.3);
 }
 
 .tagline{
-
     margin-top:15px;
-
     font-size:1.1rem;
-
-    color:#ffd966;
+    color:#fff3b0;
+    font-weight:500;
 }
 
 .live{
-
     margin-top:35px;
-
     font-size:2rem;
-
     color:#ff4d4d;
-
     font-weight:bold;
 
     animation:pulse 1.5s infinite;
@@ -152,7 +141,6 @@ h1{
 }
 
 .ascolta-btn:hover{
-
     transform:scale(1.08);
 
     box-shadow:
@@ -162,7 +150,6 @@ h1{
 .section-title{
 
     margin-top:50px;
-
     margin-bottom:20px;
 
     font-size:2rem;
@@ -182,10 +169,10 @@ h1{
     border-top:
     1px solid rgba(255,255,255,.2);
 
-    color:#dcdcdc;
+    color:#ffffff;
 }
 
-/* Tracce recenti */
+/* Widget Tracce Recenti */
 
 .cc_recenttracks_list{
     color:white !important;
@@ -211,11 +198,11 @@ h1{
     0 0 15px rgba(0,0,0,.4);
 }
 
+/* Nasconde "Acquista questo album" */
+
 .cc_recenttracks_list .ccbuy{
     display:none !important;
 }
-
-/* Nasconde eventuali link inutili */
 
 .cc_recenttracks_list a{
     text-decoration:none;
@@ -265,8 +252,8 @@ h1{
     </div>
 
     <div
-      class="cc_recenttracks_list"
-      data-username="bomyydij">
+        class="cc_recenttracks_list"
+        data-username="bomyydij">
     </div>
 
     <div class="footer">
@@ -282,4 +269,7 @@ h1{
 </div>
 
 </body>
+
 </html>
+
+ 
