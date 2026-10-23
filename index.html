@@ -1,176 +1,151 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Radio Sistema 3 Live</title>
+<title>Radio Sistema 3</title>
 
 <style>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
 body{
-
-    min-height:100vh;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    font-family:'Segoe UI',sans-serif;
+    margin:0;
+    color:#fff;
+    font-family:Arial,sans-serif;
+    text-align:center;
 
     background:
-    linear-gradient(
-        rgba(0,0,0,.45),
-        rgba(0,0,0,.55)
-    ),
-    url("studio-radio.jpeg");
+        linear-gradient(
+            rgba(0,0,0,0.35),
+            rgba(0,0,0,0.35)
+        ),
+        url("studio-radio.jpeg");
 
     background-size:cover;
     background-position:center;
-
-    color:white;
+    background-repeat:no-repeat;
+    background-attachment:fixed;
 }
 
-.player-box{
-
-    width:90%;
-    max-width:700px;
-
-    padding:40px;
-
-    text-align:center;
-
-    background:rgba(255,255,255,.10);
-
-    backdrop-filter:blur(10px);
-
-    border-radius:25px;
-
-    border:1px solid rgba(255,255,255,.25);
-
-    box-shadow:
-    0 10px 40px rgba(0,0,0,.35);
+.container{
+    max-width:900px;
+    margin:20px auto;
+    padding:20px;
 }
 
 .logo{
-
-    width:180px;
-    max-width:90%;
-
-    border-radius:20px;
-
-    margin-bottom:20px;
+    width:220px;
+    max-width:85%;
+    height:auto;
 }
 
 h1{
-
-    margin-bottom:15px;
-
-    font-size:2.5rem;
+    margin:20px 0 10px;
+    font-size:3rem;
+    color:#ffffff;
 }
 
 .slogan{
-
-    margin-bottom:25px;
-
-    color:#fff4c1;
+    font-size:18px;
+    margin-bottom:20px;
 }
 
 .live{
-
     color:#ff4040;
-
+    font-size:28px;
     font-weight:bold;
-
-    font-size:1.4rem;
-
-    margin-bottom:25px;
-
-    animation:pulse 1.5s infinite;
+    margin:20px 0;
 }
 
-audio{
-
-    width:100%;
-}
-
-.back{
-
+.ascolta-btn{
     display:inline-block;
-
-    margin-top:30px;
-
-    padding:12px 25px;
-
+    margin:30px 0;
+    padding:20px 45px;
+    background:#e53935;
+    color:#fff;
     text-decoration:none;
-
-    color:white;
-
     border-radius:50px;
-
-    background:
-    linear-gradient(
-        135deg,
-        #ff512f,
-        #dd2476
-    );
+    font-size:24px;
+    font-weight:bold;
+    box-shadow:0 0 20px rgba(229,57,53,.7);
+    transition:all .3s ease;
 }
 
-@keyframes pulse{
+.ascolta-btn:hover{
+    transform:scale(1.05);
+    background:#ff5252;
+}
 
-    0%{
-        opacity:1;
-    }
+.footer{
+    margin:30px 0;
+    font-size:18px;
+}
 
-    50%{
-        opacity:.4;
-    }
+/* Tracce recenti */
 
-    100%{
-        opacity:1;
-    }
+.cc_recenttracks_list{
+    margin-top:20px !important;
+    color:#ffffff !important;
+    font-weight:bold !important;
+}
+
+.cc_recenttracks_list *{
+    color:#ffffff !important;
+}
+
+.cc_recenttracks_list img{
+    display:block !important;
+    margin:15px auto !important;
+    width:100px !important;
+    height:auto !important;
+    border-radius:10px;
+}
+
+.cc_recenttracks_list .ccbuy{
+    display:none !important;
 }
 
 </style>
+
+<script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
+
 </head>
 
 <body>
 
-<div class="player-box">
+<div class="container">
 
     <img src="RADIO SISTEMA 3.jpeg"
-         class="logo"
-         alt="Radio Sistema 3">
+         alt="Radio Sistema 3"
+         class="logo">
 
     <h1>RADIO SISTEMA 3</h1>
 
     <div class="slogan">
-        La radio delle tue emozioni
+        Musica, informazione e intrattenimento
     </div>
 
     <div class="live">
         🔴 IN DIRETTA
     </div>
 
-    <audio controls autoplay preload="none">
-
-        <source
-        src="URL_DEL_TUO_STREAM"
-        type="audio/mpeg">
-
-    </audio>
-
-    <br>
-
-    <a href="index.html" class="back">
-        ← Torna al sito
+    <a class="ascolta-btn"
+       href="https://manage.myshoutca.st/start/bomyydij/"
+       target="_blank"
+       rel="noopener noreferrer">
+       🎧 ASCOLTA
     </a>
+
+    <div class="footer">
+        La radio delle tue emozioni
+    </div>
+
+    <h2>      🎵 Ultimo brano on air</h2>
+
+    <div class="cc_recenttracks_list"
+         data-username="bomyydij">
+    </div>
 
 </div>
 
