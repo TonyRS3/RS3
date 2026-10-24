@@ -1,8 +1,7 @@
-
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
-<head>
 
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -19,8 +18,8 @@
 }
 
 body{
-    font-family:'Segoe UI',Arial,sans-serif;
-    color:#ffffff;
+    font-family:'Segoe UI', Arial, sans-serif;
+    color:white;
     text-align:center;
 
     background:
@@ -48,55 +47,29 @@ body{
 
     border-radius:25px;
 
-    border:1px solid rgba(255,255,255,.25);
+    border:1px solid rgba(255,255,255,.20);
 
     box-shadow:
         0 0 25px rgba(255,255,255,.15),
         0 8px 25px rgba(0,0,0,.25);
 }
 
-.header-top{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:25px;
-    flex-wrap:wrap;
-}
-
 .logo{
-    width:230px;
-    max-width:90%;
+    display:block;
+    margin:0 auto 20px auto;
+
+    width:180px;
+    max-width:80%;
     height:auto;
 
     border-radius:20px;
 
     box-shadow:
-        0 0 30px rgba(255,255,255,.40);
-}
-
-.listener-box{
-    background:rgba(255,255,255,.12);
-    border:1px solid rgba(255,255,255,.20);
-    border-radius:15px;
-    padding:15px 20px;
-    min-width:180px;
-}
-
-.listener-title{
-    color:#ffd966;
-    font-size:1rem;
-    font-weight:bold;
-}
-
-.listener-number{
-    margin-top:5px;
-    color:#ffd700;
-    font-size:1.8rem;
-    font-weight:bold;
+        0 0 25px rgba(255,255,255,.40);
 }
 
 h1{
-    margin-top:25px;
+    margin-top:15px;
     font-size:3rem;
 
     text-shadow:
@@ -115,16 +88,18 @@ h1{
 }
 
 .istruzioni{
-    margin-top:18px;
+    margin-top:20px;
     font-size:1.2rem;
     font-weight:bold;
 }
 
 .evidenza{
     color:#ffd700;
+
     padding:4px 10px;
 
     border:2px solid #ff7a00;
+
     border-radius:10px;
 
     background:rgba(255,122,0,.15);
@@ -135,6 +110,7 @@ h1{
     font-size:2rem;
     color:#ff2d2d;
     font-weight:bold;
+
     animation:pulse 1.5s infinite;
 }
 
@@ -151,8 +127,8 @@ h1{
 
     padding:20px 55px;
 
-    text-decoration:none;
     color:white;
+    text-decoration:none;
 
     font-size:1.5rem;
     font-weight:bold;
@@ -181,6 +157,7 @@ h1{
     margin-bottom:20px;
 
     font-size:2rem;
+
     color:#ffd966;
 }
 
@@ -203,7 +180,10 @@ h1{
     border-top:1px solid rgba(255,255,255,.30);
 }
 
-.cc_recenttracks_list,
+.cc_recenttracks_list{
+    color:white !important;
+}
+
 .cc_recenttracks_list *{
     color:white !important;
 }
@@ -211,8 +191,10 @@ h1{
 .cc_recenttracks_list img{
     display:block !important;
     margin:15px auto !important;
+
     width:120px !important;
     height:auto !important;
+
     border-radius:12px;
 }
 
@@ -240,7 +222,7 @@ h1{
     }
 
     .logo{
-        width:180px;
+        width:150px;
     }
 
     .ascolta-btn{
@@ -249,9 +231,6 @@ h1{
         font-size:1.2rem;
     }
 
-    .listener-number{
-        font-size:1.4rem;
-    }
 }
 
 </style>
@@ -262,25 +241,9 @@ h1{
 
 <div class="container">
 
-    <div class="header-top">
-
-        <img src="RADIO SISTEMA 3.jpeg"
-             alt="Radio Sistema 3"
-             class="logo">
-
-        <div class="listener-box">
-
-            <div class="listener-title">
-                👥 Ascoltatori Online
-            </div>
-
-            <div class="listener-number">
-                000015
-            </div>
-
-        </div>
-
-    </div>
+    <img src="RADIO SISTEMA 3.jpeg"
+         alt="Radio Sistema 3"
+         class="logo">
 
     <h1>RADIO SISTEMA 3</h1>
 
@@ -329,13 +292,23 @@ h1{
             🌎 🌍 🌏
         </div>
 
-        <p style="margin-top:15px;font-size:1.2rem;line-height:1.8;">
-            Radio Sistema 3 trasmette 24 ore su 24,
+        <p style="
+            margin-top:15px;
+            font Radio Sistema 3 trasmette 24 ore su 24,
             raggiungendo ascoltatori in Italia e nel mondo.
         </p>
 
-        <p style="margin-top:15px;color:#ffd966;font-weight:bold;">
-        oter">
+        <p style="
+            margin-top:15px;
+            color:#ffd966;
+            font-weight:bold;
+        ">
+            Grazie per ascoltarci 🎧
+        </p>
+
+    </div>
+
+    <div class="footer">
 
         © Radio Sistema 3
 
@@ -349,3 +322,4 @@ h1{
 
 </body>
 </html>
+ 
