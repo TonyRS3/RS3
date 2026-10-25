@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -18,16 +17,12 @@
 }
 
 body{
-
-    font-family:'Segoe UI',Arial,sans-serif;
+    font-family:Segoe UI,Arial,sans-serif;
     color:white;
     text-align:center;
 
     background:
-    linear-gradient(
-        rgba(0,0,0,.35),
-        rgba(0,0,0,.55)
-    ),
+    linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),
     url("studio-radio.jpeg");
 
     background-size:cover;
@@ -37,122 +32,111 @@ body{
 }
 
 .container{
-
     max-width:900px;
-    margin:30px auto;
+    margin:25px auto;
     padding:30px;
 
     background:rgba(255,255,255,.08);
 
-    backdrop-filter:blur(6px);
-    -webkit-backdrop-filter:blur(6px);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
 
     border-radius:25px;
 
-    border:1px solid rgba(255,255,255,.20);
+    border:1px solid rgba(255,255,255,.15);
 
     box-shadow:
-        0 10px 25px rgba(0,0,0,.35);
+        0 10px 30px rgba(0,0,0,.35);
 }
 
-/* LOGO */
-
 .logo{
-
-    width:320px;
+    width:260px;
     max-width:90%;
-
-    height:auto;
-
     border-radius:20px;
 
     box-shadow:
-        0 0 25px rgba(255,255,255,.35);
+        0 0 30px rgba(255,255,255,.4);
 }
 
 h1{
-
     margin-top:20px;
-
     font-size:3rem;
-
-    text-shadow:
-        0 2px 8px rgba(0,0,0,.5);
 }
 
 .tagline{
-
-    margin-top:10px;
-
+    margin-top:15px;
     font-size:1.2rem;
-
-    color:#ffd966;
+    color:#ffe9a8;
 }
 
 .live{
+    margin-top:25px;
 
-    margin-top:20px;
+    color:#ff4444;
 
-    font-size:1.8rem;
-
+    font-size:1.9rem;
     font-weight:bold;
 
-    color:#ff3333;
-
-    animation:pulse 1.5s infinite;
+    animation:pulse 1.4s infinite;
 }
 
 @keyframes pulse{
-
-    0%{opacity:1;}
-    50%{opacity:.4;}
-    100%{opacity:1;}
+    0%{opacity:1}
+    50%{opacity:.4}
+    100%{opacity:1}
 }
 
 .player-box{
 
     margin-top:30px;
 
-    padding:20px;
+    background:rgba(255,255,255,.10);
 
-    background:rgba(255,255,255,.08);
+    padding:20px;
 
     border-radius:20px;
 }
 
-.player-title{
-
-    font-size:1.5rem;
-
-    margin-bottom:15px;
-
-    color:#ffd966;
-}
-
-/* PLAYER */
-
-audio{
-
-    width:300px;
-
-    max-width:100%;
-}
-
 .section-title{
 
-    margin-top:40px;
+    font-size:1.6rem;
 
     margin-bottom:15px;
-
-    font-size:1.5rem;
 
     color:#ffd966;
 }
 
-/* RECENT TRACKS */
+audio{
+    width:100%;
+    max-width:650px;
+}
+
+.backup-btn{
+
+    display:inline-block;
+
+    margin-top:15px;
+
+    padding:15px 30px;
+
+    border-radius:40px;
+
+    text-decoration:none;
+
+    color:white;
+
+    background:
+    linear-gradient(
+    135deg,
+    #ff512f,
+    #dd2476);
+
+    font-weight:bold;
+}
 
 .cc_recenttracks_list{
     color:white !important;
+    margin-top:25px;
 }
 
 .cc_recenttracks_list *{
@@ -160,13 +144,9 @@ audio{
 }
 
 .cc_recenttracks_list img{
-
     display:block !important;
-
     margin:15px auto !important;
-
     width:120px !important;
-
     border-radius:12px;
 }
 
@@ -174,18 +154,12 @@ audio{
     display:none !important;
 }
 
-/* FOOTER */
-
 .footer{
-
     margin-top:40px;
-
     padding-top:20px;
 
-    border-top:1px solid rgba(255,255,255,.20);
+    border-top:1px solid rgba(255,255,255,.2);
 }
-
-/* MOBILE */
 
 @media(max-width:768px){
 
@@ -203,79 +177,69 @@ audio{
     }
 
     .logo{
-        width:260px;
-    }
-
-    .tagline{
-        font-size:1rem;
+        width:220px;
     }
 
     .live{
         font-size:1.4rem;
     }
-
-    audio{
-        width:100%;
-    }
-
 }
 
 </style>
-
 </head>
 
 <body>
 
 <div class="container">
 
-    <img
-        src="RADIO SISTEMA 3.jpeg"
-        alt="Radio Sistema 3"
-        class="logo">
+<img src="RADIO SISTEMA 3.jpeg"
+     alt="Radio Sistema 3"
+     class="logo">
 
-    <h1>RADIO SISTEMA 3</h1>
+<h1>RADIO SISTEMA 3</h1>
 
-    <div class="tagline">
-        🎙️ La musica che accompagna le tue giornate
-    </div>
+<div class="tagline">
+🎙️ La musica che accompagna le tue giornate
+</div>
 
-    <div class="live">
-        🔴 ON AIR 24/7
-    </div>
+<div class="live">
+🔴 ON AIR 24/7
+</div>
 
-    <div class="player-box">
+<div class="player-box">
 
-        <div class="player-title">
-            🎧 Ascolta in diretta
-        </div>
+<div class="section-title">
+🎧 Ascolta in diretta
+</div>
 
-        <audio controls preload="none">
-            <source src="https://listentomystream.com:8046/" type="audio/mpeg">
-        </audio>
+<audio controls preload="none">
+    <source src="https://listentomystream.com:8046/;" type="audio/mpeg">
+</audio>
 
-    </div>
+<br>
+    
+</div>
 
-    <div class="section-title">
-        🎵 Brano in onda
-    </div>
+<div class="section-title" style="margin-top:40px;">
+🎵 Brano in onda
+</div>
 
-    <div
-        class="cc_recenttracks_list"
-        data-username="bomyydij">
-    </div>
+<div
+class="cc_recenttracks_list"
+data-username="bomyydij">
+</div>
 
-    <div class="footer">
+<div class="footer">
 
-        © Radio Sistema 3
+© Radio Sistema 3
 
-        <br><br>
+<br><br>
 
-        La radio delle tue emozioni
+La radio delle tue emozioni
 
-    </div>
+</div>
 
 </div>
 
 </body>
 </html>
-
