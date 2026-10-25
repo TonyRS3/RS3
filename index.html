@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="it">
-
 <head>
 
 <meta charset="UTF-8">
@@ -27,7 +26,7 @@ body{
     background:
     linear-gradient(
         rgba(0,0,0,.45),
-        rgba(0,0,0,.60)
+        rgba(0,0,0,.65)
     ),
     url("studio-radio.jpeg");
 
@@ -35,7 +34,6 @@ body{
     background-position:center;
     background-repeat:no-repeat;
     background-attachment:fixed;
-
 }
 
 .container{
@@ -55,12 +53,12 @@ body{
 
     box-shadow:
         0 10px 35px rgba(0,0,0,.35);
-
 }
+
 .logo{
 
-    width:260px;
-    height:260px;
+    width:280px;
+    height:280px;
 
     max-width:90vw;
     max-height:90vw;
@@ -69,10 +67,13 @@ body{
 
     border-radius:20px;
 
-    box-shadow:
-        0 0 30px rgba(255,255,255,.40);
+    border:3px solid rgba(255,255,255,.20);
 
-}    
+    box-shadow:
+        0 0 30px rgba(255,255,255,.40),
+        0 10px 25px rgba(0,0,0,.35);
+
+}
 
 h1{
 
@@ -83,7 +84,7 @@ h1{
 
 .tagline{
 
-    margin-top:10px;
+    margin-top:12px;
     font-size:1.2rem;
     color:#ffe49a;
 
@@ -100,13 +101,12 @@ h1{
     font-weight:bold;
 
     animation:pulse 1.5s infinite;
-
 }
 
 @keyframes pulse{
 
     0%{opacity:1;}
-    50%{opacity:.3;}
+    50%{opacity:.35;}
     100%{opacity:1;}
 
 }
@@ -120,47 +120,40 @@ h1{
     padding:25px;
 
     border-radius:20px;
-
 }
 
 .section-title{
 
-    font-size:1.7rem;
-
+    font-size:1.6rem;
     margin-bottom:15px;
-
     color:#ffd966;
-
 }
 
 audio{
 
     width:320px;
     max-width:100%;
-
 }
 
 #fallback{
 
     display:none;
-
     margin-top:20px;
-
 }
 
 .backup-btn{
 
     display:inline-block;
 
-    padding:14px 28px;
-
-    border-radius:40px;
+    padding:12px 24px;
 
     text-decoration:none;
 
     color:white;
 
     font-weight:bold;
+
+    border-radius:40px;
 
     background:
     linear-gradient(
@@ -170,39 +163,30 @@ audio{
     );
 
     box-shadow:
-        0 0 20px rgba(255,82,82,.5);
-
+        0 0 20px rgba(255,82,82,.50);
 }
 
 .cc_recenttracks_list{
-
     color:white !important;
     margin-top:20px;
-
 }
 
 .cc_recenttracks_list *{
-
     color:white !important;
-
 }
 
 .cc_recenttracks_list img{
 
     display:block !important;
-
     margin:15px auto !important;
 
     width:120px !important;
 
     border-radius:12px;
-
 }
 
 .cc_recenttracks_list .ccbuy{
-
     display:none !important;
-
 }
 
 .footer{
@@ -212,60 +196,43 @@ audio{
     padding-top:20px;
 
     border-top:1px solid rgba(255,255,255,.20);
-
 }
 
 @media(max-width:768px){
 
     body{
-
         background-attachment:scroll;
-
     }
 
     .container{
-
         margin:12px;
         padding:20px;
-
     }
 
     h1{
-
         font-size:2rem;
-
     }
 
     .logo{
-
         width:220px;
-
+        height:220px;
     }
 
     .tagline{
-
         font-size:1rem;
-
     }
 
     .live{
-
         font-size:1.4rem;
-
     }
 
     .section-title{
-
-        font-size:1.4rem;
-
+        font-size:1.3rem;
     }
 
     audio{
-
         width:100%;
-
     }
-
 }
 
 </style>
@@ -302,16 +269,14 @@ audio{
             controls
             preload="none">
 
-            <source
-                src="https://listentomystream.com:8046/;"
-                type="audio/mpeg">
+            https://listentomystream.com:8046/;
 
         </audio>
 
         <div id="fallback">
 
             <p style="margin-bottom:10px;">
-                ⚠️ Se il player non funziona utilizza il player esterno
+                ⚠️ Problemi con il player? Usa il player esterno.
             </p>
 
             <a
@@ -353,20 +318,10 @@ audio{
 const player = document.getElementById('radioPlayer');
 const fallback = document.getElementById('fallback');
 
-function mostraBackup() {
-
+function mostraFallback() {
     fallback.style.display = 'block';
-
 }
 
-player.addEventListener('error', mostraBackup);
-player.addEventListenerk.style.display = 'block';
-
-    }
-
-}, 10000);
-
-</script>
-
-</body>
-</html>
+player.addEventListener('error', mostraFallback);
+player.addEventListener('stalled', mostraFallback);
+player
