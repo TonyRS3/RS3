@@ -29,8 +29,6 @@ audio{width:100%;max-width:350px;}
 .dediche-box textarea{resize:none;height:70px;}
 .btn-dedica{margin-top:12px;background:linear-gradient(135deg,#ffd966,#ff9f1c);color:#000;font-weight:bold;padding:12px 25px;border:none;border-radius:30px;font-size:1.1rem;cursor:pointer;transition:.2s;}
 .btn-dedica:hover{transform:scale(1.05);box-shadow:0 0 15px #ffd966;}
-.ultime-dediche{margin-top:20px;text-align:left;max-width:500px;margin-left:auto;margin-right:auto;background:rgba(0,0,0,.25);padding:12px;border-radius:12px;max-height:200px;overflow-y:auto;}
-.ultime-dediche div{padding:6px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:0.95rem;}
 .footer{margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,.2);}
 @media(max-width:768px){.logo{width:190px;height:190px;}h1{font-size:1.9rem;}.container{margin:10px;padding:18px;}}
 </style>
@@ -53,16 +51,13 @@ audio{width:100%;max-width:350px;}
 <input type="text" id="canzone" placeholder="Canzone richiesta (opzionale)">
 <br>
 <button class="btn-dedica" onclick="inviaDedica()">📩 INVIA DEDICA</button>
-<div class="ultime-dediche" id="listaDediche"><b>💬 Ultime dediche:</b><br><i style="color:#ccc;font-size:0.85rem;">Ancora nessuna, sii il primo!</i></div>
 </div>
 
 <div class="footer">© Radio Sistema 3<br><br>La radio delle tue emozioni<br><br>Licenza SIAE n° 202600000389</div>
 </div>
 
 <script>
-// 1. METTI QUI IL NUMERO PER LE DEDICHE - con 39 davanti, senza + e senza spazi
-// Esempio: se il numero è 3401234567 scrivi 393401234567
-const WHATSAPP_NUMBER = "39xxxxxxxxxxxx";
+const WHATSAPP_NUMBER = "39XXXXXXXXXX";
 
 function inviaDedica(){
   const nome=document.getElementById('nome').value.trim();
@@ -70,23 +65,12 @@ function inviaDedica(){
   const msg=document.getElementById('messaggio').value.trim();
   const canzone=document.getElementById('canzone').value.trim();
   if(!nome || !perChi || !msg){alert("Compila nome, per chi e messaggio!");return;}
-  if(WHATSAPP_NUMBER.includes("X")){alert("Devi ancora inserire il numero! Vai in alto nel codice dove c'è WHATSAPP_NUMBER");return;}
+  if(WHATSAPP_NUMBER.includes("X")){alert("Inserisci il numero!");return;}
   const testo=`*NUOVA DEDICA - RADIO SISTEMA 3*%0A%0A👤 Da: ${nome}%0A❤️ Per: ${perChi}%0A💬 Messaggio: ${msg}%0A🎵 Canzone: ${canzone || 'a scelta della regia'}%0A%0A---%0AInviato dal sito`;
-  const dediche=JSON.parse(localStorage.getItem('dedicheRS3')||'[]');
-  dediche.unshift({nome,perChi,msg,canzone,ora:new Date().toLocaleString()});
-  if(dediche.length>10) dediche.pop();
-  localStorage.setItem('dedicheRS3',JSON.stringify(dediche));
-  mostraDediche();
   const url=`https://wa.me/${WHATSAPP_NUMBER}?text=${testo}`;
   window.location.href = url;
 }
-function mostraDediche(){
-  const dediche=JSON.parse(localStorage.getItem('dedicheRS3')||'[]');
-  const lista=document.getElementById('listaDediche');
-  if(dediche.length===0) return;
-  lista.innerHTML="<b>💬 Ultime dediche:</b><br>"+dediche.map(d=>`<div><b>${d.nome}</b> → <b>${d.perChi}</b>: "${d.msg}" ${d.canzone?'<i>['+d.canzone+']</i>':''}</div>`).join('');
-}
-mostraDediche();
+
 function cleanWhiteBorder(img){
   if(img.dataset.cleaned==="1") return;
   img.dataset.cleaned="1";
@@ -119,4 +103,3 @@ setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(
 </script>
 </body>
 </html>
- 
