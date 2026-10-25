@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
-<head>
 
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -18,15 +18,14 @@
 }
 
 body{
-
     font-family:'Segoe UI',Arial,sans-serif;
     color:white;
     text-align:center;
 
     background:
     linear-gradient(
-        rgba(0,0,0,.45),
-        rgba(0,0,0,.65)
+        rgba(0,0,0,.40),
+        rgba(0,0,0,.60)
     ),
     url("studio-radio.jpeg");
 
@@ -45,7 +44,6 @@ body{
     background:rgba(255,255,255,.08);
 
     backdrop-filter:blur(8px);
-    -webkit-backdrop-filter:blur(8px);
 
     border-radius:25px;
 
@@ -59,9 +57,6 @@ body{
 
     width:280px;
     height:280px;
-
-    max-width:90vw;
-    max-height:90vw;
 
     object-fit:cover;
 
@@ -87,7 +82,6 @@ h1{
     margin-top:12px;
     font-size:1.2rem;
     color:#ffe49a;
-
 }
 
 .live{
@@ -96,7 +90,7 @@ h1{
 
     font-size:1.8rem;
 
-    color:#ff4444;
+    color:#ff4040;
 
     font-weight:bold;
 
@@ -124,28 +118,32 @@ h1{
 
 .section-title{
 
-    font-size:1.6rem;
+    font-size:1.5rem;
+
     margin-bottom:15px;
+
     color:#ffd966;
 }
 
 audio{
 
-    width:320px;
+    width:300px;
     max-width:100%;
+
 }
 
 #fallback{
 
     display:none;
-    margin-top:20px;
+
+    margin-top:15px;
 }
 
 .backup-btn{
 
     display:inline-block;
 
-    padding:12px 24px;
+    padding:12px 25px;
 
     text-decoration:none;
 
@@ -161,9 +159,6 @@ audio{
         #ff512f,
         #dd2476
     );
-
-    box-shadow:
-        0 0 20px rgba(255,82,82,.50);
 }
 
 .cc_recenttracks_list{
@@ -178,6 +173,7 @@ audio{
 .cc_recenttracks_list img{
 
     display:block !important;
+
     margin:15px auto !important;
 
     width:120px !important;
@@ -218,16 +214,8 @@ audio{
         height:220px;
     }
 
-    .tagline{
-        font-size:1rem;
-    }
-
     .live{
         font-size:1.4rem;
-    }
-
-    .section-title{
-        font-size:1.3rem;
     }
 
     audio{
@@ -243,85 +231,85 @@ audio{
 
 <div class="container">
 
-    <img
-        src="RADIO SISTEMA 3.jpeg"
-        alt="Radio Sistema 3"
-        class="logo">
+<img
+    src="RADIO SISTEMA 3.jpeg"
+    alt="Radio Sistema 3"
+    class="logo">
 
-    <h1>RADIO SISTEMA 3</h1>
+<h1>RADIO SISTEMA 3</h1>
 
-    <div class="tagline">
-        🎙️ La musica che accompagna le tue giornate
-    </div>
+<div class="tagline">
+🎙️ La musica che accompagna le tue giornate
+</div>
 
-    <div class="live">
-        🔴 ON AIR 24/7
-    </div>
+<div class="live">
+🔴 ON AIR 24/7
+</div>
 
-    <div class="player-box">
+<div class="player-box">
 
-        <div class="section-title">
-            🎧 Ascolta in diretta
-        </div>
+<div class="section-title">
+🎧 Ascolta in diretta
+</div>
 
-        <audio
-            id="radioPlayer"
-            controls
-            preload="none">
+<audio id="radioPlayer" controls>
 
-            https://listentomystream.com:8046/;
+<source
+src="https://listentomystream.com:8046/;"
+type="audio/mpeg">
 
-        </audio>
+</audio>
 
-        <div id="fallback">
+<div id="fallback">
 
-            <p style="margin-bottom:10px;">
-                ⚠️ Problemi con il player? Usa il player esterno.
-            </p>
+<p style="margin-bottom:10px;">
+⚠️ Se il player non funziona usa il player esterno
+</p>
 
-            <a
-                class="backup-btn"
-                href="https://listentomystream.com:8046/"
-                target="_blank">
+<a
+class="backup-btn"
+href="https://listentomystream.com:8046/"
+target="_blank">
 
-                🎧 APRI PLAYER ESTERNO
+🎧 APRI PLAYER ESTERNO
 
-            </a>
+</a>
 
-        </div>
+</div>
 
-    </div>
+</div>
 
-    <div class="section-title" style="margin-top:40px;">
-        🎵 Brano in onda
-    </div>
+<div class="section-title" style="margin-top:40px;">
+🎵 Brano in onda
+</div>
 
-    <div
-        class="cc_recenttracks_list"
-        data-username="bomyydij">
-    </div>
+<div
+class="cc_recenttracks_list"
+data-username="bomyydij">
+</div>
 
-    <div class="footer">
+<div class="footer">
 
-        © Radio Sistema 3
+© Radio Sistema 3
 
-        <br><br>
+<br><br>
 
-        La radio delle tue emozioni
+La radio delle tue emozioni
 
-    </div>
+</div>
 
 </div>
 
 <script>
 
-const player = document.getElementById('radioPlayer');
-const fallback = document.getElementById('fallback');
+const player = document.getElementById("radioPlayer");
+const fallback = document.getElementById("fallback");
 
-function mostraFallback() {
-    fallback.style.display = 'block';
-}
+player.addEventListener("error", function() {
+    fallback.style.display = "block";
+});
 
-player.addEventListener('error', mostraFallback);
-player.addEventListener('stalled', mostraFallback);
-player
+</script>
+
+</body>
+</html>
