@@ -86,8 +86,6 @@ h1{
     100%{opacity:1}
 }
 
-/* PLAYER BOX PIÙ COMPATTO */
-
 .player-box{
 
     margin-top:30px;
@@ -97,11 +95,6 @@ h1{
     padding:20px;
 
     border-radius:20px;
-
-    max-width:420px;
-
-    margin-left:auto;
-    margin-right:auto;
 }
 
 .section-title{
@@ -113,11 +106,34 @@ h1{
     color:#ffd966;
 }
 
-/* NON TOCCARE IL PLAYER */
+/* PLAYER LEGGERMENTE PIÙ PICCOLO */
 
 audio{
     width:100%;
-    max-width:650px;
+    max-width:450px;
+}
+
+.backup-btn{
+
+    display:inline-block;
+
+    margin-top:15px;
+
+    padding:15px 30px;
+
+    border-radius:40px;
+
+    text-decoration:none;
+
+    color:white;
+
+    background:
+    linear-gradient(
+    135deg,
+    #ff512f,
+    #dd2476);
+
+    font-weight:bold;
 }
 
 .cc_recenttracks_list{
@@ -169,10 +185,6 @@ audio{
     .live{
         font-size:1.4rem;
     }
-
-    .player-box{
-        max-width:350px;
-    }
 }
 
 </style>
@@ -205,6 +217,8 @@ audio{
 <audio controls preload="none">
     <source src="https://listentomystream.com:8046/" type="audio/mpeg">
 </audio>
+
+<br>
 
 </div>
 
