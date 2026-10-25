@@ -19,10 +19,10 @@ h1{margin-top:20px;font-size:3rem;}
 .player-box{margin-top:30px;background:rgba(255,255,255,.10);padding:15px;border-radius:20px;width:420px;max-width:90%;margin:0 auto;}
 .section-title{font-size:1.6rem;margin-bottom:15px;color:#ffd966;}
 audio{width:100%;max-width:350px;}
-.cc_recenttracks_list{margin-top:5px !important;color:white !important;text-align:left !important; max-width:420px; margin-left:auto; margin-right:auto;}
+.cc_recenttracks_list{margin-top:5px !important;color:white !important;text-align:left !important;max-width:420px;margin-left:auto;margin-right:auto;}
 .cc_recenttracks_list *{color:white !important;line-height:1.3 !important;}
 .cc_recenttracks_list .ccbuy{display:none !important;}
-.cc_recenttracks_list img{opacity:0; display:block;}
+.cc_recenttracks_list img{opacity:0;display:block;}
 .footer{margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,.2);}
 @media(max-width:768px){.logo{width:200px;height:200px;}h1{font-size:2rem;}.container{margin:12px;padding:20px;}}
 </style>
@@ -43,11 +43,9 @@ audio{width:100%;max-width:350px;}
 function cleanWhiteBorder(img){
   if(img.dataset.cleaned==="1") return;
   img.dataset.cleaned="1";
-
   const isMobile = window.innerWidth < 768;
-  const finalSize = isMobile ? 95 : 110; // <--- dimensione ideale come tuo screenshot
+  const finalSize = isMobile ? 95 : 110;
 
-  // Crea canvas per ritagliare il bianco
   const tempImg = new Image();
   tempImg.crossOrigin = "anonymous";
   tempImg.onload = function(){
@@ -60,53 +58,39 @@ function cleanWhiteBorder(img){
     ctx.drawImage(tempImg,0,0);
     const data = ctx.getImageData(0,0,w,h).data;
 
-    // Trova bordo non bianco (soglia >230 = bianco)
     let top=0,bottom=h,left=0,right=w;
-    // top
     for(let y=0;y<h;y++){
       let whiteRow=true;
-      for(let x=0;x<w;x++){
-        const i=(y*w+x)*4;
-        if(data[i]<230 || data[i+1]<230 || data[i+2]<230){whiteRow=false;break;}
-      }
+      for(let x=0;x<w;x++){const i=(y*w+x)*4; if(data[i]<230 || data[i+1]<230 || data[i+2]<230){whiteRow=false;break;}}
       if(!whiteRow){top=y;break;}
     }
-    // bottom
     for(let y=h-1;y>=0;y--){
       let whiteRow=true;
-      for(let x=0;x<w;x++){
-        const i=(y*w+x)*4;
-        if(data[i]<230 || data[i+1]<230 || data[i+2]<230){whiteRow=false;break;}
-      }
+      for(let x=0;x<w;x++){const i=(y*w+x)*4; if(data[i]<230 || data[i+1]<230 || data[i+2]<230){whiteRow=false;break;}}
       if(!whiteRow){bottom=y+1;break;}
     }
-    // left
     for(let x=0;x<w;x++){
       let whiteCol=true;
-      for(let y=top;y<bottom;y++){
-        const i=(y*w+x)*4;
-        if(data[i]<230 || data[i+1]<230 || data[i+2]<230){whiteCol=false;break;}
-      }
+      for(let y=top;y<bottom;y++){const i=(y*w+x)*4; if(data[i]<230 || data[i+1]<230 || data[i+2]<230){whiteCol=false;break;}}
       if(!whiteCol){left=x;break;}
     }
-    // right
     for(let x=w-1;x>=0;x--){
       let whiteCol=true;
-      for(let y=top;y<bottom;y++){
-        const i=(y*w+x)*4;
-        if(data[i]<230 || data[i+1]<230 || data[i+2]<230){whiteCol=false;break;}
-      }
+      for(let y=top;y<bottom;y++){const i=(y*w+x)*4; if(data[i]<230 || data[i+1]<230 || data[i+2]<230){whiteCol=false;break;}}
       if(!whiteCol){right=x+1;break;}
     }
 
-    // Ritaglia
+    // FIX BORDO DESTRO PIU' SPESSO
+    const extraRight = Math.round(w * 0.06);
+    right = right - extraRight;
+    left = left + Math.round(w * 0.01);
+
     const cw = right-left;
     const ch = bottom-top;
     const out = document.createElement('canvas');
     out.width = finalSize;
     out.height = finalSize;
     const octx = out.getContext('2d');
-    // disegna ritagliato e ridimensionato nitido
     octx.imageSmoothingQuality = 'high';
     octx.drawImage(canvas, left, top, cw, ch, 0, 0, finalSize, finalSize);
     
@@ -118,14 +102,13 @@ function cleanWhiteBorder(img){
     img.style.border = "1px solid #ccc";
     img.style.display = "inline-block";
     img.style.verticalAlign = "middle";
-    img.style.margin = "5px 10px 5px 0";
+    img.style.margin = "2px 8px 2px 0";
     img.style.opacity = "1";
   };
   tempImg.onerror = function(){
-    // fallback se CORS blocca: usa zoom leggero
     img.style.width = finalSize+"px";
     img.style.height = finalSize+"px";
-    img.style.transform = "scale(1.2)";
+    img.style.objectPosition = "42% center";
     img.style.opacity="1";
   };
   tempImg.src = img.src;
