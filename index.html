@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
-
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -18,14 +18,16 @@
 }
 
 body{
+
     font-family:'Segoe UI',Arial,sans-serif;
+
     color:white;
     text-align:center;
 
     background:
     linear-gradient(
         rgba(0,0,0,.35),
-        rgba(0,0,0,.50)
+        rgba(0,0,0,.55)
     ),
     url("studio-radio.jpeg");
 
@@ -33,113 +35,158 @@ body{
     background-position:center;
     background-repeat:no-repeat;
     background-attachment:fixed;
+
 }
 
 .container{
+
     max-width:950px;
     margin:30px auto;
     padding:30px;
 
-    background:rgba(255,255,255,.10);
+    background:rgba(255,255,255,.08);
 
-    backdrop-filter:blur(5px);
-    -webkit-backdrop-filter:blur(5px);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
 
     border-radius:25px;
 
     border:1px solid rgba(255,255,255,.20);
 
     box-shadow:
-        0 0 25px rgba(255,255,255,.15),
-        0 8px 25px rgba(0,0,0,.25);
+        0 0 25px rgba(255,255,255,.10),
+        0 10px 25px rgba(0,0,0,.30);
+
 }
 
 /* COPERTINA QUADRATA */
- .logo{
+
+.logo-container{
+
     width:300px;
     height:300px;
 
-    object-fit:cover;
-
-    object-position:center center;
+    margin:0 auto;
 
     overflow:hidden;
 
     border-radius:20px;
-}   
+
+    border:3px solid rgba(255,255,255,.20);
+
+    box-shadow:
+        0 0 30px rgba(255,255,255,.35),
+        0 10px 25px rgba(0,0,0,.35);
+
+}
+
+.logo{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+    object-position:center center;
+
+    display:block;
+
+}
 
 h1{
+
     margin-top:25px;
+
     font-size:3rem;
 
     text-shadow:
-        0 2px 8px rgba(0,0,0,.4);
+        0 2px 8px rgba(0,0,0,.5);
+
 }
 
 .tagline{
-    margin-top:15px;
-    font-size:1.1rem;
-    color:#fff8d6;
+
+    margin-top:10px;
+
+    font-size:1.2rem;
+
+    color:#ffe9a8;
+
 }
 
 .live{
+
     margin-top:25px;
+
     font-size:1.8rem;
-    color:#ff2d2d;
+
+    color:#ff3030;
+
     font-weight:bold;
+
     animation:pulse 1.5s infinite;
+
 }
 
 @keyframes pulse{
+
     0%{opacity:1;}
-    50%{opacity:.4;}
+    50%{opacity:.35;}
     100%{opacity:1;}
+
 }
 
 .player-box{
 
     margin-top:30px;
 
-    background:rgba(255,255,255,.08);
-
     padding:20px;
 
     border-radius:20px;
+
+    background:rgba(255,255,255,.08);
+
 }
 
 .section-title{
+
     margin-bottom:15px;
+
     font-size:1.6rem;
+
     color:#ffd966;
+
 }
 
 /* PLAYER PIÙ PICCOLO */
 
 audio{
-    width:320px;
+
+    width:300px;
     max-width:100%;
+
 }
 
-/* FALLBACK */
-
 #fallback{
+
     display:none;
+
     margin-top:15px;
+
 }
 
 .backup-btn{
 
     display:inline-block;
 
-    padding:12px 25px;
-
-    border-radius:35px;
+    padding:12px 24px;
 
     text-decoration:none;
 
     color:white;
 
     font-weight:bold;
+
+    border-radius:40px;
 
     background:
     linear-gradient(
@@ -152,7 +199,6 @@ audio{
 
 .cc_recenttracks_list{
     color:white !important;
-    margin-top:20px;
 }
 
 .cc_recenttracks_list *{
@@ -160,53 +206,85 @@ audio{
 }
 
 .cc_recenttracks_list img{
+
     display:block !important;
+
     margin:15px auto !important;
+
     width:120px !important;
+
     border-radius:12px;
+
 }
 
 .cc_recenttracks_list .ccbuy{
+
     display:none !important;
+
 }
 
 .footer{
+
     margin-top:40px;
+
     padding-top:20px;
-    border-top:1px solid rgba(255,255,255,.30);
+
+    border-top:1px solid rgba(255,255,255,.25);
+
 }
 
 @media (max-width:768px){
 
     body{
+
         background-attachment:scroll;
+
     }
 
     .container{
+
         margin:12px;
         padding:20px;
+
     }
 
     h1{
+
         font-size:2rem;
+
     }
 
-    .logo{
+    .logo-container{
+
         width:220px;
         height:220px;
+
+    }
+
+    .tagline{
+
+        font-size:1rem;
+
     }
 
     .live{
+
         font-size:1.4rem;
+
     }
 
     .section-title{
+
         font-size:1.3rem;
+
     }
 
     audio{
+
         width:100%;
+
     }
+
 }
 
 </style>
@@ -217,10 +295,14 @@ audio{
 
 <div class="container">
 
-    <img
-        src="RADIO SISTEMA 3.jpeg"
-        alt="Radio Sistema 3"
-        class="logo">
+    <div class="logo-container">
+
+        <img
+            src="RADIO SISTEMA 3.jpeg"
+            alt="Radio Sistema 3"
+            class="logo">
+
+    </div>
 
     <h1>RADIO SISTEMA 3</h1>
 
@@ -238,16 +320,9 @@ audio{
             🎧 Ascolta in diretta
         </div>
 
-        <!-- QUI METTI L'URL CHE TI FUNZIONAVA -->
-
         <audio id="radioPlayer" controls preload="none">
-
-            <source
-                src="https://listentomystream.com:8046/;"
-                type="audio/mpeg">
-
+            <source src="https://listentomystream.com:8046/;" type="audio/mpeg">
             Il tuo browser non supporta l'audio HTML5.
-
         </audio>
 
         <div id="fallback">
@@ -292,11 +367,7 @@ audio{
 
 <script>
 
-const player = document.getElementById("radioPlayer");
-const fallback = document.getElementById("fallback");
-
-function mostraFallback(){
-    fallback.style.display = "block";
+const player = document. fallback.style.display = "block";
 }
 
 player.addEventListener("error", mostraFallback);
