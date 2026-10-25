@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -11,187 +12,211 @@
 <style>
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 body{
-font-family:'Segoe UI',Arial,sans-serif;
-text-align:center;
-color:#fff;
 
-background:
-linear-gradient(
-rgba(0,0,0,.35),
-rgba(0,0,0,.55)
-),
-url("studio-radio.jpeg");
+    font-family:'Segoe UI',Arial,sans-serif;
+    color:white;
+    text-align:center;
 
-background-size:cover;
-background-position:center;
-background-repeat:no-repeat;
-background-attachment:fixed;
+    background:
+    linear-gradient(
+        rgba(0,0,0,.35),
+        rgba(0,0,0,.55)
+    ),
+    url("studio-radio.jpeg");
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    background-attachment:fixed;
 }
 
 .container{
-max-width:900px;
-margin:30px auto;
-padding:30px;
 
-background:rgba(255,255,255,.08);
+    max-width:900px;
+    margin:30px auto;
+    padding:30px;
 
-backdrop-filter:blur(5px);
+    background:rgba(255,255,255,.08);
 
-border-radius:25px;
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
 
-border:1px solid rgba(255,255,255,.20);
+    border-radius:25px;
 
-box-shadow:
-0 10px 25px rgba(0,0,0,.35);
+    border:1px solid rgba(255,255,255,.20);
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.35);
 }
+
+/* LOGO */
 
 .logo{
 
-width:320px;
-max-width:90%;
+    width:320px;
+    max-width:90%;
 
-height:auto;
+    height:auto;
 
-border-radius:20px;
+    border-radius:20px;
 
-box-shadow:
-0 0 25px rgba(255,255,255,.35);
+    box-shadow:
+        0 0 25px rgba(255,255,255,.35);
 }
 
 h1{
-margin-top:20px;
-font-size:3rem;
+
+    margin-top:20px;
+
+    font-size:3rem;
+
+    text-shadow:
+        0 2px 8px rgba(0,0,0,.5);
 }
 
 .tagline{
-margin-top:10px;
-font-size:1.2rem;
-color:#ffd966;
+
+    margin-top:10px;
+
+    font-size:1.2rem;
+
+    color:#ffd966;
 }
 
 .live{
 
-margin-top:20px;
+    margin-top:20px;
 
-font-size:1.8rem;
+    font-size:1.8rem;
 
-font-weight:bold;
+    font-weight:bold;
 
-color:#ff3333;
+    color:#ff3333;
 
-animation:pulse 1.5s infinite;
+    animation:pulse 1.5s infinite;
 }
 
 @keyframes pulse{
 
-0%{opacity:1;}
-50%{opacity:.4;}
-100%{opacity:1;}
-
+    0%{opacity:1;}
+    50%{opacity:.4;}
+    100%{opacity:1;}
 }
 
 .player-box{
 
-margin-top:30px;
+    margin-top:30px;
 
-padding:20px;
+    padding:20px;
 
-background:rgba(255,255,255,.08);
+    background:rgba(255,255,255,.08);
 
-border-radius:20px;
+    border-radius:20px;
 }
 
 .player-title{
 
-font-size:1.4rem;
+    font-size:1.5rem;
 
-margin-bottom:15px;
+    margin-bottom:15px;
 
-color:#ffd966;
+    color:#ffd966;
 }
+
+/* PLAYER */
 
 audio{
 
-width:300px;
+    width:300px;
 
-max-width:100%;
+    max-width:100%;
 }
 
 .section-title{
 
-margin-top:40px;
+    margin-top:40px;
 
-margin-bottom:15px;
+    margin-bottom:15px;
 
-font-size:1.5rem;
+    font-size:1.5rem;
 
-color:#ffd966;
+    color:#ffd966;
 }
 
+/* RECENT TRACKS */
+
 .cc_recenttracks_list{
-color:white !important;
+    color:white !important;
 }
 
 .cc_recenttracks_list *{
-color:white !important;
+    color:white !important;
 }
 
 .cc_recenttracks_list img{
 
-display:block !important;
+    display:block !important;
 
-margin:15px auto !important;
+    margin:15px auto !important;
 
-width:120px !important;
+    width:120px !important;
 
-border-radius:12px;
+    border-radius:12px;
 }
 
 .cc_recenttracks_list .ccbuy{
-display:none !important;
+    display:none !important;
 }
+
+/* FOOTER */
 
 .footer{
 
-margin-top:40px;
+    margin-top:40px;
 
-padding-top:20px;
+    padding-top:20px;
 
-border-top:1px solid rgba(255,255,255,.20);
+    border-top:1px solid rgba(255,255,255,.20);
 }
+
+/* MOBILE */
 
 @media(max-width:768px){
 
-body{
-background-attachment:scroll;
-}
+    body{
+        background-attachment:scroll;
+    }
 
-.container{
-margin:12px;
-padding:20px;
-}
+    .container{
+        margin:12px;
+        padding:20px;
+    }
 
-h1{
-font-size:2rem;
-}
+    h1{
+        font-size:2rem;
+    }
 
-.logo{
-width:260px;
-}
+    .logo{
+        width:260px;
+    }
 
-.live{
-font-size:1.4rem;
-}
+    .tagline{
+        font-size:1rem;
+    }
 
-audio{
-width:100%;
-}
+    .live{
+        font-size:1.4rem;
+    }
+
+    audio{
+        width:100%;
+    }
 
 }
 
@@ -203,55 +228,54 @@ width:100%;
 
 <div class="container">
 
-<img
-src="RADIO SISTEMA 3.jpeg"
-alt="Radio Sistema 3"
-class="logo">
+    <img
+        src="RADIO SISTEMA 3.jpeg"
+        alt="Radio Sistema 3"
+        class="logo">
 
-<h1>RADIO SISTEMA 3</h1>
+    <h1>RADIO SISTEMA 3</h1>
 
-<div class="tagline">
-🎙️ La musica che accompagna le tue giornate
-</div>
+    <div class="tagline">
+        🎙️ La musica che accompagna le tue giornate
+    </div>
 
-<div class="live">
-🔴 ON AIR 24/7
-</div>
+    <div class="live">
+        🔴 ON AIR 24/7
+    </div>
 
-<div class="player-box">
+    <div class="player-box">
 
-<div class="player-title">
-🎧 Ascolta in diretta
-</div>
+        <div class="player-title">
+            🎧 Ascolta in diretta
+        </div>
 
-<audio controls preload="none">
+        <audio controls preload="none">
+            <source src="https://listentomystream.com:8046/" type="audio/mpeg">
+        </audio>
 
-https://listentomystream.com:8046/;
+    </div>
 
-</audio>
+    <div class="section-title">
+        🎵 Brano in onda
+    </div>
 
-</div>
+    <div
+        class="cc_recenttracks_list"
+        data-username="bomyydij">
+    </div>
 
-<div class="section-title">
-🎵 Brano in onda
-</div>
+    <div class="footer">
 
-<div
-class="cc_recenttracks_list"
-data-username="bomyydij">
-</div>
+        © Radio Sistema 3
 
-<div class="footer">
+        <br><br>
 
-© Radio Sistema 3
+        La radio delle tue emozioni
 
-<br><br>
-
-La radio delle tue emozioni
-
-</div>
+    </div>
 
 </div>
 
 </body>
 </html>
+
