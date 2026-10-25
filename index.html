@@ -24,7 +24,7 @@ audio{width:100%;max-width:350px;}
 .cc_recenttracks_list .ccbuy{display:none !important;}
 .cc_recenttracks_list img{opacity:0;display:block;}
 .footer{margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,.2);}
-@media(max-width:768px){.logo{width:200px;height:200px;}h1{font-size:2rem;}.container{margin:12px;padding:20px;}}
+@media(max-width:768px){.logo{width:190px;height:190px;}h1{font-size:1.9rem;}.container{margin:10px;padding:18px;}}
 </style>
 </head>
 <body>
@@ -34,7 +34,7 @@ audio{width:100%;max-width:350px;}
 <div class="tagline">🎙️ La musica che accompagna le tue giornate</div>
 <div class="live">🔴 ON AIR 24/7</div>
 <div class="player-box"><div class="section-title">🎧 Ascolta in diretta</div><audio controls preload="none"><source src="https://listentomystream.com:8046/;" type="audio/mpeg"></audio></div>
-<div class="section-title" style="margin-top:12px;">🎵 Brano in onda</div>
+<div class="section-title" style="margin-top:10px;">🎵 Brano in onda</div>
 <div class="cc_recenttracks_list" data-username="bomyydij"></div>
 <div class="footer">© Radio Sistema 3<br><br>La radio delle tue emozioni<br><br>Licenza SIAE n° 202600000389</div>
 </div>
@@ -44,7 +44,7 @@ function cleanWhiteBorder(img){
   if(img.dataset.cleaned==="1") return;
   img.dataset.cleaned="1";
   const isMobile = window.innerWidth < 768;
-  const finalSize = isMobile ? 95 : 110;
+  const finalSize = isMobile ? 80 : 100; // PIU' PICCOLA SU TELEFONO
 
   const tempImg = new Image();
   tempImg.crossOrigin = "anonymous";
@@ -80,10 +80,11 @@ function cleanWhiteBorder(img){
       if(!whiteCol){right=x+1;break;}
     }
 
-    // FIX BORDO DESTRO PIU' SPESSO
-    const extraRight = Math.round(w * 0.06);
-    right = right - extraRight;
-    left = left + Math.round(w * 0.01);
+    // FIX BORDO DESTRO - ORA TAGLIA 10% IN PIU'
+    right = right - Math.round(w * 0.10);
+    left = left + Math.round(w * 0.02);
+    top = top + Math.round(h * 0.02);
+    bottom = bottom - Math.round(h * 0.02);
 
     const cw = right-left;
     const ch = bottom-top;
@@ -98,17 +99,16 @@ function cleanWhiteBorder(img){
     img.style.width = finalSize+"px";
     img.style.height = finalSize+"px";
     img.style.objectFit = "cover";
-    img.style.borderRadius = "6px";
-    img.style.border = "1px solid #ccc";
+    img.style.borderRadius = "5px";
     img.style.display = "inline-block";
     img.style.verticalAlign = "middle";
     img.style.margin = "2px 8px 2px 0";
     img.style.opacity = "1";
+    img.style.border = "none"; // tolto il bordino che sembrava più largo a destra
   };
   tempImg.onerror = function(){
     img.style.width = finalSize+"px";
     img.style.height = finalSize+"px";
-    img.style.objectPosition = "42% center";
     img.style.opacity="1";
   };
   tempImg.src = img.src;
