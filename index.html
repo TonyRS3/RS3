@@ -6,67 +6,93 @@
 <title>Radio Sistema 3</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#111;color:#fff;font-family:Arial;text-align:center;padding:15px}
-.container{max-width:900px;margin:auto;background:#1a1a1a;padding:20px;border-radius:20px;border:1px solid #333}
-.logo{width:200px;height:200px;object-fit:cover;border-radius:15px}
-.player-box{margin:20px auto;background:#222;padding:15px;border-radius:15px;max-width:420px}
-audio{width:100%}
-.cc_recenttracks_list{max-width:420px;margin:10px auto;background:#222;padding:12px;border-radius:12px;text-align:left;color:#fff}
-.cc_recenttracks_list img{width:80px!important;height:80px!important;opacity:1!important;display:inline-block!important;border-radius:6px}
-.topcharts{margin-top:25px;background:#222;padding:15px;border-radius:15px;border:1px solid #ffd96630}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
-@media(min-width:600px){.grid{grid-template-columns:repeat(3,1fr)}}
-.card{background:#111;border-radius:10px;overflow:hidden;text-decoration:none;color:#fff;border:1px solid #333;display:block;position:relative}
-.card img{width:100%;height:140px;object-fit:cover;display:block}
-.card .info{padding:8px;text-align:left}
-.card .titolo{display:block;font-weight:bold;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card .autore{display:block;font-size:12px;color:#aaa;margin-top:2px}
-.play{position:absolute;bottom:45px;right:8px;background:#ffd966;color:#000;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold}
-.dediche{margin-top:25px;background:#222;padding:15px;border-radius:15px}
-.dediche input,.dediche textarea{width:100%;max-width:400px;padding:10px;margin:6px 0;border-radius:8px;border:none;background:#000;color:#fff}
-.btn{background:#ffd966;color:#000;padding:12px 25px;border:none;border-radius:25px;font-weight:bold;cursor:pointer;margin-top:10px}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Segoe UI,Arial,sans-serif;color:white;text-align:center;background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),url("studio-radio.jpeg");background-size:cover;background-position:center;background-attachment:fixed;background-color:#2a2a2a;}
+.container{max-width:900px;margin:25px auto;padding:30px;background:rgba(255,255,255,.08);backdrop-filter:blur(8px);border-radius:25px;border:1px solid rgba(255,255,255,.15);}
+.logo-wrap{display:inline-block;padding:5px;border-radius:26px;background:linear-gradient(135deg,#ff512f,#dd2476,#ffd966,#00d4ff,#ff512f);background-size:300% 300%;animation:gradientMove 4s ease infinite;}
+@keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.logo{width:260px;height:260px;aspect-ratio:1/1;object-fit:cover;border-radius:20px;display:block;background:#000;}
+h1{margin-top:20px;font-size:3rem;} .tagline{margin-top:15px;color:#ffe9a8;}
+.live{margin-top:25px;color:#ff4444;font-size:1.9rem;font-weight:bold;animation:pulse 1.4s infinite;}
+@keyframes pulse{0%{opacity:1}50%{opacity:.4}100%{opacity:1}}
+.player-box{margin-top:25px;background:rgba(255,255,255,.15);padding:15px;border-radius:20px;width:420px;max-width:90%;margin:0 auto;}
+.section-title{font-size:1.6rem;margin-bottom:12px;color:#ffd966;}
+audio{width:100%;max-width:380px;height:45px;}
+.cc_recenttracks_list{margin-top:8px !important;color:white !important;text-align:left !important;max-width:420px;margin:auto;background:rgba(0,0,0,.35);padding:12px;border-radius:14px;}
+.cc_recenttracks_list *{color:white !important;line-height:1.3 !important;}
+.cc_recenttracks_list .ccbuy{display:none !important;}
+.cc_recenttracks_list img{opacity:0;display:block;}
+.topcharts-window{margin-top:30px;background:rgba(255,255,255,.12);padding:20px;border-radius:20px;border:1px solid rgba(255,217,102,.3);}
+.grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(130px,1fr)); gap:14px; margin-top:14px;}
+.card{background:rgba(0,0,0,.55); border-radius:12px; overflow:hidden; text-decoration:none; color:#fff; position:relative; display:block; border:1px solid rgba(255,255,255,.15);}
+.card img{width:100%; aspect-ratio:1; object-fit:cover; display:block; background:linear-gradient(135deg,#333,#111);}
+.card .info{padding:8px 10px; text-align:left; line-height:1.2; background:rgba(0,0,0,.7);}
+.card .titolo{font-weight:bold; font-size:0.9rem; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.card .autore{font-size:0.75rem; display:block; color:#ccc; margin-top:2px;}
+.play-badge{position:absolute; bottom:50px; right:8px; background:#ffd966; color:#000; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;}
+.dediche-box{margin-top:30px;background:rgba(255,255,255,.12);padding:20px;border-radius:20px;border:1px solid rgba(255,217,102,.3);}
+.dediche-box input,.dediche-box textarea{width:100%;max-width:400px;padding:10px 12px;margin:6px 0;border-radius:10px;border:none;background:rgba(0,0,0,.5);color:white;font-size:1rem;outline:none;}
+.dediche-box textarea{resize:none;height:70px;}
+.btn-dedica{margin-top:12px;background:linear-gradient(135deg,#ffd966,#ff9f1c);color:#000;font-weight:bold;padding:12px 25px;border:none;border-radius:30px;font-size:1.1rem;cursor:pointer;}
+.footer{margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,.2);font-size:0.9rem;}
 </style>
 </head>
 <body>
 <div class="container">
-<img src="RADIO SISTEMA 3.jpeg" class="logo">
+<div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo"></div>
 <h1>RADIO SISTEMA 3</h1>
-<p style="color:#ffd966">ON AIR 24/7</p>
-
-<div class="player-box">
-<h3 style="color:#ffd966">🎧 Ascolta in diretta</h3>
-<audio controls autoplay>
+<div class="tagline">🎙️ La musica che accompagna le tue giornate</div>
+<div class="live">🔴 ON AIR 24/7</div>
+<div class="player-box"><div class="section-title">🎧 Ascolta in diretta</div>
+<audio controls preload="none">
+<source src="https://listentomystream.com:8046/stream" type="audio/mpeg">
 <source src="https://listentomystream.com:8046/;" type="audio/mpeg">
-Il tuo browser non supporta l'audio.
 </audio>
+<div style="font-size:11px;color:#aaa;margin-top:6px">Se non parte, clicca ▶</div>
 </div>
 
-<h3 style="color:#ffd966;margin-top:15px">🎵 Brano in onda</h3>
+<div class="section-title" style="margin-top:14px;">🎵 Brano in onda</div>
 <div class="cc_recenttracks_list" data-username="bomyydij"></div>
 
-<div class="topcharts">
-<h3 style="color:#ffd966">💿 Clicca la Cover - Apre in altra pagina</h3>
+<div class="topcharts-window">
+<div class="section-title">💿 Clicca la Cover - Apre in altra pagina</div>
 <div class="grid">
-<a class="card" href="https://www.top-charts.com/search?q=%22KATSEYE%22%20%22Animal%22" target="_blank">
-<img src="cover/Animal.jpg"><div class="play">▶</div><div class="info"><span class="titolo">Animal</span><span class="autore">KATSEYE</span></div></a>
-<a class="card" href="https://www.top-charts.com/search?q=%22Elisa%22%20%22Kintsugi%22" target="_blank">
-<img src="cover/Kintsugi.jpg"><div class="play">▶</div><div class="info"><span class="titolo">Kintsugi</span><span class="autore">Elisa</span></div></a>
-<a class="card" href="https://www.top-charts.com/search?q=%22Sfera%20Ebbasta%22%20%22Lontano%22" target="_blank">
-<img src="cover/Lontano.jpg"><div class="play">▶</div><div class="info"><span class="titolo">Lontano</span><span class="autore">Sfera Ebbasta</span></div></a>
+<a class="card" href="https://www.top-charts.com/search?q=%22KATSEYE%22%20%22Animal%22" target="_blank" rel="noopener">
+<img src="https://i.scdn.co/image/ab67616d0000b273c5649add07a4a8e1216e1d2e1" onerror="this.src='https://via.placeholder.com/300/ffd966/000?text=Animal'"><div class="play-badge">▶</div><div class="info"><span class="titolo">Animal</span><span class="autore">KATSEYE</span></div></a>
+<a class="card" href="https://www.top-charts.com/search?q=%22Elisa%22%20%22Kintsugi%22" target="_blank" rel="noopener">
+<img src="https://via.placeholder.com/300/dd2476/fff?text=Kintsugi" onerror="this.src='https://via.placeholder.com/300/dd2476/fff?text=Kintsugi'"><div class="play-badge">▶</div><div class="info"><span class="titolo">Kintsugi</span><span class="autore">Elisa</span></div></a>
+<a class="card" href="https://www.top-charts.com/search?q=%22Sfera%20Ebbasta%22%20%22Lontano%22" target="_blank" rel="noopener">
+<img src="https://via.placeholder.com/300/00d4ff/000?text=Lontano" onerror="this.src='https://via.placeholder.com/300/00d4ff/000?text=Lontano'"><div class="play-badge">▶</div><div class="info"><span class="titolo">Lontano</span><span class="autore">Sfera Ebbasta</span></div></a>
 </div>
-</div>
-
-<div class="dediche">
-<h3 style="color:#ffd966">💌 Dedica una canzone</h3>
-<input id="nome" placeholder="Il tuo nome"><br>
-<input id="perChi" placeholder="Per chi"><br>
-<textarea id="msg" placeholder="Messaggio"></textarea><br>
-<input id="canzone" placeholder="Canzone richiesta"><br>
-<button class="btn" onclick="let n=document.getElementById('nome').value;let p=document.getElementById('perChi').value;let m=document.getElementById('msg').value;if(!n||!p||!m){alert('Compila');return;}window.open('https://wa.me/39XXXXXXXXXX?text='+encodeURIComponent('Dedica da '+n+' per '+p+': '+m))">📩 INVIA</button>
+<div style="font-size:11px;color:#ccc;margin-top:10px">Sostituisci le immagini con le tue in cartella cover/ quando le hai</div>
 </div>
 
-<p style="margin-top:15px;font-size:12px;color:#888">Licenza SIAE 202600000389</p>
+<div class="dediche-box">
+<div class="section-title">💌 Dedica una canzone</div>
+<input type="text" id="nome" placeholder="Il tuo nome"><input type="text" id="perChi" placeholder="Per chi è la dedica?"><textarea id="messaggio" placeholder="Scrivi il tuo messaggio..."></textarea><input type="text" id="canzone" placeholder="Canzone richiesta (opzionale)"><br><button class="btn-dedica" onclick="inviaDedica()">📩 INVIA DEDICA</button>
 </div>
+<div class="footer">© Radio Sistema 3<br><br>Licenza SIAE n° 202600000389</div>
+</div>
+
+<script>
+function inviaDedica(){const n=document.getElementById('nome').value.trim();const p=document.getElementById('perChi').value.trim();const m=document.getElementById('messaggio').value.trim();const c=document.getElementById('canzone').value.trim();if(!n||!p||!m){alert("Compila nome, per chi e messaggio");return;}const t=`*NUOVA DEDICA - RADIO SISTEMA 3*%0A%0A👤 Da: ${n}%0A❤️ Per: ${p}%0A💬 Messaggio: ${m}%0A🎵 Canzone: ${c||'a scelta'}`;window.location.href=`https://wa.me/39XXXXXXXXXX?text=${t}`;}
+function cleanWhiteBorder(img){
+if(img.dataset.cleaned==="1")return;img.dataset.cleaned="1";const isMobile=window.innerWidth<768;const finalSize=isMobile?80:100;const tempImg=new Image();tempImg.crossOrigin="anonymous";
+tempImg.onload=function(){
+const w=tempImg.width,h=tempImg.height;const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');canvas.width=w;canvas.height=h;ctx.drawImage(tempImg,0,0);
+const data=ctx.getImageData(0,0,w,h).data;let top=0,bottom=h,left=0,right=w;
+for(let y=0;y<h;y++){let wr=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){wr=false;break;}}if(!wr){top=y;break;}}
+for(let y=h-1;y>=0;y--){let wr=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){wr=false;break;}}if(!wr){bottom=y+1;break;}}
+for(let x=0;x<w;x++){let wc=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){wc=false;break;}}if(!wc){left=x;break;}}
+for(let x=w-1;x>=0;x--){let wc=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){wc=false;break;}}if(!wc){right=x+1;break;}}
+right=right-Math.round(w*0.10);left=left+Math.round(w*0.02);top=top+Math.round(h*0.02);bottom=bottom-Math.round(h*0.02);
+const cw=right-left,ch=bottom-top;const out=document.createElement('canvas');out.width=finalSize;out.height=finalSize;const octx=out.getContext('2d');octx.imageSmoothingQuality='high';
+octx.drawImage(canvas,left,top,cw,ch,0,0,finalSize,finalSize);img.src=out.toDataURL('image/jpeg',0.92);
+img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="5px";img.style.display="inline-block";img.style.verticalAlign="middle";img.style.margin="2px 8px 2px 0";img.style.opacity="1";img.style.border="none";
+};tempImg.src=img.src;
+}
+const list=document.querySelector('.cc_recenttracks_list');new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);}).observe(list,{childList:true,subtree:true});
+setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);},1000);
+</script>
 </body>
 </html>
