@@ -1,89 +1,50 @@
 <!DOCTYPE html>
-<html lang="it">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Segreto - Radio Sistema 3 - FIX COVER</title>
-<style>
-body{background:#0a0a0a;color:#fff;font-family:system-ui;padding:15px;}
-.box{max-width:850px;margin:10px auto;background:#1e1e1e;border-radius:20px;padding:22px;border:1px solid #333;}
-input{width:100%;padding:12px;margin:7px 0;border-radius:10px;border:1px solid #444;background:#000;color:#fff;box-sizing:border-box;}
-button{background:#ffd966;color:#000;border:none;padding:13px;border-radius:30px;font-weight:bold;cursor:pointer;width:100%;font-size:15px;}
-#previewSingola{margin:12px 0; text-align:center; display:none;}
-#previewSingola img{width:160px;height:160px;object-fit:cover;border-radius:12px;border:2px solid #ffd966;display:inline-block;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(140px,1fr));gap:12px;margin-top:15px;}
-.card-preview{background:#2a2a2a;border-radius:12px;overflow:hidden;border:1px solid #444;}
-.card-preview img{width:100%;height:140px;object-fit:cover;display:block;background:#111;}
-.card-preview .info{padding:8px;line-height:1.2;}
-.titolo{font-weight:bold;font-size:13px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.autore{font-size:11px;color:#aaa;display:block;}
-pre{background:#000;color:#0f0;padding:15px;border-radius:12px;overflow:auto;white-space:pre-wrap;font-size:12px;max-height:500px;border:1px solid #222;margin-top:12px;}
-#lock{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:9999;}
-.lock-box{background:#1a1a1a;padding:28px;border-radius:20px;border:1px solid #ffd966;width:90%;max-width:320px;text-align:center;}
-</style>
-</head>
-<body>
-<div id="lock"><div class="lock-box"><h2>🔒 Admin Radio Sistema 3</h2><input type="password" id="pass" placeholder="Password: radiosistema3"><button onclick="if(document.getElementById('pass').value=='radiosistema3'){document.getElementById('lock').style.display='none'}else alert('errata')">ENTRA</button></div></div>
-
+<html lang="it"><head><meta charset="UTF-8"><title>Admin Segreto</title>
+<style>body{background:#000;color:#fff;font-family:Arial;padding:20px}.box{max-width:700px;margin:auto;background:#1a1a1a;padding:20px;border-radius:15px}
+input{width:100%;padding:10px;margin:6px 0;border-radius:8px;background:#000;color:#fff;border:1px solid #444;box-sizing:border-box}
+img.preview{width:200px;height:200px;object-fit:cover;border-radius:10px;border:2px solid #ffd966;display:block;margin:10px auto}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px}
+.card{background:#222;border-radius:10px;overflow:hidden}.card img{width:100%;height:120px;object-fit:cover;display:block}
+pre{background:#000;color:#0f0;padding:12px;border-radius:8px;white-space:pre-wrap;font-size:11px}
+</style></head><body>
 <div class="box">
-<h1 style="color:#ffd966;text-align:center;margin:0;">🎛️ Cover Top-Charts</h1>
-<p style="color:#888;text-align:center;font-size:12px;margin:6px 0 12px;">La cover caricata ora si vede subito qui sotto</p>
-
-<input type="file" id="fileInput" accept="image/*" onchange="anteprimaFile()">
-<div id="previewSingola"><div style="color:#ffd966;font-size:12px;margin-bottom:6px;">✅ Anteprima cover caricata:</div><img id="imgAnteprima" src=""></div>
-
-<input type="text" id="titolo" placeholder="Titolo SEPARATO - Es: Animal">
-<input type="text" id="autore" placeholder="Autore SEPARATO - Es: KATSEYE">
-
-<button onclick="aggiungi()">+ AGGIUNGI NELLA GRIGLIA</button>
-
-<div class="grid" id="grid"></div>
-
-<h3 style="color:#ffd966;margin-top:20px;font-size:15px;">📋 Codice da copiare in index.html</h3>
-<pre id="output">Carica una cover e vedrai qui il codice...</pre>
+<h2 style="color:#ffd966;text-align:center">Admin Cover - VEDI SEMPRE LA COVER</h2>
+<input type="file" id="f" accept="image/*">
+<img id="ante" class="preview" style="display:none">
+<input id="titolo" placeholder="Titolo">
+<input id="autore" placeholder="Autore">
+<button onclick="add()" style="width:100%;padding:12px;background:#ffd966;border:none;border-radius:25px;font-weight:bold;cursor:pointer">AGGIUNGI</button>
+<div id="g" class="grid"></div>
+<pre id="out">Qui il codice...</pre>
 </div>
-
 <script>
-let lista = [];
-function anteprimaFile(){
-  const f = document.getElementById('fileInput').files[0];
-  if(!f) return;
-  const r = new FileReader();
-  r.onload = e=>{
-    document.getElementById('imgAnteprima').src = e.target.result;
-    document.getElementById('previewSingola').style.display='block';
-  };
-  r.readAsDataURL(f);
-}
-function aggiungi(){
-  const fileEl = document.getElementById('fileInput');
-  const f = fileEl.files[0];
-  const titolo = document.getElementById('titolo').value.trim();
-  const autore = document.getElementById('autore').value.trim();
-  if(!f || !titolo || !autore){ alert('Metti file + titolo + autore'); return; }
-  const reader = new FileReader();
-  reader.onload = e=>{
-    const dataUrl = e.target.result;
-    lista.unshift({img:dataUrl, titolo, autore});
-    render();
-    fileEl.value=''; document.getElementById('titolo').value=''; document.getElementById('autore').value='';
-    document.getElementById('previewSingola').style.display='none';
-  };
-  reader.readAsDataURL(f);
+let list=[];
+document.getElementById('f').addEventListener('change', e=>{
+  const file=e.target.files[0];
+  if(!file)return;
+  const url=URL.createObjectURL(file);
+  const img=document.getElementById('ante');
+  img.src=url;
+  img.style.display='block';
+});
+function add(){
+  const file=document.getElementById('f').files[0];
+  const tit=document.getElementById('titolo').value.trim();
+  const aut=document.getElementById('autore').value.trim();
+  if(!file||!tit||!aut){alert('file+titolo+autore');return}
+  const url=URL.createObjectURL(file);
+  list.unshift({url,tit,aut});
+  render();
 }
 function render(){
-  const grid = document.getElementById('grid');
-  grid.innerHTML='';
-  let codice='';
-  lista.forEach(c=>{
-    const q = encodeURIComponent('"'+c.autore+'" "'+c.titolo+'"');
-    const link = 'https://www.top-charts.com/search?q='+q;
-    const fileSafe = c.titolo.replace(/[^a-zA-Z0-9]/g,'_')+'.jpg';
-    grid.innerHTML += '<div class="card-preview"><img src="'+c.img+'"><div class="info"><span class="titolo">'+c.titolo+'</span><span class="autore">'+c.autore+'</span></div></div>';
-    codice += '<a class="card" href="'+link+'" target="_blank" rel="noopener">\n  <img src="cover/'+fileSafe+'">\n  <div class="play-badge">▶</div>\n  <div class="info"><span class="titolo">'+c.titolo+'</span><span class="autore">'+c.autore+'</span></div>\n</a>\n\n';
+  let h='',c='';
+  list.forEach(i=>{
+    h+=`<div class="card"><img src="${i.url}"><div style="padding:6px"><b>${i.tit}</b><br><small>${i.aut}</small></div></div>`;
+    const q=encodeURIComponent('"'+i.aut+'" "'+i.tit+'"');
+    c+=`<a class="card" href="https://www.top-charts.com/search?q=${q}" target="_blank">\n  <img src="cover/${i.tit.replace(/ /g,'_')}.jpg">\n  <div class="info"><span class="titolo">${i.tit}</span><span class="autore">${i.aut}</span></div>\n</a>\n\n`;
   });
-  document.getElementById('output').textContent = codice;
+  document.getElementById('g').innerHTML=h;
+  document.getElementById('out').textContent=c;
 }
 </script>
-</body>
-</html>
+</body></html>
