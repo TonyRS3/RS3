@@ -3,112 +3,87 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Segreto - Radio Sistema 3</title>
+<title>Admin Segreto - Radio Sistema 3 - FIX COVER</title>
 <style>
-body{background:#0a0a0a;color:#fff;font-family:system-ui;padding:20px;}
-.box{max-width:800px;margin:20px auto;background:#1a1a1a;border-radius:20px;padding:22px;border:1px solid #333;}
-h1{color:#ffd966;text-align:center;margin-bottom:5px;}
-.sub{color:#aaa;text-align:center;font-size:13px;margin-bottom:18px;}
-input{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #444;background:#000;color:#fff;box-sizing:border-box;}
-button{background:#ffd966;color:#000;border:none;padding:12px 20px;border-radius:30px;font-weight:bold;cursor:pointer;width:100%;margin-top:10px;}
-button:hover{background:#ffcc00;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(120px,1fr));gap:12px;margin-top:18px;}
-.card-preview{background:#222;border-radius:12px;overflow:hidden;border:1px solid #333;}
-.card-preview img{width:100%;aspect-ratio:1;object-fit:cover;display:block;}
-.card-preview .info{padding:7px 8px;line-height:1.2;}
-.card-preview .titolo{font-weight:bold;font-size:13px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.card-preview .autore{font-size:11px;color:#aaa;display:block;margin-top:2px;}
-pre{background:#000;color:#0f0;padding:15px;border-radius:12px;overflow:auto;white-space:pre-wrap;font-size:12px;line-height:1.4;margin-top:15px;max-height:450px;border:1px solid #222;}
+body{background:#0a0a0a;color:#fff;font-family:system-ui;padding:15px;}
+.box{max-width:850px;margin:10px auto;background:#1e1e1e;border-radius:20px;padding:22px;border:1px solid #333;}
+input{width:100%;padding:12px;margin:7px 0;border-radius:10px;border:1px solid #444;background:#000;color:#fff;box-sizing:border-box;}
+button{background:#ffd966;color:#000;border:none;padding:13px;border-radius:30px;font-weight:bold;cursor:pointer;width:100%;font-size:15px;}
+#previewSingola{margin:12px 0; text-align:center; display:none;}
+#previewSingola img{width:160px;height:160px;object-fit:cover;border-radius:12px;border:2px solid #ffd966;display:inline-block;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(140px,1fr));gap:12px;margin-top:15px;}
+.card-preview{background:#2a2a2a;border-radius:12px;overflow:hidden;border:1px solid #444;}
+.card-preview img{width:100%;height:140px;object-fit:cover;display:block;background:#111;}
+.card-preview .info{padding:8px;line-height:1.2;}
+.titolo{font-weight:bold;font-size:13px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.autore{font-size:11px;color:#aaa;display:block;}
+pre{background:#000;color:#0f0;padding:15px;border-radius:12px;overflow:auto;white-space:pre-wrap;font-size:12px;max-height:500px;border:1px solid #222;margin-top:12px;}
 #lock{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:9999;}
-.lock-box{background:#1a1a1a;padding:30px;border-radius:20px;text-align:center;border:1px solid #ffd966;max-width:320px;width:90%;}
-.hint{font-size:11px;color:#888;margin-top:8px;text-align:center;}
+.lock-box{background:#1a1a1a;padding:28px;border-radius:20px;border:1px solid #ffd966;width:90%;max-width:320px;text-align:center;}
 </style>
 </head>
 <body>
-
-<div id="lock">
-  <div class="lock-box">
-    <h2>🔒 Admin Radio Sistema 3</h2>
-    <p style="color:#aaa;font-size:13px;">Solo il Direttore</p>
-    <input type="password" id="pass" placeholder="Password">
-    <button onclick="sblocca()">ENTRA</button>
-    <p class="hint">Password default: radiosistema3<br>Cambiala nel codice se vuoi</p>
-  </div>
-</div>
+<div id="lock"><div class="lock-box"><h2>🔒 Admin Radio Sistema 3</h2><input type="password" id="pass" placeholder="Password: radiosistema3"><button onclick="if(document.getElementById('pass').value=='radiosistema3'){document.getElementById('lock').style.display='none'}else alert('errata')">ENTRA</button></div></div>
 
 <div class="box">
-<h1>🎛️ Gestione Cover Top-Charts</h1>
-<p class="sub">SOLO TU puoi inserire cover qui. Il sito pubblico non permette a nessuno di aggiungere nulla.<br>Titolo e Autore sono separati.</p>
+<h1 style="color:#ffd966;text-align:center;margin:0;">🎛️ Cover Top-Charts</h1>
+<p style="color:#888;text-align:center;font-size:12px;margin:6px 0 12px;">La cover caricata ora si vede subito qui sotto</p>
 
-<input type="file" id="fileInput" accept="image/*">
-<input type="text" id="titolo" placeholder="Titolo separato - Es: Animal">
-<input type="text" id="autore" placeholder="Autore separato - Es: KATSEYE">
+<input type="file" id="fileInput" accept="image/*" onchange="anteprimaFile()">
+<div id="previewSingola"><div style="color:#ffd966;font-size:12px;margin-bottom:6px;">✅ Anteprima cover caricata:</div><img id="imgAnteprima" src=""></div>
 
-<button onclick="aggiungi()">+ AGGIUNGI COVER E GENERA CODICE</button>
-<button onclick="resetAll()" style="background:#333;color:#fff;margin-top:8px;">🗑️ Resetta tutto</button>
+<input type="text" id="titolo" placeholder="Titolo SEPARATO - Es: Animal">
+<input type="text" id="autore" placeholder="Autore SEPARATO - Es: KATSEYE">
 
-<div class="grid" id="previewGrid"></div>
+<button onclick="aggiungi()">+ AGGIUNGI NELLA GRIGLIA</button>
 
-<h3 style="color:#ffd966;margin-top:22px;">📋 Codice da copiare nel file pubblico index.html</h3>
-<p style="font-size:11px;color:#888;">Copia questo blocco e incollalo dentro <code>&lt;div class="grid"&gt;</code> del file pubblico. Sostituisce le cover vecchie.</p>
-<pre id="output">Nessuna cover ancora.
-Aggiungi una cover sopra e qui apparirà il codice tipo:
+<div class="grid" id="grid"></div>
 
-&lt;a class="card" href="https://www.top-charts.com/search?q=%22KATSEYE%22%20%22Animal%22" target="_blank" rel="noopener"&gt;
-  &lt;img src="cover/Animal.jpg"&gt;
-  &lt;div class="play-badge"&gt;▶&lt;/div&gt;
-  &lt;div class="info"&gt;&lt;span class="titolo"&gt;Animal&lt;/span&gt;&lt;span class="autore"&gt;KATSEYE&lt;/span&gt;&lt;/div&gt;
-&lt;/a&gt;
-</pre>
-
+<h3 style="color:#ffd966;margin-top:20px;font-size:15px;">📋 Codice da copiare in index.html</h3>
+<pre id="output">Carica una cover e vedrai qui il codice...</pre>
 </div>
 
 <script>
-const PASSWORD = "radiosistema3";
-function sblocca(){
-  if(document.getElementById('pass').value===PASSWORD){
-    document.getElementById('lock').style.display='none';
-  } else alert('Password errata!');
+let lista = [];
+function anteprimaFile(){
+  const f = document.getElementById('fileInput').files[0];
+  if(!f) return;
+  const r = new FileReader();
+  r.onload = e=>{
+    document.getElementById('imgAnteprima').src = e.target.result;
+    document.getElementById('previewSingola').style.display='block';
+  };
+  r.readAsDataURL(f);
 }
-let covers = [];
 function aggiungi(){
-  const file = document.getElementById('fileInput').files[0];
+  const fileEl = document.getElementById('fileInput');
+  const f = fileEl.files[0];
   const titolo = document.getElementById('titolo').value.trim();
   const autore = document.getElementById('autore').value.trim();
-  if(!file || !titolo || !autore){ alert('Seleziona file + Titolo + Autore (separati!)'); return; }
+  if(!f || !titolo || !autore){ alert('Metti file + titolo + autore'); return; }
   const reader = new FileReader();
-  reader.onload = function(e){
-    covers.unshift({img:e.target.result, titolo, autore});
+  reader.onload = e=>{
+    const dataUrl = e.target.result;
+    lista.unshift({img:dataUrl, titolo, autore});
     render();
-    document.getElementById('fileInput').value='';
-    document.getElementById('titolo').value='';
-    document.getElementById('autore').value='';
+    fileEl.value=''; document.getElementById('titolo').value=''; document.getElementById('autore').value='';
+    document.getElementById('previewSingola').style.display='none';
   };
-  reader.readAsDataURL(file);
+  reader.readAsDataURL(f);
 }
 function render(){
-  const grid = document.getElementById('previewGrid');
+  const grid = document.getElementById('grid');
   grid.innerHTML='';
-  let code='';
-  covers.forEach(c=>{
+  let codice='';
+  lista.forEach(c=>{
     const q = encodeURIComponent('"'+c.autore+'" "'+c.titolo+'"');
     const link = 'https://www.top-charts.com/search?q='+q;
-    const safeFile = c.titolo.replace(/[^a-zA-Z0-9]/g,'_')+'.jpg';
-    // preview
-    const d = document.createElement('div');
-    d.className='card-preview';
-    d.innerHTML='<img src="'+c.img+'"><div class="info"><span class="titolo">'+c.titolo+'</span><span class="autore">'+c.autore+'</span></div>';
-    grid.appendChild(d);
-    // codice finale
-    code += '<a class="card" href="'+link+'" target="_blank" rel="noopener">\n';
-    code += '  <img src="cover/'+safeFile+'" onerror="this.src=\'https://via.placeholder.com/300?text='+encodeURIComponent(c.titolo.substring(0,15))+'\'">\n';
-    code += '  <div class="play-badge">▶</div>\n';
-    code += '  <div class="info"><span class="titolo">'+c.titolo+'</span><span class="autore">'+c.autore+'</span></div>\n';
-    code += '</a>\n\n';
+    const fileSafe = c.titolo.replace(/[^a-zA-Z0-9]/g,'_')+'.jpg';
+    grid.innerHTML += '<div class="card-preview"><img src="'+c.img+'"><div class="info"><span class="titolo">'+c.titolo+'</span><span class="autore">'+c.autore+'</span></div></div>';
+    codice += '<a class="card" href="'+link+'" target="_blank" rel="noopener">\n  <img src="cover/'+fileSafe+'">\n  <div class="play-badge">▶</div>\n  <div class="info"><span class="titolo">'+c.titolo+'</span><span class="autore">'+c.autore+'</span></div>\n</a>\n\n';
   });
-  document.getElementById('output').textContent = code || 'Nessuna cover...';
+  document.getElementById('output').textContent = codice;
 }
-function resetAll(){ if(confirm('Cancellare tutto?')){ covers=[]; render(); } }
 </script>
 </body>
 </html>
