@@ -1,1 +1,35 @@
-
+<!DOCTYPE html>
+<html lang="it"><head><meta charset="UTF-8"><title>Admin Radio Sistema 3</title>
+<style>body{background:#111;color:#fff;font-family:system-ui;padding:20px}.box{max-width:700px;margin:auto;background:#1a1a1a;padding:20px;border-radius:20px}input{width:100%;padding:12px;margin:8px 0;border-radius:10px;background:#000;color:#fff;border:1px solid #444}button{background:#ffd966;color:#000;padding:12px;border:none;border-radius:30px;width:100%;font-weight:bold;cursor:pointer}pre{background:#000;color:#0f0;padding:15px;border-radius:10px;white-space:pre-wrap;margin-top:15px;max-height:400px;overflow:auto}#lock{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center}</style>
+</head><body>
+<div id="lock"><div style="background:#1a1a1a;padding:30px;border-radius:20px;text-align:center;border:1px solid #ffd966"><h2>🔒 Admin Radio Sistema 3</h2><input type="password" id="pass" placeholder="Password: radiosistema3"><button onclick="if(document.getElementById('pass').value=='radiosistema3'){document.getElementById('lock').style.display='none'}else alert('errata')">ENTRA</button></div></div>
+<div class="box"><h1 style="color:#ffd966;text-align:center">Admin Copertine</h1>
+<input type="file" id="f" accept="image/*"><input type="text" id="brano" placeholder="Brano"><input type="text" id="autore" placeholder="Autore"><button onclick="add()">+ AGGIUNGI E GENERA CODICE</button>
+<div id="grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px"></div>
+<pre id="out">Qui apparirà il codice HTML da copiare nel file pubblico...
+Esempio:
+<a class="card" href="https://www.top-charts.com/search?q=%22Sfera%22%20%22Lontano%22" target="_blank">
+  <img src="cover/Lontano.jpg">
+  <div class="info"><b>Lontano</b><span>Sfera Ebbasta</span></div>
+</a></pre>
+</div>
+<script>
+let list=[];
+function add(){
+ const file=document.getElementById('f').files[0]; const br=document.getElementById('brano').value.trim(); const au=document.getElementById('autore').value.trim();
+ if(!file||!br||!au){alert('file+brano+autore');return;}
+ const r=new FileReader(); r.onload=e=>{
+  list.unshift({img:e.target.result, brano:br, autore:au}); render();
+ }; r.readAsDataURL(file);
+}
+function render(){
+ const g=document.getElementById('grid'); g.innerHTML=''; let code='';
+ list.forEach(c=>{
+  const q = encodeURIComponent('"'+c.autore+'" "'+c.brano+'"');
+  const link='https://www.top-charts.com/search?q='+q;
+  g.innerHTML+='<div style="background:#222;border-radius:10px;overflow:hidden"><img src="'+c.img+'" style="width:100%;aspect-ratio:1;object-fit:cover"><div style="padding:6px;font-size:12px"><b>'+c.brano+'</b><br>'+c.autore+'</div></div>';
+  code+='<a class="card" href="'+link+'" target="_blank">\n  <img src="cover/'+c.brano.replace(/ /g,'_')+'.jpg">\n  <div class="play-badge">▶</div>\n  <div class="info"><b>'+c.brano+'</b><span>'+c.autore+'</span></div>\n</a>\n\n';
+ });
+ document.getElementById('out').textContent=code;
+}
+</script></body></html>
