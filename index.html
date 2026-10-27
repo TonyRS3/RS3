@@ -1,24 +1,63 @@
-<!DOCTYPE html>
-<html>
+ <!DOCTYPE html>
+<html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3</title>
+<title>RSISTEMA.EU - Radio Sistema 3 - Cernobbio</title>
 <style>
-body{background:#111;color:#fff;font-family:Arial;padding:20px;max-width:800px;margin:auto}
-h1{color:#ffd966}
-.box{background:#ffd966;color:#111;padding:20px;border-radius:15px;margin:20px 0}
-.dedica{background:rgba(0,0,0,.3);padding:10px;border-radius:10px;margin:10px 0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#fff;font-family:Arial,sans-serif;padding:0}
+header{background:#111;padding:20px;text-align:center;border-bottom:3px solid #ffd966}
+h1{color:#ffd966;font-size:28px}
+.sottotitolo{color:#aaa;margin-top:5px}
+.container{max-width:900px;margin:auto;padding:20px}
+.box-giallo{background:#ffd966;color:#111;padding:20px;border-radius:15px;margin:20px 0}
+.box-scuro{background:#1a1a1a;padding:20px;border-radius:15px;margin:20px 0;border:1px solid #333}
+.dedica{background:rgba(0,0,0,.3);padding:12px;border-radius:10px;margin:10px 0;border-left:4px solid #111}
+h2{margin-bottom:10px}
+a{color:#ffd966}
+footer{text-align:center;padding:30px;color:#666;font-size:12px}
+button.play{background:#ffd966;color:#111;border:0;padding:15px 30px;border-radius:30px;font-weight:bold;font-size:18px;cursor:pointer;margin:10px}
 </style>
 </head>
 <body>
-<h1>RSISTEMA.EU - Radio Sistema 3</h1>
-<p>La radio di Cernobbio</p>
 
-<div id="boxDediche" class="box" style="display:none">
+<header>
+<h1>RSISTEMA.EU - Radio Sistema 3</h1>
+<div class="sottotitolo">La radio di Cernobbio - Como - La tua musica, le tue dediche</div>
+</header>
+
+<div class="container">
+
+<div class="box-scuro" style="text-align:center">
+<h2>🔴 ASCOLTA IN DIRETTA</h2>
+<p style="margin:15px 0">Clicca Play per ascoltare Radio Sistema 3</p>
+<button class="play" onclick="alert('Inserisci qui il link del tuo streaming radio!')">▶️ PLAY RADIO</button>
+<p style="font-size:12px;color:#888;margin-top:10px">Streaming 24h/24 da Cernobbio</p>
+</div>
+
+<div id="boxDediche" class="box-giallo" style="display:none">
 <h2>💖 Ultime Dediche in Onda</h2>
 <div id="lista"></div>
 </div>
+
+<div class="box-scuro">
+<h2>📻 Chi Siamo</h2>
+<p style="line-height:1.6">Radio Sistema 3 è la radio di Cernobbio, sul lago di Como. Musica, dediche, notizie locali e compagnia tutto il giorno. Invia la tua dedica e la leggeremo in diretta!</p>
+</div>
+
+<div class="box-scuro">
+<h2>📩 Contatti e Dediche</h2>
+<p>Vuoi dedicare una canzone? Scrivici su WhatsApp o passa a trovarci a Cernobbio!</p>
+<p style="margin-top:10px">📍 Cernobbio (CO) - Lago di Como<br>📧 info@rsistema.eu</p>
+</div>
+
+</div>
+
+<footer>
+© 2026 Radio Sistema 3 - Cernobbio<br>
+<a href="admin.html" style="color:#333">admin</a>
+</footer>
 
 <script>
 async function carica(){
@@ -28,7 +67,7 @@ async function carica(){
     if(!d.length) return;
     document.getElementById('boxDediche').style.display='block';
     document.getElementById('lista').innerHTML = d.map(x=>`<div class="dedica"><b>Da ${x.da} per ${x.per}</b><br>${x.msg}</div>`).join('');
-  }catch(e){ console.log('no dediche'); }
+  }catch(e){}
 }
 carica();
 setInterval(carica, 30000);
