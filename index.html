@@ -70,7 +70,7 @@ audio{width:100%;max-width:350px;}
   <div class="section-title">🔥 La Playlist di Radio Sistema 3</div>
   <div id="novitaPlayerMain">👇 Scegli un brano qui sotto</div>
   <div id="novitaList"></div>
-  <button class="btn-dedica" style="background:#333;color:#fff;margin-top:15px" onclick="chiudiNovita()">✕ Chiudi Novità</button>
+  <button class="btn-dedica" style="background:#333;color:#fff;margin-top:15px" onclick="chiudiNovita()">✕ Chiudi Playlist</button>
 </div>
 
 <div class="dediche-box">
@@ -89,7 +89,7 @@ function apriNovita(){
   renderNovita();
 }
 function chiudiNovita(){
-  document.getElementById('novitaPlayerMain').innerHTML = "👆 Scegli un brano qui sotto";
+  document.getElementById('novitaPlayerMain').innerHTML = "👇 Scegli un brano qui sotto";
   document.getElementById('novitaList').innerHTML = "";
   document.getElementById('novitaList').dataset.done = "0";
   document.getElementById('novitaSection').style.display='none';
