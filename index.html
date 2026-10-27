@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -11,10 +10,10 @@
 // ========= QUI CAMBI I BRANI FACILE =========
 const BRANI_NOVITA = [
   { id: "pzvhHsEqMzo", artista: "Marco Mengoni", titolo: "Giornate Perse" },
-  { id: "ju9MJ1vLEuM", artista: "Hugel & David Guetta", titolo: "Shine (feat. French Montana, Aidan Martin)" },
   { id: "clkCS0Fk8Hk", artista: "Lil Nas X", titolo: "World's Greatest!" },
   { id: "mw3kSNIxjqo", artista: "Taylor Swift", titolo: "Patient Zero" },
-  { id: "frWVNdwHuGM", artista: "Baby K feat Guè", titolo: "Amore / Dilemma" }
+  { id: "frWVNdwHuGM", artista: "Baby K feat Guè", titolo: "Amore / Dilemma" },
+  { id: "dQw4w9WgXcQ", artista: "Esempio", titolo: "Aggiungi quanti vuoi" }
 ];
 const LOGO_AUTORADIO = "RADIO SISTEMA 3.jpeg";
 </script>
@@ -42,15 +41,16 @@ audio{width:100%;max-width:350px;}
 .footer{margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,.2);}
 @media(max-width:768px){.logo{width:190px;height:190px;}h1{font-size:1.9rem;}.container{margin:10px;padding:18px;}}
 .btn-novita{margin-top:30px;background:#ff0033;color:#fff;font-weight:900;padding:18px 32px;border:none;border-radius:50px;font-size:1.2rem;cursor:pointer;}
-#novitaSection{display:none;margin-top:30px;background:rgba(0,0,0,.5);padding:15px;border-radius:20px;border:1px solid rgba(255,255,255,.15);}
-.novita-block{background:#181818;margin-bottom:15px;border-radius:12px;overflow:hidden;text-align:left;border:1px solid #222}
-.novita-header{display:flex;align-items:center;gap:12px;padding:10px 12px;background:#111}
-.novita-mini{width:56px;height:56px;border-radius:6px;object-fit:cover}
-.novita-tit{flex:1}.novita-tit b{display:block}.novita-tit span{color:#aaa;font-size:.85rem}
-.novita-player{position:relative;width:100%;padding-bottom:56.25%;background:#000;cursor:pointer}
-.novita-player img.thumb{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
-.novita-player .play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#ff0000;width:68px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:28px}
-.novita-player iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+#novitaSection{display:none;margin-top:30px;background:rgba(0,0,0,.6);padding:15px;border-radius:20px;border:1px solid rgba(255,255,255,.15);}
+#novitaPlayerMain{position:sticky;top:10px;z-index:5;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#666;margin-bottom:15px;border:2px solid #ff0033}
+#novitaPlayerMain iframe{width:100%;height:100%;border:0;position:absolute;top:0;left:0}
+#novitaList{max-height:380px;overflow-y:auto;text-align:left}
+.novita-row{display:flex;align-items:center;gap:12px;padding:8px 10px;background:#151515;border-bottom:1px solid #222;cursor:pointer;border-radius:8px;margin-bottom:6px}
+.novita-row:hover{background:#222}
+.novita-row.active{background:#2a0000;border:1px solid #ff0033}
+.novita-row img{width:60px;height:45px;object-fit:cover;border-radius:5px}
+.novita-row b{font-size:.95rem}
+.novita-row span{font-size:.8rem;color:#aaa}
 </style>
 </head>
 <body>
@@ -64,7 +64,13 @@ audio{width:100%;max-width:350px;}
 <div class="cc_recenttracks_list" data-username="bomyydij"></div>
 
 <button class="btn-novita" id="btnNovita" onclick="apriNovita()">▶ ASCOLTA LE NOVITA'</button>
-<div id="novitaSection"><div class="section-title">🔥 Novità Musicali</div><div id="novitaContainer"></div><button class="btn-dedica" style="background:#333;color:#fff;margin-top:10px" onclick="chiudiNovita()">✕ Chiudi Novità</button></div>
+
+<div id="novitaSection">
+  <div class="section-title">🔥 Novità Musicali</div>
+  <div id="novitaPlayerMain">👆 Scegli un brano qui sotto</div>
+  <div id="novitaList"></div>
+  <button class="btn-dedica" style="background:#333;color:#fff;margin-top:15px" onclick="chiudiNovita()">✕ Chiudi Novità</button>
+</div>
 
 <div class="dediche-box">
 <div class="section-title">💌 Dedica una canzone</div>
@@ -82,25 +88,28 @@ function apriNovita(){
   renderNovita();
 }
 function chiudiNovita(){
-  const container = document.getElementById('novitaContainer');
-  container.innerHTML = "";
-  container.dataset.done = "0";
+  document.getElementById('novitaPlayerMain').innerHTML = "👆 Scegli un brano qui sotto";
+  document.getElementById('novitaList').innerHTML = "";
+  document.getElementById('novitaList').dataset.done = "0";
   document.getElementById('novitaSection').style.display='none';
   document.getElementById('btnNovita').style.display='inline-block';
   const r=document.getElementById('radioAudio'); if(r) r.play().catch(()=>{});
   aggiornaCoverAutoradio("Radio Sistema 3","ON AIR 24/7",LOGO_AUTORADIO);
 }
-function playVideo(el,id){
+function playNovita(id, el){
   const r=document.getElementById('radioAudio'); if(r) r.pause();
-  el.innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1&rel=0&modestbranding=1&playsinline=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+  document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1&rel=0&modestbranding=1&playsinline=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>';
 }
 function renderNovita(){
-  const c=document.getElementById('novitaContainer');
+  const c=document.getElementById('novitaList');
   if(c.dataset.done=="1") return; c.dataset.done="1";
   c.innerHTML = BRANI_NOVITA.map(b=>`
-    <div class="novita-block">
-      <div class="novita-header"><img class="novita-mini" src="https://i.ytimg.com/vi/${b.id}/hqdefault.jpg"><div class="novita-tit"><b>${b.artista}</b><span>${b.titolo}</span></div></div>
-      <div class="novita-player" onclick="playVideo(this,'${b.id}')"><img class="thumb" src="https://i.ytimg.com/vi/${b.id}/hqdefault.jpg"><div class="play">▶</div></div>
+    <div class="novita-row" onclick="playNovita('${b.id}', this)">
+      <img src="https://i.ytimg.com/vi/${b.id}/hqdefault.jpg">
+      <div><b>${b.artista}</b><br><span>${b.titolo}</span></div>
+      <div style="margin-left:auto;color:#ff0033">▶</div>
     </div>`).join('');
 }
 const WHATSAPP_NUMBER = "39XXXXXXXXXX";
@@ -113,7 +122,6 @@ function inviaDedica(){
   const testo=`*NUOVA DEDICA - RADIO SISTEMA 3*%0A%0A👤 Da: ${nome}%0A❤️ Per: ${perChi}%0A💬 Messaggio: ${msg}%0A🎵 Canzone: ${canzone || 'a scelta della regia'}`;
   window.location.href=`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(testo)}`;
 }
-// ===== FIX COPERTINA BRANO =====
 function cleanWhiteBorder(img){
   if(img.dataset.cleaned==="1") return;
   img.dataset.cleaned="1";
@@ -137,16 +145,12 @@ function cleanWhiteBorder(img){
     octx.drawImage(canvas,left,top,cw,ch,0,0,finalSize,finalSize);
     img.src=out.toDataURL('image/jpeg',0.92);
     img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="5px";img.style.display="inline-block";img.style.verticalAlign="middle";img.style.margin="2px 8px 2px 0";img.style.opacity="1";img.style.border="none";
-    // aggiorna anche autoradio con la cover vera
-    try{ aggiornaCoverAutoradio(document.querySelector('.cc_recenttracks_list')?.innerText.split('\n')[0]||"Radio Sistema 3", "Radio Sistema 3", img.src); }catch(e){}
   };
   tempImg.src=img.src;
 }
 const list=document.querySelector('.cc_recenttracks_list');
 new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);}).observe(list,{childList:true,subtree:true});
 setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);},1000);
-
-// ===== FIX AUTORADIO LOGO COME COPERTINA =====
 function aggiornaCoverAutoradio(titolo, artista, immagine){
   if('mediaSession' in navigator){
     try{
@@ -154,19 +158,12 @@ function aggiornaCoverAutoradio(titolo, artista, immagine){
         title: titolo || "Radio Sistema 3",
         artist: artista || "Live On Air",
         album: "Radio Sistema 3",
-        artwork: [
-          { src: immagine || LOGO_AUTORADIO, sizes: "512x512", type: "image/jpeg" },
-          { src: immagine || LOGO_AUTORADIO, sizes: "96x96", type: "image/jpeg" },
-          { src: immagine || LOGO_AUTORADIO, sizes: "512x512", type: "image/png" }
-        ]
+        artwork: [{ src: immagine || LOGO_AUTORADIO, sizes: "512x512", type: "image/jpeg" }]
       });
     }catch(e){}
   }
 }
-document.getElementById('radioAudio').addEventListener('play', () => {
-  aggiornaCoverAutoradio("Radio Sistema 3", "ON AIR 24/7", LOGO_AUTORADIO);
-});
-// All'avvio metti subito logo
+document.getElementById('radioAudio').addEventListener('play', () => { aggiornaCoverAutoradio("Radio Sistema 3", "ON AIR 24/7", LOGO_AUTORADIO); });
 setTimeout(()=>{ aggiornaCoverAutoradio("Radio Sistema 3","ON AIR 24/7",LOGO_AUTORADIO); }, 1000);
 </script>
 </body>
