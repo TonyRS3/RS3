@@ -1,34 +1,19 @@
 <!DOCTYPE html>
-<html lang="it">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin Dediche - Radio Sistema 3</title>
-<style>body{background:#111;color:#fff;font-family:Arial;padding:20px;max-width:600px;margin:auto}input,textarea{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:none}button{padding:12px 20px;border-radius:20px;border:none;font-weight:bold;cursor:pointer;margin:5px} .btn-save{background:#ffd966} .btn-del{background:#ff4444;color:#fff} .dedica-item{background:#222;padding:12px;border-radius:10px;margin:10px 0;text-align:left}</style>
-</head>
-<body>
-<h2>🔐 ADMIN DEDICHE - Radio Sistema 3</h2>
-<div id="loginBox"><input type="password" id="pass" placeholder="Password"><button onclick="login()">Entra</button></div>
-<div id="adminBox" style="display:none">
-  <h3>Scrivi nuova dedica in onda</h3>
-  <input id="da" placeholder="Da: es. Luca"><input id="per" placeholder="Per: es. Maria"><textarea id="msg" placeholder="Messaggio"></textarea><input id="song" placeholder="Canzone (opzionale)">
-  <button class="btn-save" onclick="aggiungi()">💾 PUBBLICA SUL SITO</button>
-  <hr><h3>Dediche in onda adesso</h3><div id="lista"></div>
-  <button onclick="svuota()" class="btn-del">Svuota tutto</button>
-  <p style="color:#aaa;font-size:.8rem;margin-top:20px">Nota: per farle vedere a tutti, questo file admin e index.html devono stare sullo stesso dominio (es. radiosistema3.it). Se usi GitHub, funziona se lo apri dallo stesso sito.</p>
+<html><head><meta charset="UTF-8"><title>Admin Dediche</title>
+<style>body{background:#111;color:#fff;font-family:Arial;padding:20px;max-width:600px;margin:auto}input,textarea{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:none}button{padding:12px;border-radius:20px;border:none;font-weight:bold;cursor:pointer} .item{background:#222;padding:10px;border-radius:10px;margin:8px 0}</style>
+</head><body>
+<h2>🔐 Admin Dediche</h2>
+<div id="login"><input type="password" id="pass" placeholder="Password"><button onclick="login()">Entra</button></div>
+<div id="box" style="display:none">
+<input id="da" placeholder="Da: Luca"><input id="per" placeholder="Per: Maria"><textarea id="msg" placeholder="Messaggio"></textarea><input id="song" placeholder="Canzone (opzionale)">
+<button onclick="add()" style="background:#ffd966;width:100%">💾 PUBBLICA SUL SITO</button>
+<div id="lista" style="margin-top:20px"></div>
 </div>
 <script>
-const PASSWORD="sistema3";
-function login(){ if(document.getElementById('pass').value===PASSWORD){document.getElementById('loginBox').style.display='none';document.getElementById('adminBox').style.display='block';render();} else alert("Password errata"); }
-function getDediche(){ return JSON.parse(localStorage.getItem('dediche_radio_sistema3')||'[]'); }
-function saveDediche(d){ localStorage.setItem('dediche_radio_sistema3', JSON.stringify(d)); }
-function aggiungi(){
-  const da=document.getElementById('da').value.trim(), per=document.getElementById('per').value.trim(), msg=document.getElementById('msg').value.trim(), song=document.getElementById('song').value.trim();
-  if(!da||!per||!msg){alert("Compila Da, Per, Messaggio");return;}
-  const d=getDediche(); d.unshift({da,per,msg,song,data:new Date().toLocaleString()}); saveDediche(d);
-  document.getElementById('da').value='';document.getElementById('per').value='';document.getElementById('msg').value='';document.getElementById('song').value='';
-  render(); alert("Pubblicata! Ora vai sul sito principale e ricarica.");
-}
-function elimina(i){ const d=getDediche(); d.splice(i,1); saveDediche(d); render(); }
-function svuota(){ if(confirm("Sicuro?")){localStorage.removeItem('dediche_radio_sistema3');render();}}
-function render(){ const lista=document.getElementById('lista'); const d=getDediche(); if(d.length==0){lista.innerHTML="<p style='color:#666'>Nessuna dedica</p>";return;} lista.innerHTML=d.map((x,i)=>`<div class="dedica-item"><b>Da: ${x.da} → Per: ${x.per}</b><br>${x.msg}<br><i style="color:#ffd966">${x.song||''}</i><br><small style="color:#888">${x.data}</small><br><button class="btn-del" onclick="elimina(${i})">Elimina</button></div>`).join(''); }
-</script>
-</body>
-</html>
+function login(){if(document.getElementById('pass').value=='sistema3'){document.getElementById('login').style.display='none';document.getElementById('box').style.display='block';render()}else alert('Password errata')}
+function get(){return JSON.parse(localStorage.getItem('dediche_radio_sistema3')||'[]')}
+function save(d){localStorage.setItem('dediche_radio_sistema3',JSON.stringify(d))}
+function add(){const da=document.getElementById('da').value,per=document.getElementById('per').value,msg=document.getElementById('msg').value,song=document.getElementById('song').value; if(!da||!per||!msg){alert('Compila tutto');return} const d=get(); d.unshift({da,per,msg,song,data:new Date().toLocaleString()}); save(d); document.getElementById('da').value='';document.getElementById('per').value='';document.getElementById('msg').value=''; render(); alert('Pubblicata! Ricarica il sito principale');}
+function delItem(i){const d=get(); d.splice(i,1); save(d); render()}
+function render(){const d=get(); document.getElementById('lista').innerHTML=d.map((x,i)=>`<div class=item><b>${x.da} → ${x.per}</b><br>${x.msg}<br><small>${x.song||''}</small><br><button onclick="delItem(${i})" style="background:#ff4444;color:#fff;margin-top:5px">Elimina</button></div>`).join('')}
+</script></body></html>
