@@ -6,17 +6,16 @@
 <input id="per" placeholder="Per chi? Es: SALVATORE">
 <textarea id="msg" placeholder="Messaggio? Es: BUON COMPLEANNO"></textarea>
 <button onclick="aggiungi()">+ AGGIUNGI DEDICA</button>
-<div id="lista"></div>
-<hr>
-<button onclick="copia()">📋 COPIA IL CODICE PER IL SITO</button>
-<textarea id="output" style="height:150px;background:#000;color:#0f0"></textarea>
-<p style="color:#aaa;font-size:12px">Dopo aver cliccato COPIA, vai su GitHub > dediche.json > matitina > incolla > Commit. Fatto!</p>
+<div id="lista"></div><hr>
+<button onclick="copia()">📋 COPIA CODICE PER SITO</button>
+<textarea id="output" style="height:200px;background:#000;color:#0f0"></textarea>
+<p style="color:#aaa;font-size:12px">1. Clicca COPIA<br>2. Vai su GitHub > dediche.json > matitina > incolla tutto > Commit<br>Fatto!</p>
 <script>
 let dediche=[];
 async function init(){try{let r=await fetch('dediche.json?v='+Date.now());dediche=await r.json();render();}catch(e){}}
-function render(){document.getElementById('lista').innerHTML=dediche.map((d,i)=>`<div class=dedica><b>${d.da} → ${d.per}</b>: ${d.msg} <a href="#" onclick="elimina(${i});return false" style="color:red;float:right">X</a></div>`).join('');document.getElementById('output').value=JSON.stringify(dediche,null,2);}
-function aggiungi(){let da=document.getElementById('da').value,per=document.getElementById('per').value,msg=document.getElementById('msg').value;if(!da||!per||!msg)return alert('Compila tutto');dediche.unshift({da,per,msg});document.getElementById('da').value='';document.getElementById('per').value='';document.getElementById('msg').value='';render();}
+function render(){document.getElementById('lista').innerHTML=dediche.map((d,i)=>`<div class=dedica><b>${d.da} → ${d.per}</b>: ${d.msg} <a href="#" onclick="elimina(${i});return false" style="color:red;float:right">✕</a></div>`).join('');document.getElementById('output').value=JSON.stringify(dediche,null,2);}
+function aggiungi(){let da=document.getElementById('da').value.trim(),per=document.getElementById('per').value.trim(),msg=document.getElementById('msg').value.trim();if(!da||!per||!msg)return alert('Compila tutto');dediche.unshift({da,per,msg});document.getElementById('da').value='';document.getElementById('per').value='';document.getElementById('msg').value='';render();}
 function elimina(i){dediche.splice(i,1);render();}
-function copia(){navigator.clipboard.writeText(document.getElementById('output').value);alert('Copiato! Ora vai su dediche.json e incollalo');}
+function copia(){navigator.clipboard.writeText(document.getElementById('output').value);alert('Copiato! Ora incollalo in dediche.json');}
 init();
 </script></body></html>
