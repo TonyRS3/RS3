@@ -1,1 +1,22 @@
-
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin Dediche</title>
+<style>body{background:#111;color:#fff;font-family:Arial;padding:20px;max-width:600px;margin:auto}input,textarea{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:0}button{padding:15px;background:#ffd966;border:0;border-radius:8px;font-weight:bold;width:100%;margin:5px 0;cursor:pointer}.dedica{background:#222;padding:10px;border-radius:8px;margin:8px 0}</style></head><body>
+<h1>🎙️ Admin Radio Sistema 3</h1>
+<input id="da" placeholder="Da chi? Es: MARIA">
+<input id="per" placeholder="Per chi? Es: SALVATORE">
+<textarea id="msg" placeholder="Messaggio? Es: BUON COMPLEANNO"></textarea>
+<button onclick="aggiungi()">+ AGGIUNGI DEDICA</button>
+<div id="lista"></div>
+<hr>
+<button onclick="copia()">📋 COPIA IL CODICE PER IL SITO</button>
+<textarea id="output" style="height:150px;background:#000;color:#0f0"></textarea>
+<p style="color:#aaa;font-size:12px">Dopo aver cliccato COPIA, vai su GitHub > dediche.json > matitina > incolla > Commit. Fatto!</p>
+<script>
+let dediche=[];
+async function init(){try{let r=await fetch('dediche.json?v='+Date.now());dediche=await r.json();render();}catch(e){}}
+function render(){document.getElementById('lista').innerHTML=dediche.map((d,i)=>`<div class=dedica><b>${d.da} → ${d.per}</b>: ${d.msg} <a href="#" onclick="elimina(${i});return false" style="color:red;float:right">X</a></div>`).join('');document.getElementById('output').value=JSON.stringify(dediche,null,2);}
+function aggiungi(){let da=document.getElementById('da').value,per=document.getElementById('per').value,msg=document.getElementById('msg').value;if(!da||!per||!msg)return alert('Compila tutto');dediche.unshift({da,per,msg});document.getElementById('da').value='';document.getElementById('per').value='';document.getElementById('msg').value='';render();}
+function elimina(i){dediche.splice(i,1);render();}
+function copia(){navigator.clipboard.writeText(document.getElementById('output').value);alert('Copiato! Ora vai su dediche.json e incollalo');}
+init();
+</script></body></html>
