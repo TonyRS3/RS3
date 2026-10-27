@@ -6,6 +6,18 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Radio Sistema 3</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
+<script>
+// ========= QUI CAMBI I BRANI - FACILISSIMO =========
+// Prendi solo la parte dopo v= dal link YouTube
+// Es: https://www.youtube.com/watch?v=pzvhHsEqMzo -> metti solo pzvhHsEqMzo
+const BRANI_NOVITA = [
+  { id: "pzvhHsEqMzo", artista: "Marco Mengoni", titolo: "Giornate Perse" },
+  { id: "clkCS0Fk8Hk", artista: "Lil Nas X", titolo: "World's Greatest!" },
+  { id: "mw3kSNIxjqo", artista: "Taylor Swift", titolo: "Patient Zero" },
+  { id: "frWVNdwHuGM", artista: "Baby K feat Guè", titolo: "Amore / Dilemma" }
+];
+// ========= FINE PARTE DA MODIFICARE =========
+</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:Segoe UI,Arial,sans-serif;color:white;text-align:center;background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),url("studio-radio.jpeg");background-size:cover;background-position:center;background-attachment:fixed;}
@@ -26,18 +38,15 @@ audio{width:100%;max-width:350px;}
 .cc_recenttracks_list img{opacity:0;display:block;}
 .dediche-box{margin-top:30px;background:rgba(255,255,255,.10);padding:20px;border-radius:20px;border:1px solid rgba(255,217,102,.3);}
 .dediche-box input, .dediche-box textarea{width:100%;max-width:400px;padding:10px 12px;margin:6px 0;border-radius:10px;border:none;background:rgba(0,0,0,.4);color:white;font-size:1rem;outline:none;}
-.dediche-box input::placeholder, .dediche-box textarea::placeholder{color:#ccc;}
-.dediche-box textarea{resize:none;height:70px;}
-.btn-dedica{margin-top:12px;background:linear-gradient(135deg,#ffd966,#ff9f1c);color:#000;font-weight:bold;padding:12px 25px;border:none;border-radius:30px;font-size:1.1rem;cursor:pointer;transition:.2s;}
-.btn-dedica:hover{transform:scale(1.05);box-shadow:0 0 15px #ffd966;}
+.btn-dedica{margin-top:12px;background:linear-gradient(135deg,#ffd966,#ff9f1c);color:#000;font-weight:bold;padding:12px 25px;border:none;border-radius:30px;font-size:1.1rem;cursor:pointer;}
 .footer{margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,.2);}
 @media(max-width:768px){.logo{width:190px;height:190px;}h1{font-size:1.9rem;}.container{margin:10px;padding:18px;}}
-.btn-novita{margin-top:30px;background:#ff0033;color:#fff;font-weight:900;padding:18px 32px;border:none;border-radius:50px;font-size:1.2rem;cursor:pointer;box-shadow:0 0 20px rgba(255,0,51,.5);}
+.btn-novita{margin-top:30px;background:#ff0033;color:#fff;font-weight:900;padding:18px 32px;border:none;border-radius:50px;font-size:1.2rem;cursor:pointer;}
 #novitaSection{display:none;margin-top:30px;background:rgba(0,0,0,.5);padding:15px;border-radius:20px;border:1px solid rgba(255,255,255,.15);}
 .novita-block{background:#181818;margin-bottom:15px;border-radius:12px;overflow:hidden;text-align:left;border:1px solid #222}
 .novita-header{display:flex;align-items:center;gap:12px;padding:10px 12px;background:#111}
 .novita-mini{width:56px;height:56px;border-radius:6px;object-fit:cover}
-.novita-tit{flex:1}.novita-tit b{display:block;font-size:1rem}.novita-tit span{color:#aaa;font-size:.85rem}
+.novita-tit{flex:1}.novita-tit b{display:block}.novita-tit span{color:#aaa;font-size:.85rem}
 .novita-player{position:relative;width:100%;padding-bottom:56.25%;background:#000;cursor:pointer}
 .novita-player img.thumb{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
 .novita-player .play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#ff0000;width:68px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:28px}
@@ -55,68 +64,42 @@ audio{width:100%;max-width:350px;}
 <div class="cc_recenttracks_list" data-username="bomyydij"></div>
 
 <button class="btn-novita" id="btnNovita" onclick="apriNovita()">▶ ASCOLTA LE NOVITA'</button>
-
-<div id="novitaSection">
-<div class="section-title">🔥 Novità Musicali</div>
-
-<div class="novita-block">
-<div class="novita-header"><img class="novita-mini" src="https://i.ytimg.com/vi/pzvhHsEqMzo/hqdefault.jpg"><div class="novita-tit"><b>Marco Mengoni</b><span>Giornate Perse</span></div></div>
-<div class="novita-player" onclick="playVideo(this,'pzvhHsEqMzo')"><img class="thumb" src="https://i.ytimg.com/vi/pzvhHsEqMzo/hqdefault.jpg"><div class="play">▶</div></div>
-</div>
-
-<div class="novita-block">
-<div class="novita-header"><img class="novita-mini" src="https://i.ytimg.com/vi/clkCS0Fk8Hk/hqdefault.jpg"><div class="novita-tit"><b>Lil Nas X</b><span>World's Greatest!</span></div></div>
-<div class="novita-player" onclick="playVideo(this,'clkCS0Fk8Hk')"><img class="thumb" src="https://i.ytimg.com/vi/clkCS0Fk8Hk/hqdefault.jpg"><div class="play">▶</div></div>
-</div>
-
-<div class="novita-block">
-<div class="novita-header"><img class="novita-mini" src="https://i.ytimg.com/vi/mw3kSNIxjqo/hqdefault.jpg"><div class="novita-tit"><b>Taylor Swift</b><span>Patient Zero</span></div></div>
-<div class="novita-player" onclick="playVideo(this,'mw3kSNIxjqo')"><img class="thumb" src="https://i.ytimg.com/vi/mw3kSNIxjqo/hqdefault.jpg"><div class="play">▶</div></div>
-</div>
-
-<div class="novita-block">
-<div class="novita-header"><img class="novita-mini" src="https://i.ytimg.com/vi/frWVNdwHuGM/hqdefault.jpg"><div class="novita-tit"><b>Baby K feat Guè</b><span>Amore/Dilemma</span></div></div>
-<div class="novita-player" onclick="playVideo(this,'frWVNdwHuGM')"><img class="thumb" src="https://i.ytimg.com/vi/frWVNdwHuGM/hqdefault.jpg"><div class="play">▶</div></div>
-</div>
-
-<button class="btn-dedica" style="background:#333;color:#fff;margin-top:10px" onclick="chiudiNovita()">✕ Chiudi Novità</button>
-</div>
+<div id="novitaSection"><div class="section-title">🔥 Novità Musicali</div><div id="novitaContainer"></div><button class="btn-dedica" style="background:#333;color:#fff;margin-top:10px" onclick="chiudiNovita()">✕ Chiudi Novità</button></div>
 
 <div class="dediche-box">
 <div class="section-title">💌 Dedica una canzone</div>
-<input type="text" id="nome" placeholder="Il tuo nome">
-<input type="text" id="perChi" placeholder="Per chi è la dedica?">
-<textarea id="messaggio" placeholder="Scrivi il tuo messaggio..."></textarea>
-<input type="text" id="canzone" placeholder="Canzone richiesta (opzionale)">
-<br>
-<button class="btn-dedica" onclick="inviaDedica()">📩 INVIA DEDICA</button>
+<input type="text" id="nome" placeholder="Il tuo nome"><input type="text" id="perChi" placeholder="Per chi è la dedica?"><textarea id="messaggio" placeholder="Scrivi il tuo messaggio..."></textarea><input type="text" id="canzone" placeholder="Canzone richiesta (opzionale)"><br><button class="btn-dedica" onclick="inviaDedica()">📩 INVIA DEDICA</button>
 </div>
-
 <div class="footer">© Radio Sistema 3<br><br>La radio delle tue emozioni<br><br>Licenza SIAE n° 202600000389</div>
 </div>
 
 <script>
 function apriNovita(){
-  const radio = document.getElementById('radioAudio');
-  if(radio){ radio.pause(); }
+  const r=document.getElementById('radioAudio'); if(r) r.pause();
   document.getElementById('novitaSection').style.display='block';
   document.getElementById('btnNovita').style.display='none';
   document.getElementById('novitaSection').scrollIntoView({behavior:'smooth'});
+  renderNovita();
 }
-
 function chiudiNovita(){
   document.getElementById('novitaSection').style.display='none';
   document.getElementById('btnNovita').style.display='inline-block';
-  const radio = document.getElementById('radioAudio');
-  if(radio){ radio.play().catch(()=>{}); }
+  const r=document.getElementById('radioAudio'); if(r) r.play().catch(()=>{});
 }
-
 function playVideo(el,id){
-  const radio = document.getElementById('radioAudio');
-  if(radio){ radio.pause(); }
+  const r=document.getElementById('radioAudio'); if(r) r.pause();
   el.innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1&rel=0&modestbranding=1&playsinline=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
 }
-
+function renderNovita(){
+  const c=document.getElementById('novitaContainer');
+  if(c.dataset.done=="1") return;
+  c.dataset.done="1";
+  c.innerHTML = BRANI_NOVITA.map(b=>`
+    <div class="novita-block">
+      <div class="novita-header"><img class="novita-mini" src="https://i.ytimg.com/vi/${b.id}/hqdefault.jpg"><div class="novita-tit"><b>${b.artista}</b><span>${b.titolo}</span></div></div>
+      <div class="novita-player" onclick="playVideo(this,'${b.id}')"><img class="thumb" src="https://i.ytimg.com/vi/${b.id}/hqdefault.jpg"><div class="play">▶</div></div>
+    </div>`).join('');
+}
 const WHATSAPP_NUMBER = "39XXXXXXXXXX";
 function inviaDedica(){
   const nome=document.getElementById('nome').value.trim();
@@ -124,41 +107,9 @@ function inviaDedica(){
   const msg=document.getElementById('messaggio').value.trim();
   const canzone=document.getElementById('canzone').value.trim();
   if(!nome || !perChi || !msg){alert("Compila nome, per chi e messaggio!");return;}
-  if(WHATSAPP_NUMBER.includes("X")){alert("Inserisci il numero!");return;}
-  const testo=`*NUOVA DEDICA - RADIO SISTEMA 3*%0A%0A👤 Da: ${nome}%0A❤️ Per: ${perChi}%0A💬 Messaggio: ${msg}%0A🎵 Canzone: ${canzone || 'a scelta della regia'}%0A%0A---%0AInviato dal sito`;
-  const url=`https://wa.me/${WHATSAPP_NUMBER}?text=${testo}`;
-  window.location.href = url;
+  const testo=`*NUOVA DEDICA - RADIO SISTEMA 3*%0A%0A👤 Da: ${nome}%0A❤️ Per: ${perChi}%0A💬 Messaggio: ${msg}%0A🎵 Canzone: ${canzone || 'a scelta della regia'}`;
+  window.location.href=`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(testo)}`;
 }
-
-function cleanWhiteBorder(img){
-  if(img.dataset.cleaned==="1") return;
-  img.dataset.cleaned="1";
-  const isMobile=window.innerWidth<768;
-  const finalSize=isMobile?80:100;
-  const tempImg=new Image();tempImg.crossOrigin="anonymous";
-  tempImg.onload=function(){
-    const w=tempImg.width,h=tempImg.height;
-    const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');
-    canvas.width=w;canvas.height=h;ctx.drawImage(tempImg,0,0);
-    const data=ctx.getImageData(0,0,w,h).data;
-    let top=0,bottom=h,left=0,right=w;
-    for(let y=0;y<h;y++){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){top=y;break;}}
-    for(let y=h-1;y>=0;y--){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){bottom=y+1;break;}}
-    for(let x=0;x<w;x++){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){left=x;break;}}
-    for(let x=w-1;x>=0;x--){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){right=x+1;break;}}
-    right=right-Math.round(w*0.10);left=left+Math.round(w*0.02);top=top+Math.round(h*0.02);bottom=bottom-Math.round(h*0.02);
-    const cw=right-left,ch=bottom-top;
-    const out=document.createElement('canvas');out.width=finalSize;out.height=finalSize;
-    const octx=out.getContext('2d');octx.imageSmoothingQuality='high';
-    octx.drawImage(canvas,left,top,cw,ch,0,0,finalSize,finalSize);
-    img.src=out.toDataURL('image/jpeg',0.92);
-    img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="5px";img.style.display="inline-block";img.style.verticalAlign="middle";img.style.margin="2px 8px 2px 0";img.style.opacity="1";img.style.border="none";
-  };
-  tempImg.src=img.src;
-}
-const list=document.querySelector('.cc_recenttracks_list');
-new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);}).observe(list,{childList:true,subtree:true});
-setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);},1000);
 </script>
 </body>
 </html>
