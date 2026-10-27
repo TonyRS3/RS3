@@ -80,9 +80,11 @@ audio{width:100%;max-width:350px;}
   <div id="listaDedichePubbliche" style="text-align:left"></div>
 </div>
 <div class="dediche-box">
-<div class="section-title">💌 Prossimamente su RS3</div>
-<div class="section-title">💌 Dedica una canzone</div>  
-<input type="text" id="nome" placeholder="Il tuo nome"><input type="text" id="perChi" placeholder="Per chi è la dedica?"><textarea id="messaggio" placeholder="Scrivi il tuo messaggio..."></textarea><input type="text" id="canzone" placeholder="Canzone richiesta (opzionale)"><br><button class="btn-dedica" onclick="inviaDedica()">📩 INVIA DEDICA</button>
+<div class="section-title">💌 Dedica un pensiero</div>  
+<input type="text" id="nome" placeholder="Il tuo nome">
+<input type="text" id="perChi" placeholder="Per chi è la dedica?">
+<textarea id="messaggio" placeholder="Scrivi il tuo messaggio..."></textarea>
+<br><button class="btn-dedica" onclick="inviaDedica()">📩 INVIA DEDICA</button>
 </div>
 <div class="footer">© Radio Sistema 3<br><br>La radio delle tue emozioni<br><br>TUTTI I DIRITTI RISERVATI<br><br>Licenza SIAE n° 202600000389<br><a href="admin.html" style="color:#333">.</a></div>
 </div>
@@ -125,9 +127,8 @@ function inviaDedica(){
   const nome=document.getElementById('nome').value.trim();
   const perChi=document.getElementById('perChi').value.trim();
   const msg=document.getElementById('messaggio').value.trim();
-  const canzone=document.getElementById('canzone').value.trim();
   if(!nome || !perChi || !msg){alert("Compila nome, per chi e messaggio!");return;}
-  const testo=`*NUOVA DEDICA - RADIO SISTEMA 3*%0A%0A👤 Da: ${nome}%0A❤️ Per: ${perChi}%0A💬 Messaggio: ${msg}%0A🎵 Canzone: ${canzone || 'a scelta della regia'}`;
+  const testo=`*NUOVA DEDICA - RADIO SISTEMA 3*%0A%0A👤 Da: ${nome}%0A❤️ Per: ${perChi}%0A💬 Messaggio: ${msg}`;
   window.location.href=`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(testo)}`;
 }
 function cleanWhiteBorder(img){
@@ -179,7 +180,12 @@ async function caricaDedichePubbliche(){
     const d = await r.json();
     if(!d || d.length==0){ box.style.display='none'; return; }
     box.style.display='block';
-    lista.innerHTML = d.slice(0,10).map(x=>`<div style="background:rgba(0,0,0,.4);padding:10px;border-radius:10px;margin:8px 0"><b style="color:#ffd966">Da ${x.da} per ${x.per}</b><br>${x.msg}</div>`).join('');
+    lista.innerHTML = d.slice(0,10).map(x=>{
+      const msg = x.messaggio || x.msg || '';
+      const da = x.da || '';
+      const per = x.per || x.perChi || '';
+      return `<div style="background:rgba(0,0,0,.4);padding:10px;border-radius:10px;margin:8px 0"><b style="color:#ffd966">Da ${da} per ${per}</b><br>${msg}</div>`;
+    }).join('');
   }catch(e){
     box.style.display='none';
   }
