@@ -1,9 +1,16 @@
-json[
+[
   {
-    "da": "Tony",
-    "per": "Ascoltatori di Radio Sistema 3",
-    "msg": "Benvenuti! Questa è la prima dedica ufficiale!",
-    "song": "Giornate Perse - Marco Mengoni",
+    "da": "MARIA",
+    "per": "SALVATORE",
+    "msg": "BUON COMPLEANNO",
+    "song": "",
+    "data": "27/10/2026"
+  },
+  {
+    "da": "PINA",
+    "per": "STEFANO",
+    "msg": "BUON COMPLEANNO",
+    "song": "",
     "data": "27/10/2026"
   }
 ]
