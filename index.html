@@ -65,28 +65,23 @@ audio{width:100%;max-width:350px;}
 <div class="player-box"><div class="section-title">🎧 Ascolta in diretta</div><audio id="radioAudio" controls preload="none"><source src="https://listentomystream.com:8046/;" type="audio/mpeg"></audio></div>
 <div class="section-title" style="margin-top:10px;">🎵 Brano in onda</div>
 <div class="cc_recenttracks_list" data-username="bomyydij"></div>
-
 <button class="btn-novita" id="btnNovita" onclick="apriNovita()">▶ La PLAYLIST di Radio Sistema 3</button>
-
 <div id="novitaSection">
   <div class="section-title">🔥 La Playlist di Radio Sistema 3</div>
   <div id="novitaPlayerMain"></div>
   <div id="novitaList"></div>
   <button class="btn-dedica" style="background:#333;color:#fff;margin-top:15px" onclick="chiudiNovita()">✕ Chiudi Playlist</button>
 </div>
-
 <div id="ultimeDedicheBox" style="display:none">
   <div class="section-title">💖 Ultime Dediche in Onda</div>
   <div id="listaDedichePubbliche" style="text-align:left"></div>
 </div>
-
 <div class="dediche-box">
 <div class="section-title">💌 Dedica una canzone</div>
 <input type="text" id="nome" placeholder="Il tuo nome"><input type="text" id="perChi" placeholder="Per chi è la dedica?"><textarea id="messaggio" placeholder="Scrivi il tuo messaggio..."></textarea><input type="text" id="canzone" placeholder="Canzone richiesta (opzionale)"><br><button class="btn-dedica" onclick="inviaDedica()">📩 INVIA DEDICA</button>
 </div>
 <div class="footer">© Radio Sistema 3<br><br>La radio delle tue emozioni<br><br>Licenza SIAE n° 202600000389<br><a href="admin.html" style="color:#333">.</a></div>
 </div>
-
 <script>
 function apriNovita(){
   const r=document.getElementById('radioAudio'); if(r) r.pause();
@@ -103,6 +98,7 @@ function chiudiNovita(){
   document.getElementById('novitaSection').style.display='none';
   document.getElementById('btnNovita').style.display='inline-block';
   const r=document.getElementById('radioAudio'); if(r) r.play().catch(()=>{});
+  aggiornaCoverAutoradio("Radio Sistema 3","ON AIR 24/7",LOGO_AUTORADIO);
 }
 function playNovita(id, el){
   const r=document.getElementById('radioAudio'); if(r) r.pause();
@@ -130,8 +126,46 @@ function inviaDedica(){
   const testo=`*NUOVA DEDICA - RADIO SISTEMA 3*%0A%0A👤 Da: ${nome}%0A❤️ Per: ${perChi}%0A💬 Messaggio: ${msg}%0A🎵 Canzone: ${canzone || 'a scelta della regia'}`;
   window.location.href=`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(testo)}`;
 }
+function cleanWhiteBorder(img){
+  if(img.dataset.cleaned==="1") return; img.dataset.cleaned="1";
+  const isMobile=window.innerWidth<768; const finalSize=isMobile?80:100;
+  const tempImg=new Image();tempImg.crossOrigin="anonymous";
+  tempImg.onload=function(){
+    const w=tempImg.width,h=tempImg.height; const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');
+    canvas.width=w;canvas.height=h;ctx.drawImage(tempImg,0,0); const data=ctx.getImageData(0,0,w,h).data;
+    let top=0,bottom=h,left=0,right=w;
+    for(let y=0;y<h;y++){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){top=y;break;}}
+    for(let y=h-1;y>=0;y--){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){bottom=y+1;break;}}
+    for(let x=0;x<w;x++){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){left=x;break;}}
+    for(let x=w-1;x>=0;x--){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){right=x+1;break;}}
+    right=right-Math.round(w*0.10);left=left+Math.round(w*0.02);top=top+Math.round(h*0.02);bottom=bottom-Math.round(h*0.02);
+    const cw=right-left,ch=bottom-top; const out=document.createElement('canvas');out.width=finalSize;out.height=finalSize;
+    const octx=out.getContext('2d');octx.imageSmoothingQuality='high'; octx.drawImage(canvas,left,top,cw,ch,0,0,finalSize,finalSize);
+    img.src=out.toDataURL('image/jpeg',0.92);
+    img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="5px";img.style.display="inline-block";img.style.verticalAlign="middle";img.style.margin="2px 8px 2px 0";img.style.opacity="1";img.style.border="none";
+  }; tempImg.src=img.src;
+}
+const list=document.querySelector('.cc_recenttracks_list');
+if(list){
+  new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);}).observe(list,{childList:true,subtree:true});
+  setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);},1000);
+}
+function aggiornaCoverAutoradio(titolo, artista, immagine){
+  if('mediaSession' in navigator){
+    try{
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: titolo || "Radio Sistema 3",
+        artist: artista || "Live On Air",
+        album: "Radio Sistema 3",
+        artwork: [{ src: immagine || LOGO_AUTORADIO, sizes: "512x512", type: "image/jpeg" }]
+      });
+    }catch(e){}
+  }
+}
+document.getElementById('radioAudio').addEventListener('play', () => { aggiornaCoverAutoradio("Radio Sistema 3", "ON AIR 24/7", LOGO_AUTORADIO); });
+document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML;
+setTimeout(()=>{ aggiornaCoverAutoradio("Radio Sistema 3","ON AIR 24/7",LOGO_AUTORADIO); }, 1000);
 
-// NUOVA FUNZIONE CHE LEGGE DA dediche.json (QUELLO CHE GESTISCI TU)
 async function caricaDedichePubbliche(){
   const box = document.getElementById('ultimeDedicheBox');
   const lista = document.getElementById('listaDedichePubbliche');
