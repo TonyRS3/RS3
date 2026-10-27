@@ -7,7 +7,7 @@
 <title>Radio Sistema 3</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
-// ========= QUI CAMBI I BRANI - FACILISSIMO =========
+// ========= QUI CAMBI I BRANI FACILE =========
 const BRANI_NOVITA = [
   { id: "pzvhHsEqMzo", artista: "Marco Mengoni", titolo: "Giornate Perse" },
   { id: "clkCS0Fk8Hk", artista: "Lil Nas X", titolo: "World's Greatest!" },
@@ -79,9 +79,15 @@ function apriNovita(){
   renderNovita();
 }
 function chiudiNovita(){
+  // FIX DOPPIO AUDIO: stoppa YouTube e resetta le miniature
+  const container = document.getElementById('novitaContainer');
+  container.innerHTML = "";
+  container.dataset.done = "0";
+
   document.getElementById('novitaSection').style.display='none';
   document.getElementById('btnNovita').style.display='inline-block';
-  const r=document.getElementById('radioAudio'); if(r) r.play().catch(()=>{});
+  const r=document.getElementById('radioAudio'); 
+  if(r) r.play().catch(()=>{});
 }
 function playVideo(el,id){
   const r=document.getElementById('radioAudio'); if(r) r.pause();
@@ -106,7 +112,6 @@ function inviaDedica(){
   const testo=`*NUOVA DEDICA - RADIO SISTEMA 3*%0A%0A👤 Da: ${nome}%0A❤️ Per: ${perChi}%0A💬 Messaggio: ${msg}%0A🎵 Canzone: ${canzone || 'a scelta della regia'}`;
   window.location.href=`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(testo)}`;
 }
-// ====== PARTE ORIGINALE TUA CHE FA VEDERE LA COPERTINA ======
 function cleanWhiteBorder(img){
   if(img.dataset.cleaned==="1") return;
   img.dataset.cleaned="1";
