@@ -1,1 +1,9 @@
-
+json[
+  {
+    "da": "Tony",
+    "per": "Ascoltatori di Radio Sistema 3",
+    "msg": "Benvenuti! Questa è la prima dedica ufficiale!",
+    "song": "Giornate Perse - Marco Mengoni",
+    "data": "27/10/2026"
+  }
+]
