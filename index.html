@@ -8,15 +8,12 @@
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 // ========= QUI CAMBI I BRANI - FACILISSIMO =========
-// Prendi solo la parte dopo v= dal link YouTube
-// Es: https://www.youtube.com/watch?v=pzvhHsEqMzo -> metti solo pzvhHsEqMzo
 const BRANI_NOVITA = [
   { id: "pzvhHsEqMzo", artista: "Marco Mengoni", titolo: "Giornate Perse" },
   { id: "clkCS0Fk8Hk", artista: "Lil Nas X", titolo: "World's Greatest!" },
   { id: "mw3kSNIxjqo", artista: "Taylor Swift", titolo: "Patient Zero" },
   { id: "frWVNdwHuGM", artista: "Baby K feat Guè", titolo: "Amore / Dilemma" }
 ];
-// ========= FINE PARTE DA MODIFICARE =========
 </script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -92,8 +89,7 @@ function playVideo(el,id){
 }
 function renderNovita(){
   const c=document.getElementById('novitaContainer');
-  if(c.dataset.done=="1") return;
-  c.dataset.done="1";
+  if(c.dataset.done=="1") return; c.dataset.done="1";
   c.innerHTML = BRANI_NOVITA.map(b=>`
     <div class="novita-block">
       <div class="novita-header"><img class="novita-mini" src="https://i.ytimg.com/vi/${b.id}/hqdefault.jpg"><div class="novita-tit"><b>${b.artista}</b><span>${b.titolo}</span></div></div>
@@ -110,6 +106,36 @@ function inviaDedica(){
   const testo=`*NUOVA DEDICA - RADIO SISTEMA 3*%0A%0A👤 Da: ${nome}%0A❤️ Per: ${perChi}%0A💬 Messaggio: ${msg}%0A🎵 Canzone: ${canzone || 'a scelta della regia'}`;
   window.location.href=`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(testo)}`;
 }
+// ====== PARTE ORIGINALE TUA CHE FA VEDERE LA COPERTINA ======
+function cleanWhiteBorder(img){
+  if(img.dataset.cleaned==="1") return;
+  img.dataset.cleaned="1";
+  const isMobile=window.innerWidth<768;
+  const finalSize=isMobile?80:100;
+  const tempImg=new Image();tempImg.crossOrigin="anonymous";
+  tempImg.onload=function(){
+    const w=tempImg.width,h=tempImg.height;
+    const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');
+    canvas.width=w;canvas.height=h;ctx.drawImage(tempImg,0,0);
+    const data=ctx.getImageData(0,0,w,h).data;
+    let top=0,bottom=h,left=0,right=w;
+    for(let y=0;y<h;y++){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){top=y;break;}}
+    for(let y=h-1;y>=0;y--){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){bottom=y+1;break;}}
+    for(let x=0;x<w;x++){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){left=x;break;}}
+    for(let x=w-1;x>=0;x--){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){right=x+1;break;}}
+    right=right-Math.round(w*0.10);left=left+Math.round(w*0.02);top=top+Math.round(h*0.02);bottom=bottom-Math.round(h*0.02);
+    const cw=right-left,ch=bottom-top;
+    const out=document.createElement('canvas');out.width=finalSize;out.height=finalSize;
+    const octx=out.getContext('2d');octx.imageSmoothingQuality='high';
+    octx.drawImage(canvas,left,top,cw,ch,0,0,finalSize,finalSize);
+    img.src=out.toDataURL('image/jpeg',0.92);
+    img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="5px";img.style.display="inline-block";img.style.verticalAlign="middle";img.style.margin="2px 8px 2px 0";img.style.opacity="1";img.style.border="none";
+  };
+  tempImg.src=img.src;
+}
+const list=document.querySelector('.cc_recenttracks_list');
+new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);}).observe(list,{childList:true,subtree:true});
+setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);},1000);
 </script>
 </body>
 </html>
