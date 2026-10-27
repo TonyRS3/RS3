@@ -7,7 +7,6 @@
 <title>Radio Sistema 3</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
-// ========= QUI CAMBI I BRANI FACILE =========
 const BRANI_NOVITA = [
   { id: "pzvhHsEqMzo", artista: "Marco Mengoni", titolo: "Giornate Perse" },
   { id: "clkCS0Fk8Hk", artista: "Lil Nas X", titolo: "World's Greatest!" },
@@ -39,10 +38,10 @@ audio{width:100%;max-width:350px;}
 .dediche-box input, .dediche-box textarea{width:100%;max-width:400px;padding:10px 12px;margin:6px 0;border-radius:10px;border:none;background:rgba(0,0,0,.4);color:white;font-size:1rem;outline:none;}
 .btn-dedica{margin-top:12px;background:linear-gradient(135deg,#ffd966,#ff9f1c);color:#000;font-weight:bold;padding:12px 25px;border:none;border-radius:30px;font-size:1.1rem;cursor:pointer;}
 .footer{margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,.2);}
-@media(max-width:768px){.logo{width:190px;height:190px;}h1{font-size:1.9rem;}.container{margin:10px;padding:18px;}}
+@media(max-width:768px){.logo{width:190px;height:190px;}h1{font-size:1.9rem;}.container{margin:10px;padding:18px;} #novitaPlayerMain{width:90% !important;}}
 .btn-novita{margin-top:30px;background:#ff0033;color:#fff;font-weight:900;padding:18px 32px;border:none;border-radius:50px;font-size:1.2rem;cursor:pointer;}
 #novitaSection{display:none;margin-top:30px;background:rgba(0,0,0,.6);padding:15px;border-radius:20px;border:1px solid rgba(255,255,255,.15);}
-#novitaPlayerMain{position:sticky;top:10px;z-index:5;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#666;margin-bottom:15px;border:2px solid #ff0033}
+#novitaPlayerMain{position:sticky;top:10px;z-index:5;width:65%;max-width:360px;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#666;margin:0 auto 15px auto;border:2px solid #ff0033}
 #novitaPlayerMain iframe{width:100%;height:100%;border:0;position:absolute;top:0;left:0}
 #novitaList{max-height:380px;overflow-y:auto;text-align:left}
 .novita-row{display:flex;align-items:center;gap:12px;padding:8px 10px;background:#151515;border-bottom:1px solid #222;cursor:pointer;border-radius:8px;margin-bottom:6px}
@@ -123,30 +122,23 @@ function inviaDedica(){
   window.location.href=`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(testo)}`;
 }
 function cleanWhiteBorder(img){
-  if(img.dataset.cleaned==="1") return;
-  img.dataset.cleaned="1";
-  const isMobile=window.innerWidth<768;
-  const finalSize=isMobile?80:100;
+  if(img.dataset.cleaned==="1") return; img.dataset.cleaned="1";
+  const isMobile=window.innerWidth<768; const finalSize=isMobile?80:100;
   const tempImg=new Image();tempImg.crossOrigin="anonymous";
   tempImg.onload=function(){
-    const w=tempImg.width,h=tempImg.height;
-    const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');
-    canvas.width=w;canvas.height=h;ctx.drawImage(tempImg,0,0);
-    const data=ctx.getImageData(0,0,w,h).data;
+    const w=tempImg.width,h=tempImg.height; const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');
+    canvas.width=w;canvas.height=h;ctx.drawImage(tempImg,0,0); const data=ctx.getImageData(0,0,w,h).data;
     let top=0,bottom=h,left=0,right=w;
     for(let y=0;y<h;y++){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){top=y;break;}}
     for(let y=h-1;y>=0;y--){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){bottom=y+1;break;}}
     for(let x=0;x<w;x++){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){left=x;break;}}
     for(let x=w-1;x>=0;x--){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){right=x+1;break;}}
     right=right-Math.round(w*0.10);left=left+Math.round(w*0.02);top=top+Math.round(h*0.02);bottom=bottom-Math.round(h*0.02);
-    const cw=right-left,ch=bottom-top;
-    const out=document.createElement('canvas');out.width=finalSize;out.height=finalSize;
-    const octx=out.getContext('2d');octx.imageSmoothingQuality='high';
-    octx.drawImage(canvas,left,top,cw,ch,0,0,finalSize,finalSize);
+    const cw=right-left,ch=bottom-top; const out=document.createElement('canvas');out.width=finalSize;out.height=finalSize;
+    const octx=out.getContext('2d');octx.imageSmoothingQuality='high'; octx.drawImage(canvas,left,top,cw,ch,0,0,finalSize,finalSize);
     img.src=out.toDataURL('image/jpeg',0.92);
     img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="5px";img.style.display="inline-block";img.style.verticalAlign="middle";img.style.margin="2px 8px 2px 0";img.style.opacity="1";img.style.border="none";
-  };
-  tempImg.src=img.src;
+  }; tempImg.src=img.src;
 }
 const list=document.querySelector('.cc_recenttracks_list');
 new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);}).observe(list,{childList:true,subtree:true});
