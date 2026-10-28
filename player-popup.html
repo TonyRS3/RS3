@@ -3,34 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - Player Popup</title>
-<style>
- body{margin:0;background:#0E1C3A;color:white;font-family:Arial;text-align:center;padding:20px}
- img{width:260px;height:260px;border-radius:20px;object-fit:cover;margin-top:10px}
- audio{width:100%;margin-top:20px}
- .live{color:#ff4444;font-weight:bold;margin-top:15px;animation:pulse 1.4s infinite}
- @keyframes pulse{0%{opacity:1}50%{opacity:.4}100%{opacity:1}}
-</style>
+<title>Radio Sistema 3</title>
+<style>body{margin:0;background:#0E1C3A;color:white;text-align:center;padding:20px;font-family:Arial}img{width:240px;height:240px;border-radius:20px}audio{width:100%;margin-top:25px}</style>
 </head>
 <body>
 <h2>RADIO SISTEMA 3</h2>
 <img src="RADIO SISTEMA 3.jpeg">
-<div class="live">🔴 ON AIR 24/7</div>
-<audio controls autoplay id="radioPopup">
- <source src="https://listentomystream.com:8046/;" type="audio/mpeg">
-</audio>
-<p style="margin-top:15px;color:#ffd966">La musica che accompagna le tue giornate</p>
-<br>
-<p style="font-size:.8rem;color:#aaa">Puoi chiudere la pagina principale, questo player continuerà a suonare!</p>
-<script>
-if('mediaSession' in navigator){
-  navigator.mediaSession.metadata = new MediaMetadata({
-    title: "Radio Sistema 3",
-    artist: "ON AIR 24/7",
-    artwork: [{src: "RADIO SISTEMA 3.jpeg", sizes:"512x512", type:"image/jpeg"}]
-  });
-}
-document.getElementById('radioPopup').play().catch(()=>{});
-</script>
+<h3 style="color:#ff4444">🔴 ON AIR 24/7</h3>
+<audio controls autoplay><source src="https://listentomystream.com:8046/;"></audio>
+<p style="color:#ffd966;margin-top:15px">La musica continua anche se chiudi il sito</p>
 </body>
 </html>
