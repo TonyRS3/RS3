@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - STEREO SLIM</title>
+<title>Radio Sistema 3 - STEREO FAST</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 const BRANI_NOVITA = [
@@ -15,6 +15,7 @@ const BRANI_NOVITA = [
 ];
 const LOGO_AUTORADIO = "RADIO SISTEMA 3.jpeg";
 const PLACEHOLDER_HTML = `<div style="text-align:center"><div style="color:#fff;font-weight:bold">Scegli un brano</div><div style="font-size:2rem">👇</div></div>`;
+const WHATSAPP_NUMBER = "393664780561";
 </script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -29,25 +30,27 @@ h1{margin-top:20px;font-size:3rem;}
 .player-box{margin-top:15px;background:rgba(255,255,255,.10);padding:12px;border-radius:20px;width:400px;max-width:92%;margin:0 auto;}
 .section-title{font-size:1.4rem;margin-bottom:8px;color:#ffd966;}
 audio{width:100%;max-width:340px;height:36px;}
-/* FIX FODERINA - torna vicino al testo */
 .cc_recenttracks_list{margin-top:8px !important;color:white !important;text-align:left !important;max-width:400px;margin-left:auto;margin-right:auto;background:rgba(0,0,0,0.3);padding:8px;border-radius:10px;}
 .cc_recenttracks_list *{color:white !important;line-height:1.25 !important;font-size:0.95rem !important;}
 .cc_recenttracks_list .ccbuy{display:none !important;}
-.cc_recenttracks_list img{opacity:0;display:block;} /* viene sostituita da cleanWhiteBorder */
+.cc_recenttracks_list img{opacity:0;display:block;}
 .btn-novita{margin-top:20px;background:#ff0033;color:#fff;font-weight:900;padding:14px 26px;border:none;border-radius:50px;font-size:1.1rem;cursor:pointer;}
 #novitaSection{display:none;margin-top:20px;background:rgba(0,0,0,.6);padding:15px;border-radius:20px;}
 #novitaPlayerMain{width:65%;max-width:340px;aspect-ratio:16/9;background:#1a1a1a;border-radius:12px;margin:0 auto 12px auto;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border:2px dashed #555}
 #novitaPlayerMain iframe{width:100%;height:100%;border:0;position:absolute;top:0;left:0}
 #novitaList{max-height:350px;overflow-y:auto;text-align:left}
 .novita-row{display:flex;align-items:center;gap:10px;padding:7px 9px;background:#151515;cursor:pointer;border-radius:8px;margin-bottom:5px}
-/* VU STRETTO - più slim come vuoi tu */
-.vu-wrap{margin-top:8px;background:rgba(0,0,0,.75);padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,.2);}
+  .vu-wrap{margin-top:8px;background:rgba(0,0,0,.75);padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,.2);}
 #vuCanvas{width:100%;height:54px;display:block;border-radius:5px;background:#0a0a0a;}
 .vu-label{font-size:.7rem;color:#aaa;margin-top:3px;display:flex;justify-content:space-between;font-family:monospace;}
 @keyframes bassHit {0%{transform:scale(1);}15%{transform:scale(1.04); box-shadow:0 0 20px #ff0033;}100%{transform:scale(1);}}
 .bass-active .logo-wrap{animation:bassHit 0.2s ease, gradientMove 4s ease infinite !important;}
 #bassFlashOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle, rgba(255,0,51,0.15) 0%, transparent 70%);pointer-events:none;opacity:0;transition:opacity 0.1s;z-index:9999;}
 #bassFlashOverlay.on{opacity:1;}
+#ultimeDedicheBox{margin-top:20px;background:rgba(255,217,102,.12);padding:12px;border-radius:15px;border:1px solid #ffd966;display:none}
+.dediche-box{margin-top:20px;background:rgba(255,255,255,.10);padding:18px;border-radius:20px;border:1px solid rgba(255,217,102,.3);}
+.dediche-box input, .dediche-box textarea{width:100%;max-width:380px;padding:9px 11px;margin:5px 0;border-radius:10px;border:none;background:rgba(0,0,0,.4);color:white;font-size:.95rem;outline:none;}
+.btn-dedica{margin-top:10px;background:linear-gradient(135deg,#ffd966,#ff9f1c);color:#000;font-weight:bold;padding:11px 22px;border:none;border-radius:30px;font-size:1rem;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -55,7 +58,7 @@ audio{width:100%;max-width:340px;height:36px;}
 <div class="container">
 <div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo"></div>
 <h1>RADIO SISTEMA 3</h1>
-<div class="live">🔴 ON AIR 24/7 - STEREO</div>
+<div class="live">🔴 ON AIR 24/7 - STEREO FAST</div>
 <div class="player-box">
 <div class="section-title">🎧 Ascolta in diretta</div>
 <audio id="radioAudio" controls preload="none"><source src="https://listentomystream.com:8046/;" type="audio/mpeg"></audio>
@@ -73,6 +76,17 @@ audio{width:100%;max-width:340px;height:36px;}
   <div id="novitaList"></div>
   <button style="background:#333;color:#fff;margin-top:12px;padding:8px 18px;border:none;border-radius:20px" onclick="chiudiNovita()">✕ Chiudi</button>
 </div>
+<div id="ultimeDedicheBox">
+  <div class="section-title">💖 Dediche in Diretta - Aggiornamento ogni 5 sec</div>
+  <div id="listaDedichePubbliche" style="text-align:left"></div>
+</div>
+<div class="dediche-box">
+<div class="section-title">💌 Dedica un pensiero - Appare SUBITO</div>  
+<input type="text" id="nome" placeholder="Il tuo nome">
+<input type="text" id="perChi" placeholder="Per chi è la dedica?">
+<textarea id="messaggio" placeholder="Scrivi il tuo messaggio..."></textarea>
+<br><button class="btn-dedica" onclick="inviaDedica()">📩 INVIA DEDICA ISTANTANEA</button>
+</div>
 <div class="footer" style="margin-top:15px;font-size:0.85rem">© Radio Sistema 3 - SIAE 202600000389</div>
 </div>
 <script>
@@ -80,12 +94,8 @@ function apriNovita(){ document.getElementById('radioAudio').pause(); document.g
 function chiudiNovita(){ document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML; document.getElementById('novitaList').innerHTML = ""; document.getElementById('novitaList').dataset.done = "0"; document.getElementById('novitaSection').style.display='none'; document.getElementById('btnNovita').style.display='inline-block'; document.getElementById('radioAudio').play().catch(()=>{}); }
 function playNovita(id, el){ document.getElementById('radioAudio').pause(); document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active')); el.classList.add('active'); document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>'; }
 function renderNovita(){ const c=document.getElementById('novitaList'); if(c.dataset.done=="1") return; c.dataset.done="1"; c.innerHTML = BRANI_NOVITA.map(b=>`<div class="novita-row" onclick="playNovita('${b.id}', this)"><img src="https://i.ytimg.com/vi/${b.id}/hqdefault.jpg" style="width:50px;height:38px;border-radius:4px"><div><b style="font-size:0.9rem">${b.artista}</b><br><span style="color:#aaa;font-size:.75rem">${b.titolo}</span></div><div style="margin-left:auto;color:#ff0033">▶</div></div>`).join(''); }
-
-// FIX FODERINA - rimessa vicina come prima
 function cleanWhiteBorder(img){ if(img.dataset.cleaned==="1") return; img.dataset.cleaned="1"; const isMobile=window.innerWidth<768; const finalSize=isMobile?68:82; const tempImg=new Image();tempImg.crossOrigin="anonymous"; tempImg.onload=function(){ const w=tempImg.width,h=tempImg.height; const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d'); canvas.width=w;canvas.height=h;ctx.drawImage(tempImg,0,0); const data=ctx.getImageData(0,0,w,h).data; let top=0,bottom=h,left=0,right=w; for(let y=0;y<h;y++){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){top=y;break;}} for(let y=h-1;y>=0;y--){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){bottom=y+1;break;}} for(let x=0;x<w;x++){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){left=x;break;}} for(let x=w-1;x>=0;x--){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){right=x+1;break;}} right=right-Math.round(w*0.10);left=left+Math.round(w*0.02);top=top+Math.round(h*0.02);bottom=bottom-Math.round(h*0.02); const cw=right-left,ch=bottom-top; const out=document.createElement('canvas');out.width=finalSize;out.height=finalSize; const octx=out.getContext('2d');octx.imageSmoothingQuality='high'; octx.drawImage(canvas,left,top,cw,ch,0,0,finalSize,finalSize); img.src=out.toDataURL('image/jpeg',0.92); img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="5px";img.style.display="inline-block";img.style.verticalAlign="middle";img.style.margin="0 8px 0 0";img.style.opacity="1";img.style.border="none"; }; tempImg.src=img.src; }
 const list=document.querySelector('.cc_recenttracks_list'); if(list){ new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);}).observe(list,{childList:true,subtree:true}); setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);},1000); }
-
-// VU STEREO SLIM - più stretto
 const vuCanvas = document.getElementById('vuCanvas');
 const vuCtx = vuCanvas.getContext('2d');
 const radioEl = document.getElementById('radioAudio');
@@ -95,29 +105,13 @@ let peakL = 0, peakR = 0;
 function drawStereo(){
   const W=vuCanvas.width, H=vuCanvas.height;
   vuCtx.clearRect(0,0,W,H);
-  vuCtx.fillStyle='#0a0a0a';
-  vuCtx.fillRect(0,0,W,H);
-  let bars = 36;
-  let barW = W / bars;
-  let gap = 1.5;
-  let rowH = H/2 - 2;
+  vuCtx.fillStyle='#0a0a0a'; vuCtx.fillRect(0,0,W,H);
+  let bars = 36; let barW = W / bars; let gap = 1.5; let rowH = H/2 - 2;
   let activeL = Math.floor((levelL/100)*bars);
-  for(let i=0;i<bars;i++){
-    let x = i*barW; let lit = i < activeL;
-    let color = i < bars*0.6 ? (lit ? '#00ff2a' : '#001a05') : i < bars*0.84 ? (lit ? '#ffea00' : '#1a1a00') : (lit ? '#ff1a1a' : '#1a0000');
-    vuCtx.fillStyle = color;
-    let y = 1; let bh = lit ? rowH-1 : rowH*0.4;
-    vuCtx.fillRect(x+gap, y + (rowH-bh)/2, barW-gap*2, bh);
-  }
+  for(let i=0;i<bars;i++){ let x = i*barW; let lit = i < activeL; let color = i < bars*0.6 ? (lit ? '#00ff2a' : '#001a05') : i < bars*0.84 ? (lit ? '#ffea00' : '#1a1a00') : (lit ? '#ff1a1a' : '#1a0000'); vuCtx.fillStyle = color; let y = 1; let bh = lit ? rowH-1 : rowH*0.4; vuCtx.fillRect(x+gap, y + (rowH-bh)/2, barW-gap*2, bh); }
   vuCtx.fillStyle='#333'; vuCtx.fillRect(0, H/2-0.5, W, 1);
   let activeR = Math.floor((levelR/100)*bars);
-  for(let i=0;i<bars;i++){
-    let x = i*barW; let lit = i < activeR;
-    let color = i < bars*0.6 ? (lit ? '#00d4ff' : '#001a1a') : i < bars*0.84 ? (lit ? '#ffea00' : '#1a1a00') : (lit ? '#ff1a1a' : '#1a0000');
-    vuCtx.fillStyle = color;
-    let y = H/2 + 1; let bh = lit ? rowH-1 : rowH*0.4;
-    vuCtx.fillRect(x+gap, y + (rowH-bh)/2, barW-gap*2, bh);
-  }
+  for(let i=0;i<bars;i++){ let x = i*barW; let lit = i < activeR; let color = i < bars*0.6 ? (lit ? '#00d4ff' : '#001a1a') : i < bars*0.84 ? (lit ? '#ffea00' : '#1a1a00') : (lit ? '#ff1a1a' : '#1a0000'); vuCtx.fillStyle = color; let y = H/2 + 1; let bh = lit ? rowH-1 : rowH*0.4; vuCtx.fillRect(x+gap, y + (rowH-bh)/2, barW-gap*2, bh); }
   vuCtx.fillStyle='#00ff2a'; vuCtx.font='bold 9px monospace'; vuCtx.fillText('L', 2, 10);
   vuCtx.fillStyle='#00d4ff'; vuCtx.fillText('R', 2, H-2);
   if(peakL > 2){ vuCtx.fillStyle='#ff0000'; vuCtx.fillRect((peakL/100)*W-1, 1, 1.5, rowH-2); }
@@ -148,6 +142,46 @@ radioEl.addEventListener('play', ()=>{ isPlayingVU=true; });
 radioEl.addEventListener('pause', ()=>{ isPlayingVU=false; });
 drawStereo();
 setInterval(updateStereo, 60);
+async function caricaDedichePubbliche(){
+  const box = document.getElementById('ultimeDedicheBox');
+  const lista = document.getElementById('listaDedichePubbliche');
+  try{
+    const r = await fetch('dediche.json?v='+Date.now(), {cache:'no-store'});
+    if(!r.ok) throw new Error('no file');
+    const d = await r.json();
+    if(!d || d.length==0){ if(!lista.dataset.hasLocal) box.style.display='none'; return; }
+    box.style.display='block';
+    let htmlLocale = lista.dataset.localHtml || "";
+    let htmlRemote = d.slice(0,10).map(x=>{
+      const msg = x.messaggio || x.msg || '';
+      const da = x.da || '';
+      const per = x.per || x.perChi || '';
+      return `<div style="background:rgba(0,0,0,.4);padding:10px;border-radius:10px;margin:8px 0;border-left:3px solid #ffd966"><b style="color:#ffd966">Da ${da} per ${per}</b><br>${msg}<br><small style="color:#888">${x.data||''}</small></div>`;
+    }).join('');
+    lista.innerHTML = htmlLocale + htmlRemote;
+  }catch(e){ if(lista.dataset.hasLocal) box.style.display='block'; }
+}
+function inviaDedica(){ 
+  const nome=document.getElementById('nome').value.trim(); 
+  const perChi=document.getElementById('perChi').value.trim(); 
+  const msg=document.getElementById('messaggio').value.trim(); 
+  if(!nome || !perChi || !msg){alert("Compila nome, per chi e messaggio!");return;} 
+  const box = document.getElementById('ultimeDedicheBox');
+  const lista = document.getElementById('listaDedichePubbliche');
+  const ora = new Date().toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
+  const htmlLocale = `<div style="background:linear-gradient(135deg, rgba(0,255,42,0.25), rgba(0,0,0,0.4));padding:10px;border-radius:10px;margin:8px 0;border-left:3px solid #00ff2a;"><b style="color:#00ff2a">🔴 APPENA ARRIVATA - Da ${nome} per ${perChi}</b><br>${msg}<br><small style="color:#00ff2a">In diretta ora - ${ora}</small></div>`;
+  lista.dataset.hasLocal = "1";
+  lista.dataset.localHtml = htmlLocale + (lista.dataset.localHtml || "");
+  lista.innerHTML = lista.dataset.localHtml + lista.innerHTML;
+  box.style.display='block';
+  box.scrollIntoView({behavior:'smooth'});
+  document.getElementById('nome').value=''; document.getElementById('perChi').value=''; document.getElementById('messaggio').value='';
+  const testo=`*NUOVA DEDICA - RADIO SISTEMA 3*\n\nDa: ${nome}\nPer: ${perChi}\nMessaggio: ${msg}\nOra: ${ora}`;
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(testo)}`, '_blank');
+  setTimeout(caricaDedichePubbliche, 2000);
+}
+caricaDedichePubbliche();
+setInterval(caricaDedichePubbliche, 5000);
 document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML;
 </script>
 </body>
