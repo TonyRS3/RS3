@@ -4,17 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Radio Sistema 3</title>
-<script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <style>
  body{margin:0;background:#0E1C3A;color:white;text-align:center;padding:15px;font-family:Arial}
  .logo{width:120px;height:120px;border-radius:15px;object-fit:cover}
  audio{width:100%;margin-top:15px}
  .box{background:rgba(255,255,255,.1);padding:12px;border-radius:12px;margin-top:12px}
- .titolo-box{color:#ffd966;font-weight:bold;margin-bottom:5px}
- /* QUESTO TOGLIE DEFINITIVAMENTE IL QUADRATINO COVER */
- .cc_recenttracks_list img, .cc_recenttracks_list .cccover, .cc_recenttracks_list br {display:none !important}
- .cc_recenttracks_list *{color:white !important;font-family:Arial !important}
- .cc_recenttracks_list .ccbuy, .cc_recenttracks_list .cctitle a:last-child{display:none !important}
 </style>
 </head>
 <body>
@@ -23,8 +17,25 @@
 <img src="RADIO SISTEMA 3.jpeg" class="logo" style="margin-top:10px">
 <audio controls autoplay><source src="https://listentomystream.com:8046/;" type="audio/mpeg"></audio>
 <div class="box">
- <div class="titolo-box">🎵 Brano in onda</div>
- <div class="cc_recenttracks_list" data-username="bomyydij"></div>
+ <div style="color:#ffd966;font-weight:bold">🎵 Brano in onda</div>
+ <div id="brano" style="margin-top:5px">Caricamento...</div>
 </div>
+
+<script>
+function aggiornaBrano(){
+ fetch('https://manage.myshoutca.st/api/recenttracks/?username=bomyydij&limit=1&format=json')
+ .then(r=>r.json())
+ .then(d=>{
+   if(d && d.length>0 && d[0].title){
+     document.getElementById('brano').innerHTML = d[0].title;
+   } else {
+     document.getElementById('brano').innerHTML = "Radio Sistema 3 - Live";
+   }
+ })
+ .catch(()=>{ document.getElementById('brano').innerHTML = "Radio Sistema 3 - ON AIR"; });
+}
+aggiornaBrano();
+setInterval(aggiornaBrano, 15000);
+</script>
 </body>
 </html>
