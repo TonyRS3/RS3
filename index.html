@@ -142,6 +142,42 @@ radioEl.addEventListener('play', ()=>{ isPlayingVU=true; });
 radioEl.addEventListener('pause', ()=>{ isPlayingVU=false; });
 drawStereo();
 setInterval(updateStereo, 60);
+  // CARICA DEDICHE PUBBLICHE + ANTI-DOPPIE + ANTI-CACHE
+async function caricaDedichePubbliche() {
+  try {
+    const res = await fetch('dediche.json?t=' + Date.now(), {cache: "no-store"});
+    const pubbliche = await res.json();
+    let htmlPubbliche = '';
+    pubbliche.forEach(d => {
+      htmlPubbliche += creaHtmlDedica(d, 'pubblica');
+    });
+    
+    const contenitore = document.getElementById('contenitore-dediche');
+    if (!contenitore) return;
+    
+    let localHtml = contenitore.dataset.localHtml || '';
+
+    // Se la gialla è già arrivata, cancella la verde uguale
+    if (localHtml && pubbliche.length > 0) {
+      for (let p of pubbliche) {
+        if (localHtml.includes(p.da) && localHtml.includes(p.messaggio.substring(0,15))) {
+          localHtml = '';
+          contenitore.dataset.localHtml = '';
+          break;
+        }
+      }
+    }
+
+    contenitore.innerHTML = htmlPubbliche + localHtml;
+  } catch(e) {
+    console.log("dediche non ancora pronte");
+  }
+}
+
+// Ricarica automatica ogni 30 sec
+setInterval(caricaDedichePubbliche, 30000);
+// Carica subito all'avvio
+caricaDedichePubbliche();
 async function caricaDedichePubbliche(){
   const box = document.getElementById('ultimeDedicheBox');
   const lista = document.getElementById('listaDedichePubbliche');
