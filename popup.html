@@ -4,11 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Radio Sistema 3</title>
+<script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <style>
  body{margin:0;background:#0E1C3A;color:white;text-align:center;padding:15px;font-family:Arial}
- .logo{width:120px;height:120px;border-radius:15px;object-fit:cover}
+ .logo{width:120px;height:120px;border-radius:15px}
  audio{width:100%;margin-top:15px}
- .box{background:rgba(255,255,255,.1);padding:12px;border-radius:12px;margin-top:12px}
+ .box{background:rgba(255,255,255,.1);padding:12px;border-radius:12px;margin-top:12px;min-height:40px}
+ .cc_recenttracks_list img, .cc_recenttracks_list .cccover{display:none !important}
+ .cc_recenttracks_list *{color:white !important}
+ .cc_recenttracks_list .ccbuy{display:none !important}
+ #branoFallback{color:white;margin-top:5px}
 </style>
 </head>
 <body>
@@ -16,26 +21,27 @@
 <div style="color:#ff4444;font-weight:bold">🔴 ON AIR 24/7</div>
 <img src="RADIO SISTEMA 3.jpeg" class="logo" style="margin-top:10px">
 <audio controls autoplay><source src="https://listentomystream.com:8046/;" type="audio/mpeg"></audio>
+
 <div class="box">
  <div style="color:#ffd966;font-weight:bold">🎵 Brano in onda</div>
- <div id="brano" style="margin-top:5px">Caricamento...</div>
+ <div class="cc_recenttracks_list" data-username="bomyydij"></div>
+ <div id="branoFallback"></div>
 </div>
 
 <script>
-function aggiornaBrano(){
- fetch('https://manage.myshoutca.st/api/recenttracks/?username=bomyydij&limit=1&format=json')
- .then(r=>r.json())
- .then(d=>{
-   if(d && d.length>0 && d[0].title){
-     document.getElementById('brano').innerHTML = d[0].title;
-   } else {
-     document.getElementById('brano').innerHTML = "Radio Sistema 3 - Live";
-   }
- })
- .catch(()=>{ document.getElementById('brano').innerHTML = "Radio Sistema 3 - ON AIR"; });
-}
-aggiornaBrano();
-setInterval(aggiornaBrano, 15000);
+// Se dopo 3 secondi il sistema vecchio non ha caricato nulla (succede su telefono), usa il piano B
+setTimeout(function(){
+  var lista = document.querySelector('.cc_recenttracks_list');
+  if(!lista || lista.innerHTML.trim() === ""){
+    fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://listentomystream.com:8046/currentsong?sid=1'))
+    .then(r=>r.text())
+    .then(t=>{
+      if(t) document.getElementById('branoFallback').innerHTML = t;
+      else document.getElementById('branoFallback').innerHTML = "Radio Sistema 3 - Live";
+    })
+    .catch(()=>{ document.getElementById('branoFallback').innerHTML = "ON AIR - Radio Sistema 3"; });
+  }
+}, 3000);
 </script>
 </body>
 </html>
