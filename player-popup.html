@@ -1,1 +1,40 @@
-
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radio Sistema 3 - Player Popup</title>
+<style>
+ body{margin:0;background:#0E1C3A;color:white;font-family:Arial;text-align:center;padding:20px}
+ img{width:260px;height:260px;border-radius:20px;object-fit:cover;margin-top:10px}
+ audio{width:100%;margin-top:20px}
+ .live{color:#ff4444;font-weight:bold;margin-top:15px;animation:pulse 1.4s infinite}
+ @keyframes pulse{0%{opacity:1}50%{opacity:.4}100%{opacity:1}}
+ .btn{margin-top:20px;background:#25D366;color:white;padding:12px 20px;border-radius:30px;text-decoration:none;display:inline-block;font-weight:bold}
+</style>
+</head>
+<body>
+<h2>RADIO SISTEMA 3</h2>
+<img src="RADIO SISTEMA 3.jpeg">
+<div class="live">🔴 ON AIR 24/7</div>
+<audio controls autoplay id="radioPopup">
+ <source src="https://listentomystream.com:8046/;" type="audio/mpeg">
+</audio>
+<p style="margin-top:15px;color:#ffd966" id="titoloBrano">La musica che accompagna le tue giornate</p>
+<br>
+<a class="btn" href="https://wa.me/393664780561?text=Ciao%20Radio%20Sistema%203%20vi%20ascolto%20dal%20popup!" target="_blank">💌 Invia dedica</a>
+<br><br>
+<p style="font-size:.8rem;color:#aaa">Puoi chiudere la pagina principale, questo player continuerà a suonare!</p>
+<script>
+// mantiene il titolo per le auto
+if('mediaSession' in navigator){
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: "Radio Sistema 3",
+    artist: "ON AIR 24/7",
+    artwork: [{src: "RADIO SISTEMA 3.jpeg", sizes:"512x512", type:"image/jpeg"}]
+  });
+}
+document.getElementById('radioPopup').play().catch(()=>{});
+</script>
+</body>
+</html>
