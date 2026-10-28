@@ -129,8 +129,9 @@ function inviaDedica(){
   const perChi=document.getElementById('perChi').value.trim();
   const msg=document.getElementById('messaggio').value.trim();
   if(!nome || !perChi || !msg){alert("Compila nome, per chi e messaggio!");return;}
-  const testo=`*NUOVA DEDICA - RADIO SISTEMA 3*%0A%0A👤 Da: ${nome}%0A❤️ Per: ${perChi}%0A💬 Messaggio: ${msg}`;
-  window.location.href=`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(testo)}`;
+  const testo=`*NUOVA DEDICA - RADIO SISTEMA 3*\n\nDa: ${nome}\nPer: ${perChi}\nMessaggio: ${msg}`;
+  const url=`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(testo)}`;
+  window.open(url, '_blank');
 }
 function cleanWhiteBorder(img){
   if(img.dataset.cleaned==="1") return; img.dataset.cleaned="1";
@@ -171,7 +172,6 @@ function aggiornaCoverAutoradio(titolo, artista, immagine){
 document.getElementById('radioAudio').addEventListener('play', () => { aggiornaCoverAutoradio("Radio Sistema 3", "ON AIR 24/7", LOGO_AUTORADIO); });
 document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML;
 setTimeout(()=>{ aggiornaCoverAutoradio("Radio Sistema 3","ON AIR 24/7",LOGO_AUTORADIO); }, 1000);
-
 async function caricaDedichePubbliche(){
   const box = document.getElementById('ultimeDedicheBox');
   const lista = document.getElementById('listaDedichePubbliche');
