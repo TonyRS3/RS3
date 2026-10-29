@@ -3,48 +3,65 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RS3 RADIO SOUL FUNK - V25 FULL</title>
+<title>RS3 RADIO SOUL FUNK - V25 ORIGINAL OLD</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;color:#fff;font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:10px}
-.header{width:100%;max-width:900px;text-align:center;padding:20px;background:linear-gradient(180deg,#1a001a,#000);border:2px solid #ff00ff;border-radius:20px;margin-bottom:15px;box-shadow:0 0 30px rgba(255,0,255,0.5)}
-.header h1{font-size:3em;color:#ff00ff;text-shadow:0 0 15px #ff00ff,0 0 30px #ff00ff;letter-spacing:3px}
-.header h2{font-size:1.2em;color:#fff;margin-top:5px;letter-spacing:5px}
-.header p{color:#aaa;margin-top:10px;font-size:0.9em}
-
-.player-container{width:100%;max-width:900px;background:#0a0a0a;border:2px solid #333;border-radius:20px;padding:20px;display:grid;grid-template-columns:1fr 300px;gap:20px}
-@media(max-width:700px){.player-container{grid-template-columns:1fr}}
-
-.controls{background:#111;border-radius:15px;padding:20px;border:1px solid #222}
-.channel-title{font-size:1.8em;margin-bottom:15px;color:#ff00ff;text-align:center}
-.channels{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
-.btn{padding:15px 10px;border-radius:30px;border:none;font-weight:bold;cursor:pointer;font-size:14px;transition:all 0.3s;text-transform:uppercase}
+body{background:#000;color:#fff;font-family:Arial,sans-serif;display:flex;flex-direction:column;align-items:center;padding:10px;min-height:100vh}
+.header{width:100%;max-width:900px;background:linear-gradient(180deg,#1a001a,#000);border:2px solid #ff00ff;border-radius:20px;padding:25px;text-align:center;box-shadow:0 0 25px #ff00ff;margin-bottom:15px}
+.header h1{font-size:3.2em;color:#ff00ff;text-shadow:0 0 20px #ff00ff;letter-spacing:3px}
+.header h2{letter-spacing:6px;margin:10px 0}
+.header p{color:#aaa;font-size:0.9em}
+.container{width:100%;max-width:900px;display:grid;grid-template-columns:1fr 300px;gap:15px}
+@media(max-width:700px){.container{grid-template-columns:1fr}}
+.box{background:#0f0f0f;border:1px solid #333;border-radius:20px;padding:20px}
+.title{color:#ff00ff;font-size:1.6em;text-align:center;margin-bottom:15px;font-weight:bold}
+.channels{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px}
+.btn{padding:14px;border-radius:30px;border:none;font-weight:bold;cursor:pointer;transition:0.3s}
 .btn-main{background:#fff;color:#000}
-.btn-soul{background:#ff00ff;color:#fff;box-shadow:0 0 10px #ff00ff}
+.btn-soul{background:#ff00ff;color:#fff;box-shadow:0 0 15px #ff00ff;border:2px solid yellow}
 .btn-jazz{background:#111;color:#ffaa00;border:1px solid #ffaa00}
 .btn-funk{background:#111;color:#00ff88;border:1px solid #00ff88}
-.btn-love{background:#111;color:#ff0044;border:1px solid #ff0044}
+.btn-love{background:#111;color:#ff0044;border:1px solid #ff0044;grid-column:span 2}
 .btn:hover{transform:scale(1.05)}
-.btn-active{transform:scale(1.08);border:3px solid yellow!important;box-shadow:0 0 20px yellow}
-
 audio{width:100%;margin:15px 0;border-radius:10px}
-.status-box{background:#000;border-radius:10px;padding:12px;text-align:center;border:1px solid #222;margin-top:10px}
-.status-live{color:#0f0;font-weight:bold;animation:blink 1s infinite}
+.live{background:#000;border-radius:10px;padding:12px;text-align:center;margin-top:10px;border:1px solid #222}
+.live span{color:#0f0;font-weight:bold;animation:blink 1s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.5}}
-
-.info{font-size:11px;color:#666;margin-top:15px;line-height:1.6;text-align:center}
-
-.side{background:#111;border-radius:15px;padding:15px;border:1px solid #222}
-.side h3{color:#ff00ff;text-align:center;margin-bottom:15px}
-.visualizer{display:flex;align-items:end;justify-content:center;gap:3px;height:80px;margin:15px 0}
-.bar{width:8px;background:linear-gradient(to top,#ff00ff,#ff88ff);border-radius:5px;animation:wave 0.5s infinite alternate}
-.bar:nth-child(2){animation-delay:0.1s;height:60%}.bar:nth-child(3){animation-delay:0.2s;height:80%}.bar:nth-child(4){animation-delay:0.3s;height:40%}.bar:nth-child(5){animation-delay:0.15s;height:90%}
+.side{text-align:center}
+.bars{display:flex;gap:4px;justify-content:center;height:70px;align-items:end;margin:15px 0}
+.bar{width:10px;background:linear-gradient(to top,#ff00ff,#ff88ff);border-radius:5px;animation:wave 0.6s infinite alternate}
+.bar:nth-child(2){animation-delay:0.1s}.bar:nth-child(3){animation-delay:0.2s}.bar:nth-child(4){animation-delay:0.3s}
 @keyframes wave{from{height:20%}to{height:100%}}
+.info{font-size:11px;color:#555;text-align:center;margin-top:15px;line-height:1.6}
 
-.footer{margin-top:20px;text-align:center;color:#444;font-size:12px}
+/* PARTE VECCHIA CHE MANCAVA */
+.about{width:100%;max-width:900px;margin-top:20px;background:#0a0a0a;border:1px solid #222;border-radius:15px;padding:20px;text-align:center}
+.about h3{color:#ff00ff;margin-bottom:10px}
+.footer{width:100%;max-width:900px;margin-top:20px;background:#050505;border-top:1px solid #222;padding:20px;text-align:center;border-radius:15px}
+.footer a{color:#ff00ff;text-decoration:none;margin:0 10px}
+
+/* IL POPUP - POUP CHE MANCAVA */
+.popup-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:9999}
+.popup-box{background:#111;border:2px solid #ff00ff;border-radius:20px;padding:30px;max-width:400px;width:90%;text-align:center;box-shadow:0 0 40px #ff00ff;animation:popIn 0.5s}
+@keyframes popIn{from{transform:scale(0.7);opacity:0}to{transform:scale(1);opacity:1}}
+.popup-box h2{color:#ff00ff;font-size:2em;margin-bottom:15px;text-shadow:0 0 10px #ff00ff}
+.popup-box p{color:#ccc;margin-bottom:20px;line-height:1.5}
+.popup-btn{background:#ff00ff;color:#fff;border:none;padding:12px 30px;border-radius:30px;font-weight:bold;cursor:pointer;font-size:16px;box-shadow:0 0 15px #ff00ff}
+.popup-btn:hover{transform:scale(1.05)}
+.hidden{display:none!important}
 </style>
 </head>
 <body>
+
+<!-- POPUP ORIGINALE - IL POUP VECCHIO -->
+<div id="popup" class="popup-overlay">
+<div class="popup-box">
+<h2>RS3 RADIO</h2>
+<p><b style="color:#fff">Benvenuto su Soul Funk & More!</b><br><br>La migliore musica Soul, Funk, Jazz e Love Songs d'Italia<br><br>24/7 Non Stop Music LIVE</p>
+<p style="font-size:12px;color:#ff00ff">🎧 Metti le cuffie e goditi lo spettacolo!</p>
+<button class="popup-btn" onclick="closePopup()">ENTRA IN RADIO ▶</button>
+</div>
+</div>
 
 <div class="header">
 <h1>RS3 RADIO</h1>
@@ -52,91 +69,68 @@ audio{width:100%;margin:15px 0;border-radius:10px}
 <p>LIVE FROM ITALY - listentomystream.com:8046</p>
 </div>
 
-<div class="player-container">
-<div class="controls">
-<h2 class="channel-title" id="channelName">📻 CANALE: MAIN</h2>
-
+<div class="container">
+<div class="box">
+<div class="title" id="chTitle">🎷 CANALE: SOUL FUNK</div>
 <div class="channels">
-<button id="btnMain" class="btn btn-main btn-active" onclick="playChannel('main')">MAIN</button>
-<button id="btnSoul" class="btn btn-soul" onclick="playChannel('soul')">SOUL FUNK</button>
-<button class="btn btn-jazz" onclick="playChannel('main')">JAZZ SOUL</button>
-<button class="btn btn-funk" onclick="playChannel('soul')">FUNK 70</button>
-<button class="btn btn-love" onclick="playChannel('main')" style="grid-column:span 2">LOVE SONGS</button>
+<button class="btn btn-main" onclick="playCh('main')">MAIN</button>
+<button class="btn btn-soul" onclick="playCh('soul')">SOUL FUNK</button>
+<button class="btn btn-jazz" onclick="playCh('main')">JAZZ SOUL</button>
+<button class="btn btn-funk" onclick="playCh('soul')">FUNK 70</button>
+<button class="btn btn-love" onclick="playCh('main')">LOVE SONGS</button>
+</div>
+<audio id="player" controls autoplay><source id="src" src="http://listentomystream.com:8046/soulfunk" type="audio/mpeg"></audio>
+<div class="live"><span id="liveTxt">● LIVE - SOUL FUNK - RS3</span><br><small style="color:#666">Server: listentomystream.com:8046</small></div>
+<div class="info">MAIN: /stream - 128k MP3<br>SOUL FUNK: /soulfunk - 128k MP3<br>Stream Host: listentomystream.com - Port 8046<br>V25 Final Edition - By Tony</div>
 </div>
 
-<audio id="audioPlayer" controls autoplay>
-<source id="audioSource" src="http://listentomystream.com:8046/stream" type="audio/mpeg">
-Il tuo browser non supporta audio.
-</audio>
-
-<div class="status-box">
-<div class="status-live" id="status">● LIVE - MAIN - RS3</div>
-<div style="font-size:11px;color:#888;margin-top:5px">Server: listentomystream.com:8046</div>
-</div>
-
-<div class="info">
-<b>MAIN:</b> /stream - 128k MP3<br>
-<b>SOUL FUNK:</b> /soulfunk - 128k MP3<br>
-Stream Host: listentomystream.com - Port 8046<br>
-V25 Final Edition - By Tony
-</div>
-</div>
-
-<div class="side">
-<h3>ON AIR</h3>
-<div class="visualizer">
-<div class="bar" style="height:50%"></div>
-<div class="bar" style="height:70%"></div>
-<div class="bar" style="height:90%"></div>
-<div class="bar" style="height:60%"></div>
-<div class="bar" style="height:80%"></div>
-<div class="bar" style="height:40%"></div>
-<div class="bar" style="height:75%"></div>
-</div>
-<p style="text-align:center;color:#aaa;font-size:13px;margin:10px 0">Stai ascoltando RS3<br>La migliore Soul Funk d'Italia</p>
-<div style="background:#000;border-radius:10px;padding:10px;margin-top:15px;text-align:center">
+<div class="box side">
+<h3 style="color:#ff00ff">ON AIR</h3>
+<div class="bars"><div class="bar" style="height:40%"></div><div class="bar" style="height:80%"></div><div class="bar" style="height:60%"></div><div class="bar" style="height:90%"></div><div class="bar" style="height:50%"></div><div class="bar" style="height:70%"></div></div>
+<p style="color:#aaa;font-size:13px">Stai ascoltando RS3<br>La migliore Soul Funk d'Italia</p>
+<div style="background:#000;border-radius:10px;padding:15px;margin-top:15px;border:1px solid #222">
 <p style="color:#ff00ff;font-weight:bold">RS3 SOUL FUNK</p>
 <p style="color:#666;font-size:12px;margin-top:5px">24/7 Non Stop Music</p>
+<p style="color:#555;font-size:11px;margin-top:10px">Chat Live: in arrivo...</p>
 </div>
-<div style="margin-top:20px;text-align:center">
-<p style="font-size:12px;color:#555">Powered by<br><b style="color:#888">MyShoutcast V2</b></p>
+<p style="color:#444;font-size:11px;margin-top:20px">Powered by<br><b>MyShoutcast V2</b></p>
 </div>
 </div>
+
+<!-- PARTE VECCHIA SOTTO -->
+<div class="about">
+<h3>ABOUT RS3 RADIO</h3>
+<p style="color:#aaa;font-size:13px;line-height:1.6">RS3 Radio Soul Funk nasce in Italia per portare la vera musica Soul, Funk, Jazz e Love Songs. Trasmettiamo 24 ore su 24 con selezione musicale curata da Tony.<br><br>Canale MAIN: Hits & More<br>Canale SOUL FUNK: Puro Soul Funk Anni 70-80-90</p>
 </div>
 
 <div class="footer">
-RS3 Radio Soul Funk © 2026 - Tutti i diritti riservati<br>
-listentomystream.com:8046 - V25
+<a href="#">Home</a> | <a href="#">Palinsesto</a> | <a href="#">Contatti</a> | <a href="#">Donazioni</a>
+<br><br>
+<p style="color:#444;font-size:12px">RS3 Radio Soul Funk © 2026 - Tutti i diritti riservati<br>listentomystream.com:8046 - V25 Original Old Edition - By Tony</p>
 </div>
 
 <script>
-const streams = {
-main: "http://listentomystream.com:8046/stream",
-soul: "http://listentomystream.com:8046/soulfunk"
-};
-function playChannel(ch){
-const audio=document.getElementById('audioPlayer');
-const source=document.getElementById('audioSource');
-const status=document.getElementById('status');
-const name=document.getElementById('channelName');
-const bMain=document.getElementById('btnMain');
-const bSoul=document.getElementById('btnSoul');
-let url = streams[ch] || streams.main;
-source.src=url;
-audio.load();
-audio.play().catch(e=>{console.log(e)});
-if(ch==='main'){
-name.innerHTML="📻 CANALE: MAIN";
-status.innerHTML="● LIVE - MAIN - RS3";
-bMain.classList.add('btn-active');
-bSoul.classList.remove('btn-active');
-}else{
-name.innerHTML="🎷 CANALE: SOUL FUNK";
-status.innerHTML="● LIVE - SOUL FUNK - RS3";
-bSoul.classList.add('btn-active');
-bMain.classList.remove('btn-active');
+function playCh(c){
+let p=document.getElementById('player');
+let s=document.getElementById('src');
+let t=document.getElementById('chTitle');
+let l=document.getElementById('liveTxt');
+let url=c=='main'?'http://listentomystream.com:8046/stream':'http://listentomystream.com:8046/soulfunk';
+s.src=url; p.load(); p.play().catch(()=>{});
+t.innerHTML=c=='main'?'📻 CANALE: MAIN':'🎷 CANALE: SOUL FUNK';
+l.innerHTML=c=='main'?'● LIVE - MAIN - RS3':'● LIVE - SOUL FUNK - RS3';
 }
+function closePopup(){
+document.getElementById('popup').classList.add('hidden');
+document.getElementById('player').play().catch(()=>{});
 }
+// Chiude popup dopo 1.5 sec se non cliccato - come originale
+setTimeout(()=>{
+let pp=document.getElementById('popup');
+if(pp && !pp.classList.contains('hidden')){
+// resta aperto fino a click, come vecchia versione
+}
+},1500);
 </script>
 </body>
 </html>
