@@ -3,26 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOUL FUNK - Radio Sistema 3</title>
+<title>SOUL FUNK</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
-  background-color:#0e0620;
-  background-image: url('soul-funk.jpeg');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 85% auto;
-  background-attachment: fixed;
+  background:#0a0618 url('soul-funk.jpeg') no-repeat center 35%;
+  background-size: 90% auto;
   font-family:Arial,sans-serif;
   color:white;
   text-align:center;
   min-height:100vh;
 }
-@media (max-width:480px){
-  body{background-size: 115% auto; background-position: center 45%;}
-}
 .overlay{
-  background: rgba(8,0,20,0.32);
+  background: rgba(5,0,15,0.38);
   min-height:100vh;
   padding:14px;
   display:flex;
@@ -33,13 +26,13 @@ body{
   width:92%;
   max-width:340px;
   padding:14px;
-  background: rgba(0,0,0,0.72);
+  background: rgba(0,0,0,0.78);
   border-radius:18px;
   border:1.5px solid #ff3b9a;
-  box-shadow:0 0 20px rgba(255,59,154,0.35);
+  box-shadow:0 0 20px rgba(255,59,154,0.4);
   backdrop-filter: blur(8px);
 }
-.logo{width:62px;border-radius:10px;background:white;padding:3px}
+.logo{width:60px;border-radius:10px;background:white;padding:3px}
 h1{color:#ffe600;font-size:1.5rem;margin-top:4px;text-shadow:0 0 8px #ff3b9a}
 .sub{font-size:.7rem;color:#ddd}
 .live{font-size:.75rem;color:#ff3b9a;font-weight:900}
@@ -47,13 +40,13 @@ h1{color:#ffe600;font-size:1.5rem;margin-top:4px;text-shadow:0 0 8px #ff3b9a}
 .btns a{padding:7px 14px;border-radius:18px;text-decoration:none;font-weight:900;font-size:.7rem}
 .main{background:white;color:black}
 .soul{background:#ff3b9a;color:white;border:1px solid #ffe600}
-.box{background:rgba(0,0,0,0.68);padding:10px;border-radius:12px}
+.box{background:rgba(0,0,0,0.7);padding:10px;border-radius:12px}
 audio{width:100%;height:32px}
 .vu{margin-top:8px;background:#0a0a0a;border-radius:8px;padding:6px;border:1px solid #333}
-.vu-row{display:flex;gap:2px}
-.vu-row span{flex:1;height:9px;background:#1e1e1e;border-radius:1px}
-.vu-row.top span.on{background:#0f0}
-.vu-row.bot span.on{background:#0af}
+.vu-row{display:flex;gap:2px;margin-bottom:2px}
+.vu-row span{flex:1;height:10px;background:#1e1e1e;border-radius:1px}
+.vu-row.top span.on{background:linear-gradient(#5f5,#0a0);box-shadow:0 0 4px #0f0}
+.vu-row.bot span.on{background:linear-gradient(#6cf,#09a);box-shadow:0 0 4px #0af}
 .vu-labels{display:flex;justify-content:space-between;font-size:.5rem;color:#888;margin-top:3px;font-weight:900}
 .track{margin-top:8px;display:flex;gap:8px;align-items:center;background:#111;padding:8px;border-radius:10px;text-align:left}
 .track img{width:52px;height:52px;border-radius:8px;object-fit:cover;background:#222}
@@ -72,10 +65,14 @@ audio{width:100%;height:32px}
 <div class="live">💗 SOUL ON AIR</div>
 <div class="btns"><a class="main" href="index.html">MAIN</a><a class="soul">SOUL FUNK</a></div>
 <div class="box">
-<audio id="player" controls playsinline autoplay crossorigin="anonymous" preload="auto">
+<audio id="player" controls playsinline autoplay crossorigin="anonymous">
 <source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg">
 </audio>
-<div class="vu"><div class="vu-row top" id="rowTop"></div><div class="vu-row bot" id="rowBot"></div><div class="vu-labels"><div>L • R</div><div style="color:#0f0">● LIVE</div></div></div>
+<div class="vu">
+<div class="vu-row top" id="rowTop"></div>
+<div class="vu-row bot" id="rowBot"></div>
+<div class="vu-labels"><div>L • LEFT</div><div style="color:#0f0">● STEREO LIVE</div><div>R • RIGHT</div></div>
+</div>
 <div class="track"><img id="cover" src="RADIO SISTEMA 3.jpeg"><div><div id="title" class="track-title">Soul Funk</div><div id="artist" class="track-artist">Connessione...</div></div></div>
 </div>
 <div class="footer">© Radio Sistema 3 - SIAE n°202600000389<br><a href="index.html">⬅ Torna a MAIN</a></div>
@@ -83,80 +80,107 @@ audio{width:100%;height:32px}
 </div>
 <script>
 const player=document.getElementById('player'),titleEl=document.getElementById('title'),artistEl=document.getElementById('artist'),coverEl=document.getElementById('cover'),rowTop=document.getElementById('rowTop'),rowBot=document.getElementById('rowBot');
-const SEG=20; for(let i=0;i<SEG;i++){rowTop.appendChild(document.createElement('span'));rowBot.appendChild(document.createElement('span'));}
-let ac,an,d; function init(){try{ac=new(window.AudioContext||window.webkitAudioContext)();let s=ac.createMediaElementSource(player);an=ac.createAnalyser();an.fftSize=128;s.connect(an);an.connect(ac.destination);d=new Uint8Array(an.frequencyBinCount);loop()}catch(e){}}
-function loop(){requestAnimationFrame(loop);if(!an)return;an.getByteFrequencyData(d);let avg=d.reduce((a,b)=>a+b,0)/d.length/255;let l=Math.floor(avg*1.4*SEG);rowTop.querySelectorAll('span').forEach((e,i)=>e.className=i<l?'on':'');rowBot.querySelectorAll('span').forEach((e,i)=>e.className=i<l?'on':'');}
-player.addEventListener('play',()=>{if(!ac)init();if(ac&&ac.state==='suspended')ac.resume()});
-
-// FIX COPERTINA + TITOLO - USA API AZURACAST + FILTRI
-async function fetchText(url){
+const SEG=16; for(let i=0;i<SEG;i++){rowTop.appendChild(document.createElement('span'));rowBot.appendChild(document.createElement('span'));}
+// STEREO VERO - split frequenze
+let ac,an,d;
+function initAudio(){
   try{
-    let r=await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(url+'&_='+Date.now()),{cache:'no-store'});
-    if(!r.ok) return "";
-    let t=await r.text();
-    return t;
-  }catch(e){return "";}
+    ac=new(window.AudioContext||window.webkitAudioContext)();
+    let src=ac.createMediaElementSource(player);
+    an=ac.createAnalyser(); an.fftSize=256; an.smoothingTimeConstant=0.7;
+    src.connect(an); an.connect(ac.destination);
+    d=new Uint8Array(an.frequencyBinCount);
+    render();
+  }catch(e){}
+}
+function render(){
+  requestAnimationFrame(render);
+  if(!an||!d) return;
+  an.getByteFrequencyData(d);
+  let mid=Math.floor(d.length/2);
+  let sumL=0,sumR=0;
+  for(let i=0;i<mid;i++) sumL+=d[i];
+  for(let i=mid;i<d.length;i++) sumR+=d[i];
+  let avgL=(sumL/mid)/255, avgR=(sumR/(d.length-mid))/255;
+  let l=Math.floor(Math.min(1, avgL*1.8)*SEG);
+  let r=Math.floor(Math.min(1, avgR*1.8+0.05)*SEG);
+  rowTop.querySelectorAll('span').forEach((e,i)=>{e.className=i<l?'on':''});
+  rowBot.querySelectorAll('span').forEach((e,i)=>{e.className=i<r?'on':''});
+}
+player.addEventListener('play',()=>{if(!ac)initAudio();if(ac&&ac.state==='suspended')ac.resume()});
+
+// TITOLO - 4 metodi diversi, l'ultimo funziona sicuro
+async function fetchNoProxy(url){
+  try{ let r=await fetch(url+'?_='+Date.now(),{cache:'no-store'}); if(!r.ok) return ""; let t=await r.text(); return t.trim(); }catch(e){return "";}
+}
+async function fetchWithAllOrigins(url){
+  try{ let r=await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(url+'?_='+Date.now()),{cache:'no-store'}); if(!r.ok) return ""; let t=await r.text(); return t.trim(); }catch(e){return "";}
 }
 
-async function getNowPlaying(){
-  // 1. API AzuraCast principale (quella vera per myshoutcast)
-  const apiUrls = [
+async function getSong(){
+  // Metodo 1: API AzuraCast - formato JSON
+  let apis=[
     'https://control.myshoutca.st/api/nowplaying/tbqmsenb',
-    'https://control.myshoutca.st/api/nowplaying/1',
-    'https://control.myshoutca.st/proxy/tbqmsenb/api/nowplaying'
+    'https://control.myshoutca.st/api/nowplaying/1'
   ];
-  for(let api of apiUrls){
+  for(let api of apis){
+    let txt=await fetchWithAllOrigins(api);
+    if(!txt||txt.includes('keyless')||txt.length<10) continue;
     try{
-      let txt=await fetchText(api);
-      if(!txt) continue;
-      if(txt.includes('keyless')||txt.includes('CORSProxy')||txt.includes('"success":false')) continue;
       let j=JSON.parse(txt);
-      // AzuraCast format: {now_playing:{song:{title,artist,art}}}
-      let song=j.now_playing?.song || j.song || j.now_playing;
-      if(song){
-        let t=(song.artist?song.artist+' - ':'')+(song.title||'');
-        let artUrl=song.art || j.now_playing?.song?.art || "";
-        if(t) return {text:t, art:artUrl, title:song.title||"", artist:song.artist||""};
+      let np=j.now_playing||j;
+      let s=np.song||np;
+      if(s&&s.title){
+        let artist=s.artist||"", title=s.title||"", art=s.art||np.song?.art||"";
+        let full=(artist?artist+' - ':'')+title;
+        return {text:full, title:title, artist:artist, art:art};
       }
-      if(j.title) return {text:j.title, art:"", title:j.title, artist:j.artist||""};
     }catch(e){}
   }
-  // 2. fallback currentsong vecchio
-  try{
-    let t=await fetchText('https://control.myshoutca.st/proxy/tbqmsenb/currentsong?sid=1');
-    t=t.trim();
-    if(t && t.length>2 && t.length<200 && !t.includes('<') && !t.includes('{')) return {text:t, art:"", title:"", artist:""};
-  }catch(e){}
+  // Metodo 2: currentsong?sid=1 diretto
+  let t1=await fetchNoProxy('https://control.myshoutca.st/proxy/tbqmsenb/currentsong?sid=1');
+  if(t1&&t1.length>2&&t1.length<150&&!t1.includes('<')&&!t1.includes('{')) return {text:t1, title:"", artist:"", art:""};
+  
+  let t2=await fetchWithAllOrigins('https://control.myshoutca.st/proxy/tbqmsenb/currentsong?sid=1');
+  if(t2&&t2.length>2&&t2.length<150&&!t2.includes('<')&&!t2.includes('{')&&!t2.includes('success')) return {text:t2, title:"", artist:"", art:""};
+
+  // Metodo 3: 7.html Shoutcast classico
+  let t3=await fetchWithAllOrigins('https://control.myshoutca.st/proxy/tbqmsenb/7.html');
+  if(t3){
+    try{
+      let p=t3.split(','); let b=p.slice(6).join(',').trim();
+      if(b&&b.length>2&&b.length<150) return {text:b, title:"", artist:"", art:""};
+    }catch(e){}
+  }
   return null;
 }
 
-async function aggiorna(){
-  let data=await getNowPlaying();
+async function updateSong(){
+  let data=await getSong();
   if(!data||!data.text) return;
-  let brano=data.text;
-  if(brano.includes('keyless')||brano.includes('success')) return;
-
-  let artista=data.artist||""; let titolo=data.title||brano;
-  if(!data.artist && brano.includes(" - ")){ let s=brano.split(" - "); artista=s[0].trim(); titolo=s.slice(1).join(" - ").trim(); }
+  let txt=data.text;
+  if(txt.length<2||txt.includes('keyless')||txt.includes('CORSProxy')||txt.toLowerCase().includes('not supported')) return;
   
-  if(titolo!==titleEl.textContent){
-    titleEl.textContent=titolo;
-    artistEl.textContent=artista||"Soul Funk";
-    
-    // COPERTINA: prima prova quella dell'API AzuraCast, poi iTunes
-    if(data.art){
-      coverEl.src=data.art;
-    }else{
-      try{
-        let q=encodeURIComponent((artista+' '+titolo).trim());
-        let ri=await fetch('https://itunes.apple.com/search?term='+q+'&limit=1&media=music&country=IT');
-        let ji=await ri.json();
-        if(ji.results[0]&&ji.results[0].artworkUrl100) coverEl.src=ji.results[0].artworkUrl100.replace('100x100','400x400');
-      }catch(e){}
-    }
+  let artista=data.artist||"", titolo=data.title||txt;
+  if(!data.artist&&txt.includes(" - ")){ let s=txt.split(" - "); artista=s[0].trim(); titolo=s.slice(1).join(" - ").trim(); }
+  if(titolo===titleEl.textContent) return;
+
+  titleEl.textContent=titolo;
+  artistEl.textContent=artista||"Soul Funk - Radio Sistema 3";
+
+  if(data.art){
+    coverEl.src=data.art;
+  }else{
+    try{
+      let q=encodeURIComponent((artista+" "+titolo).trim());
+      let r=await fetch('https://itunes.apple.com/search?term='+q+'&limit=1&media=music&country=IT');
+      let j=await r.json();
+      if(j.results[0]?.artworkUrl100) coverEl.src=j.results[0].artworkUrl100.replace('100x100','400x400');
+    }catch(e){}
   }
 }
-aggiorna(); setInterval(aggiorna,5000);
+updateSong();
+setInterval(updateSong,4000);
 </script>
 </body>
 </html>
