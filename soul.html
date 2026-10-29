@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOUL FUNK - Radio Sistema 3 - Server 2 AutoDJ</title>
+<title>SOUL FUNK - Radio Sistema 3</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Segoe UI,Arial,sans-serif;color:white;text-align:center;background:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.7)),url("studio-radio.jpeg");background-size:cover;background-position:center;background-attachment:fixed}
@@ -45,21 +45,19 @@ audio{width:100%;max-width:360px;height:40px;border-radius:10px}
 
 <div class="player-box">
 <div class="section-title">♪ Soul, Funk, Disco & Groove</div>
-<!-- SERVER 2 SOUL - tbqmsenb -->
 <audio id="radioAudio" controls autoplay crossorigin="anonymous">
-  <source src="https://control.myshoutca.st/listen/tbqmsenb" type="audio/mpeg">
-  <source src="http://manage.myshoutca.st:8060/stream" type="audio/mpeg">
-  <source src="http://manage.myshoutca.st:8060/" type="audio/mpeg">
+  <source src="https://control.myshoutca.st/proxy/tbqmsenb/;stream.mp3" type="audio/mpeg">
+  <source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg">
+  <source src="http://manage.myshoutca.st:8060/;stream.mp3" type="audio/mpeg">
 </audio>
 <div class="vu-wrap"><canvas id="vuCanvas" width="600" height="38"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak" style="color:#ff3b9a">STOP</span></div></div>
-<div style="margin-top:10px;font-size:.7rem;color:#aaa">Server 2: tbqmsenb - manage.myshoutca.st:8060</div>
 </div>
 
 <div class="genre">
 <span>Motown</span><span>Funk 70s</span><span>Disco</span><span>Soulful House</span><span>R&B Classics</span>
 </div>
 
-<div class="footer">© Radio Sistema 3 Soul Funk - Server 2 AutoDJ - SIAE n°202600000389<br><a href="index.html" style="color:#ffe600;text-decoration:none;border:1px solid #ffe600;padding:8px 18px;border-radius:20px;display:inline-block;margin-top:12px">⬅ Torna a MAIN</a></div>
+<div class="footer">© Radio Sistema 3 Soul Funk - Server 2 tbqmsenb - SIAE n°202600000389<br><a href="index.html" style="color:#ffe600;text-decoration:none;border:1px solid #ffe600;padding:8px 18px;border-radius:20px;display:inline-block;margin-top:12px">⬅ Torna a MAIN</a></div>
 </div>
 
 <script>
