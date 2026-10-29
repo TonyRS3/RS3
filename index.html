@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - v24 FINALE LUNGO</title>
+<title>Radio Sistema 3 - v24 FIX RITORNO</title>
 <script>
 if(window.location.search.includes('popup=1')){
   document.documentElement.classList.add('popup-mode');
@@ -86,7 +86,7 @@ html.popup-mode #vuCanvas{height:32px !important;}
 <a class="ch-btn ch-soul" href="soul.html">SOUL FUNK</a>
 </div>
 <div class="section-title">♪ Ascolta in diretta</div>
-<audio id="radioAudio" controls preload="none"><source id="radioSource" src="https://listentomystream.com:8046/;" type="audio/mpeg"></audio>
+<audio id="radioAudio" controls autoplay preload="none"><source id="radioSource" src="https://listentomystream.com:8046/;" type="audio/mpeg"></audio>
 <div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak" style="color:#ff4444">STOP</span></div></div>
 <button id="btnPopup" onclick="apriPopupPlayer()" style="margin-top:12px;background:#00d4ff;color:#000;font-weight:bold;padding:10px 20px;border:none;border-radius:30px;cursor:pointer;">⧉ APRI POPUP PLAYER</button>
 </div>
@@ -116,6 +116,11 @@ radioEl.addEventListener('pause', ()=>{ lastPause = Date.now(); isPlayingVU=fals
 radioEl.addEventListener('play', ()=>{ isPlayingVU=true; vuPeakEl.textContent="● LIVE"; vuPeakEl.style.color="#00ff2a"; vuPeakEl.style.animation="pulse 0.8s infinite"; if(popupWin && !popupWin.closed){ popupWin.close(); popupWin = null; } if(!isForcing && lastPause > 0 && (Date.now() - lastPause > 15000)){ forzaLive(); return; } document.querySelectorAll('.cc_recenttracks_list img').forEach(img=>{ img.dataset.cleaned="0"; }); const s = document.createElement('script'); s.src = 'https://manage.myshoutca.st/system/recenttracks.js?play_now=' + Date.now(); document.head.appendChild(s); setTimeout(()=>s.remove(), 3000); });
 drawStereo(); setInterval(updateStereo, 60);
 document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML;
+
+// FIX RITORNO DA SOUL
+if(window.location.search.includes('play=1')){
+  setTimeout(()=>{ radioEl.play().catch(()=>{}); }, 500);
+}
 </script>
 </body>
 </html>
