@@ -11,6 +11,10 @@ if(window.location.search.includes('popup=1')){
     document.body.classList.add('popup-mode');
     document.body.style.setProperty('background','#020a18','important');
     document.body.style.setProperty('background-image','linear-gradient(180deg,#0a1830 0%,#020a18 100%)','important');
+    const vu=document.getElementById('vuCanvas');
+    if(vu){ vu.style.setProperty('height','32px','important'); vu.setAttribute('height','32'); }
+    const wrap=document.querySelector('.vu-wrap');
+    if(wrap){ wrap.style.setProperty('max-width','300px','important'); }
     const a=document.getElementById('radioAudio');
     if(a){ a.autoplay=true; a.muted=false; setTimeout(()=>a.play().catch(()=>{}), 500); }
   });
@@ -63,7 +67,6 @@ audio{width:100%;max-width:340px;height:36px;}
 .dediche-box{margin-top:20px;background:rgba(255,255,255,.10);padding:18px;border-radius:20px;border:1px solid rgba(255,217,102,.3);}
 .dediche-box input, .dediche-box textarea{width:100%;max-width:380px;padding:9px 11px;margin:5px 0;border-radius:10px;border:none;background:rgba(0,0,0,.4);color:white;font-size:.95rem;outline:none;}
 .btn-dedica{margin-top:10px;background:linear-gradient(135deg,#ffd966,#ff9f1c);color:#000;font-weight:bold;padding:11px 22px;border:none;border-radius:30px;font-size:1rem;cursor:pointer;}
-/* POPUP BLU NOTTE SCURISSIMO */
 html.popup-mode, body.popup-mode{
   background:#020a18 !important;
   background-image:linear-gradient(180deg,#0a1830 0%,#020a18 100%) !important;
@@ -103,7 +106,7 @@ html.popup-mode #vuCanvas, body.popup-mode #vuCanvas{height:32px !important;}
 <div class="section-title">🎧 Ascolta in diretta</div>
 <audio id="radioAudio" controls preload="none"><source src="https://listentomystream.com:8046/;" type="audio/mpeg"></audio>
 <div class="vu-wrap">
-<canvas id="vuCanvas" width="600" height="54"></canvas>
+<canvas id="vuCanvas" width="600" height="32"></canvas>
 <div class="vu-label"><span>L ● R STEREO SLIM</span><span id="vuPeak">STOP</span></div>
 </div>
 <button id="btnPopup" onclick="apriPopupPlayer()" style="margin-top:12px;background:#00d4ff;color:#000;font-weight:bold;padding:10px 20px;border:none;border-radius:30px;cursor:pointer;">🔲 APRI POPUP - Resta aperto</button>
@@ -138,7 +141,7 @@ function renderNovita(){ const c=document.getElementById('novitaList'); if(c.dat
 function apriPopupPlayer(){
   const mainAudio=document.getElementById('radioAudio');
   if(mainAudio){ mainAudio.pause(); }
-  window.open(window.location.href.split('?')[0] + '?popup=1', 'RadioSistema3Popup', 'width=400,height=400,top=50,left=50,resizable=yes,scrollbars=no');
+  window.open(window.location.href.split('?')[0] + '?popup=1&v=3', 'RadioSistema3Popup', 'width=400,height=400,top=50,left=50,resizable=yes,scrollbars=no');
 }
 function cleanWhiteBorder(img){ if(img.dataset.cleaned==="1") return; if(!img.dataset.original){img.dataset.original=img.src; coverOriginale=img.src;} img.dataset.cleaned="1"; const isMobile=window.innerWidth<768; const finalSize=isMobile?68:82; const tempImg=new Image();tempImg.crossOrigin="anonymous"; tempImg.onload=function(){ const w=tempImg.width,h=tempImg.height; const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d'); canvas.width=w;canvas.height=h;ctx.drawImage(tempImg,0,0); const data=ctx.getImageData(0,0,w,h).data; let top=0,bottom=h,left=0,right=w; for(let y=0;y<h;y++){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){top=y;break;}} for(let y=h-1;y>=0;y--){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){bottom=y+1;break;}} for(let x=0;x<w;x++){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){left=x;break;}} for(let x=w-1;x>=0;x--){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){right=x+1;break;}} right=right-Math.round(w*0.10);left=left+Math.round(w*0.02);top=top+Math.round(h*0.02);bottom=bottom-Math.round(h*0.02); const cw=right-left,ch=bottom-top; const out=document.createElement('canvas');out.width=finalSize;out.height=finalSize; const octx=out.getContext('2d');octx.imageSmoothingQuality='high'; octx.drawImage(canvas,left,top,cw,ch,0,0,finalSize,finalSize); img.src=out.toDataURL('image/jpeg',0.92); img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="5px";img.style.display="inline-block";img.style.verticalAlign="middle";img.style.margin="0 8px 0 0";img.style.opacity="1";img.style.border="none"; aggiornaCopertinaIPhone(); }; tempImg.src=img.dataset.original; }
 const list=document.querySelector('.cc_recenttracks_list'); if(list){ new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);}).observe(list,{childList:true,subtree:true}); setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);},1000); }
