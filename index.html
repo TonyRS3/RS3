@@ -52,22 +52,20 @@ audio{width:100%;max-width:340px;height:36px;}
 .dediche-box{margin-top:20px;background:rgba(255,255,255,.10);padding:18px;border-radius:20px;border:1px solid rgba(255,217,102,.3);}
 .dediche-box input, .dediche-box textarea{width:100%;max-width:380px;padding:9px 11px;margin:5px 0;border-radius:10px;border:none;background:rgba(0,0,0,.4);color:white;font-size:.95rem;outline:none;}
 .btn-dedica{margin-top:10px;background:linear-gradient(135deg,#ffd966,#ff9f1c);color:#000;font-weight:bold;padding:11px 22px;border:none;border-radius:30px;font-size:1rem;cursor:pointer;}
-html.popup-mode body, body.popup-mode{background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),url("studio-radio.jpeg") !important;background-size:cover !important;background-position:center !important;background-attachment:fixed !important;}
-html.popup-mode body .container, body.popup-mode .container{max-width:360px !important;margin:10px auto !important;padding:15px !important;}
-html.popup-mode body h1, body.popup-mode h1{font-size:1.6rem !important;margin-top:10px !important}
-html.popup-mode body .live, body.popup-mode .live{font-size:1rem !important}
-/* POPUP DISCRETO - SENZA STEMMA */
+/* POPUP CORTO - FINISCE A BRANO IN ONDA */
+html.popup-mode body, body.popup-mode{overflow:hidden !important;}
 html.popup-mode .logo-wrap, body.popup-mode .logo-wrap,
-html.popup-mode .logo, body.popup-mode .logo,
-html.popup-mode h1, body.popup-mode h1{display:none !important;}
-html.popup-mode .container, body.popup-mode .container{max-width:340px !important;margin:5px auto !important;padding:10px !important;}
-html.popup-mode .live, body.popup-mode .live{font-size:0.9rem !important;margin-top:0 !important;}
-html.popup-mode body #novitaSection, body.popup-mode #novitaSection,
-html.popup-mode body .dediche-box, body.popup-mode .dediche-box,
-html.popup-mode body #ultimeDedicheBox, body.popup-mode #ultimeDedicheBox,
-html.popup-mode body .btn-novita, body.popup-mode .btn-novita,
-html.popup-mode body .footer, body.popup-mode .footer,
-html.popup-mode body #btnPopup, body.popup-mode #btnPopup{display:none !important;}
+html.popup-mode h1, body.popup-mode h1,
+html.popup-mode #novitaSection, body.popup-mode #novitaSection,
+html.popup-mode .dediche-box, body.popup-mode .dediche-box,
+html.popup-mode #ultimeDedicheBox, body.popup-mode #ultimeDedicheBox,
+html.popup-mode .btn-novita, body.popup-mode .btn-novita,
+html.popup-mode .footer, body.popup-mode .footer,
+html.popup-mode #btnPopup, body.popup-mode #btnPopup{display:none !important;}
+html.popup-mode .container, body.popup-mode .container{max-width:340px !important;margin:0 auto !important;padding:8px !important;background:none !important;border:none !important;backdrop-filter:none !important;}
+html.popup-mode .live, body.popup-mode .live{font-size:0.85rem !important;margin:0 0 6px 0 !important;}
+html.popup-mode .player-box, body.popup-mode .player-box{margin:0 auto !important;padding:8px !important;}
+html.popup-mode .cc_recenttracks_list, body.popup-mode .cc_recenttracks_list{margin-bottom:0 !important;}
 </style>
 </head>
 <body>
@@ -113,7 +111,7 @@ function apriNovita(){ document.getElementById('radioAudio').pause(); document.g
 function chiudiNovita(){ document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML; document.getElementById('novitaList').innerHTML = ""; document.getElementById('novitaList').dataset.done = "0"; document.getElementById('novitaSection').style.display='none'; document.getElementById('btnNovita').style.display='inline-block'; document.getElementById('radioAudio').play().catch(()=>{}); }
 function playNovita(id, el){ document.getElementById('radioAudio').pause(); document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active')); el.classList.add('active'); document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>'; }
 function renderNovita(){ const c=document.getElementById('novitaList'); if(c.dataset.done=="1") return; c.dataset.done="1"; c.innerHTML = BRANI_NOVITA.map(b=>`<div class="novita-row" onclick="playNovita('${b.id}', this)"><img src="https://i.ytimg.com/vi/${b.id}/hqdefault.jpg" style="width:50px;height:38px;border-radius:4px"><div><b style="font-size:0.9rem">${b.artista}</b><br><span style="color:#aaa;font-size:.75rem">${b.titolo}</span></div><div style="margin-left:auto;color:#ff0033">▶</div></div>`).join(''); }
-function apriPopupPlayer(){window.open(window.location.href.split('?')[0] + '?popup=1', 'RadioSistema3Popup', 'width=390,height=620,top=50,left=50,resizable=yes,scrollbars=no');}
+function apriPopupPlayer(){window.open(window.location.href.split('?')[0] + '?popup=1', 'RadioSistema3Popup', 'width=390,height=340,top=50,left=50,resizable=yes,scrollbars=no');}
 function cleanWhiteBorder(img){ if(img.dataset.cleaned==="1") return; if(!img.dataset.original){img.dataset.original=img.src; coverOriginale=img.src;} img.dataset.cleaned="1"; const isMobile=window.innerWidth<768; const finalSize=isMobile?68:82; const tempImg=new Image();tempImg.crossOrigin="anonymous"; tempImg.onload=function(){ const w=tempImg.width,h=tempImg.height; const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d'); canvas.width=w;canvas.height=h;ctx.drawImage(tempImg,0,0); const data=ctx.getImageData(0,0,w,h).data; let top=0,bottom=h,left=0,right=w; for(let y=0;y<h;y++){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){top=y;break;}} for(let y=h-1;y>=0;y--){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){bottom=y+1;break;}} for(let x=0;x<w;x++){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){left=x;break;}} for(let x=w-1;x>=0;x--){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){right=x+1;break;}} right=right-Math.round(w*0.10);left=left+Math.round(w*0.02);top=top+Math.round(h*0.02);bottom=bottom-Math.round(h*0.02); const cw=right-left,ch=bottom-top; const out=document.createElement('canvas');out.width=finalSize;out.height=finalSize; const octx=out.getContext('2d');octx.imageSmoothingQuality='high'; octx.drawImage(canvas,left,top,cw,ch,0,0,finalSize,finalSize); img.src=out.toDataURL('image/jpeg',0.92); img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="5px";img.style.display="inline-block";img.style.verticalAlign="middle";img.style.margin="0 8px 0 0";img.style.opacity="1";img.style.border="none"; aggiornaCopertinaIPhone(); }; tempImg.src=img.dataset.original; }
 const list=document.querySelector('.cc_recenttracks_list'); if(list){ new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);}).observe(list,{childList:true,subtree:true}); setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);},1000); }
 function aggiornaCopertinaIPhone(){
@@ -122,7 +120,7 @@ function aggiornaCopertinaIPhone(){
   if(!('mediaSession' in navigator)) return;
   let coverUrl = coverOriginale;
   if(imgEl && imgEl.dataset.original) coverUrl = imgEl.dataset.original;
-  if(!coverUrl || coverUrl.startsWith('data:')) coverUrl = "RADIO SISTEMA 3.jpeg";
+  if(!coverUrl || coverUrl.startsWith('data:')) coverUrl = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/') + "RADIO%20SISTEMA%203.jpeg";
   try{
     navigator.mediaSession.metadata = new MediaMetadata({
       title: txtEl ? txtEl.innerText.split('\n')[0].slice(0,80) : 'Radio Sistema 3',
