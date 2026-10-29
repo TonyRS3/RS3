@@ -35,8 +35,8 @@ audio{width:100%;max-width:360px;height:40px;border-radius:10px}
 <div class="container">
 <div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" class="logo" onerror="this.src='https://via.placeholder.com/260/ff3b9a/ffe600?text=SOUL+FUNK'"></div>
 <h1>SOUL FUNK</h1>
-<div class="sub">Canale 2 - Radio Sistema 3 - SERVER 2</div>
-<div class="live">💗 SOUL ON AIR 24/7 - AutoDJ ON</div>
+<div class="sub">Canale 2 - Radio Sistema 3</div>
+<div class="live">💗 SOUL ON AIR 24/7</div>
 
 <div class="ch-chooser">
 <a class="ch-btn ch-main" href="index.html">MAIN</a>
@@ -57,7 +57,7 @@ audio{width:100%;max-width:360px;height:40px;border-radius:10px}
 <span>Motown</span><span>Funk 70s</span><span>Disco</span><span>Soulful House</span><span>R&B Classics</span>
 </div>
 
-<div class="footer">© Radio Sistema 3 Soul Funk - Server 2 tbqmsenb - SIAE n°202600000389<br><a href="index.html" style="color:#ffe600;text-decoration:none;border:1px solid #ffe600;padding:8px 18px;border-radius:20px;display:inline-block;margin-top:12px">⬅ Torna a MAIN</a></div>
+<div class="footer">© Radio Sistema 3 Soul Funk - SIAE n°202600000389<br><a href="index.html" style="color:#ffe600;text-decoration:none;border:1px solid #ffe600;padding:8px 18px;border-radius:20px;display:inline-block;margin-top:12px">⬅ Torna a MAIN</a></div>
 </div>
 
 <script>
@@ -66,7 +66,7 @@ let isPlayingVU=false,levelL=0,levelR=0;
 function drawStereo(){const W=vuCanvas.width,H=vuCanvas.height;vuCtx.clearRect(0,0,W,H);vuCtx.fillStyle='#0a0a0a';vuCtx.fillRect(0,0,W,H);let bars=36,barW=W/bars,gap=1.5,rowH=H/2-2;let activeL=Math.floor((levelL/100)*bars);for(let i=0;i<bars;i++){let x=i*barW;let lit=i<activeL;let color=i<bars*0.6?(lit?'#ff3b9a':'#1a0010'):i<bars*0.84?(lit?'#ffe600':'#1a1a00'):(lit?'#ff1a1a':'#1a0000');vuCtx.fillStyle=color;let y=1;let bh=lit?rowH-1:rowH*0.45;vuCtx.fillRect(x+gap,y+(rowH-bh)/2,barW-gap*2,bh);}vuCtx.fillStyle='#333';vuCtx.fillRect(0,H/2-0.5,W,1);let activeR=Math.floor((levelR/100)*bars);for(let i=0;i<bars;i++){let x=i*barW;let lit=i<activeR;let color=i<bars*0.6?(lit?'#00d4ff':'#001a1a'):i<bars*0.84?(lit?'#ffe600':'#1a1a00'):(lit?'#ff1a1a':'#1a0000');vuCtx.fillStyle=color;let y=H/2+1;let bh=lit?rowH-1:rowH*0.45;vuCtx.fillRect(x+gap,y+(rowH-bh)/2,barW-gap*2,bh);}requestAnimationFrame(drawStereo);}
 function updateStereo(){if(!isPlayingVU){levelL+=(0-levelL)*0.08;levelR+=(0-levelR)*0.08;return;}let base=18+Math.random()*28;let targetL=base+Math.random()*22;let targetR=base*0.85+Math.random()*28;levelL+=(targetL-levelL)*0.32;levelR+=(targetR-levelR)*0.28;}
 radioEl.addEventListener('pause',()=>{isPlayingVU=false;vuPeakEl.textContent="STOP";vuPeakEl.style.color="#ff3b9a";});
-radioEl.addEventListener('play',()=>{isPlayingVU=true;vuPeakEl.textContent="● LIVE SOUL S2";vuPeakEl.style.color="#00ff2a";});
+radioEl.addEventListener('play',()=>{isPlayingVU=true;vuPeakEl.textContent="● LIVE SOUL";vuPeakEl.style.color="#00ff2a";});
 drawStereo();setInterval(updateStereo,60);
 </script>
 </body>
