@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -7,28 +6,32 @@
 <title>SOUL FUNK - Radio Sistema 3</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial,sans-serif;color:white;text-align:center;background:#1a0a1a}
-.container{max-width:500px;margin:10px auto;padding:15px;background:rgba(255,59,154,.15);border-radius:20px;border:2px solid #ff3b9a}
-.logo{width:180px;border-radius:15px}
-h1{color:#ffe600;margin-top:10px;font-size:2.2rem}
-.play-btn{width:100%;padding:18px;background:#ff3b9a;color:white;border:none;border-radius:40px;font-weight:900;font-size:1.3rem;margin:15px 0;cursor:pointer}
-.track{display:flex;gap:12px;align-items:center;background:rgba(0,0,0,.6);padding:12px;border-radius:12px;text-align:left}
-.track img{width:70px;height:70px;border-radius:8px;object-fit:cover;background:#333}
-.track-title{color:#ffe600;font-weight:bold;font-size:1rem}
-.track-artist{color:#ffb3d9;font-size:.9rem;margin-top:3px}
-audio{width:100%;margin-top:12px;height:40px}
-.btns{display:flex;gap:10px;justify-content:center;margin:18px 0}
-.btns a{padding:10px 22px;border-radius:25px;text-decoration:none;font-weight:bold}
+body{font-family:Arial,sans-serif;background:#2a0a2a;color:white;text-align:center}
+.container{max-width:520px;margin:10px auto;padding:15px;background:rgba(0,0,0,.35);border-radius:20px;border:2px solid #ff3b9a}
+.logo{width:200px;border-radius:15px}
+h1{color:#ffe600;font-size:2.6rem;margin-top:10px}
+.sub{color:#fff;font-size:1rem}
+.live{color:#ff3b9a;font-weight:900;margin-top:6px}
+.btns{display:flex;gap:12px;justify-content:center;margin:16px 0}
+.btns a{padding:12px 28px;border-radius:30px;text-decoration:none;font-weight:900}
 .main{background:white;color:black}
-.soul{background:#ff3b9a;color:white;border:2px solid yellow}
+.soul{background:#ff3b9a;color:white;border:2px solid #ffe600}
+.track{display:flex;gap:12px;align-items:center;background:rgba(0,0,0,.6);padding:12px;border-radius:14px;text-align:left;margin-top:10px}
+.track img{width:75px;height:75px;border-radius:10px;object-fit:cover;background:#333}
+.track-title{color:#ffe600;font-weight:900;font-size:1.05rem}
+.track-artist{color:#ffb3d9;font-size:.9rem;margin-top:2px}
+.play-btn{width:100%;padding:18px;background:#ff3b9a;color:white;border:none;border-radius:40px;font-weight:900;font-size:1.35rem;margin:16px 0}
+audio{width:100%;height:42px}
+.footer{margin-top:18px;font-size:.75rem;color:#aaa}
+.footer a{color:#ffe600}
 </style>
 </head>
 <body>
 <div class="container">
-<img src="RADIO SISTEMA 3.jpeg" class="logo">
+<img src="RADIO SISTEMA 3.jpeg" class="logo" alt="Radio Sistema 3">
 <h1>SOUL FUNK</h1>
-<p>Canale 2 - Radio Sistema 3</p>
-<p style="color:#ff3b9a;font-weight:bold;margin-top:8px">💗 SOUL ON AIR</p>
+<div class="sub">Canale 2 - Radio Sistema 3</div>
+<div class="live">💗 SOUL ON AIR</div>
 
 <div class="btns">
 <a class="main" href="index.html">MAIN</a>
@@ -36,7 +39,7 @@ audio{width:100%;margin-top:12px;height:40px}
 </div>
 
 <div class="track">
-<img id="cover" src="https://via.placeholder.com/70/ff3b9a/fff?text=♪">
+<img id="cover" src="RADIO SISTEMA 3.jpeg" alt="cover">
 <div>
 <div id="title" class="track-title">Tocca PLAY qui sotto</div>
 <div id="artist" class="track-artist">In attesa...</div>
@@ -45,11 +48,14 @@ audio{width:100%;margin-top:12px;height:40px}
 
 <button id="playBtn" class="play-btn">▶ TAPPA PER ASCOLTARE</button>
 
-<audio id="player" controls playsinline>
+<audio id="player" controls playsinline preload="none">
   <source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg">
 </audio>
 
-<p style="margin-top:15px;font-size:.7rem;color:#888">© Radio Sistema 3 - SIAE 202600000389<br><a href="index.html" style="color:#ffe600">⬅ Torna a MAIN</a></p>
+<div class="footer">
+© Radio Sistema 3 - SIAE 202600000389<br><br>
+<a href="index.html">⬅ Torna a MAIN</a>
+</div>
 </div>
 
 <script>
@@ -59,60 +65,56 @@ const titleEl = document.getElementById('title');
 const artistEl = document.getElementById('artist');
 const coverEl = document.getElementById('cover');
 
-btn.addEventListener('click', async () => {
-  try {
-    await player.play();
-    btn.textContent = "● IN ONDA";
-    btn.style.background = "green";
-  } catch(e) {
-    player.play();
-  }
-});
+btn.onclick = async () => {
+  try { await player.play(); } catch(e) { player.play(); }
+};
+player.addEventListener('play', () => { btn.textContent = "● IN ONDA"; btn.style.background = "green"; });
+player.addEventListener('pause', () => { btn.textContent = "▶ TAPPA PER ASCOLTARE"; btn.style.background = "#ff3b9a"; });
 
-player.addEventListener('play', () => {
-  btn.textContent = "● IN ONDA";
-  btn.style.background = "green";
-});
-player.addEventListener('pause', () => {
-  btn.textContent = "▶ TAPPA PER ASCOLTARE";
-  btn.style.background = "#ff3b9a";
-});
-
-// TITOLO + COPERTINA come MAIN
-async function aggiorna() {
-  try {
-    // uso proxy per evitare blocco CORS
-    const r = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('http://manage.myshoutca.st:8060/7.html?_=' + Date.now()));
-    const t = await r.text();
-    const parti = t.split(',');
+async function getTitle(){
+  // 1) provo status-json (metodo più stabile)
+  try{
+    let r = await fetch('https://control.myshoutca.st/proxy/tbqmsenb/status-json.xsl?_='+Date.now(), {cache:'no-store'});
+    let j = await r.json();
+    let t = j.icestats?.source?.title || j.icestats?.source?.[0]?.title || "";
+    if(t) return t;
+  }catch(e){}
+  // 2) fallback 7.html via proxy
+  try{
+    let r = await fetch('https://api.allorigins.win/get?url='+encodeURIComponent('https://control.myshoutca.st/proxy/tbqmsenb/7.html?_='+Date.now()));
+    let j = await r.json();
+    let txt = j.contents || "";
+    let parti = txt.split(',');
     let brano = parti.slice(6).join(',').trim();
-    if (!brano) return;
+    if(brano) return brano;
+  }catch(e){}
+  return "";
+}
+
+async function aggiorna(){
+  try{
+    let brano = await getTitle();
+    if(!brano) return;
+    let artista = ""; let titolo = brano;
+    if(brano.includes(" - ")){ let s = brano.split(" - "); artista = s[0]; titolo = s.slice(1).join(" - "); }
     
-    let artista = "";
-    let titolo = brano;
-    if (brano.includes(" - ")) {
-      const s = brano.split(" - ");
-      artista = s[0];
-      titolo = s.slice(1).join(" - ");
-    }
-    if (titolo !== titleEl.textContent) {
+    if(titolo !== titleEl.textContent){
       titleEl.textContent = titolo;
       artistEl.textContent = artista || "Soul Funk";
-      
-      // cerca foderina su iTunes
-      try {
-        const q = encodeURIComponent(artista + " " + titolo);
-        const ri = await fetch('https://itunes.apple.com/search?term=' + q + '&media=music&limit=1');
-        const ji = await ri.json();
-        if (ji.results && ji.results[0]) {
-          coverEl.src = ji.results[0].artworkUrl100.replace('100x100','300x300');
+      // cerca foderina vera come MAIN
+      try{
+        let q = encodeURIComponent((artista+" "+titolo).trim());
+        let ri = await fetch('https://itunes.apple.com/search?term='+q+'&media=music&limit=1');
+        let ji = await ri.json();
+        if(ji.results && ji.results[0] && ji.results[0].artworkUrl100){
+          coverEl.src = ji.results[0].artworkUrl100.replace('100x100','600x600');
         }
-      } catch(e){}
+      }catch(e){}
     }
-  } catch(e) {}
+  }catch(e){}
 }
 aggiorna();
-setInterval(aggiorna, 10000);
+setInterval(aggiorna, 12000);
 </script>
 </body>
 </html>
