@@ -3,108 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOUL FUNK - Radio Sistema 3</title>
+<title>SOUL FUNK</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Segoe UI,Arial,sans-serif;color:white;text-align:center;background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.6)),url("soul-funk.jpeg");background-size:90% auto;background-position:center 40%;background-attachment:fixed;background-color:#0d0620}
-.container{max-width:900px;margin:25px auto;padding:30px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);border-radius:25px;border:1px solid #ff3b9a}
-.logo{width:90px;height:90px;object-fit:cover;border-radius:14px;background:#fff;padding:3px}
-h1{margin-top:12px;font-size:2.6rem;color:#ffe600;text-shadow:0 0 12px #ff3b9a}
-.live{margin-top:8px;color:#ff3b9a;font-size:1.4rem;font-weight:900}
-.player-box{margin:18px auto 0 auto;background:rgba(255,255,255,.10);padding:14px;border-radius:20px;width:420px;max-width:94%}
-.ch-chooser{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
-.ch-btn{flex:1;padding:10px 0;border-radius:30px;border:none;font-weight:900;font-size:.85rem;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center}
-.ch-main{background:#fff;color:#222}
-.ch-soul{background:#ff3b9a;color:#fff;box-shadow:0 0 10px #ff3b9a}
-.ch-btn.active{outline:3px solid #ffe600;transform:scale(1.05)}
-.section-title{font-size:1.2rem;margin-bottom:8px;color:#ffd966}
-audio{width:100%;max-width:360px;height:38px}
-.cc_recenttracks_list{margin-top:10px !important;color:white !important;text-align:left !important;max-width:420px;margin-left:auto;margin-right:auto;background:rgba(0,0,0,0.45);padding:10px;border-radius:12px;display:flex !important;align-items:center !important;gap:12px !important}
-.cc_recenttracks_list *{color:white !important;line-height:1.25 !important;font-size:1rem !important}
+body{font-family:Arial,sans-serif;color:white;text-align:center;background:#0d0620 url('soul-funk.jpeg') no-repeat center 40% / 85% auto;background-attachment:fixed}
+.overlay{background:rgba(8,0,18,0.55);min-height:100vh;padding:20px;display:flex;align-items:center;justify-content:center}
+.container{width:100%;max-width:400px;padding:20px;background:rgba(0,0,0,0.82);border-radius:22px;border:1.5px solid #ff3b9a;box-shadow:0 0 30px rgba(255,59,154,.4)}
+.logo{width:70px;border-radius:12px;background:#fff;padding:3px}
+h1{color:#ffe600;font-size:1.8rem;margin-top:6px;text-shadow:0 0 10px #ff3b9a}
+.sub{font-size:.8rem;color:#ccc}
+.live{color:#ff3b9a;font-weight:900;margin-top:2px}
+.btns{display:flex;gap:8px;justify-content:center;margin:14px 0}
+.btns a{padding:9px 18px;border-radius:20px;text-decoration:none;font-weight:900;font-size:.8rem}
+.main{background:#fff;color:#000}
+.soul{background:#ff3b9a;color:#fff;border:1px solid #ffe600}
+.box{background:rgba(20,20,20,.7);padding:14px;border-radius:14px;border:1px solid #333}
+audio{width:100%;height:38px}
+.vu-wrap{margin-top:10px;background:#0e0e0e;padding:6px;border-radius:8px;border:1px solid #333}
+#vuCanvas{width:100%;height:34px;background:#0a0a0a;border-radius:4px}
+.vu-label{display:flex;justify-content:space-between;font-size:.6rem;color:#888;margin-top:3px;font-weight:900}
+/* FIX 1 BRANO SOLO */
+.cc_recenttracks_list{background:rgba(0,0,0,.5);padding:10px;border-radius:12px;display:flex !important;align-items:center !important;gap:12px !important;text-align:left !important;max-width:400px;margin:10px auto 0 auto}
+.cc_recenttracks_list *{color:white !important;line-height:1.2 !important;font-size:.95rem !important;white-space:normal !important;word-break:break-word !important;writing-mode:horizontal-tb !important}
 .cc_recenttracks_list .ccbuy{display:none !important}
-.cc_recenttracks_list img{opacity:0;display:block;flex-shrink:0 !important;min-width:78px !important}
-.vu-wrap{margin-top:10px;background:rgba(0,0,0,.75);padding:6px;border-radius:8px;border:1px solid rgba(255,255,255,.2);max-width:360px;margin:auto}
-#vuCanvas{width:100%;height:36px;display:block;border-radius:4px;background:#0a0a0a}
-.vu-label{font-size:.65rem;color:#aaa;margin-top:3px;display:flex;justify-content:space-between;font-family:monospace}
-.footer{margin-top:20px;font-size:.85rem}
+.cc_recenttracks_list img{width:76px !important;height:76px !important;min-width:76px !important;object-fit:cover;border-radius:6px;opacity:1 !important;display:block !important}
+/* nascondi dal 2° in poi */
+.cc_recenttracks_list:nth-of-type(n+2){display:none !important}
+.footer{margin-top:14px;font-size:.7rem;color:#999}
 .footer a{color:#ffe600;text-decoration:none;font-weight:900}
 </style>
 </head>
 <body>
+<div class="overlay">
 <div class="container">
-<img src="RADIO SISTEMA 3.jpeg" class="logo" alt="Radio Sistema 3">
+<img src="RADIO SISTEMA 3.jpeg" class="logo">
 <h1>SOUL FUNK</h1>
-<div class="live">💗 SOUL ON AIR - Canale 2</div>
-
-<div class="player-box">
-<div class="ch-chooser">
-<a class="ch-btn ch-main" href="index.html?play=1">MAIN</a>
-<a class="ch-btn ch-soul active">SOUL FUNK</a>
-</div>
-
-<div class="section-title">♪ Ascolta in diretta</div>
+<div class="sub">Canale 2 - Radio Sistema 3</div>
+<div class="live">💗 SOUL ON AIR</div>
+<div class="btns"><a class="main" href="index.html?play=1">MAIN</a><a class="soul">SOUL FUNK</a></div>
+<div class="box">
 <audio id="radioAudio" controls autoplay><source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg"></audio>
-<div class="vu-wrap"><canvas id="vuCanvas" width="600" height="36"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak" style="color:#00ff2a">● LIVE</span></div></div>
-</div>
-
-<div class="section-title" style="margin-top:14px">♪ Brano in onda</div>
-<!-- QUI IL TRUCCO: stesso sistema del MAIN ma con username SOUL -->
+<div class="vu-wrap"><canvas id="vuCanvas" width="600" height="34"></canvas><div class="vu-label"><span>L ● R STEREO</span><span style="color:#0f0">● LIVE</span></div></div>
+<div style="margin-top:10px;color:#ffd966;font-weight:900">♪ Brano in onda</div>
 <div class="cc_recenttracks_list" data-username="tbqmsenb"></div>
-
+</div>
 <div class="footer">© Radio Sistema 3 - SIAE n°202600000389<br><br><a href="index.html?play=1">⬅ Torna a MAIN</a></div>
 </div>
-
+</div>
 <script>
-// STESSO CODICE PULIZIA COPERTINA DEL MAIN - funziona identico
-function cleanWhiteBorder(img){
- if(img.dataset.cleaned==="1") return; img.dataset.cleaned="1";
- const finalSize=82;
- const tempImg=new Image(); tempImg.crossOrigin="anonymous";
- tempImg.onload=function(){
-  const w=tempImg.width,h=tempImg.height;
-  const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');
-  canvas.width=w;canvas.height=h;ctx.drawImage(tempImg,0,0);
-  const data=ctx.getImageData(0,0,w,h).data;
-  let top=0,bottom=h,left=0,right=w;
-  for(let y=0;y<h;y++){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){top=y;break;}}
-  for(let y=h-1;y>=0;y--){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){bottom=y+1;break;}}
-  for(let x=0;x<w;x++){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){left=x;break;}}
-  for(let x=w-1;x>=0;x--){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){right=x+1;break;}}
-  const cw=right-left,ch=bottom-top;
-  const out=document.createElement('canvas');out.width=finalSize;out.height=finalSize;const octx=out.getContext('2d');
-  octx.drawImage(canvas,left,top,cw,ch,0,0,finalSize,finalSize);
-  img.src=out.toDataURL('image/jpeg',0.92);
-  img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="6px";img.style.display="inline-block";img.style.opacity="1";
- };
- tempImg.src=img.src;
-}
-const list=document.querySelector('.cc_recenttracks_list');
-if(list){
- new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);}).observe(list,{childList:true,subtree:true});
- setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);},1200);
-}
-
-// VU STEREO UGUALE - come MAIN, non più mono sbilanciato
-const vuCanvas=document.getElementById('vuCanvas');const vuCtx=vuCanvas.getContext('2d');
-let levelL=0,levelR=0,isPlayingVU=true;
-function drawStereo(){
- const W=vuCanvas.width,H=vuCanvas.height;vuCtx.clearRect(0,0,W,H);vuCtx.fillStyle='#0a0a0a';vuCtx.fillRect(0,0,W,H);
- let bars=32,barW=W/bars,gap=1.5,rowH=H/2-2;
- let activeL=Math.floor((levelL/100)*bars);
- for(let i=0;i<bars;i++){let x=i*barW;let lit=i<activeL;let color=i<bars*0.6?(lit?'#00ff2a':'#001a05'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000');vuCtx.fillStyle=color;vuCtx.fillRect(x+gap,1,barW-gap*2,lit?rowH-1:rowH*0.4);}
- vuCtx.fillStyle='#333';vuCtx.fillRect(0,H/2-0.5,W,1);
- let activeR=Math.floor((levelR/100)*bars);
- for(let i=0;i<bars;i++){let x=i*barW;let lit=i<activeR;let color=i<bars*0.6?(lit?'#00d4ff':'#001a1a'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000');vuCtx.fillStyle=color;vuCtx.fillRect(x+gap,H/2+1,barW-gap*2,lit?rowH-1:rowH*0.4);}
- requestAnimationFrame(drawStereo);
-}
-function updateStereo(){
- let base=22+Math.random()*30;
- let targetL=base+Math.random()*18;
- let targetR=base+Math.random()*18; // UGUALE, non sbilanciato
- levelL+=(targetL-levelL)*0.3; levelR+=(targetR-levelR)*0.3;
-}
-drawStereo();setInterval(updateStereo,70);
+// VU STEREO UGUALE
+const c=document.getElementById('vuCanvas'),x=c.getContext('2d');let l=0,r=0;
+function draw(){x.clearRect(0,0,c.width,c.height);x.fillStyle='#0a0a0a';x.fillRect(0,0,c.width,c.height);let bars=30,bw=c.width/bars,g=1.5,rh=c.height/2-2,al=Math.floor((l/100)*bars),ar=Math.floor((r/100)*bars);for(let i=0;i<bars;i++){let lit=i<al;x.fillStyle=lit?(i<18?'#0f0':i<24?'#ff0':'#f00'):'#1a1a1a';x.fillRect(i*bw+g,1,bw-g*2,lit?rh-1:rh*0.4)}x.fillStyle='#333';x.fillRect(0,c.height/2-.5,c.width,1);for(let i=0;i<bars;i++){let lit=i<ar;x.fillStyle=lit?(i<18?'#0af':i<24?'#ff0':'#f00'):'#1a1a1a';x.fillRect(i*bw+g,c.height/2+1,bw-g*2,lit?rh-1:rh*0.4)}requestAnimationFrame(draw)}function upd(){let b=22+Math.random()*30;l+=(b+Math.random()*15-l)*0.3;r+=(b+Math.random()*15-r)*0.3}draw();setInterval(upd,70);
 </script>
 </body>
 </html>
