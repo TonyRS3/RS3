@@ -52,9 +52,9 @@ audio{width:100%;max-width:340px;height:36px;}
 #novitaPlayerMain iframe{width:100%;height:100%;border:0;position:absolute;top:0;left:0}
 #novitaList{max-height:350px;overflow-y:auto;text-align:left}
 .novita-row{display:flex;align-items:center;gap:10px;padding:7px 9px;background:#151515;cursor:pointer;border-radius:8px;margin-bottom:5px}
-.vu-wrap{margin-top:8px;background:rgba(0,0,0,.75);padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,.2);}
-#vuCanvas{width:100%;height:54px;display:block;border-radius:5px;background:#0a0a0a;}
-.vu-label{font-size:.7rem;color:#aaa;margin-top:3px;display:flex;justify-content:space-between;font-family:monospace;}
+.vu-wrap{margin-top:8px;background:rgba(0,0,0,.75);padding:4px 6px;border-radius:8px;border:1px solid rgba(255,255,255,.2);max-width:320px;margin-left:auto;margin-right:auto;}
+#vuCanvas{width:100%;height:32px;display:block;border-radius:4px;background:#0a0a0a;}
+.vu-label{font-size:.65rem;color:#aaa;margin-top:2px;display:flex;justify-content:space-between;font-family:monospace;}
 @keyframes bassHit {0%{transform:scale(1);}15%{transform:scale(1.04); box-shadow:0 0 20px #ff0033;}100%{transform:scale(1);}}
 .bass-active .logo-wrap{animation:bassHit 0.2s ease, gradientMove 4s ease infinite !important;}
 #bassFlashOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle, rgba(255,0,51,0.15) 0%, transparent 70%);pointer-events:none;opacity:0;transition:opacity 0.1s;z-index:9999;}
@@ -89,6 +89,8 @@ html.popup-mode .player-box, body.popup-mode .player-box{
 html.popup-mode .cc_recenttracks_list, body.popup-mode .cc_recenttracks_list{
   margin-bottom:10px !important;background:rgba(0,0,0,.35) !important;min-height:60px !important;overflow:visible !important;
 }
+html.popup-mode .vu-wrap, body.popup-mode .vu-wrap{max-width:300px !important;}
+html.popup-mode #vuCanvas, body.popup-mode #vuCanvas{height:32px !important;}
 </style>
 </head>
 <body>
