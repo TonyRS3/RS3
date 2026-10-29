@@ -7,29 +7,16 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
-  font-family:Arial,sans-serif;
-  background: url('soul-funk.jpeg') no-repeat center center fixed;
-  background-size: cover;
-  background-color:#1a0a3a;
-  min-height:100vh;
-  color:white;
-  text-align:center;
+  background-color:#140a2a;
+  background-image: url('soul-funk.jpeg');
+  background-repeat:no-repeat;
+  background-position:center center;
+  background-attachment:fixed;
+  background-size:cover;
+  font-family:Arial,sans-serif;color:white;text-align:center;min-height:100vh;
 }
-.overlay{
-  background: rgba(10,0,25,.58);
-  min-height:100vh;
-  padding:14px;
-}
-.container{
-  max-width:560px;
-  margin:10px auto;
-  padding:18px;
-  background: rgba(0,0,0,.55);
-  border-radius:22px;
-  border:2px solid #ff3b9a;
-  backdrop-filter: blur(6px);
-  box-shadow:0 0 25px rgba(255,59,154,.4);
-}
+.overlay{background:rgba(8,0,20,.68);min-height:100vh;padding:14px}
+.container{max-width:560px;margin:0 auto;padding:18px;background:rgba(0,0,0,.55);border-radius:22px;border:2px solid #ff3b9a;box-shadow:0 0 25px rgba(255,59,154,.4);backdrop-filter:blur(4px)}
 .logo{width:90px;border-radius:14px;background:white;padding:3px}
 h1{color:#ffe600;font-size:2.2rem;margin-top:8px;text-shadow:0 0 10px #ff3b9a}
 .sub{color:#ddd;font-size:.9rem}
@@ -38,8 +25,8 @@ h1{color:#ffe600;font-size:2.2rem;margin-top:8px;text-shadow:0 0 10px #ff3b9a}
 .btns a{padding:11px 26px;border-radius:30px;text-decoration:none;font-weight:900;font-size:.9rem}
 .main{background:white;color:black}
 .soul{background:#ff3b9a;color:white;border:2px solid #ffe600;box-shadow:0 0 12px #ff3b9a}
-.box{background:rgba(0,0,0,.6);padding:14px;border-radius:16px;border:1px solid rgba(255,59,154,.3)}
-audio{width:100%;height:40px;border-radius:10px}
+.box{background:rgba(0,0,0,.65);padding:14px;border-radius:16px;border:1px solid rgba(255,59,154,.3)}
+audio{width:100%;height:42px}
 .vu{margin-top:12px;background:#0a0a0a;border-radius:10px;padding:8px 10px;border:1px solid #333}
 .vu-bars{display:flex;flex-direction:column;gap:4px}
 .vu-row{display:flex;gap:3px}
@@ -50,11 +37,11 @@ audio{width:100%;height:40px;border-radius:10px}
 .vu-row span.on.peak{background:#f22 !important}
 .vu-labels{display:flex;justify-content:space-between;margin-top:6px;font-size:.65rem;color:#aaa;font-weight:900}
 .vu-labels .live{color:#00ff66}
-.track{margin-top:14px;display:flex;gap:14px;align-items:center;background:rgba(20,20,20,.85);padding:12px;border-radius:12px;text-align:left}
-.track img{width:88px;height:88px;border-radius:12px;object-fit:cover;background:#222;flex-shrink:0;box-shadow:0 0 10px rgba(0,0,0,.8)}
+.track{margin-top:14px;display:flex;gap:14px;align-items:center;background:rgba(20,20,20,.9);padding:12px;border-radius:12px;text-align:left}
+.track img{width:88px;height:88px;border-radius:12px;object-fit:cover;background:#222;flex-shrink:0}
 .track-title{color:#ffe600;font-weight:900;font-size:1.1rem;line-height:1.2}
 .track-artist{color:#ffb3d9;font-size:.9rem;margin-top:4px}
-.footer{margin-top:14px;font-size:.7rem;color:#ddd;text-shadow:0 1px 2px #000}
+.footer{margin-top:14px;font-size:.7rem;color:#ddd}
 .footer a{color:#ffe600;text-decoration:none;font-weight:900}
 </style>
 </head>
@@ -65,95 +52,44 @@ audio{width:100%;height:40px;border-radius:10px}
 <h1>SOUL FUNK</h1>
 <div class="sub">Canale 2 - Radio Sistema 3</div>
 <div class="live">💗 SOUL ON AIR</div>
-
-<div class="btns">
-<a class="main" href="index.html">MAIN</a>
-<a class="soul">SOUL FUNK</a>
-</div>
-
+<div class="btns"><a class="main" href="index.html">MAIN</a><a class="soul">SOUL FUNK</a></div>
 <div class="box">
 <audio id="player" controls playsinline autoplay crossorigin="anonymous" preload="auto">
-  <source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg">
+<source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg">
 </audio>
-
-<div class="vu">
-<div class="vu-bars">
-<div class="vu-row top" id="rowTop"></div>
-<div class="vu-row bot" id="rowBot"></div>
+<div class="vu"><div class="vu-bars"><div class="vu-row top" id="rowTop"></div><div class="vu-row bot" id="rowBot"></div></div><div class="vu-labels"><div>L • R STEREO</div><div class="live">● LIVE</div></div></div>
+<div class="track"><img id="cover" src="RADIO SISTEMA 3.jpeg"><div><div id="title" class="track-title">Soul Funk</div><div id="artist" class="track-artist">In onda...</div></div></div>
 </div>
-<div class="vu-labels"><div>L • R STEREO</div><div class="live">● LIVE</div></div>
-</div>
-
-<div class="track">
-<img id="cover" src="RADIO SISTEMA 3.jpeg" alt="cover">
-<div>
-<div id="title" class="track-title">Soul Funk</div>
-<div id="artist" class="track-artist">Caricamento brano...</div>
-</div>
-</div>
-</div>
-
 <div class="footer">© Radio Sistema 3 - SIAE n°202600000389<br><br><a href="index.html">⬅ Torna a MAIN</a></div>
 </div>
 </div>
-
 <script>
-const player=document.getElementById('player');
-const titleEl=document.getElementById('title');
-const artistEl=document.getElementById('artist');
-const coverEl=document.getElementById('cover');
-const rowTop=document.getElementById('rowTop');
-const rowBot=document.getElementById('rowBot');
-const SEG=22;
-for(let i=0;i<SEG;i++){ rowTop.appendChild(document.createElement('span')); rowBot.appendChild(document.createElement('span')); }
-window.addEventListener('DOMContentLoaded', async()=>{ try{ player.volume=1; await player.play(); }catch(e){} });
-let audioCtx, analyser, data;
-function initMeter(){
-  try{
-    audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-    const src=audioCtx.createMediaElementSource(player);
-    analyser=audioCtx.createAnalyser(); analyser.fftSize=256;
-    src.connect(analyser); analyser.connect(audioCtx.destination);
-    data=new Uint8Array(analyser.frequencyBinCount);
-    requestAnimationFrame(updateMeter);
-  }catch(e){}
-}
-function updateMeter(){
-  requestAnimationFrame(updateMeter);
-  if(!analyser) return;
-  analyser.getByteFrequencyData(data);
-  let avg=data.reduce((a,b)=>a+b,0)/data.length/255;
-  let left=Math.min(1, avg*1.4 + Math.random()*0.05);
-  let right=Math.min(1, avg*1.4 + Math.random()*0.05);
-  let l=Math.floor(left*SEG); let r=Math.floor(right*SEG);
-  rowTop.querySelectorAll('span').forEach((s,i)=>{ s.className=i<l?(i>18?'on peak':i>15?'on warn':'on'):''; });
-  rowBot.querySelectorAll('span').forEach((s,i)=>{ s.className=i<r?(i>18?'on peak':i>15?'on warn':'on'):''; });
-}
-player.addEventListener('play', ()=>{ if(!audioCtx) initMeter(); if(audioCtx && audioCtx.state==='suspended') audioCtx.resume(); });
+// TROVA SFONDO ANCHE SE MAIUSCOLO/MINUSCOLO DIVERSO
+(function(){
+  const variants=['soul-funk.jpeg','Soul-Funk.jpeg','SOUL-FUNK.JPEG','soul-funk.JPG','Soul-funk.jpeg','soul-funk.jpg','SOUL-FUNK.jpg','soul-funk.JPEG'];
+  let i=0;
+  function tryNext(){
+    if(i>=variants.length) return;
+    let img=new Image();
+    img.onload=function(){document.body.style.backgroundImage="url('"+variants[i]+"')";};
+    img.onerror=function(){i++;tryNext();};
+    img.src=variants[i]+'?_='+Date.now();
+  }
+  tryNext();
+})();
 
-async function getTitle(){
-  try{
-    let r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent('https://control.myshoutca.st/proxy/tbqmsenb/7.html?_='+Date.now()));
-    let j=await r.json(); let txt=j.contents||""; let p=txt.split(','); let brano=p.slice(6).join(',').trim(); if(brano) return brano;
-  }catch(e){} return "";
-}
-async function aggiorna(){
-  try{
-    let brano=await getTitle(); if(!brano || brano.length<3) return;
-    let artista=""; let titolo=brano;
-    if(brano.includes(" - ")){ let s=brano.split(" - "); artista=s[0]; titolo=s.slice(1).join(" - "); }
-    if(titolo && titolo!==titleEl.textContent){
-      titleEl.textContent=titolo; artistEl.textContent=artista||"Soul Funk";
-      try{
-        let q=encodeURIComponent((artista+" "+titolo).trim());
-        let ri=await fetch('https://itunes.apple.com/search?term='+q+'&media=music&limit=1');
-        let ji=await ri.json();
-        if(ji.results && ji.results[0] && ji.results[0].artworkUrl100) coverEl.src=ji.results[0].artworkUrl100.replace('100x100','600x600');
-      }catch(e){}
-    }
-  }catch(e){}
-}
-aggiorna(); setInterval(aggiorna,8000);
+const player=document.getElementById('player'),titleEl=document.getElementById('title'),artistEl=document.getElementById('artist'),coverEl=document.getElementById('cover'),rowTop=document.getElementById('rowTop'),rowBot=document.getElementById('rowBot');
+const SEG=22;
+for(let k=0;k<SEG;k++){rowTop.appendChild(document.createElement('span'));rowBot.appendChild(document.createElement('span'));}
+window.addEventListener('DOMContentLoaded',async()=>{try{await player.play();}catch(e){}});
+let audioCtx,analyser,data;
+function initMeter(){try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();const src=audioCtx.createMediaElementSource(player);analyser=audioCtx.createAnalyser();analyser.fftSize=256;src.connect(analyser);analyser.connect(audioCtx.destination);data=new Uint8Array(analyser.frequencyBinCount);requestAnimationFrame(updateMeter);}catch(e){}}
+function updateMeter(){requestAnimationFrame(updateMeter);if(!analyser)return;analyser.getByteFrequencyData(data);let avg=data.reduce((a,b)=>a+b,0)/data.length/255;let l=Math.floor(Math.min(1,avg*1.4+Math.random()*0.05)*SEG),r=Math.floor(Math.min(1,avg*1.4+Math.random()*0.05)*SEG);rowTop.querySelectorAll('span').forEach((s,j)=>{s.className=j<l?(j>18?'on peak':j>15?'on warn':'on'):''});rowBot.querySelectorAll('span').forEach((s,j)=>{s.className=j<r?(j>18?'on peak':j>15?'on warn':'on'):''});}
+player.addEventListener('play',()=>{if(!audioCtx)initMeter();if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();});
+async function fetchText(url){try{let r=await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(url+'&_='+Date.now()));if(!r.ok)throw'';let t=await r.text();return t.trim();}catch(e){return"";}}
+async function getNowPlaying(){let t=await fetchText('https://control.myshoutca.st/proxy/tbqmsenb/currentsong?sid=1');if(t&&t.length>2&&!t.includes('<html'))return t;let t2=await fetchText('https://control.myshoutca.st/proxy/tbqmsenb/7.html');if(t2){let p=t2.split(',');let b=p.slice(6).join(',').trim();if(b)return b;}try{let r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent('https://control.myshoutca.st/proxy/tbqmsenb/status-json.xsl?_='+Date.now()));let j=await r.json();let inner=JSON.parse(j.contents);if(inner&&inner.icestats&&inner.icestats.source){let src=Array.isArray(inner.icestats.source)?inner.icestats.source[0]:inner.icestats.source;if(src.title)return src.title;}}catch(e){}return"";}
+async function aggiorna(){let brano=await getNowPlaying();if(!brano||brano.length<2)return;let artista="",titolo=brano;if(brano.includes(" - ")){let s=brano.split(" - ");artista=s[0];titolo=s.slice(1).join(" - ");}if(titolo!==titleEl.textContent){titleEl.textContent=titolo;artistEl.textContent=artista||"Soul Funk";try{let q=encodeURIComponent((artista+" "+titolo).trim());let ri=await fetch('https://itunes.apple.com/search?term='+q+'&media=music&limit=1');let ji=await ri.json();if(ji.results&&ji.results[0]&&ji.results[0].artworkUrl100){coverEl.src=ji.results[0].artworkUrl100.replace('100x100','600x600');}}catch(e){}}}
+aggiorna();setInterval(aggiorna,6000);
 </script>
 </body>
 </html>
