@@ -1,1 +1,63 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SOUL FUNK - Radio Sistema 3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{margin:0;background:#000;color:#f5d76e;font-family:Arial;text-align:center}
+.top{padding:12px;background:#111;display:flex;justify-content:space-between}
+.top a{color:#f5d76e;text-decoration:none;border:1px solid #f5d76e;padding:6px 12px;border-radius:10px;font-weight:900}
+.player{max-width:500px;margin:20px auto;background:#151515;border:2px solid #f5d76e;border-radius:25px;padding:20px}
+.cover{width:200px;height:200px;border-radius:20px;object-fit:cover;border:3px solid #f5d76e;margin-bottom:15px}
+.play{width:90px;height:90px;border-radius:50%;border:none;background:#f5d76e;font-size:35px;cursor:pointer}
+#aud{width:100%;margin-top:15px}
+.tit{font-size:20px;font-weight:900;margin-top:10px;color:#fff}
+.art{color:#aaa;margin-top:4px}
+</style>
+</head>
+<body>
+<div class="top"><a href="index.html">⬅ RADIO SISTEMA 3</a><b>SOUL FUNK</b><span></span></div>
+
+<div class="player">
+<img class="cover" src="https://i.ibb.co/3mJ0nYd/soul-cover-gold.jpg" id="cover" onerror="this.src='https://via.placeholder.com/200/f5d76e/000000?text=SOUL+FUNK'">
+<button class="play" id="btn">▶</button>
+<div class="tit" id="title">Clicca PLAY per Soul Funk</div>
+<div class="art" id="artist">Radio Sistema 3 - Canale 3</div>
+<audio id="aud" controls preload="none">
+<source src="http://manage.myshoutca.st:8060/stream" type="audio/mpeg">
+</audio>
+<p style="font-size:12px;color:#666;margin-top:10px">Se non parte, il server è Offline nel pannello MyShoutcast - accendilo da https://manage.myshoutca.st/start/tbqmsenb</p>
+</div>
+
+<script>
+const aud=document.getElementById('aud');
+const btn=document.getElementById('btn');
+const titleEl=document.getElementById('title');
+const artistEl=document.getElementById('artist');
+
+btn.onclick=()=>{
+ if(aud.paused){ aud.play(); btn.innerText='⏸'; } else { aud.pause(); btn.innerText='▶'; }
+};
+aud.onplay=()=>btn.innerText='⏸';
+aud.onpause=()=>btn.innerText='▶';
+
+// Prende titolo e autore dal tuo server MyShoutcast
+async function getMeta(){
+ try{
+  const r=await fetch('http://manage.myshoutca.st:8060/status-json.xsl');
+  const j=await r.json();
+  const t=j.icestats.source.title || j.icestats.source[0].title;
+  if(t){
+   let parts=t.split(' - ');
+   if(parts.length>1){ titleEl.innerText=parts[1]; artistEl.innerText=parts[0]; }
+   else { titleEl.innerText=t; }
+  }
+ }catch(e){}
+}
+setInterval(getMeta,5000);
+getMeta();
+</script>
+</body>
+</html>
