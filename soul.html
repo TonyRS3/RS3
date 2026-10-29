@@ -2,96 +2,404 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOUL FUNK</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="description" content="SOUL FUNK - Canale 2 Radio Sistema 3 - Soul, Funk, Disco in streaming">
+<title>SOUL FUNK - Radio Sistema 3 - Canale 2</title>
+<link rel="preconnect" href="https://control.myshoutca.st">
+<link rel="preconnect" href="https://itunes.apple.com">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:url('soul-funk.jpeg') no-repeat center center fixed;background-size:cover;background-color:#140a2a;font-family:Arial,sans-serif;color:white;text-align:center;min-height:100vh}
-.overlay{background:rgba(8,0,20,.55);min-height:100vh;padding:8px;display:flex;align-items:center;justify-content:center}
-.container{width:92%;max-width:360px;padding:14px;background:rgba(0,0,0,.62);border-radius:18px;border:1.5px solid #ff3b9a;box-shadow:0 0 18px rgba(255,59,154,.4)}
-.logo{width:58px;border-radius:10px;background:white;padding:2px}
-h1{color:#ffe600;font-size:1.6rem;margin-top:4px;text-shadow:0 0 8px #ff3b9a;line-height:1}
-.sub{font-size:.75rem;color:#ddd;margin-top:2px}
-.live{color:#ff3b9a;font-weight:900;font-size:.8rem;margin-top:2px}
-.btns{display:flex;gap:8px;justify-content:center;margin:10px 0}
-.btns a{padding:7px 16px;border-radius:20px;text-decoration:none;font-weight:900;font-size:.75rem}
-.main{background:white;color:black}
-.soul{background:#ff3b9a;color:white;border:1.5px solid #ffe600}
-.box{background:rgba(0,0,0,.65);padding:10px;border-radius:12px;border:1px solid rgba(255,59,154,.25)}
-audio{width:100%;height:32px;border-radius:8px}
-.vu{margin-top:8px;background:#0a0a0a;border-radius:8px;padding:6px;border:1px solid #333}
+/* RESET E BASE */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow-x:hidden}
+body{
+  background: url('soul-funk.jpeg') no-repeat center center fixed;
+  background-size: cover;
+  background-color:#0e0620;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  color:white;
+  text-align:center;
+  min-height:100vh;
+  min-height:100dvh;
+}
+/* OVERLAY CON SFUMATURA ANIMATA */
+.overlay{
+  background: radial-gradient(ellipse at center, rgba(20,10,42,0.3) 0%, rgba(8,0,20,0.75) 100%);
+  min-height:100vh;
+  min-height:100dvh;
+  padding:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  animation: fadeIn 0.8s ease;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+/* CONTAINER PRINCIPALE - COMPATTO MA ESTESO DI STILE */
+.container{
+  width:92%;
+  max-width:360px;
+  padding:16px;
+  background: linear-gradient(145deg, rgba(0,0,0,0.72), rgba(20,0,30,0.68));
+  border-radius:20px;
+  border:1.5px solid #ff3b9a;
+  box-shadow: 
+    0 0 0 1px rgba(255,59,154,0.2) inset,
+    0 0 25px rgba(255,59,154,0.35),
+    0 10px 30px rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: slideUp 0.6s ease;
+}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+/* LOGO CON ANIMAZIONE PULSE */
+.logo-wrap{position:relative;display:inline-block}
+.logo{
+  width:62px;
+  height:62px;
+  border-radius:12px;
+  background:white;
+  padding:3px;
+  object-fit:cover;
+  box-shadow:0 0 0 2px rgba(255,255,255,0.8), 0 0 15px rgba(255,59,154,0.5);
+  animation: pulseLogo 3s infinite;
+}
+@keyframes pulseLogo{0%,100%{box-shadow:0 0 0 2px rgba(255,255,255,0.8), 0 0 15px rgba(255,59,154,0.5)}50%{box-shadow:0 0 0 2px rgba(255,255,255,0.9), 0 0 25px rgba(255,59,154,0.8)}}
+/* TITOLI */
+h1{
+  color:#ffe600;
+  font-size:1.7rem;
+  margin-top:6px;
+  font-weight:900;
+  letter-spacing:0.5px;
+  text-shadow: 0 0 10px #ff3b9a, 0 2px 0 rgba(0,0,0,0.5);
+  line-height:1;
+}
+.sub{font-size:.72rem;color:#d8cde8;margin-top:3px;letter-spacing:0.3px;opacity:0.9}
+.live{
+  font-size:.78rem;
+  color:#ff3b9a;
+  font-weight:900;
+  margin-top:3px;
+  text-shadow:0 0 8px #ff3b9a;
+  animation: liveBlink 1.5s infinite;
+}
+@keyframes liveBlink{0%,100%{opacity:1}50%{opacity:0.7}}
+/* BOTTONI */
+.btns{display:flex;gap:8px;justify-content:center;margin:12px 0}
+.btns a{
+  flex:1;
+  max-width:120px;
+  padding:8px 14px;
+  border-radius:20px;
+  text-decoration:none;
+  font-weight:900;
+  font-size:.7rem;
+  letter-spacing:0.3px;
+  transition: all 0.2s ease;
+  cursor:pointer;
+}
+.btns a:active{transform:scale(0.95)}
+.main{background:linear-gradient(#fff,#e8e8e8);color:#111;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+.main:hover{background:white;box-shadow:0 3px 12px rgba(0,0,0,0.4)}
+.soul{
+  background:linear-gradient(135deg,#ff3b9a,#ff1a7a);
+  color:white;
+  border:1.5px solid #ffe600;
+  box-shadow:0 0 12px rgba(255,59,154,0.6), 0 2px 8px rgba(0,0,0,0.3);
+}
+/* BOX PLAYER */
+.box{
+  background: linear-gradient(180deg, rgba(0,0,0,0.7), rgba(10,0,20,0.75));
+  padding:12px;
+  border-radius:14px;
+  border:1px solid rgba(255,59,154,0.25);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+}
+audio{width:100%;height:34px;border-radius:8px;filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));}
+/* VU METER ESTESO */
+.vu{
+  margin-top:10px;
+  background: linear-gradient(180deg,#0f0f0f,#050505);
+  border-radius:9px;
+  padding:8px 8px 5px;
+  border:1px solid #2a2a2a;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.03);
+}
+.vu-header{display:flex;justify-content:space-between;font-size:.5rem;color:#555;font-weight:900;margin-bottom:4px;letter-spacing:1px}
+.vu-bars{display:flex;flex-direction:column;gap:3px}
 .vu-row{display:flex;gap:2px}
-.vu-row span{flex:1;height:10px;border-radius:1px;background:#1e1e1e}
-.vu-row.top span.on{background:#0f0}
-.vu-row.bot span.on{background:#0af}
-.vu-labels{display:flex;justify-content:space-between;margin-top:4px;font-size:.55rem;color:#aaa;font-weight:900}
-.vu-labels .live{color:#00ff66}
-.track{margin-top:8px;display:flex;gap:8px;align-items:center;background:rgba(20,20,20,.9);padding:8px;border-radius:10px;text-align:left}
-.track img{width:54px;height:54px;border-radius:8px;object-fit:cover;background:#222}
-.track-title{color:#ffe600;font-weight:900;font-size:.85rem;line-height:1.1}
-.track-artist{color:#ffb3d9;font-size:.7rem;margin-top:2px}
-.footer{margin-top:8px;font-size:.55rem;color:#ddd}
-.footer a{color:#ffe600;text-decoration:none;font-weight:900}
+.vu-row span{
+  flex:1;
+  height:11px;
+  border-radius:2px;
+  background: linear-gradient(180deg,#1a1a1a,#121212);
+  border:1px solid #000;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+  transition: all 0.05s ease;
+}
+.vu-row.top span.on{
+  background: linear-gradient(180deg,#7aff7a,#00cc00);
+  box-shadow: 0 0 6px #0f0, inset 0 1px 0 rgba(255,255,255,0.3);
+  border-color:#0a0;
+}
+.vu-row.bot span.on{
+  background: linear-gradient(180deg,#7ac8ff,#0090ff);
+  box-shadow: 0 0 6px #09f, inset 0 1px 0 rgba(255,255,255,0.3);
+  border-color:#06a;
+}
+.vu-row span.on.warn{
+  background: linear-gradient(180deg,#ffff7a,#cccc00) !important;
+  box-shadow: 0 0 6px #ff0 !important;
+}
+.vu-row span.on.peak{
+  background: linear-gradient(180deg,#ff7a7a,#ff0000) !important;
+  box-shadow: 0 0 8px #f00 !important;
+  animation: peakFlash 0.2s ease;
+}
+@keyframes peakFlash{0%{transform:scaleY(1.3)}100%{transform:scaleY(1)}}
+.vu-labels{display:flex;justify-content:space-between;margin-top:5px;font-size:.5rem;color:#666;font-weight:900;letter-spacing:0.5px}
+.vu-labels .live{color:#00ff66;text-shadow:0 0 5px #0f0}
+/* TRACK INFO ESTESA */
+.track{
+  margin-top:10px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  background: linear-gradient(135deg, rgba(25,25,25,0.95), rgba(15,10,20,0.9));
+  padding:10px;
+  border-radius:11px;
+  text-align:left;
+  border:1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+  transition: all 0.3s ease;
+}
+.track:hover{transform:translateY(-1px);box-shadow:0 4px 15px rgba(0,0,0,0.5);border-color:rgba(255,59,154,0.2)}
+.track img{
+  width:58px;
+  height:58px;
+  border-radius:9px;
+  object-fit:cover;
+  background:#222;
+  flex-shrink:0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1);
+  transition: transform 0.3s ease;
+}
+.track img:hover{transform:scale(1.05)}
+.track-info{flex:1;min-width:0}
+.track-title{
+  color:#ffe600;
+  font-weight:900;
+  font-size:.88rem;
+  line-height:1.15;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  text-shadow:0 1px 2px rgba(0,0,0,0.5);
+}
+.track-artist{
+  color:#ffb3d9;
+  font-size:.72rem;
+  margin-top:2px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  opacity:0.9;
+}
+.track-time{font-size:.55rem;color:#888;margin-top:2px}
+/* HISTORY */
+.history{margin-top:10px;text-align:left}
+.history-title{font-size:.6rem;color:#ff3b9a;font-weight:900;letter-spacing:1px;margin-bottom:6px;text-align:center}
+.history-item{display:flex;gap:6px;align-items:center;padding:4px 6px;background:rgba(255,255,255,0.03);border-radius:6px;margin-bottom:4px;font-size:.6rem;border:1px solid rgba(255,255,255,0.03)}
+.history-item img{width:22px;height:22px;border-radius:4px;object-fit:cover}
+.history-item .h-title{color:#ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
+.history-item .h-artist{color:#999;font-size:.55rem}
+/* FOOTER ESTESO */
+.footer{margin-top:12px;font-size:.52rem;color:#999;line-height:1.4}
+.footer a{color:#ffe600;text-decoration:none;font-weight:900;transition: all 0.2s}
+.footer a:hover{color:#fff;text-shadow:0 0 8px #ffe600}
+.footer .siae{font-size:.48rem;opacity:0.7;margin-top:3px}
+/* SHARE */
+.share{display:flex;gap:6px;justify-content:center;margin-top:8px}
+.share button{
+  width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,59,154,0.3);
+  background:rgba(0,0,0,0.5);color:#ff3b9a;font-size:.7rem;cursor:pointer;
+  transition: all 0.2s;
+}
+.share button:hover{background:#ff3b9a;color:white;transform:scale(1.1)}
 </style>
 </head>
 <body>
 <div class="overlay">
 <div class="container">
-<img src="RADIO SISTEMA 3.jpeg" class="logo">
-<h1>SOUL FUNK</h1>
-<div class="sub">Canale 2 - Radio Sistema 3</div>
-<div class="live">💗 SOUL ON AIR</div>
-<div class="btns"><a class="main" href="index.html">MAIN</a><a class="soul">SOUL FUNK</a></div>
-<div class="box">
-<audio id="player" controls playsinline autoplay crossorigin="anonymous" preload="auto">
-<source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg">
-</audio>
-<div class="vu"><div class="vu-bars"><div class="vu-row top" id="rowTop"></div><div class="vu-row bot" id="rowBot"></div></div><div class="vu-labels"><div>L • R STEREO</div><div class="live">● LIVE</div></div></div>
-<div class="track"><img id="cover" src="RADIO SISTEMA 3.jpeg"><div><div id="title" class="track-title">Soul Funk</div><div id="artist" class="track-artist">Caricamento...</div></div></div>
-</div>
-<div class="footer">© Radio Sistema 3 - SIAE n°202600000389<br><a href="index.html">⬅ Torna a MAIN</a></div>
-</div>
-</div>
-<script>
-const player=document.getElementById('player'),titleEl=document.getElementById('title'),artistEl=document.getElementById('artist'),coverEl=document.getElementById('cover'),rowTop=document.getElementById('rowTop'),rowBot=document.getElementById('rowBot');
-const SEG=22; for(let i=0;i<SEG;i++){rowTop.appendChild(document.createElement('span'));rowBot.appendChild(document.createElement('span'));}
-let ac,an,d;
-function init(){try{ac=new(window.AudioContext||window.webkitAudioContext)();let s=ac.createMediaElementSource(player);an=ac.createAnalyser();an.fftSize=256;s.connect(an);an.connect(ac.destination);d=new Uint8Array(an.frequencyBinCount);loop()}catch(e){}}
-function loop(){requestAnimationFrame(loop);if(!an)return;an.getByteFrequencyData(d);let avg=d.reduce((a,b)=>a+b,0)/d.length/255;let l=Math.floor(avg*1.4*SEG),r=Math.floor((avg*1.35+Math.random()*0.1)*SEG);rowTop.querySelectorAll('span').forEach((e,i)=>{e.className=i<l?'on':''});rowBot.querySelectorAll('span').forEach((e,i)=>{e.className=i<r?'on':''})}
-player.addEventListener('play',()=>{if(!ac)init();if(ac&&ac.state==='suspended')ac.resume()});
+  <div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" class="logo" alt="Radio Sistema 3"></div>
+  <h1>SOUL FUNK</h1>
+  <div class="sub">Canale 2 • Radio Sistema 3 • Soul • Funk • Disco</div>
+  <div class="live">💗 SOUL ON AIR • 24/7</div>
 
-// TITOLO FIX - prova diretto + proxy
-async function getSong(){
- const urls=[
-  'https://control.myshoutca.st/proxy/tbqmsenb/currentsong?sid=1',
-  'https://api.allorigins.win/raw?url=https://control.myshoutca.st/proxy/tbqmsenb/currentsong?sid=1',
-  'https://corsproxy.io/?https://control.myshoutca.st/proxy/tbqmsenb/currentsong?sid=1'
- ];
- for(let u of urls){
+  <div class="btns">
+    <a class="main" href="index.html">◀ MAIN</a>
+    <a class="soul">● SOUL FUNK</a>
+  </div>
+
+  <div class="box">
+    <audio id="player" controls playsinline autoplay crossorigin="anonymous" preload="auto">
+      <source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg">
+    </audio>
+
+    <div class="vu">
+      <div class="vu-header"><span>PEAK</span><span>VU METER STEREO</span><span>PEAK</span></div>
+      <div class="vu-bars">
+        <div class="vu-row top" id="rowTop"></div>
+        <div class="vu-row bot" id="rowBot"></div>
+      </div>
+      <div class="vu-labels"><div>L • LEFT</div><div class="live">● LIVE • 128k STEREO</div><div>R • RIGHT</div></div>
+    </div>
+
+    <div class="track" id="trackBox">
+      <img id="cover" src="RADIO SISTEMA 3.jpeg" alt="cover">
+      <div class="track-info">
+        <div id="title" class="track-title">Soul Funk Channel</div>
+        <div id="artist" class="track-artist">Caricamento in corso...</div>
+        <div id="time" class="track-time">--:--</div>
+      </div>
+    </div>
+
+    <div class="history" id="history">
+      <div class="history-title">♫ ULTIMI BRANI</div>
+      <div id="historyList"></div>
+    </div>
+  </div>
+
+  <div class="share">
+    <button title="Condividi" onclick="if(navigator.share){navigator.share({title:'Soul Funk',url:location.href})}else{alert('Copia: '+location.href)}">↗</button>
+    <button title="Info" onclick="alert('SOUL FUNK - Canale 2 Radio Sistema 3\nSoul, Funk, Disco 24/7\nSIAE 202600000389')">ⓘ</button>
+  </div>
+
+  <div class="footer">
+    <div>© 2026 Radio Sistema 3 • Made with 💗 in Italy</div>
+    <div class="siae">SIAE n°202600000389 • Streaming Shoutcast • iTunes Artwork</div>
+    <br>
+    <a href="index.html">⬅ Torna a MAIN CHANNEL</a>
+  </div>
+</div>
+</div>
+
+<script>
+// ELEMENTI
+const player=document.getElementById('player');
+const titleEl=document.getElementById('title');
+const artistEl=document.getElementById('artist');
+const timeEl=document.getElementById('time');
+const coverEl=document.getElementById('cover');
+const rowTop=document.getElementById('rowTop');
+const rowBot=document.getElementById('rowBot');
+const historyList=document.getElementById('historyList');
+const SEG=20;
+// CREA VU BARRE
+for(let i=0;i<SEG;i++){ rowTop.appendChild(document.createElement('span')); rowBot.appendChild(document.createElement('span')); }
+// AUTOPLAY
+window.addEventListener('DOMContentLoaded', async()=>{ try{ await player.play(); }catch(e){} updateClock(); });
+// CLOCK
+function updateClock(){ const n=new Date(); timeEl.textContent=n.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})+ ' • '+n.toLocaleDateString('it-IT',{day:'2-digit',month:'short'}); setTimeout(updateClock,30000); }
+// VU METER ANALYSER
+let audioCtx,analyser,data;
+function initMeter(){
   try{
-   let r=await fetch(u+'&_='+Date.now(),{cache:'no-store'});
-   let t=await r.text();
-   t=t.trim();
-   if(t && t.length>2 && !t.includes('<html') && !t.includes('DOCTYPE')) return t;
+    audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    const src=audioCtx.createMediaElementSource(player);
+    analyser=audioCtx.createAnalyser(); analyser.fftSize=256; analyser.smoothingTimeConstant=0.6;
+    src.connect(analyser); analyser.connect(audioCtx.destination);
+    data=new Uint8Array(analyser.frequencyBinCount);
+    requestAnimationFrame(updateMeter);
+  }catch(e){ console.log('AudioContext error',e); }
+}
+function updateMeter(){
+  requestAnimationFrame(updateMeter);
+  if(!analyser||!data) return;
+  analyser.getByteFrequencyData(data);
+  let sum=0; for(let i=0;i<data.length;i++) sum+=data[i];
+  let avg=sum/data.length/255;
+  let leftLevel=Math.min(1, avg*1.5 + Math.random()*0.08);
+  let rightLevel=Math.min(1, avg*1.45 + Math.random()*0.08);
+  let l=Math.floor(leftLevel*SEG); let r=Math.floor(rightLevel*SEG);
+  rowTop.querySelectorAll('span').forEach((s,i)=>{ s.className=i<l?(i>17?'on peak':i>14?'on warn':'on'):''; });
+  rowBot.querySelectorAll('span').forEach((s,i)=>{ s.className=i<r?(i>17?'on peak':i>14?'on warn':'on'):''; });
+}
+player.addEventListener('play',()=>{ if(!audioCtx) initMeter(); if(audioCtx&&audioCtx.state==='suspended') audioCtx.resume(); });
+// FETCH METADATA CON MULTI-PROXY
+async function fetchViaProxy(url){
+  const proxies=[
+    'https://api.allorigins.win/raw?url=',
+    'https://corsproxy.io/?',
+    'https://api.codetabs.com/v1/proxy?quest='
+  ];
+  for(let p of proxies){
+    try{
+      let res=await fetch(p+encodeURIComponent(url+'&_='+Date.now()),{cache:'no-store',mode:'cors'});
+      if(!res.ok) continue;
+      let txt=await res.text();
+      if(txt&&txt.length>2) return txt;
+    }catch(e){}
+  }
+  return "";
+}
+async function getNowPlaying(){
+  let t=await fetchViaProxy('https://control.myshoutca.st/proxy/tbqmsenb/currentsong?sid=1');
+  if(t&&t.length>2&&!t.includes('<html')&&!t.toLowerCase().includes('doctype')) return t.trim();
+  let t2=await fetchViaProxy('https://control.myshoutca.st/proxy/tbqmsenb/7.html');
+  if(t2){ let parts=t2.split(','); let body=parts.slice(6).join(',').trim(); if(body&&body.length>2) return body; }
+  try{
+    let raw=await fetchViaProxy('https://control.myshoutca.st/proxy/tbqmsenb/status-json.xsl');
+    if(raw){ let j=JSON.parse(raw); let src=j.icestats&&j.icestats.source; if(src){ let s=Array.isArray(src)?src[0]:src; if(s.title) return s.title; } }
   }catch(e){}
- }
- return "";
+  return "";
 }
-async function up(){
- let b=await getSong();
- if(!b) return;
- let art="",tit=b;
- if(b.includes(" - ")){let s=b.split(" - ");art=s[0];tit=s.slice(1).join(" - ")}
- titleEl.textContent=tit;
- artistEl.textContent=art||"Soul Funk";
- try{
-  let q=encodeURIComponent(b);
-  let r=await fetch('https://itunes.apple.com/search?term='+q+'&limit=1&media=music');
-  let j=await r.json();
-  if(j.results[0]&&j.results[0].artworkUrl100) coverEl.src=j.results[0].artworkUrl100.replace('100x100','300x300');
- }catch(e){}
+// HISTORY
+let historyData=[];
+function addToHistory(artista,titolo,cover){
+  if(historyData.length>0 && historyData[0].titolo===titolo) return;
+  historyData.unshift({artista,titolo,cover,time:new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})});
+  if(historyData.length>4) historyData.pop();
+  renderHistory();
 }
-up();setInterval(up,6000);
+function renderHistory(){
+  historyList.innerHTML='';
+  historyData.forEach(h=>{
+    let div=document.createElement('div'); div.className='history-item';
+    div.innerHTML='<img src="'+(h.cover||'RADIO SISTEMA 3.jpeg')+'"><div><div class="h-title">'+h.titolo+'</div><div class="h-artist">'+(h.artista||'')+' • '+h.time+'</div></div>';
+    historyList.appendChild(div);
+  });
+}
+// UPDATE LOOP
+async function aggiorna(){
+  let brano=await getNowPlaying();
+  if(!brano||brano.length<2) return;
+  let artista=""; let titolo=brano;
+  if(brano.includes(" - ")){ let s=brano.split(" - "); artista=s[0].trim(); titolo=s.slice(1).join(" - ").trim(); }
+  if(titolo!==titleEl.textContent){
+    let oldCover=coverEl.src;
+    titleEl.textContent=titolo;
+    artistEl.textContent=artista||'Soul Funk • Radio Sistema 3';
+    titleEl.animate([{transform:'translateX(10px)',opacity:0},{transform:'translateX(0)',opacity:1}],{duration:300,easing:'ease'});
+    try{
+      let q=encodeURIComponent((artista+' '+titolo).trim());
+      let ri=await fetch('https://itunes.apple.com/search?term='+q+'&media=music&limit=1&country=IT');
+      let ji=await ri.json();
+      if(ji.results&&ji.results[0]&&ji.results[0].artworkUrl100){
+        let newCover=ji.results[0].artworkUrl100.replace('100x100','600x600');
+        coverEl.src=newCover;
+        coverEl.animate([{transform:'scale(0.9)',opacity:0.5},{transform:'scale(1)',opacity:1}],{duration:400});
+        addToHistory(artista,titolo,newCover);
+      }else{
+        addToHistory(artista,titolo,oldCover);
+      }
+    }catch(e){ addToHistory(artista,titolo,oldCover); }
+  }
+}
+aggiorna(); setInterval(aggiorna,6000);
+// VISIBILITY API - riprende quando torni
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') aggiorna(); });
+// HANDLE ERROR
+player.addEventListener('error',()=>{ console.log('Stream error, retry in 5s'); setTimeout(()=>{player.load();player.play().catch(()=>{});},5000); });
 </script>
 </body>
 </html>
