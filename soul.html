@@ -1,19 +1,26 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOUL FUNK</title>
+<title>SOUL FUNK - Radio Sistema 3</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial;color:white;text-align:center;background:#111}
-.container{max-width:500px;margin:15px auto;padding:20px;background:rgba(255,59,154,.15);border-radius:20px;border:2px solid #ff3b9a}
-.logo{width:150px;border-radius:15px}
-h1{color:#ffe600;margin-top:10px}
-#playBtn{width:100%;padding:18px;background:#ff3b9a;color:white;border:none;border-radius:40px;font-weight:900;font-size:1.3rem;margin:15px 0}
-.track-box{display:flex;gap:10px;align-items:center;background:rgba(0,0,0,.5);padding:10px;border-radius:10px;text-align:left;margin-bottom:10px}
-.track-box img{width:60px;height:60px;border-radius:8px}
-audio{width:100%;margin-top:10px}
+body{font-family:Arial,sans-serif;color:white;text-align:center;background:#1a0a1a}
+.container{max-width:500px;margin:10px auto;padding:15px;background:rgba(255,59,154,.15);border-radius:20px;border:2px solid #ff3b9a}
+.logo{width:180px;border-radius:15px}
+h1{color:#ffe600;margin-top:10px;font-size:2.2rem}
+.play-btn{width:100%;padding:18px;background:#ff3b9a;color:white;border:none;border-radius:40px;font-weight:900;font-size:1.3rem;margin:15px 0;cursor:pointer}
+.track{display:flex;gap:12px;align-items:center;background:rgba(0,0,0,.6);padding:12px;border-radius:12px;text-align:left}
+.track img{width:70px;height:70px;border-radius:8px;object-fit:cover;background:#333}
+.track-title{color:#ffe600;font-weight:bold;font-size:1rem}
+.track-artist{color:#ffb3d9;font-size:.9rem;margin-top:3px}
+audio{width:100%;margin-top:12px;height:40px}
+.btns{display:flex;gap:10px;justify-content:center;margin:18px 0}
+.btns a{padding:10px 22px;border-radius:25px;text-decoration:none;font-weight:bold}
+.main{background:white;color:black}
+.soul{background:#ff3b9a;color:white;border:2px solid yellow}
 </style>
 </head>
 <body>
@@ -23,93 +30,89 @@ audio{width:100%;margin-top:10px}
 <p>Canale 2 - Radio Sistema 3</p>
 <p style="color:#ff3b9a;font-weight:bold;margin-top:8px">💗 SOUL ON AIR</p>
 
-<div style="margin:20px 0">
-<a href="index.html" style="background:white;color:black;padding:10px 20px;border-radius:20px;text-decoration:none;font-weight:bold">MAIN</a>
-<a style="background:#ff3b9a;color:white;padding:10px 20px;border-radius:20px;font-weight:bold;margin-left:10px;border:2px solid yellow">SOUL FUNK</a>
+<div class="btns">
+<a class="main" href="index.html">MAIN</a>
+<a class="soul">SOUL FUNK</a>
 </div>
 
-<div class="track-box">
-<img id="cover" src="RADIO SISTEMA 3.jpeg">
+<div class="track">
+<img id="cover" src="https://via.placeholder.com/70/ff3b9a/fff?text=♪">
 <div>
-<div id="npTitle" style="color:#ffe600;font-weight:bold">Tocca PLAY qui sotto</div>
-<div id="npArtist" style="color:#ffb3d9;font-size:.8rem">Radio Sistema 3</div>
+<div id="title" class="track-title">Tocca PLAY qui sotto</div>
+<div id="artist" class="track-artist">In attesa...</div>
 </div>
 </div>
 
-<button id="playBtn">▶ TAPPA QUI PER ASCOLTARE</button>
+<button id="playBtn" class="play-btn">▶ TAPPA PER ASCOLTARE</button>
 
-<audio id="radioAudio" controls playsinline preload="none"></audio>
+<audio id="player" controls playsinline>
+  <source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg">
+</audio>
 
-<p id="status" style="font-size:.8rem;color:#aaa;margin-top:10px">Pronto</p>
+<p style="margin-top:15px;font-size:.7rem;color:#888">© Radio Sistema 3 - SIAE 202600000389<br><a href="index.html" style="color:#ffe600">⬅ Torna a MAIN</a></p>
 </div>
 
 <script>
-const aud = document.getElementById('radioAudio');
+const player = document.getElementById('player');
 const btn = document.getElementById('playBtn');
-const status = document.getElementById('status');
-const titleEl = document.getElementById('npTitle');
-const artistEl = document.getElementById('npArtist');
-const cover = document.getElementById('cover');
+const titleEl = document.getElementById('title');
+const artistEl = document.getElementById('artist');
+const coverEl = document.getElementById('cover');
 
-// LISTA LINK - prova uno dopo l'altro
-const LINKS = [
-  "https://control.myshoutca.st/proxy/tbqmsenb/stream",
-  "https://control.myshoutca.st/proxy/tbqmsenb/mp3",
-  "https://control.myshoutca.st/proxy/tbqmsenb/;stream.mp3",
-  "http://manage.myshoutca.st:8060/stream/1/"
-];
-let current = 0;
-
-function setStream(n){
-  current = n;
-  aud.src = LINKS[current] + "?t=" + Date.now();
-  aud.load();
-  status.textContent = "Provo connessione " + (current+1) + "/" + LINKS.length + "...";
-}
-
-setStream(0);
-
-btn.onclick = async () => {
-  try{
-    await aud.play();
-    btn.textContent = "● IN ONDA - TOCCA PER FERMAR";
+btn.addEventListener('click', async () => {
+  try {
+    await player.play();
+    btn.textContent = "● IN ONDA";
     btn.style.background = "green";
-    status.textContent = "In riproduzione";
-  }catch(e){
-    status.textContent = "Tocca di nuovo, il telefono blocca l'audio";
-  }
-};
-
-aud.onpause = () => { btn.textContent="▶ TAPPA QUI PER ASCOLTARE"; btn.style.background="#ff3b9a"; }
-aud.onplay = () => { btn.textContent="● IN ONDA"; btn.style.background="green"; }
-
-// Se gira a vuoto o errore, cambia link da solo
-aud.addEventListener('error', () => {
-  status.textContent = "Link bloccato, provo altro...";
-  if(current < LINKS.length-1){ setStream(current+1); aud.play().catch(()=>{}); }
-  else { status.textContent = "Nessun link funziona, ricarica pagina"; }
-});
-aud.addEventListener('stalled', () => {
-  if(aud.currentTime < 1 && current < LINKS.length-1){
-    setStream(current+1);
-    aud.play().catch(()=>{});
+  } catch(e) {
+    player.play();
   }
 });
 
-// Brano
-async function brano(){
-  try{
-    let r = await fetch('https://control.myshoutca.st/proxy/tbqmsenb/7.html',{cache:'no-store'});
-    let t = await r.text();
-    let p = t.split(',');
-    let br = p.slice(6).join(',').trim();
-    if(br){
-      if(br.includes(" - ")){ let s=br.split(" - "); artistEl.textContent=s[0]; titleEl.textContent=s.slice(1).join(" - "); }
-      else titleEl.textContent=br;
+player.addEventListener('play', () => {
+  btn.textContent = "● IN ONDA";
+  btn.style.background = "green";
+});
+player.addEventListener('pause', () => {
+  btn.textContent = "▶ TAPPA PER ASCOLTARE";
+  btn.style.background = "#ff3b9a";
+});
+
+// TITOLO + COPERTINA come MAIN
+async function aggiorna() {
+  try {
+    // uso proxy per evitare blocco CORS
+    const r = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('http://manage.myshoutca.st:8060/7.html?_=' + Date.now()));
+    const t = await r.text();
+    const parti = t.split(',');
+    let brano = parti.slice(6).join(',').trim();
+    if (!brano) return;
+    
+    let artista = "";
+    let titolo = brano;
+    if (brano.includes(" - ")) {
+      const s = brano.split(" - ");
+      artista = s[0];
+      titolo = s.slice(1).join(" - ");
     }
-  }catch(e){}
+    if (titolo !== titleEl.textContent) {
+      titleEl.textContent = titolo;
+      artistEl.textContent = artista || "Soul Funk";
+      
+      // cerca foderina su iTunes
+      try {
+        const q = encodeURIComponent(artista + " " + titolo);
+        const ri = await fetch('https://itunes.apple.com/search?term=' + q + '&media=music&limit=1');
+        const ji = await ri.json();
+        if (ji.results && ji.results[0]) {
+          coverEl.src = ji.results[0].artworkUrl100.replace('100x100','300x300');
+        }
+      } catch(e){}
+    }
+  } catch(e) {}
 }
-brano(); setInterval(brano,15000);
+aggiorna();
+setInterval(aggiorna, 10000);
 </script>
 </body>
 </html>
