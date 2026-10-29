@@ -10,46 +10,44 @@ body{
   background-color:#0e0620;
   background-image: url('soul-funk.jpeg');
   background-repeat: no-repeat;
-  background-position: center top;
-  background-size: 100% auto;
-  background-attachment: scroll;
+  background-position: center center;
+  background-size: 85% auto;
+  background-attachment: fixed;
   font-family:Arial,sans-serif;
   color:white;
   text-align:center;
   min-height:100vh;
 }
-@media (min-width:600px){
-  body{background-size: cover; background-position: center center; background-attachment: fixed;}
+@media (max-width:480px){
+  body{background-size: 115% auto; background-position: center 45%;}
 }
 .overlay{
-  background: linear-gradient(to bottom, rgba(8,0,20,0.35) 0%, rgba(8,0,20,0.75) 100%);
+  background: rgba(8,0,20,0.32);
   min-height:100vh;
-  padding:12px 8px;
+  padding:14px;
   display:flex;
-  align-items:flex-start;
+  align-items:center;
   justify-content:center;
-  padding-top:18px;
 }
 .container{
   width:92%;
-  max-width:360px;
+  max-width:340px;
   padding:14px;
-  background: rgba(0,0,0,0.68);
+  background: rgba(0,0,0,0.72);
   border-radius:18px;
   border:1.5px solid #ff3b9a;
   box-shadow:0 0 20px rgba(255,59,154,0.35);
-  backdrop-filter: blur(6px);
-  margin-top:0;
+  backdrop-filter: blur(8px);
 }
-.logo{width:64px;border-radius:10px;background:white;padding:3px;display:block;margin:0 auto}
-h1{color:#ffe600;font-size:1.6rem;margin-top:6px;text-shadow:0 0 8px #ff3b9a;line-height:1}
+.logo{width:62px;border-radius:10px;background:white;padding:3px}
+h1{color:#ffe600;font-size:1.5rem;margin-top:4px;text-shadow:0 0 8px #ff3b9a}
 .sub{font-size:.7rem;color:#ddd}
 .live{font-size:.75rem;color:#ff3b9a;font-weight:900}
 .btns{display:flex;gap:8px;justify-content:center;margin:10px 0}
 .btns a{padding:7px 14px;border-radius:18px;text-decoration:none;font-weight:900;font-size:.7rem}
 .main{background:white;color:black}
 .soul{background:#ff3b9a;color:white;border:1px solid #ffe600}
-.box{background:rgba(0,0,0,0.65);padding:10px;border-radius:12px}
+.box{background:rgba(0,0,0,0.68);padding:10px;border-radius:12px}
 audio{width:100%;height:32px}
 .vu{margin-top:8px;background:#0a0a0a;border-radius:8px;padding:6px;border:1px solid #333}
 .vu-row{display:flex;gap:2px}
@@ -68,7 +66,7 @@ audio{width:100%;height:32px}
 <body>
 <div class="overlay">
 <div class="container">
-<img src="RADIO SISTEMA 3.jpeg" class="logo" alt="Radio Sistema 3">
+<img src="RADIO SISTEMA 3.jpeg" class="logo">
 <h1>SOUL FUNK</h1>
 <div class="sub">Canale 2 - Radio Sistema 3</div>
 <div class="live">💗 SOUL ON AIR</div>
@@ -78,7 +76,7 @@ audio{width:100%;height:32px}
 <source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg">
 </audio>
 <div class="vu"><div class="vu-row top" id="rowTop"></div><div class="vu-row bot" id="rowBot"></div><div class="vu-labels"><div>L • R</div><div style="color:#0f0">● LIVE</div></div></div>
-<div class="track"><img id="cover" src="RADIO SISTEMA 3.jpeg"><div><div id="title" class="track-title">Soul Funk</div><div id="artist" class="track-artist">Caricamento...</div></div></div>
+<div class="track"><img id="cover" src="RADIO SISTEMA 3.jpeg"><div><div id="title" class="track-title">Soul Funk</div><div id="artist" class="track-artist">Connessione...</div></div></div>
 </div>
 <div class="footer">© Radio Sistema 3 - SIAE n°202600000389<br><a href="index.html">⬅ Torna a MAIN</a></div>
 </div>
@@ -90,46 +88,75 @@ let ac,an,d; function init(){try{ac=new(window.AudioContext||window.webkitAudioC
 function loop(){requestAnimationFrame(loop);if(!an)return;an.getByteFrequencyData(d);let avg=d.reduce((a,b)=>a+b,0)/d.length/255;let l=Math.floor(avg*1.4*SEG);rowTop.querySelectorAll('span').forEach((e,i)=>e.className=i<l?'on':'');rowBot.querySelectorAll('span').forEach((e,i)=>e.className=i<l?'on':'');}
 player.addEventListener('play',()=>{if(!ac)init();if(ac&&ac.state==='suspended')ac.resume()});
 
-// FIX DEFINITIVO - SENZA corsproxy.io che da errore 403
-async function getSong(){
-  // 1. prova diretto (senza proxy)
+// FIX COPERTINA + TITOLO - USA API AZURACAST + FILTRI
+async function fetchText(url){
   try{
-    let r=await fetch('https://control.myshoutca.st/proxy/tbqmsenb/currentsong?sid=1&_='+Date.now(),{cache:'no-store'});
-    let t=await r.text(); t=t.trim();
-    if(t && t.length>2 && t.length<200 && !t.includes('<') && !t.includes('{') && !t.includes('success') && !t.includes('error')) return t;
-  }catch(e){}
-  // 2. prova allorigins
-  try{
-    let r=await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent('https://control.myshoutca.st/proxy/tbqmsenb/currentsong?sid=1&_='+Date.now()),{cache:'no-store'});
-    let t=await r.text(); t=t.trim();
-    if(t && t.length>2 && t.length<200 && !t.includes('<') && !t.includes('{') && !t.includes('success')) return t;
-  }catch(e){}
-  // 3. prova codetabs
-  try{
-    let r=await fetch('https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent('https://control.myshoutca.st/proxy/tbqmsenb/currentsong?sid=1&_='+Date.now()),{cache:'no-store'});
-    let t=await r.text(); t=t.trim();
-    if(t && t.length>2 && t.length<200 && !t.includes('<') && !t.includes('{')) return t;
-  }catch(e){}
-  return "";
+    let r=await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(url+'&_='+Date.now()),{cache:'no-store'});
+    if(!r.ok) return "";
+    let t=await r.text();
+    return t;
+  }catch(e){return "";}
 }
 
-async function up(){
-  let b=await getSong();
-  if(!b) return;
-  // filtra errori JSON tipo quello che vedevi
-  if(b.includes('keyless') || b.includes('CORSProxy') || b.includes('success":false')) return;
-  let art="",tit=b;
-  if(b.includes(" - ")){let s=b.split(" - ");art=s[0];tit=s.slice(1).join(" - ")}
-  titleEl.textContent=tit;
-  artistEl.textContent=art||"Soul Funk";
+async function getNowPlaying(){
+  // 1. API AzuraCast principale (quella vera per myshoutcast)
+  const apiUrls = [
+    'https://control.myshoutca.st/api/nowplaying/tbqmsenb',
+    'https://control.myshoutca.st/api/nowplaying/1',
+    'https://control.myshoutca.st/proxy/tbqmsenb/api/nowplaying'
+  ];
+  for(let api of apiUrls){
+    try{
+      let txt=await fetchText(api);
+      if(!txt) continue;
+      if(txt.includes('keyless')||txt.includes('CORSProxy')||txt.includes('"success":false')) continue;
+      let j=JSON.parse(txt);
+      // AzuraCast format: {now_playing:{song:{title,artist,art}}}
+      let song=j.now_playing?.song || j.song || j.now_playing;
+      if(song){
+        let t=(song.artist?song.artist+' - ':'')+(song.title||'');
+        let artUrl=song.art || j.now_playing?.song?.art || "";
+        if(t) return {text:t, art:artUrl, title:song.title||"", artist:song.artist||""};
+      }
+      if(j.title) return {text:j.title, art:"", title:j.title, artist:j.artist||""};
+    }catch(e){}
+  }
+  // 2. fallback currentsong vecchio
   try{
-    let q=encodeURIComponent(b);
-    let ri=await fetch('https://itunes.apple.com/search?term='+q+'&limit=1&media=music');
-    let j=await ri.json();
-    if(j.results[0]&&j.results[0].artworkUrl100) coverEl.src=j.results[0].artworkUrl100.replace('100x100','300x300');
+    let t=await fetchText('https://control.myshoutca.st/proxy/tbqmsenb/currentsong?sid=1');
+    t=t.trim();
+    if(t && t.length>2 && t.length<200 && !t.includes('<') && !t.includes('{')) return {text:t, art:"", title:"", artist:""};
   }catch(e){}
+  return null;
 }
-up(); setInterval(up,6000);
+
+async function aggiorna(){
+  let data=await getNowPlaying();
+  if(!data||!data.text) return;
+  let brano=data.text;
+  if(brano.includes('keyless')||brano.includes('success')) return;
+
+  let artista=data.artist||""; let titolo=data.title||brano;
+  if(!data.artist && brano.includes(" - ")){ let s=brano.split(" - "); artista=s[0].trim(); titolo=s.slice(1).join(" - ").trim(); }
+  
+  if(titolo!==titleEl.textContent){
+    titleEl.textContent=titolo;
+    artistEl.textContent=artista||"Soul Funk";
+    
+    // COPERTINA: prima prova quella dell'API AzuraCast, poi iTunes
+    if(data.art){
+      coverEl.src=data.art;
+    }else{
+      try{
+        let q=encodeURIComponent((artista+' '+titolo).trim());
+        let ri=await fetch('https://itunes.apple.com/search?term='+q+'&limit=1&media=music&country=IT');
+        let ji=await ri.json();
+        if(ji.results[0]&&ji.results[0].artworkUrl100) coverEl.src=ji.results[0].artworkUrl100.replace('100x100','400x400');
+      }catch(e){}
+    }
+  }
+}
+aggiorna(); setInterval(aggiorna,5000);
 </script>
 </body>
 </html>
