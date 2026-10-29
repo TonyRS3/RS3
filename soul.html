@@ -16,27 +16,22 @@ h1{color:#ffe600;font-size:2.6rem;margin-top:10px}
 .btns a{padding:12px 28px;border-radius:30px;text-decoration:none;font-weight:900}
 .main{background:white;color:black}
 .soul{background:#ff3b9a;color:white;border:2px solid #ffe600}
-.track{display:flex;gap:12px;align-items:center;background:rgba(0,0,0,.6);padding:12px;border-radius:12px;text-align:left;margin-top:10px}
-.track img{width:74px;height:74px;border-radius:10px;object-fit:cover;background:#222}
-.track-title{color:#ffe600;font-weight:900;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:300px}
-.track-artist{color:#ffb3d9;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:300px}
-.player-box{background:rgba(255,255,255,.06);padding:14px;border-radius:16px;margin-top:12px}
-.play-btn{width:100%;padding:16px;background:#ff3b9a;color:white;border:none;border-radius:40px;font-weight:900;font-size:1.25rem;margin:12px 0;cursor:pointer}
-audio{width:100%;height:38px}
-
-/* LEVEL UGUALE ALLA FOTO */
-.vu{margin-top:10px;background:#0a0a0a;border-radius:12px;padding:8px 10px;border:1px solid #333;box-shadow:inset 0 0 8px #000}
+.box{background:rgba(255,255,255,.06);padding:14px;border-radius:16px}
+audio{width:100%;height:40px}
+.vu{margin-top:12px;background:#0a0a0a;border-radius:10px;padding:8px 10px;border:1px solid #333}
 .vu-bars{display:flex;flex-direction:column;gap:4px}
 .vu-row{display:flex;gap:3px}
-.vu-row span{flex:1;height:14px;border-radius:2px;background:#1a1a1a;display:block}
-.vu-row.top span.on{background:linear-gradient(to top,#0a0,#3f3)}
-.vu-row.top span.on.warn{background:linear-gradient(to top,#cc0,#ff0)}
-.vu-row.top span.on.peak{background:linear-gradient(to top,#a00,#f33)}
-.vu-row.bot span.on{background:linear-gradient(to top,#0a4a6a,#3ab)}
-.vu-row.bot span.on.warn{background:#3ab}
-.vu-row.bot span.on.peak{background:#f33}
-.vu-labels{display:flex;justify-content:space-between;margin-top:6px;font-size:.65rem;color:#888;font-weight:900;letter-spacing:.5px}
+.vu-row span{flex:1;height:14px;border-radius:2px;background:#1a1a1a}
+.vu-row.top span.on{background:linear-gradient(#2f2,#0a0)}
+.vu-row.bot span.on{background:linear-gradient(#6cf,#09a)}
+.vu-row span.on.warn{background:#ff0 !important}
+.vu-row span.on.peak{background:#f22 !important}
+.vu-labels{display:flex;justify-content:space-between;margin-top:6px;font-size:.65rem;color:#888;font-weight:900}
 .vu-labels .live{color:#00ff66}
+.track{margin-top:14px;display:flex;gap:14px;align-items:center;background:rgba(0,0,0,.6);padding:12px;border-radius:12px;text-align:left}
+.track img{width:90px;height:90px;border-radius:12px;object-fit:cover;background:#222;box-shadow:0 0 10px rgba(0,0,0,.6)}
+.track-title{color:#ffe600;font-weight:900;font-size:1.15rem}
+.track-artist{color:#ffb3d9;font-size:.95rem;margin-top:3px}
 .footer{margin-top:14px;font-size:.7rem;color:#aaa}
 .footer a{color:#ffe600}
 </style>
@@ -53,60 +48,52 @@ audio{width:100%;height:38px}
 <a class="soul">SOUL FUNK</a>
 </div>
 
-<div class="player-box">
-<div class="track">
-<img id="cover" src="RADIO SISTEMA 3.jpeg">
-<div><div id="title" class="track-title">Connessione Soul...</div><div id="artist" class="track-artist">Radio Sistema 3</div></div>
-</div>
+<div class="box">
+<audio id="player" controls playsinline autoplay crossorigin="anonymous" preload="auto">
+  <source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg">
+</audio>
 
-<div class="vu" id="vuBox">
+<div class="vu">
 <div class="vu-bars">
 <div class="vu-row top" id="rowTop"></div>
 <div class="vu-row bot" id="rowBot"></div>
 </div>
-<div class="vu-labels">
-<div>L • R STEREO</div>
-<div class="live">● LIVE</div>
-</div>
+<div class="vu-labels"><div>L • R STEREO</div><div class="live">● LIVE</div></div>
 </div>
 
-<button id="playBtn" class="play-btn">▶ TAPPA SE NON PARTE</button>
-<audio id="player" controls playsinline crossorigin="anonymous" preload="auto" autoplay>
-  <source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg">
-</audio>
+<div class="track">
+<img id="cover" src="RADIO SISTEMA 3.jpeg" alt="cover">
+<div>
+<div id="title" class="track-title">Radio Sistema 3</div>
+<div id="artist" class="track-artist">Soul Funk in onda</div>
+</div>
+</div>
 </div>
 
 <div class="footer">© Radio Sistema 3 - SIAE n°202600000389<br><br><a href="index.html">⬅ Torna a MAIN</a></div>
 </div>
 
 <script>
-const player = document.getElementById('player');
-const btn = document.getElementById('playBtn');
-const titleEl = document.getElementById('title');
-const artistEl = document.getElementById('artist');
-const coverEl = document.getElementById('cover');
-const rowTop = document.getElementById('rowTop');
-const rowBot = document.getElementById('rowBot');
-const SEG = 20;
-for(let i=0;i<SEG;i++){ let s=document.createElement('span'); rowTop.appendChild(s); }
-for(let i=0;i<SEG;i++){ let s=document.createElement('span'); rowBot.appendChild(s); }
+const player=document.getElementById('player');
+const titleEl=document.getElementById('title');
+const artistEl=document.getElementById('artist');
+const coverEl=document.getElementById('cover');
+const rowTop=document.getElementById('rowTop');
+const rowBot=document.getElementById('rowBot');
+const SEG=22;
+for(let i=0;i<SEG;i++){ rowTop.appendChild(document.createElement('span')); rowBot.appendChild(document.createElement('span')); }
 
-window.addEventListener('DOMContentLoaded', async ()=>{ try{ await player.play(); btn.textContent="● IN ONDA SOUL"; btn.style.background="green"; }catch(e){} });
-btn.onclick = async ()=>{ try{ await player.play(); btn.textContent="● IN ONDA SOUL"; btn.style.background="green"; }catch(e){} };
-player.onplay = ()=>{ btn.textContent="● IN ONDA SOUL"; btn.style.background="green"; if(!audioCtx) initMeter(); if(audioCtx && audioCtx.state==='suspended') audioCtx.resume(); };
-player.onpause = ()=>{ btn.textContent="▶ TAPPA PER ASCOLTARE"; btn.style.background="#ff3b9a"; };
+window.addEventListener('DOMContentLoaded', async()=>{ try{ await player.play(); }catch(e){} });
 
-// LEVEL METER VERo come foto
+// LEVEL STEREO UGUALI - non con differenza enorme
 let audioCtx, analyser, data;
 function initMeter(){
   try{
-    audioCtx = new (window.AudioContext||window.webkitAudioContext)();
-    const src = audioCtx.createMediaElementSource(player);
-    analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 256;
-    src.connect(analyser);
-    analyser.connect(audioCtx.destination);
-    data = new Uint8Array(analyser.frequencyBinCount);
+    audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    const src=audioCtx.createMediaElementSource(player);
+    analyser=audioCtx.createAnalyser(); analyser.fftSize=256;
+    src.connect(analyser); analyser.connect(audioCtx.destination);
+    data=new Uint8Array(analyser.frequencyBinCount);
     requestAnimationFrame(updateMeter);
   }catch(e){}
 }
@@ -114,34 +101,31 @@ function updateMeter(){
   requestAnimationFrame(updateMeter);
   if(!analyser) return;
   analyser.getByteFrequencyData(data);
-  let low = data.slice(0,40).reduce((a,b)=>a+b,0)/40/255;
-  let high = data.slice(40,100).reduce((a,b)=>a+b,0)/60/255;
-  let l = Math.floor(low*SEG*1.4);
-  let r = Math.floor(high*SEG*1.3);
-  const tops = rowTop.querySelectorAll('span');
-  const bots = rowBot.querySelectorAll('span');
-  tops.forEach((s,i)=>{
-    s.className = i < l ? (i>16?'on peak':i>13?'on warn':'on') : '';
-  });
-  bots.forEach((s,i)=>{
-    s.className = i < r ? (i>16?'on peak':i>13?'on warn':'on') : '';
-  });
+  let avg=data.reduce((a,b)=>a+b,0)/data.length/255;
+  // level L e R quasi uguali, piccola variazione stereo
+  let left = Math.min(1, avg*1.4 + Math.random()*0.08);
+  let right = Math.min(1, avg*1.4 + Math.random()*0.08);
+  let l = Math.floor(left*SEG);
+  let r = Math.floor(right*SEG);
+  rowTop.querySelectorAll('span').forEach((s,i)=>{ s.className = i<l ? (i>18?'on peak':i>15?'on warn':'on') : ''; });
+  rowBot.querySelectorAll('span').forEach((s,i)=>{ s.className = i<r ? (i>18?'on peak':i>15?'on warn':'on') : ''; });
 }
+player.addEventListener('play', ()=>{ if(!audioCtx) initMeter(); if(audioCtx && audioCtx.state==='suspended') audioCtx.resume(); });
 
-// TITOLO + FODERINA come MAIN
+// BRANO + COPERTINA sotto il player
 async function getTitle(){
   try{
-    let r = await fetch('https://api.allorigins.win/get?url='+encodeURIComponent('https://control.myshoutca.st/proxy/tbqmsenb/7.html?_='+Date.now()));
-    let j = await r.json(); let txt=j.contents||""; let p=txt.split(','); let brano=p.slice(6).join(',').trim(); if(brano) return brano;
+    let r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent('https://control.myshoutca.st/proxy/tbqmsenb/7.html?_='+Date.now()));
+    let j=await r.json(); let txt=j.contents||""; let p=txt.split(','); let brano=p.slice(6).join(',').trim(); if(brano) return brano;
   }catch(e){} return "";
 }
 async function aggiorna(){
   try{
-    let brano = await getTitle(); if(!brano || brano.length<2) return;
+    let brano=await getTitle(); if(!brano || brano.length<3) return;
     let artista=""; let titolo=brano;
     if(brano.includes(" - ")){ let s=brano.split(" - "); artista=s[0]; titolo=s.slice(1).join(" - "); }
-    if(titolo !== titleEl.textContent){
-      titleEl.textContent = titolo; artistEl.textContent = artista||"Soul Funk";
+    if(titolo!==titleEl.textContent){
+      titleEl.textContent=titolo; artistEl.textContent=artista||"Soul Funk";
       try{
         let q=encodeURIComponent((artista+" "+titolo).trim());
         let ri=await fetch('https://itunes.apple.com/search?term='+q+'&media=music&limit=1');
