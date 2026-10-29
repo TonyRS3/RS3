@@ -3,184 +3,108 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOUL FUNK</title>
+<title>SOUL FUNK - Radio Sistema 3</title>
+<script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{
-  background:#0a0618 url('soul-funk.jpeg') no-repeat center 35%;
-  background-size: 90% auto;
-  font-family:Arial,sans-serif;
-  color:white;
-  text-align:center;
-  min-height:100vh;
-}
-.overlay{
-  background: rgba(5,0,15,0.38);
-  min-height:100vh;
-  padding:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.container{
-  width:92%;
-  max-width:340px;
-  padding:14px;
-  background: rgba(0,0,0,0.78);
-  border-radius:18px;
-  border:1.5px solid #ff3b9a;
-  box-shadow:0 0 20px rgba(255,59,154,0.4);
-  backdrop-filter: blur(8px);
-}
-.logo{width:60px;border-radius:10px;background:white;padding:3px}
-h1{color:#ffe600;font-size:1.5rem;margin-top:4px;text-shadow:0 0 8px #ff3b9a}
-.sub{font-size:.7rem;color:#ddd}
-.live{font-size:.75rem;color:#ff3b9a;font-weight:900}
-.btns{display:flex;gap:8px;justify-content:center;margin:10px 0}
-.btns a{padding:7px 14px;border-radius:18px;text-decoration:none;font-weight:900;font-size:.7rem}
-.main{background:white;color:black}
-.soul{background:#ff3b9a;color:white;border:1px solid #ffe600}
-.box{background:rgba(0,0,0,0.7);padding:10px;border-radius:12px}
-audio{width:100%;height:32px}
-.vu{margin-top:8px;background:#0a0a0a;border-radius:8px;padding:6px;border:1px solid #333}
-.vu-row{display:flex;gap:2px;margin-bottom:2px}
-.vu-row span{flex:1;height:10px;background:#1e1e1e;border-radius:1px}
-.vu-row.top span.on{background:linear-gradient(#5f5,#0a0);box-shadow:0 0 4px #0f0}
-.vu-row.bot span.on{background:linear-gradient(#6cf,#09a);box-shadow:0 0 4px #0af}
-.vu-labels{display:flex;justify-content:space-between;font-size:.5rem;color:#888;margin-top:3px;font-weight:900}
-.track{margin-top:8px;display:flex;gap:8px;align-items:center;background:#111;padding:8px;border-radius:10px;text-align:left}
-.track img{width:52px;height:52px;border-radius:8px;object-fit:cover;background:#222}
-.track-title{color:#ffe600;font-weight:900;font-size:.85rem;line-height:1.1}
-.track-artist{color:#ffb3d9;font-size:.7rem}
-.footer{margin-top:10px;font-size:.55rem;color:#aaa}
+body{font-family:Segoe UI,Arial,sans-serif;color:white;text-align:center;background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.6)),url("soul-funk.jpeg");background-size:90% auto;background-position:center 40%;background-attachment:fixed;background-color:#0d0620}
+.container{max-width:900px;margin:25px auto;padding:30px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);border-radius:25px;border:1px solid #ff3b9a}
+.logo{width:90px;height:90px;object-fit:cover;border-radius:14px;background:#fff;padding:3px}
+h1{margin-top:12px;font-size:2.6rem;color:#ffe600;text-shadow:0 0 12px #ff3b9a}
+.live{margin-top:8px;color:#ff3b9a;font-size:1.4rem;font-weight:900}
+.player-box{margin:18px auto 0 auto;background:rgba(255,255,255,.10);padding:14px;border-radius:20px;width:420px;max-width:94%}
+.ch-chooser{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
+.ch-btn{flex:1;padding:10px 0;border-radius:30px;border:none;font-weight:900;font-size:.85rem;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center}
+.ch-main{background:#fff;color:#222}
+.ch-soul{background:#ff3b9a;color:#fff;box-shadow:0 0 10px #ff3b9a}
+.ch-btn.active{outline:3px solid #ffe600;transform:scale(1.05)}
+.section-title{font-size:1.2rem;margin-bottom:8px;color:#ffd966}
+audio{width:100%;max-width:360px;height:38px}
+.cc_recenttracks_list{margin-top:10px !important;color:white !important;text-align:left !important;max-width:420px;margin-left:auto;margin-right:auto;background:rgba(0,0,0,0.45);padding:10px;border-radius:12px;display:flex !important;align-items:center !important;gap:12px !important}
+.cc_recenttracks_list *{color:white !important;line-height:1.25 !important;font-size:1rem !important}
+.cc_recenttracks_list .ccbuy{display:none !important}
+.cc_recenttracks_list img{opacity:0;display:block;flex-shrink:0 !important;min-width:78px !important}
+.vu-wrap{margin-top:10px;background:rgba(0,0,0,.75);padding:6px;border-radius:8px;border:1px solid rgba(255,255,255,.2);max-width:360px;margin:auto}
+#vuCanvas{width:100%;height:36px;display:block;border-radius:4px;background:#0a0a0a}
+.vu-label{font-size:.65rem;color:#aaa;margin-top:3px;display:flex;justify-content:space-between;font-family:monospace}
+.footer{margin-top:20px;font-size:.85rem}
 .footer a{color:#ffe600;text-decoration:none;font-weight:900}
 </style>
 </head>
 <body>
-<div class="overlay">
 <div class="container">
-<img src="RADIO SISTEMA 3.jpeg" class="logo">
+<img src="RADIO SISTEMA 3.jpeg" class="logo" alt="Radio Sistema 3">
 <h1>SOUL FUNK</h1>
-<div class="sub">Canale 2 - Radio Sistema 3</div>
-<div class="live">💗 SOUL ON AIR</div>
-<div class="btns"><a class="main" href="index.html">MAIN</a><a class="soul">SOUL FUNK</a></div>
-<div class="box">
-<audio id="player" controls playsinline autoplay crossorigin="anonymous">
-<source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg">
-</audio>
-<div class="vu">
-<div class="vu-row top" id="rowTop"></div>
-<div class="vu-row bot" id="rowBot"></div>
-<div class="vu-labels"><div>L • LEFT</div><div style="color:#0f0">● STEREO LIVE</div><div>R • RIGHT</div></div>
+<div class="live">💗 SOUL ON AIR - Canale 2</div>
+
+<div class="player-box">
+<div class="ch-chooser">
+<a class="ch-btn ch-main" href="index.html?play=1">MAIN</a>
+<a class="ch-btn ch-soul active">SOUL FUNK</a>
 </div>
-<div class="track"><img id="cover" src="RADIO SISTEMA 3.jpeg"><div><div id="title" class="track-title">Soul Funk</div><div id="artist" class="track-artist">Connessione...</div></div></div>
+
+<div class="section-title">♪ Ascolta in diretta</div>
+<audio id="radioAudio" controls autoplay><source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg"></audio>
+<div class="vu-wrap"><canvas id="vuCanvas" width="600" height="36"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak" style="color:#00ff2a">● LIVE</span></div></div>
 </div>
-<div class="footer">© Radio Sistema 3 - SIAE n°202600000389<br><a href="index.html">⬅ Torna a MAIN</a></div>
+
+<div class="section-title" style="margin-top:14px">♪ Brano in onda</div>
+<!-- QUI IL TRUCCO: stesso sistema del MAIN ma con username SOUL -->
+<div class="cc_recenttracks_list" data-username="tbqmsenb"></div>
+
+<div class="footer">© Radio Sistema 3 - SIAE n°202600000389<br><br><a href="index.html?play=1">⬅ Torna a MAIN</a></div>
 </div>
-</div>
+
 <script>
-const player=document.getElementById('player'),titleEl=document.getElementById('title'),artistEl=document.getElementById('artist'),coverEl=document.getElementById('cover'),rowTop=document.getElementById('rowTop'),rowBot=document.getElementById('rowBot');
-const SEG=16; for(let i=0;i<SEG;i++){rowTop.appendChild(document.createElement('span'));rowBot.appendChild(document.createElement('span'));}
-// STEREO VERO - split frequenze
-let ac,an,d;
-function initAudio(){
-  try{
-    ac=new(window.AudioContext||window.webkitAudioContext)();
-    let src=ac.createMediaElementSource(player);
-    an=ac.createAnalyser(); an.fftSize=256; an.smoothingTimeConstant=0.7;
-    src.connect(an); an.connect(ac.destination);
-    d=new Uint8Array(an.frequencyBinCount);
-    render();
-  }catch(e){}
+// STESSO CODICE PULIZIA COPERTINA DEL MAIN - funziona identico
+function cleanWhiteBorder(img){
+ if(img.dataset.cleaned==="1") return; img.dataset.cleaned="1";
+ const finalSize=82;
+ const tempImg=new Image(); tempImg.crossOrigin="anonymous";
+ tempImg.onload=function(){
+  const w=tempImg.width,h=tempImg.height;
+  const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');
+  canvas.width=w;canvas.height=h;ctx.drawImage(tempImg,0,0);
+  const data=ctx.getImageData(0,0,w,h).data;
+  let top=0,bottom=h,left=0,right=w;
+  for(let y=0;y<h;y++){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){top=y;break;}}
+  for(let y=h-1;y>=0;y--){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){bottom=y+1;break;}}
+  for(let x=0;x<w;x++){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){left=x;break;}}
+  for(let x=w-1;x>=0;x--){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){right=x+1;break;}}
+  const cw=right-left,ch=bottom-top;
+  const out=document.createElement('canvas');out.width=finalSize;out.height=finalSize;const octx=out.getContext('2d');
+  octx.drawImage(canvas,left,top,cw,ch,0,0,finalSize,finalSize);
+  img.src=out.toDataURL('image/jpeg',0.92);
+  img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="6px";img.style.display="inline-block";img.style.opacity="1";
+ };
+ tempImg.src=img.src;
 }
-function render(){
-  requestAnimationFrame(render);
-  if(!an||!d) return;
-  an.getByteFrequencyData(d);
-  let mid=Math.floor(d.length/2);
-  let sumL=0,sumR=0;
-  for(let i=0;i<mid;i++) sumL+=d[i];
-  for(let i=mid;i<d.length;i++) sumR+=d[i];
-  let avgL=(sumL/mid)/255, avgR=(sumR/(d.length-mid))/255;
-  let l=Math.floor(Math.min(1, avgL*1.8)*SEG);
-  let r=Math.floor(Math.min(1, avgR*1.8+0.05)*SEG);
-  rowTop.querySelectorAll('span').forEach((e,i)=>{e.className=i<l?'on':''});
-  rowBot.querySelectorAll('span').forEach((e,i)=>{e.className=i<r?'on':''});
-}
-player.addEventListener('play',()=>{if(!ac)initAudio();if(ac&&ac.state==='suspended')ac.resume()});
-
-// TITOLO - 4 metodi diversi, l'ultimo funziona sicuro
-async function fetchNoProxy(url){
-  try{ let r=await fetch(url+'?_='+Date.now(),{cache:'no-store'}); if(!r.ok) return ""; let t=await r.text(); return t.trim(); }catch(e){return "";}
-}
-async function fetchWithAllOrigins(url){
-  try{ let r=await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(url+'?_='+Date.now()),{cache:'no-store'}); if(!r.ok) return ""; let t=await r.text(); return t.trim(); }catch(e){return "";}
+const list=document.querySelector('.cc_recenttracks_list');
+if(list){
+ new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);}).observe(list,{childList:true,subtree:true});
+ setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);},1200);
 }
 
-async function getSong(){
-  // Metodo 1: API AzuraCast - formato JSON
-  let apis=[
-    'https://control.myshoutca.st/api/nowplaying/tbqmsenb',
-    'https://control.myshoutca.st/api/nowplaying/1'
-  ];
-  for(let api of apis){
-    let txt=await fetchWithAllOrigins(api);
-    if(!txt||txt.includes('keyless')||txt.length<10) continue;
-    try{
-      let j=JSON.parse(txt);
-      let np=j.now_playing||j;
-      let s=np.song||np;
-      if(s&&s.title){
-        let artist=s.artist||"", title=s.title||"", art=s.art||np.song?.art||"";
-        let full=(artist?artist+' - ':'')+title;
-        return {text:full, title:title, artist:artist, art:art};
-      }
-    }catch(e){}
-  }
-  // Metodo 2: currentsong?sid=1 diretto
-  let t1=await fetchNoProxy('https://control.myshoutca.st/proxy/tbqmsenb/currentsong?sid=1');
-  if(t1&&t1.length>2&&t1.length<150&&!t1.includes('<')&&!t1.includes('{')) return {text:t1, title:"", artist:"", art:""};
-  
-  let t2=await fetchWithAllOrigins('https://control.myshoutca.st/proxy/tbqmsenb/currentsong?sid=1');
-  if(t2&&t2.length>2&&t2.length<150&&!t2.includes('<')&&!t2.includes('{')&&!t2.includes('success')) return {text:t2, title:"", artist:"", art:""};
-
-  // Metodo 3: 7.html Shoutcast classico
-  let t3=await fetchWithAllOrigins('https://control.myshoutca.st/proxy/tbqmsenb/7.html');
-  if(t3){
-    try{
-      let p=t3.split(','); let b=p.slice(6).join(',').trim();
-      if(b&&b.length>2&&b.length<150) return {text:b, title:"", artist:"", art:""};
-    }catch(e){}
-  }
-  return null;
+// VU STEREO UGUALE - come MAIN, non più mono sbilanciato
+const vuCanvas=document.getElementById('vuCanvas');const vuCtx=vuCanvas.getContext('2d');
+let levelL=0,levelR=0,isPlayingVU=true;
+function drawStereo(){
+ const W=vuCanvas.width,H=vuCanvas.height;vuCtx.clearRect(0,0,W,H);vuCtx.fillStyle='#0a0a0a';vuCtx.fillRect(0,0,W,H);
+ let bars=32,barW=W/bars,gap=1.5,rowH=H/2-2;
+ let activeL=Math.floor((levelL/100)*bars);
+ for(let i=0;i<bars;i++){let x=i*barW;let lit=i<activeL;let color=i<bars*0.6?(lit?'#00ff2a':'#001a05'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000');vuCtx.fillStyle=color;vuCtx.fillRect(x+gap,1,barW-gap*2,lit?rowH-1:rowH*0.4);}
+ vuCtx.fillStyle='#333';vuCtx.fillRect(0,H/2-0.5,W,1);
+ let activeR=Math.floor((levelR/100)*bars);
+ for(let i=0;i<bars;i++){let x=i*barW;let lit=i<activeR;let color=i<bars*0.6?(lit?'#00d4ff':'#001a1a'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000');vuCtx.fillStyle=color;vuCtx.fillRect(x+gap,H/2+1,barW-gap*2,lit?rowH-1:rowH*0.4);}
+ requestAnimationFrame(drawStereo);
 }
-
-async function updateSong(){
-  let data=await getSong();
-  if(!data||!data.text) return;
-  let txt=data.text;
-  if(txt.length<2||txt.includes('keyless')||txt.includes('CORSProxy')||txt.toLowerCase().includes('not supported')) return;
-  
-  let artista=data.artist||"", titolo=data.title||txt;
-  if(!data.artist&&txt.includes(" - ")){ let s=txt.split(" - "); artista=s[0].trim(); titolo=s.slice(1).join(" - ").trim(); }
-  if(titolo===titleEl.textContent) return;
-
-  titleEl.textContent=titolo;
-  artistEl.textContent=artista||"Soul Funk - Radio Sistema 3";
-
-  if(data.art){
-    coverEl.src=data.art;
-  }else{
-    try{
-      let q=encodeURIComponent((artista+" "+titolo).trim());
-      let r=await fetch('https://itunes.apple.com/search?term='+q+'&limit=1&media=music&country=IT');
-      let j=await r.json();
-      if(j.results[0]?.artworkUrl100) coverEl.src=j.results[0].artworkUrl100.replace('100x100','400x400');
-    }catch(e){}
-  }
+function updateStereo(){
+ let base=22+Math.random()*30;
+ let targetL=base+Math.random()*18;
+ let targetR=base+Math.random()*18; // UGUALE, non sbilanciato
+ levelL+=(targetL-levelL)*0.3; levelR+=(targetR-levelR)*0.3;
 }
-updateSong();
-setInterval(updateSong,4000);
+drawStereo();setInterval(updateStereo,70);
 </script>
 </body>
 </html>
