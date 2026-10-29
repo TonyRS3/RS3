@@ -3,110 +3,113 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOUL FUNK - Radio Sistema 3</title>
+<title>SOUL FUNK</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Segoe UI,Arial,sans-serif;color:white;text-align:center;background:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.7)),url("studio-radio.jpeg");background-size:cover;background-position:center;background-attachment:fixed}
-.container{max-width:900px;margin:25px auto;padding:30px;background:rgba(20,0,20,.45);backdrop-filter:blur(8px);border-radius:25px;border:2px solid rgba(255,59,154,.4)}
-.logo-wrap{display:inline-block;padding:5px;border-radius:26px;background:linear-gradient(135deg,#ff3b9a,#ff8a00,#ffe600,#ff3b9a);background-size:300% 300%;animation:gradientMove 4s ease infinite}
-@keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-.logo{width:260px;height:260px;object-fit:cover;border-radius:20px;display:block}
-h1{font-size:3.2rem;color:#ffe600;text-shadow:0 0 15px #ff3b9a;letter-spacing:2px;margin-top:18px}
-.sub{color:#ffb3d9;font-size:1.2rem;margin-top:4px}
-.live{margin-top:12px;color:#ff3b9a;font-size:1.5rem;font-weight:bold;animation:pulse 1.4s infinite}
-@keyframes pulse{0%{opacity:1}50%{opacity:.5}100%{opacity:1}}
-.ch-chooser{display:flex;gap:10px;justify-content:center;margin:18px auto;width:400px;max-width:92%}
-.ch-btn{flex:1;padding:12px 0;border-radius:30px;border:none;font-weight:900;font-size:0.9rem;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center}
-.ch-main{background:#fff;color:#222}
-.ch-soul{background:#ff3b9a;color:#fff;box-shadow:0 0 18px #ff3b9a;outline:3px solid #ffe600;transform:scale(1.05)}
-.player-box{margin:15px auto;background:rgba(255,255,255,.10);padding:14px;border-radius:20px;width:420px;max-width:94%;border:1px solid rgba(255,59,154,.3)}
-.track-box{display:flex;gap:12px;align-items:center;margin:12px auto;text-align:left;background:rgba(0,0,0,.4);padding:10px;border-radius:12px}
-.track-box img{width:64px;height:64px;border-radius:8px;object-fit:cover;background:#222}
-.track-info{flex:1;min-width:0}
-.track-title{font-weight:bold;font-size:.95rem;color:#ffe600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.track-artist{font-size:.85rem;color:#ffb3d9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-audio{width:100%;max-width:360px;height:40px;border-radius:10px}
-.vu-wrap{margin-top:10px;background:rgba(0,0,0,.75);padding:5px 8px;border-radius:10px;border:1px solid rgba(255,59,154,.3);max-width:340px;margin-left:auto;margin-right:auto}
-#vuCanvas{width:100%;height:38px;display:block;border-radius:6px;background:#0a0a0a}
-.footer{margin-top:22px;font-size:.8rem;color:#aaa}
+body{font-family:Arial;color:white;text-align:center;background:#111}
+.container{max-width:500px;margin:15px auto;padding:20px;background:rgba(255,59,154,.15);border-radius:20px;border:2px solid #ff3b9a}
+.logo{width:150px;border-radius:15px}
+h1{color:#ffe600;margin-top:10px}
+#playBtn{width:100%;padding:18px;background:#ff3b9a;color:white;border:none;border-radius:40px;font-weight:900;font-size:1.3rem;margin:15px 0}
+.track-box{display:flex;gap:10px;align-items:center;background:rgba(0,0,0,.5);padding:10px;border-radius:10px;text-align:left;margin-bottom:10px}
+.track-box img{width:60px;height:60px;border-radius:8px}
+audio{width:100%;margin-top:10px}
 </style>
 </head>
 <body>
 <div class="container">
-<div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" class="logo"></div>
+<img src="RADIO SISTEMA 3.jpeg" class="logo">
 <h1>SOUL FUNK</h1>
-<div class="sub">Canale 2 - Radio Sistema 3</div>
-<div class="live">💗 SOUL ON AIR 24/7</div>
-<div class="ch-chooser">
-<a class="ch-btn ch-main" href="index.html">MAIN</a>
-<a class="ch-btn ch-soul">SOUL FUNK</a>
-</div>
+<p>Canale 2 - Radio Sistema 3</p>
+<p style="color:#ff3b9a;font-weight:bold;margin-top:8px">💗 SOUL ON AIR</p>
 
-<div class="player-box">
-<div class="section-title" style="color:#ffe600;margin-bottom:8px">♪ Soul, Funk, Disco & Groove</div>
+<div style="margin:20px 0">
+<a href="index.html" style="background:white;color:black;padding:10px 20px;border-radius:20px;text-decoration:none;font-weight:bold">MAIN</a>
+<a style="background:#ff3b9a;color:white;padding:10px 20px;border-radius:20px;font-weight:bold;margin-left:10px;border:2px solid yellow">SOUL FUNK</a>
+</div>
 
 <div class="track-box">
-<img id="cover" src="RADIO SISTEMA 3.jpeg" onerror="this.src='https://via.placeholder.com/64/ff3b9a/fff?text=SOUL'">
-<div class="track-info">
-<div id="npTitle" class="track-title">Caricamento...</div>
-<div id="npArtist" class="track-artist">Radio Sistema 3</div>
+<img id="cover" src="RADIO SISTEMA 3.jpeg">
+<div>
+<div id="npTitle" style="color:#ffe600;font-weight:bold">Tocca PLAY qui sotto</div>
+<div id="npArtist" style="color:#ffb3d9;font-size:.8rem">Radio Sistema 3</div>
 </div>
 </div>
 
-<audio id="radioAudio" controls autoplay crossorigin="anonymous">
-  <source src="https://control.myshoutca.st/proxy/tbqmsenb/;stream.mp3" type="audio/mpeg">
-  <source src="http://manage.myshoutca.st:8060/;stream.mp3" type="audio/mpeg">
-</audio>
-<div class="vu-wrap"><canvas id="vuCanvas" width="600" height="38"></canvas></div>
-</div>
+<button id="playBtn">▶ TAPPA QUI PER ASCOLTARE</button>
 
-<div class="footer">© Radio Sistema 3 Soul Funk - SIAE n°202600000389<br><a href="index.html" style="color:#ffe600;text-decoration:none;border:1px solid #ffe600;padding:8px 18px;border-radius:20px;display:inline-block;margin-top:12px">⬅ Torna a MAIN</a></div>
+<audio id="radioAudio" controls playsinline preload="none"></audio>
+
+<p id="status" style="font-size:.8rem;color:#aaa;margin-top:10px">Pronto</p>
 </div>
 
 <script>
-// VU METER
-const vuCanvas=document.getElementById('vuCanvas');const vuCtx=vuCanvas.getContext('2d');const radioEl=document.getElementById('radioAudio');
-let isPlayingVU=false,levelL=0,levelR=0;
-function drawVU(){const W=vuCanvas.width,H=vuCanvas.height;vuCtx.fillStyle='#0a0a0a';vuCtx.fillRect(0,0,W,H);let bars=36,barW=W/bars;for(let i=0;i<bars;i++){let lit=i<(levelL/100*bars);vuCtx.fillStyle=lit?(i<22?'#ff3b9a':i<30?'#ffe600':'#ff1a1a'):'#1a0010';vuCtx.fillRect(i*barW+1,1,barW-2,H/2-2);}for(let i=0;i<bars;i++){let lit=i<(levelR/100*bars);vuCtx.fillStyle=lit?(i<22?'#00d4ff':i<30?'#ffe600':'#ff1a1a'):'#001a1a';vuCtx.fillRect(i*barW+1,H/2+1,barW-2,H/2-2);}requestAnimationFrame(drawVU);}
-function updVU(){if(!isPlayingVU){levelL*=0.92;levelR*=0.92;return;}levelL+=(18+Math.random()*40-levelL)*0.3;levelR+=(18+Math.random()*40-levelR)*0.3;}
-radioEl.addEventListener('play',()=>isPlayingVU=true);radioEl.addEventListener('pause',()=>isPlayingVU=false);
-drawVU();setInterval(updVU,60);
+const aud = document.getElementById('radioAudio');
+const btn = document.getElementById('playBtn');
+const status = document.getElementById('status');
+const titleEl = document.getElementById('npTitle');
+const artistEl = document.getElementById('npArtist');
+const cover = document.getElementById('cover');
 
-// NOW PLAYING + COVER
-const coverEl=document.getElementById('cover');const titleEl=document.getElementById('npTitle');const artistEl=document.getElementById('npArtist');
-async function fetchNowPlaying(){
- try{
-  // 1) prova endpoint HTTPS proxy 7.html
-  let text=""; 
-  try{let r=await fetch('https://control.myshoutca.st/proxy/tbqmsenb/7.html',{cache:'no-store'}); if(r.ok) text=await r.text();}catch(e){}
-  if(!text){
-   try{let r=await fetch('http://manage.myshoutca.st:8060/7.html',{cache:'no-store'}); if(r.ok) text=await r.text();}catch(e){}
-  }
-  let fullTitle="";
-  if(text){ // formato: 1,1,4,100,1,128,Titolo
-   let parts=text.split(','); if(parts.length>=7){fullTitle=parts.slice(6).join(',').trim();}
-  }
-  // 2) fallback a /currentsong?sid=1#
-  if(!fullTitle){
-   try{let r=await fetch('https://control.myshoutca.st/proxy/tbqmsenb/currentsong?sid=1',{cache:'no-store'}); if(r.ok) fullTitle=(await r.text()).trim();}catch(e){}
-  }
-  if(fullTitle && fullTitle!=titleEl.textContent){
-   let artist=""; let title=fullTitle;
-   if(fullTitle.includes(" - ")){let sp=fullTitle.split(" - "); artist=sp[0]; title=sp.slice(1).join(" - ");}
-   titleEl.textContent=title; artistEl.textContent=artist||"Soul Funk";
-   // cerca cover su iTunes
-   try{
-    let q=encodeURIComponent(fullTitle);
-    let r=await fetch('https://itunes.apple.com/search?term='+q+'&media=music&limit=1'); 
-    let j=await r.json(); 
-    if(j.results && j.results[0] && j.results[0].artworkUrl100){
-     coverEl.src=j.results[0].artworkUrl100.replace('100x100','300x300');
-    }
-   }catch(e){}
-  }
- }catch(e){console.log("np error",e)}
+// LISTA LINK - prova uno dopo l'altro
+const LINKS = [
+  "https://control.myshoutca.st/proxy/tbqmsenb/stream",
+  "https://control.myshoutca.st/proxy/tbqmsenb/mp3",
+  "https://control.myshoutca.st/proxy/tbqmsenb/;stream.mp3",
+  "http://manage.myshoutca.st:8060/stream/1/"
+];
+let current = 0;
+
+function setStream(n){
+  current = n;
+  aud.src = LINKS[current] + "?t=" + Date.now();
+  aud.load();
+  status.textContent = "Provo connessione " + (current+1) + "/" + LINKS.length + "...";
 }
-fetchNowPlaying(); setInterval(fetchNowPlaying,15000);
+
+setStream(0);
+
+btn.onclick = async () => {
+  try{
+    await aud.play();
+    btn.textContent = "● IN ONDA - TOCCA PER FERMAR";
+    btn.style.background = "green";
+    status.textContent = "In riproduzione";
+  }catch(e){
+    status.textContent = "Tocca di nuovo, il telefono blocca l'audio";
+  }
+};
+
+aud.onpause = () => { btn.textContent="▶ TAPPA QUI PER ASCOLTARE"; btn.style.background="#ff3b9a"; }
+aud.onplay = () => { btn.textContent="● IN ONDA"; btn.style.background="green"; }
+
+// Se gira a vuoto o errore, cambia link da solo
+aud.addEventListener('error', () => {
+  status.textContent = "Link bloccato, provo altro...";
+  if(current < LINKS.length-1){ setStream(current+1); aud.play().catch(()=>{}); }
+  else { status.textContent = "Nessun link funziona, ricarica pagina"; }
+});
+aud.addEventListener('stalled', () => {
+  if(aud.currentTime < 1 && current < LINKS.length-1){
+    setStream(current+1);
+    aud.play().catch(()=>{});
+  }
+});
+
+// Brano
+async function brano(){
+  try{
+    let r = await fetch('https://control.myshoutca.st/proxy/tbqmsenb/7.html',{cache:'no-store'});
+    let t = await r.text();
+    let p = t.split(',');
+    let br = p.slice(6).join(',').trim();
+    if(br){
+      if(br.includes(" - ")){ let s=br.split(" - "); artistEl.textContent=s[0]; titleEl.textContent=s.slice(1).join(" - "); }
+      else titleEl.textContent=br;
+    }
+  }catch(e){}
+}
+brano(); setInterval(brano,15000);
 </script>
 </body>
 </html>
