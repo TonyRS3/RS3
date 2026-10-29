@@ -6,37 +6,64 @@
 <title>SOUL FUNK - Radio Sistema 3</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial,sans-serif;color:#f5d76e;text-align:center;background:#000 url("studio-radio.jpeg");background-size:cover;background-position:center}
-.container{max-width:900px;margin:25px auto;padding:30px;background:rgba(0,0,0,.7);border-radius:25px;border:2px solid #f5d76e}
-h1{font-size:3rem;color:#f5d76e}
-.ch-chooser{display:flex;gap:10px;justify-content:center;margin:20px auto;width:400px;max-width:92%}
-.ch-btn{flex:1;padding:12px 0;border-radius:30px;border:none;font-weight:900;font-size:0.9rem;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center}
+body{font-family:Segoe UI,Arial,sans-serif;color:white;text-align:center;background:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.7)),url("studio-radio.jpeg");background-size:cover;background-position:center;background-attachment:fixed}
+.container{max-width:900px;margin:25px auto;padding:30px;background:rgba(20,0,20,.45);backdrop-filter:blur(8px);border-radius:25px;border:2px solid rgba(255,59,154,.4);box-shadow:0 0 30px rgba(255,59,154,.3)}
+.logo-wrap{display:inline-block;padding:5px;border-radius:26px;background:linear-gradient(135deg,#ff3b9a,#ff8a00,#ffe600,#ff3b9a);background-size:300% 300%;animation:gradientMove 4s ease infinite}
+@keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.logo{width:260px;height:260px;object-fit:cover;border-radius:20px;display:block}
+h1{margin-top:18px;font-size:3.2rem;color:#ffe600;text-shadow:0 0 15px #ff3b9a, 0 0 30px #ff3b9a;letter-spacing:2px}
+.sub{color:#ffb3d9;font-size:1.2rem;margin-top:4px;letter-spacing:1px}
+.live{margin-top:12px;color:#ff3b9a;font-size:1.5rem;font-weight:bold;animation:pulse 1.4s infinite;text-shadow:0 0 10px #ff3b9a}
+@keyframes pulse{0%{opacity:1}50%{opacity:.5}100%{opacity:1}}
+.ch-chooser{display:flex;gap:10px;justify-content:center;margin:18px auto;width:400px;max-width:92%}
+.ch-btn{flex:1;padding:12px 0;border-radius:30px;border:none;font-weight:900;font-size:0.9rem;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;transition:all .3s ease}
 .ch-main{background:#fff;color:#222}
-.ch-soul{background:#ff3b9a;color:#fff;box-shadow:0 0 15px #ff3b9a;outline:3px solid #ffe600}
-.ch-btn:hover{transform:scale(1.08);filter:brightness(1.2)}
-audio{width:90%;max-width:400px;height:40px;margin-top:20px}
-.note{margin-top:15px;color:#aaa;font-size:.8rem}
+.ch-soul{background:#ff3b9a;color:#fff;box-shadow:0 0 18px #ff3b9a;outline:3px solid #ffe600;transform:scale(1.05)}
+.ch-btn:hover{transform:scale(1.08);box-shadow:0 0 15px #ffe600, 0 0 25px #ff3b9a;filter:brightness(1.2)}
+.player-box{margin:15px auto;background:rgba(255,255,255,.10);padding:14px;border-radius:20px;width:420px;max-width:94%;border:1px solid rgba(255,59,154,.3)}
+.section-title{font-size:1.2rem;margin-bottom:8px;color:#ffe600}
+audio{width:100%;max-width:360px;height:40px;border-radius:10px}
+.vu-wrap{margin-top:10px;background:rgba(0,0,0,.75);padding:5px 8px;border-radius:10px;border:1px solid rgba(255,59,154,.3);max-width:340px;margin-left:auto;margin-right:auto}
+#vuCanvas{width:100%;height:38px;display:block;border-radius:6px;background:#0a0a0a}
+.vu-label{font-size:.70rem;color:#ff8ab4;margin-top:3px;display:flex;justify-content:space-between;font-family:monospace}
+.genre{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
+.genre span{background:rgba(255,59,154,.2);border:1px solid rgba(255,59,154,.4);padding:6px 12px;border-radius:20px;font-size:.8rem;color:#ffb3d9}
+.footer{margin-top:22px;font-size:.8rem;color:#aaa}
 </style>
 </head>
 <body>
 <div class="container">
+<div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" class="logo" onerror="this.src='https://via.placeholder.com/260/ff3b9a/ffe600?text=SOUL+FUNK'"></div>
 <h1>SOUL FUNK</h1>
-<p>Canale 2 - Radio Sistema 3</p>
+<div class="sub">Canale 2 - Radio Sistema 3</div>
+<div class="live">💗 SOUL ON AIR 24/7</div>
 
 <div class="ch-chooser">
 <a class="ch-btn ch-main" href="index.html">MAIN</a>
 <a class="ch-btn ch-soul">SOUL FUNK</a>
 </div>
 
-<audio controls autoplay>
-<source src="http://manage.myshoutca.st:8060/stream" type="audio/mpeg">
-</audio>
-
-<p class="note">Server di prova 7 giorni: http://manage.myshoutca.st:8060/index.html<br>Se non parte, accendilo dal pannello https://manage.myshoutca.st/start/tbqmsenb</p>
-
-<br><a href="index.html" style="color:#f5d76e;border:1px solid #f5d76e;padding:10px 20px;border-radius:20px;text-decoration:none">⬅ Torna a MAIN</a>
+<div class="player-box">
+<div class="section-title">♪ Soul, Funk, Disco & Groove</div>
+<audio id="radioAudio" controls autoplay><source src="https://listentomystream.com:8046/soulfunk" type="audio/mpeg"></audio>
+<div class="vu-wrap"><canvas id="vuCanvas" width="600" height="38"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak" style="color:#ff3b9a">STOP</span></div></div>
 </div>
+
+<div class="genre">
+<span>Motown</span><span>Funk 70s</span><span>Disco</span><span>Soulful House</span><span>R&B Classics</span>
+</div>
+
+<div class="footer">© Radio Sistema 3 Soul Funk - Tutti i Diritti Riservati - SIAE n°202600000389<br><a href="index.html" style="color:#ffe600;text-decoration:none;border:1px solid #ffe600;padding:8px 18px;border-radius:20px;display:inline-block;margin-top:12px">⬅ Torna a MAIN</a></div>
+</div>
+
+<script>
+const vuCanvas=document.getElementById('vuCanvas');const vuCtx=vuCanvas.getContext('2d');const radioEl=document.getElementById('radioAudio');const vuPeakEl=document.getElementById('vuPeak');
+let isPlayingVU=false,levelL=0,levelR=0;
+function drawStereo(){const W=vuCanvas.width,H=vuCanvas.height;vuCtx.clearRect(0,0,W,H);vuCtx.fillStyle='#0a0a0a';vuCtx.fillRect(0,0,W,H);let bars=36,barW=W/bars,gap=1.5,rowH=H/2-2;let activeL=Math.floor((levelL/100)*bars);for(let i=0;i<bars;i++){let x=i*barW;let lit=i<activeL;let color=i<bars*0.6?(lit?'#ff3b9a':'#1a0010'):i<bars*0.84?(lit?'#ffe600':'#1a1a00'):(lit?'#ff1a1a':'#1a0000');vuCtx.fillStyle=color;let y=1;let bh=lit?rowH-1:rowH*0.45;vuCtx.fillRect(x+gap,y+(rowH-bh)/2,barW-gap*2,bh);}vuCtx.fillStyle='#333';vuCtx.fillRect(0,H/2-0.5,W,1);let activeR=Math.floor((levelR/100)*bars);for(let i=0;i<bars;i++){let x=i*barW;let lit=i<activeR;let color=i<bars*0.6?(lit?'#00d4ff':'#001a1a'):i<bars*0.84?(lit?'#ffe600':'#1a1a00'):(lit?'#ff1a1a':'#1a0000');vuCtx.fillStyle=color;let y=H/2+1;let bh=lit?rowH-1:rowH*0.45;vuCtx.fillRect(x+gap,y+(rowH-bh)/2,barW-gap*2,bh);}requestAnimationFrame(drawStereo);}
+function updateStereo(){if(!isPlayingVU){levelL+=(0-levelL)*0.08;levelR+=(0-levelR)*0.08;return;}let base=18+Math.random()*28;let targetL=base+Math.random()*22;let targetR=base*0.85+Math.random()*28;levelL+=(targetL-levelL)*0.32;levelR+=(targetR-levelR)*0.28;}
+radioEl.addEventListener('pause',()=>{isPlayingVU=false;vuPeakEl.textContent="STOP";vuPeakEl.style.color="#ff3b9a";});
+radioEl.addEventListener('play',()=>{isPlayingVU=true;vuPeakEl.textContent="● LIVE SOUL";vuPeakEl.style.color="#00ff2a";});
+drawStereo();setInterval(updateStereo,60);
+</script>
 </body>
 </html>
-
-
