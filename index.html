@@ -54,20 +54,19 @@ audio{width:100%;max-width:340px;height:36px;}
 .vu-wrap{margin-top:8px;background:rgba(0,0,0,.75);padding:4px 6px;border-radius:8px;border:1px solid rgba(255,255,255,.2);max-width:320px;margin-left:auto;margin-right:auto;}
 #vuCanvas{width:100%;height:32px;display:block;border-radius:4px;background:#0a0a0a;}
 .vu-label{font-size:.65rem;color:#aaa;margin-top:2px;display:flex;justify-content:space-between;font-family:monospace;}
-
-/* HOVER FIX TONY */
 #btnPopup:hover{background:#fff !important;color:#000 !important;transform:scale(1.05);box-shadow:0 0 12px rgba(0,212,255,0.7);}
 .btn-novita:hover{background:#fff !important;color:#ff0033 !important;transform:scale(1.05);box-shadow:0 0 15px rgba(255,0,51,0.6);}
 .novita-row:hover{background:#2a2a2a !important;border-left:3px solid #ff0033;transform:translateX(4px);}
-
 @media (max-width:768px){ #btnPopup{display:none !important;} }
-html.popup-mode, body.popup-mode{ background:#020a18 !important; background-image:linear-gradient(180deg,#0a1830 0%,#020a18 100%) !important; overflow:hidden !important; height:335px !important; min-height:335px !important; max-height:335px !important; }
+
+/* POPUP FIX - NON TAGLIA PIU */
+html.popup-mode, body.popup-mode{ background:#020a18 !important; background-image:linear-gradient(180deg,#0a1830 0%,#020a18 100%) !important; overflow:hidden !important; height:380px !important; min-height:380px !important; max-height:380px !important; }
 html.popup-mode .logo-wrap, body.popup-mode .logo-wrap, html.popup-mode h1, body.popup-mode h1, html.popup-mode .live, body.popup-mode .live, html.popup-mode #novitaSection, body.popup-mode #novitaSection, html.popup-mode .footer, body.popup-mode .footer, html.popup-mode .btn-novita, body.popup-mode .btn-novita, html.popup-mode #btnPopup, body.popup-mode #btnPopup{display:none !important;}
-html.popup-mode .container{ max-width:360px !important;margin:0 auto !important;padding:6px !important; background:transparent !important;border:none !important;backdrop-filter:none !important; height:335px !important; overflow:hidden !important; }
-html.popup-mode .player-box{ margin:0 auto 4px auto !important;padding:6px !important;background:rgba(255,255,255,.10) !important; }
-html.popup-mode .cc_recenttracks_list{ display:flex !important; visibility:visible !important; opacity:1 !important; margin-bottom:3px !important; background:rgba(0,0,0,.55) !important; min-height:85px !important; height:85px !important; max-height:85px !important; overflow:hidden !important; padding:6px !important; }
-html.popup-mode .vu-wrap{max-width:300px !important; margin-top:3px !important;}
-html.popup-mode #vuCanvas{height:28px !important;}
+html.popup-mode .container{ max-width:360px !important;margin:0 auto !important;padding:8px !important; background:transparent !important;border:none !important;backdrop-filter:none !important; height:380px !important; overflow:hidden !important; }
+html.popup-mode .player-box{ margin:0 auto 6px auto !important;padding:8px !important;background:rgba(255,255,255,.10) !important; }
+html.popup-mode .cc_recenttracks_list{ display:flex !important; visibility:visible !important; opacity:1 !important; margin-bottom:6px !important; background:rgba(0,0,0,.55) !important; min-height:92px !important; height:92px !important; max-height:92px !important; overflow:visible !important; padding:8px !important; align-items:center !important; border-radius:12px !important; }
+html.popup-mode .vu-wrap{max-width:300px !important; margin-top:6px !important;}
+html.popup-mode #vuCanvas{height:32px !important;}
 </style>
 </head>
 <body>
@@ -92,32 +91,21 @@ function apriNovita(){ document.getElementById('radioAudio').pause(); document.g
 function chiudiNovita(){ document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML; document.getElementById('novitaList').innerHTML = ""; document.getElementById('novitaList').dataset.done = "0"; document.getElementById('novitaSection').style.display='none'; document.getElementById('btnNovita').style.display='inline-block'; document.getElementById('radioAudio').play().catch(()=>{}); }
 function playNovita(id, el){ document.getElementById('radioAudio').pause(); document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active')); el.classList.add('active'); document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>'; }
 function renderNovita(){ const c=document.getElementById('novitaList'); if(c.dataset.done=="1") return; c.dataset.done="1"; c.innerHTML = BRANI_NOVITA.map(b=>`<div class="novita-row" onclick="playNovita('${b.id}', this)"><img src="https://i.ytimg.com/vi/${b.id}/hqdefault.jpg" style="width:50px;height:38px;border-radius:4px"><div><b style="font-size:0.9rem">${b.artista}</b><br><span style="color:#aaa;font-size:.75rem">${b.titolo}</span></div><div style="margin-left:auto;color:#ff0033">▶</div></div>`).join(''); }
-function apriPopupPlayer(){ if(window.innerWidth <= 768) return; document.getElementById('radioAudio').pause(); window.open(window.location.href.split('?')[0] + '?popup=1&v=18', 'RadioSistema3Popup', 'width=380,height=335,top=50,left=50,resizable=yes,scrollbars=no'); }
+function apriPopupPlayer(){ if(window.innerWidth <= 768) return; document.getElementById('radioAudio').pause(); window.open(window.location.href.split('?')[0] + '?popup=1&v=19', 'RadioSistema3Popup', 'width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); }
 function cleanWhiteBorder(img){ if(img.dataset.cleaned==="1") return; if(!img.dataset.original){img.dataset.original=img.src; coverOriginale=img.src;} img.dataset.cleaned="1"; const isMobile=window.innerWidth<768; const finalSize=isMobile?68:82; const tempImg=new Image();tempImg.crossOrigin="anonymous"; tempImg.onload=function(){ const w=tempImg.width,h=tempImg.height; const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d'); canvas.width=w;canvas.height=h;ctx.drawImage(tempImg,0,0); const data=ctx.getImageData(0,0,w,h).data; let top=0,bottom=h,left=0,right=w; for(let y=0;y<h;y++){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){top=y;break;}} for(let y=h-1;y>=0;y--){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){bottom=y+1;break;}} for(let x=0;x<w;x++){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){left=x;break;}} for(let x=w-1;x>=0;x--){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){right=x+1;break;}} right=right-Math.round(w*0.10);left=left+Math.round(w*0.02);top=top+Math.round(h*0.02);bottom=bottom-Math.round(h*0.02); const cw=right-left,ch=bottom-top; const out=document.createElement('canvas');out.width=finalSize;out.height=finalSize; const octx=out.getContext('2d');octx.imageSmoothingQuality='high'; octx.drawImage(canvas,left,top,cw,ch,0,0,finalSize,finalSize); img.src=out.toDataURL('image/jpeg',0.92); img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="5px";img.style.display="inline-block";img.style.verticalAlign="middle";img.style.margin="0";img.style.opacity="1";img.style.border="none"; }; tempImg.src=img.dataset.original; }
 const list=document.querySelector('.cc_recenttracks_list'); if(list){ new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);}).observe(list,{childList:true,subtree:true}); setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);},1000); }
 
 const vuCanvas = document.getElementById('vuCanvas'); const vuCtx = vuCanvas.getContext('2d'); const radioEl = document.getElementById('radioAudio'); const vuPeakEl = document.getElementById('vuPeak');
 let isPlayingVU=false, levelL=0, levelR=0;
-
 function drawStereo(){ 
   const W=vuCanvas.width, H=vuCanvas.height; 
   vuCtx.clearRect(0,0,W,H); vuCtx.fillStyle='#0a0a0a'; vuCtx.fillRect(0,0,W,H); 
   let bars=36, barW=W/bars, gap=1.5, rowH=H/2-2; 
   let activeL=Math.floor((levelL/100)*bars); 
-  for(let i=0;i<bars;i++){ 
-    let x=i*barW; let lit=i<activeL; 
-    let color=i<bars*0.6?(lit?'#00ff2a':'#001a05'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); 
-    vuCtx.fillStyle=color; let y=1; let bh=lit?rowH-1:rowH*0.4; 
-    vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); 
-  } 
+  for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeL; let color=i<bars*0.6?(lit?'#00ff2a':'#001a05'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } 
   vuCtx.fillStyle='#333'; vuCtx.fillRect(0, H/2-0.5, W, 1); 
   let activeR=Math.floor((levelR/100)*bars); 
-  for(let i=0;i<bars;i++){ 
-    let x=i*barW; let lit=i<activeR; 
-    let color=i<bars*0.6?(lit?'#00d4ff':'#001a1a'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); 
-    vuCtx.fillStyle=color; let y=H/2+1; let bh=lit?rowH-1:rowH*0.4; 
-    vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); 
-  } 
+  for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeR; let color=i<bars*0.6?(lit?'#00d4ff':'#001a1a'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=H/2+1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } 
   requestAnimationFrame(drawStereo); 
 }
 function updateStereo(){ 
@@ -125,7 +113,6 @@ function updateStereo(){
   let base=18+Math.random()*28; let targetL=base+Math.random()*22; let targetR=base*0.85+Math.random()*28; 
   levelL+=(targetL-levelL)*0.32; levelR+=(targetR-levelR)*0.28; 
 }
-
 const STREAM_URL = "https://listentomystream.com:8046/;";
 let lastPause = 0;
 let isForcing = false;
