@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOUL FUNK</title>
+<title>SOUL FUNK - Radio Sistema 3</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -11,8 +11,9 @@ body{font-family:Arial,sans-serif;color:white;text-align:center;background: line
 .overlay{background:rgba(8,0,18,0.35);min-height:100vh;padding:20px;display:flex;align-items:center;justify-content:center}
 .container{width:100%;max-width:420px;padding:22px;background:rgba(0,0,0,0.82);border-radius:22px;border:1.5px solid #ff3b9a}
 .logo{width:70px;border-radius:12px;background:#fff;padding:3px}
-h1{color:#ffe600;font-size:1.9rem}
-.live{color:#ff3b9a;font-weight:900;margin-top:2px}
+h1{color:#ffe600;font-size:1.9rem;margin-top:6px}
+.live{color:#ff3b9a;font-weight:900;margin-top:2px;animation:blink 1.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.6}}
 .btns{display:flex;gap:8px;justify-content:center;margin:14px 0}
 .btns a{padding:9px 18px;border-radius:20px;text-decoration:none;font-weight:900;font-size:.8rem}
 .main{background:#fff;color:#000}.soul{background:#ff3b9a;color:#fff;border:1px solid #ffe600}
@@ -48,6 +49,7 @@ audio{width:100%;height:38px}
 </div>
 
 <script>
+// FIX COPERTINA BIANCA + BORDO
 function isAllWhite(img, cb){
   const t=new Image(); t.crossOrigin="anonymous";
   t.onload=function(){
@@ -55,38 +57,33 @@ function isAllWhite(img, cb){
     const ctx=c.getContext('2d'); ctx.drawImage(t,0,0);
     try{
       const d=ctx.getImageData(0,0,c.width,c.height).data;
-      let white=0; for(let i=0;i<d.length;i+=4*20){ if(d[i]>240 && d[i+1]>240 && d[i+2]>240) white++; }
-      cb(white > (d.length/(4*20))*0.9);
+      let white=0, tot=0; for(let i=0;i<d.length;i+=4*20){ tot++; if(d[i]>240 && d[i+1]>240 && d[i+2]>240) white++; }
+      cb(white > tot*0.9);
     }catch(e){ cb(false); }
   };
   t.onerror=()=>cb(false);
   t.src=img.src;
 }
-
 function fetchRealCover(query, targetImg){
   if(!query) return;
   fetch('https://itunes.apple.com/search?term='+encodeURIComponent(query)+'&media=music&limit=1')
   .then(r=>r.json()).then(j=>{
     if(j.results && j.results[0] && j.results[0].artworkUrl100){
       targetImg.src=j.results[0].artworkUrl100.replace('100x100','300x300');
-      targetImg.style.background='#111';
     }
   }).catch(()=>{});
 }
-
 function handleCover(img){
   if(img.dataset.done=="1") return;
   isAllWhite(img, (allWhite)=>{
     if(allWhite){
       img.dataset.done="1";
-      // prendi titolo/artista dal testo accanto
       const box=document.querySelector('.cc_recenttracks_list');
       let txt=box ? box.innerText : '';
-      txt=txt.replace(/\n+/g,' ').trim().substring(0,80);
+      txt=txt.replace(/\n+/g,' ').replace(/Unknown/gi,'').trim().substring(0,80);
       if(txt.length>3) fetchRealCover(txt, img);
-      else { img.style.background='#111'; img.src='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="76" height="76"><rect width="100%" height="100%" fill="%23111"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-size="30">🎵</text></svg>'; }
     } else {
-      // pulisci bordo bianco come prima
+      // pulisci bordo bianco
       const finalSize=76;
       const t=new Image(); t.crossOrigin="anonymous";
       t.onload=function(){
@@ -106,14 +103,28 @@ function handleCover(img){
     }
   });
 }
-
+// Nasconde solo "Unknown" del CD, se c'è nome CD vero lo lascia
+function hideUnknownRow(){
+  const box=document.querySelector('.cc_recenttracks_list');
+  if(!box) return;
+  box.querySelectorAll('*').forEach(el=>{
+    if(el.children.length===0){
+      const txt=el.textContent.trim();
+      if(txt.toLowerCase()==='unknown'){
+        el.style.display='none';
+      }
+    }
+  });
+}
 const list=document.querySelector('.cc_recenttracks_list');
 if(list){
-  new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(handleCover);}).observe(list,{childList:true,subtree:true});
-  setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(handleCover);},1500);
+  new MutationObserver(()=>{
+    document.querySelectorAll('.cc_recenttracks_list img').forEach(handleCover);
+    hideUnknownRow();
+  }).observe(list,{childList:true,subtree:true});
+  setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(handleCover); hideUnknownRow();},1500);
 }
-
-// VU
+// VU STEREO
 const c=document.getElementById('vuCanvas'),x=c.getContext('2d');let l=0,r=0;
 function draw(){x.clearRect(0,0,c.width,c.height);x.fillStyle='#0a0a0a';x.fillRect(0,0,c.width,c.height);let bars=30,bw=c.width/bars,g=1.5,rh=c.height/2-2,al=Math.floor((l/100)*bars),ar=Math.floor((r/100)*bars);for(let i=0;i<bars;i++){let lit=i<al;x.fillStyle=lit?(i<18?'#0f0':i<24?'#ff0':'#f00'):'#1a1a1a';x.fillRect(i*bw+g,1,bw-g*2,lit?rh-1:rh*0.4)}x.fillStyle='#333';x.fillRect(0,c.height/2-.5,c.width,1);for(let i=0;i<bars;i++){let lit=i<ar;x.fillStyle=lit?(i<18?'#0af':i<24?'#ff0':'#f00'):'#1a1a1a';x.fillRect(i*bw+g,c.height/2+1,bw-g*2,lit?rh-1:rh*0.4)}requestAnimationFrame(draw)}function upd(){let b=22+Math.random()*30;l+=(b+Math.random()*15-l)*0.3;r+=(b+Math.random()*15-r)*0.3}draw();setInterval(upd,70);
 </script>
