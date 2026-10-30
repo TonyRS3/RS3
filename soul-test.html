@@ -1,1 +1,65 @@
 
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOUL v42 TEST AUDIO</title>
+<script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
+<style>
+body{font-family:Arial;color:white;text-align:center;background:#1a0a2e;padding:20px}
+.player{max-width:400px;margin:20px auto;background:rgba(255,255,255,.1);padding:20px;border-radius:20px}
+audio{width:100%;height:50px;margin:10px 0}
+button{background:#ffb300;color:#000;font-weight:900;padding:16px;border:none;border-radius:30px;width:100%;font-size:1.2rem;cursor:pointer}
+#log{margin-top:10px;font-size:0.75rem;color:#aaa;word-break:break-all;text-align:left;background:#000;padding:8px;border-radius:8px;max-height:120px;overflow:auto}
+</style>
+</head>
+<body>
+<h2>SOUL v42 - TEST AUDIO PURO</h2>
+<div class="player">
+<audio id="a" controls playsinline></audio>
+<button id="btn" onclick="test()">▶ TAP PER TEST</button>
+<div id="log">Log: pronto</div>
+<div style="margin-top:10px">
+<button onclick="tryUrl(0)" style="background:#fff;padding:8px;margin:2px">Prova URL 1</button>
+<button onclick="tryUrl(1)" style="background:#fff;padding:8px;margin:2px">Prova URL 2</button>
+<button onclick="tryUrl(2)" style="background:#fff;padding:8px;margin:2px">Prova URL 3</button>
+</div>
+</div>
+<div class="cc_recenttracks_list" data-username="tbqmsenb" style="margin-top:20px"></div>
+
+<script>
+const URLS = [
+  "https://control.myshoutca.st/proxy/tbqmsenb/mp3",
+  "https://control.myshoutca.st/proxy/tbqmsenb/stream",
+  "http://manage.myshoutca.st:8062/stream"
+];
+const a = document.getElementById('a');
+const logEl = document.getElementById('log');
+let idx=0;
+
+function log(t){ logEl.innerHTML += "<br>"+t; console.log(t); }
+
+function tryUrl(i){
+  idx=i;
+  log("Provo URL "+(i+1)+": "+URLS[i]);
+  a.src = URLS[i] + "?_=" + Date.now();
+  a.load();
+  a.play().then(()=>{ log("PLAY OK URL "+(i+1)); document.getElementById('btn').style.display='none'; })
+          .catch(e=>{ log("PLAY FAIL URL "+(i+1)+": "+e.message); });
+}
+
+function test(){ tryUrl(idx); }
+
+a.addEventListener('error', (e)=>{
+  log("ERRORE AUDIO elemento: "+a.error.code+" - "+a.error.message);
+  idx++;
+  if(idx < URLS.length){ log("Passo al prossimo..."); setTimeout(()=>tryUrl(idx), 800); }
+  else { log("TUTTI FALLITI - serve nuovo link da Centova"); }
+});
+
+a.addEventListener('playing', ()=>{ log("EVENTO: playing - AUDIO PARTITO!"); });
+a.addEventListener('waiting', ()=>{ log("EVENTO: waiting/buffering..."); });
+</script>
+</body>
+</html>
