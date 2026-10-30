@@ -19,16 +19,16 @@ if(new URLSearchParams(location.search).get('popup')==='1'){
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Arial,sans-serif;color:white;text-align:center;background: linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.6)), url("studio-radio.jpeg");background-size:cover;background-position:center;background-attachment:fixed;background-color:#0d0620}
 .overlay{background:rgba(8,0,18,0.35);min-height:100vh;padding:20px;display:flex;align-items:center;justify-content:center}
-.container{width:100%;max-width:420px;padding:22px;background:rgba(0,0,0,0.82);border-radius:22px;border:1.5px solid #ff3b9a}
+.container{width:100%;max-width:420px;padding:22px;background:rgba(0,0,0,0.82);border-radius:22px;border:1.5px solid #7b1fa2}
 .top-title{color:#ffe600;font-size:.75rem;letter-spacing:2px;font-weight:900;margin-bottom:10px}
 h1{color:#ffe600;font-size:1.9rem;margin-top:6px}
-.live{color:#ff3b9a;font-weight:900;margin-top:2px;animation:pulse 1.4s infinite}
+.live{color:#b388ff;font-weight:900;margin-top:2px;animation:pulse 1.4s infinite}
 @keyframes pulse{0%{opacity:1}50%{opacity:.5}100%{opacity:1}}
 .btns{display:flex;gap:8px;justify-content:center;margin:14px 0}
 .btns a{padding:10px 18px;border-radius:22px;text-decoration:none;font-weight:900;font-size:.85rem;flex:1;cursor:pointer;transition:all 0.3s ease}
-.main{background:#fff;color:#555;border:2px solid #ffe600}.soul{background:#ff3b9a;color:#fff;border:2px solid #ff3b9a;box-shadow:0 0 12px #ff3b9a66}
+.main{background:#fff;color:#555;border:2px solid #ffe600}.soul{background:#7b1fa2;color:#fff;border:2px solid #7b1fa2;box-shadow:0 0 12px #7b1fa266}
 .btns a.active{outline:3px solid #ffe600;transform:scale(1.05)}
-.btns a:hover{transform:scale(1.08);box-shadow:0 0 15px #ffe600, 0 0 25px #ff3b9a;filter:brightness(1.2)}
+.btns a:hover{transform:scale(1.08);box-shadow:0 0 15px #ffe600, 0 0 25px #b388ff;filter:brightness(1.2)}
 .box-title{color:#ffe67a;font-size:1.15rem;margin:12px 0 8px;font-weight:700}
 .box{background:rgba(20,20,20,.75);padding:14px;border-radius:14px;border:1px solid #333}
 audio{width:100%;height:38px;border-radius:20px}
@@ -53,9 +53,6 @@ html.popup-mode .box-title{font-size:0.85rem !important;margin:4px 0 !important;
 html.popup-mode .vu-wrap{max-width:300px !important; margin-top:6px !important; padding:4px 6px !important;}
 html.popup-mode #vuCanvas{height:32px !important;}
 html.popup-mode #trackBox{background:rgba(0,0,0,.55) !important; border-radius:12px !important; min-height:92px !important; height:92px !important; overflow:hidden !important; padding:6px 8px !important; margin-top:6px !important; display:flex !important; align-items:center !important;}
-html.popup-mode .cc_recenttracks_list{height:92px !important; min-height:92px !important; background:transparent !important; gap:6px !important;}
-html.popup-mode .cc_recenttracks_list img{width:62px !important; height:62px !important; min-width:62px !important; max-width:62px !important; border:none !important;}
-html.popup-mode .cc_recenttracks_list *{font-size:0.72rem !important; line-height:1.1 !important;}
 </style>
 </head>
 <body>
@@ -64,7 +61,7 @@ html.popup-mode .cc_recenttracks_list *{font-size:0.72rem !important; line-heigh
 <div id="popupBrand">RADIO SISTEMA 3 - SOUL</div>
 <img src="RADIO SISTEMA 3.jpeg" class="logo" style="width:70px;border-radius:12px;background:#fff;padding:3px">
 <h1>SOUL FUNK</h1>
-<div class="live">💗 SOUL ON AIR</div>
+<div class="live">💜 SOUL ON AIR</div>
 <div class="btns">
 <a id="btnMain" class="main" href="index.html">MAIN</a>
 <a id="btnSoul" class="soul active" href="soul.html">SOUL FUNK</a>
@@ -72,7 +69,7 @@ html.popup-mode .cc_recenttracks_list *{font-size:0.72rem !important; line-heigh
 <div class="box-title">♪ Ascolta in diretta</div>
 <div class="box">
 <audio id="radioAudio" controls autoplay preload="none"><source src="https://listentomystream.com:8060/stream" type="audio/mpeg"></audio>
-<div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak" style="color:#7aff7a">● LIVE</span></div></div>
+<div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak" style="color:#b388ff">● LIVE</span></div></div>
 <button id="btnPopup" onclick="apriPopupPlayer()" style="margin-top:12px;background:#00d4ff;color:#000;font-weight:bold;padding:10px 20px;border:none;border-radius:30px;cursor:pointer;">⧉ APRI POPUP PLAYER</button>
 <div class="box-title" style="margin-top:10px">♪ Brano in onda</div>
 <div id="trackBox"><div class="cc_recenttracks_list" data-username="tbqmsenb"></div></div>
@@ -95,48 +92,9 @@ function setupChannelNav(){
   }
 }
 setupChannelNav();
-const list=document.querySelector('.cc_recenttracks_list');
-if(list){
-  function updateMediaSessionCover(){
-    try{
-      const imgEl=document.querySelector('.cc_recenttracks_list img');
-      if(!imgEl||!imgEl.src) return;
-      let src=imgEl.src;
-      if(src.includes('via.placeholder')||src.toLowerCase().includes('radio+sistema')) return;
-      if(src.startsWith('//')) src='https:'+src;
-      src=src.replace('http://','https://');
-      let title="SOUL FUNK",artist="Radio Sistema 3";
-      const tc=document.querySelector('.cc_recenttracks_list');
-      if(tc){
-        let raw=tc.innerText.trim();
-        let parts=raw.split('\n').map(s=>s.trim()).filter(Boolean);
-        if(parts.length>0){
-          let last=parts[parts.length-1];
-          if(last.includes('-')){
-            let sp=last.split('-');
-            artist=sp[0].trim();
-            title=sp.slice(1).join('-').trim();
-          } else {
-            title=last;
-            if(parts.length>1) artist=parts[0];
-          }
-        }
-      }
-      if('mediaSession' in navigator){
-        navigator.mediaSession.metadata=new MediaMetadata({
-          title:title.substring(0,80),
-          artist:artist.substring(0,80),
-          album:"Radio Sistema 3 - SOUL FUNK",
-          artwork:[{src:src,sizes:"512x512",type:"image/jpeg"}]
-        });
-      }
-    }catch(e){}
-  }
-  setInterval(updateMediaSessionCover,3000);
-}
 const vuCanvas=document.getElementById('vuCanvas'),vuCtx=vuCanvas.getContext('2d'),radioEl=document.getElementById('radioAudio');
 let isPlayingVU=false,levelL=0,levelR=0;
-function drawStereo(){ const W=vuCanvas.width,H=vuCanvas.height; vuCtx.clearRect(0,0,W,H); vuCtx.fillStyle='#111118'; vuCtx.fillRect(0,0,W,H); let bars=36,barW=W/bars,gap=1.5,rowH=H/2-2; let activeL=Math.floor((levelL/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeL; let color=i<bars*0.6?(lit?'#ff3b9a':'#2a0a1a'):i<bars*0.84?(lit?'#ffe600':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } vuCtx.fillStyle='#333'; vuCtx.fillRect(0, H/2-0.5, W, 1); let activeR=Math.floor((levelR/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeR; let color=i<bars*0.6?(lit?'#7b1fa2':'#1a0a2a'):i<bars*0.84?(lit?'#ffe600':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=H/2+1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } requestAnimationFrame(drawStereo); }
+function drawStereo(){ const W=vuCanvas.width,H=vuCanvas.height; vuCtx.clearRect(0,0,W,H); vuCtx.fillStyle='#111118'; vuCtx.fillRect(0,0,W,H); let bars=36,barW=W/bars,gap=1.5,rowH=H/2-2; let activeL=Math.floor((levelL/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeL; let color=i<bars*0.6?(lit?'#7b1fa2':'#2a0a1a'):i<bars*0.84?(lit?'#ffe600':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } vuCtx.fillStyle='#333'; vuCtx.fillRect(0, H/2-0.5, W, 1); let activeR=Math.floor((levelR/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeR; let color=i<bars*0.6?(lit?'#b388ff':'#1a0a2a'):i<bars*0.84?(lit?'#ffe600':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=H/2+1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } requestAnimationFrame(drawStereo); }
 function updateStereo(){ if(!isPlayingVU){ levelL+=(0-levelL)*0.08; levelR+=(0-levelR)*0.08; return; } const isPopup = new URLSearchParams(location.search).get('popup')==='1' || !!window.opener; if(isPopup){ let isPeak = Math.random() < 0.07; if(isPeak){ levelL = 78 + Math.random()*18; levelR = 76 + Math.random()*18; } else { let base = 32 + Math.random()*18; let targetL = base + Math.random()*10; let targetR = base*0.9 + Math.random()*10; levelL += (targetL - levelL) * 0.20; levelR += (targetR - levelR) * 0.18; } return; } let base = 40 + Math.random()*45; let isPeak = Math.random() < 0.18; let targetL = isPeak ? 88 + Math.random()*12 : base + Math.random()*18; let targetR = isPeak ? 85 + Math.random()*15 : base*0.9 + Math.random()*20; levelL+=(targetL-levelL)*0.38; levelR+=(targetR-levelR)*0.34; if(levelL>100)levelL=100; if(levelR>100)levelR=100; }
 radioEl.addEventListener('pause', ()=>{ isPlayingVU=false; });
 radioEl.addEventListener('play', ()=>{ isPlayingVU=true; });
