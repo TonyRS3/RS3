@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - v25 FIX POPUP NAV + VU ROSSO</title>
+<title>Radio Sistema 3 - v26 VIOLA COORDINATO</title>
 <script>
 if(window.location.search.includes('popup=1')){
   document.documentElement.classList.add('popup-mode');
@@ -38,10 +38,37 @@ h1{margin-top:20px;font-size:3rem;}
 .player-box{margin-top:15px;background:rgba(255,255,255,.10);padding:12px;border-radius:20px;width:400px;max-width:92%;margin:0 auto;}
 .section-title{font-size:1.4rem;margin-bottom:8px;color:#ffd966;}
 audio{width:100%;max-width:340px;height:36px;}
-.cc_recenttracks_list{margin-top:8px !important;color:white !important;text-align:left !important;max-width:400px;margin-left:auto;margin-right:auto;background:rgba(0,0,0,0.3);padding:8px;border-radius:10px; display:flex !important; align-items:center !important; gap:10px !important;}
-.cc_recenttracks_list *{color:white !important;line-height:1.25 !important;font-size:0.95rem !important;}
+/* BRANO IN ONDA FIX - ORIZZONTALE COME MAIN */
+.cc_recenttracks_list{
+  margin-top:8px !important;
+  color:white !important;
+  text-align:left !important;
+  max-width:400px !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  background:rgba(0,0,0,0.65) !important;
+  padding:10px 12px !important;
+  border-radius:14px !important;
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  gap:12px !important;
+  min-height:90px !important;
+}
+.cc_recenttracks_list img{
+  width:82px !important;
+  height:82px !important;
+  min-width:82px !important;
+  max-width:82px !important;
+  object-fit:cover !important;
+  border-radius:8px !important;
+  display:block !important;
+  opacity:1 !important;
+  background:#000 !important;
+  border:none !important;
+}
+.cc_recenttracks_list *{color:white !important;line-height:1.25 !important;font-size:0.92rem !important;text-align:left !important;}
 .cc_recenttracks_list .ccbuy{display:none !important;}
-.cc_recenttracks_list img{opacity:0;display:block;flex-shrink:0 !important;min-width:68px !important;}
 .btn-novita{margin-top:20px;background:#ff0033;color:#fff;font-weight:900;padding:14px 26px;border:none;border-radius:50px;font-size:1.1rem;cursor:pointer;transition:all 0.25s ease;}
 #btnPopup{transition:all 0.25s ease;}
 #novitaSection{display:none;margin-top:20px;background:rgba(0,0,0,.6);padding:15px;border-radius:20px;}
@@ -56,18 +83,18 @@ audio{width:100%;max-width:340px;height:36px;}
 .ch-chooser{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
 .ch-btn{flex:1;padding:10px 0;border-radius:30px;border:none;font-weight:900;font-size:0.85rem;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease}
 .ch-main{background:#fff;color:#222}
-.ch-soul{background:#ff3b9a;color:#fff;box-shadow:0 0 10px #ff3b9a}
+.ch-soul{background:#7b1fa2;color:#fff;box-shadow:0 0 12px #7b1fa2}
 .ch-btn.active{outline:3px solid #ffe600;transform:scale(1.05)}
-.ch-btn:hover{transform:scale(1.08);box-shadow:0 0 15px #ffe600, 0 0 25px #ff3b9a;filter:brightness(1.3);animation:lampeggio 0.5s infinite alternate}
-@keyframes lampeggio{0%{box-shadow:0 0 5px #ffe600}100%{box-shadow:0 0 25px #ffe600, 0 0 40px #ff3b9a}}
+.ch-btn:hover{transform:scale(1.08);box-shadow:0 0 15px #ffe600, 0 0 25px #7b1fa2;filter:brightness(1.3);animation:lampeggio 0.5s infinite alternate}
+@keyframes lampeggio{0%{box-shadow:0 0 5px #ffe600}100%{box-shadow:0 0 25px #ffe600, 0 0 40px #7b1fa2}}
 @media (max-width:768px){ #btnPopup{display:none !important;} }
 html.popup-mode, body.popup-mode{ background:#020a18 !important; background-image:linear-gradient(180deg,#0a1830 0%,#020a18 100%) !important; overflow:hidden !important; height:380px !important; min-height:380px !important; max-height:380px !important; }
 html.popup-mode .logo-wrap, body.popup-mode .logo-wrap, html.popup-mode h1, body.popup-mode h1, html.popup-mode .live, body.popup-mode .live, html.popup-mode #novitaSection, body.popup-mode #novitaSection, html.popup-mode .footer, body.popup-mode .footer, html.popup-mode .btn-novita, body.popup-mode .btn-novita, html.popup-mode #btnPopup, body.popup-mode #btnPopup{display:none !important;}
 html.popup-mode .container{ max-width:360px !important;margin:0 auto !important;padding:8px !important; background:transparent !important;border:none !important;backdrop-filter:none !important; height:380px !important; overflow:hidden !important; }
 html.popup-mode #popupBrand{display:block !important; font-size:0.68rem !important; color:#ffd966 !important; letter-spacing:2.5px !important; font-weight:900 !important; margin-bottom:4px !important; opacity:0.9 !important;}
 html.popup-mode .player-box{ margin:0 auto 6px auto !important;padding:8px !important;background:rgba(255,255,255,.10) !important; margin-top:0 !important; }
-html.popup-mode .cc_recenttracks_list{ display:flex !important; visibility:visible !important; opacity:1 !important; margin-bottom:6px !important; background:rgba(0,0,0,.55) !important; min-height:92px !important; height:92px !important; max-height:92px !important; overflow:hidden !important; padding:6px 8px !important; align-items:center !important; border-radius:12px !important; gap:6px !important; }
-html.popup-mode .cc_recenttracks_list img{ width:62px !important; height:62px !important; min-width:62px !important; }
+html.popup-mode .cc_recenttracks_list{ display:flex !important; flex-direction:row !important; visibility:visible !important; opacity:1 !important; margin-bottom:6px !important; background:rgba(0,0,0,.55) !important; min-height:92px !important; height:92px !important; max-height:92px !important; overflow:hidden !important; padding:6px 8px !important; align-items:center !important; border-radius:12px !important; gap:6px !important; }
+html.popup-mode .cc_recenttracks_list img{ width:62px !important; height:62px !important; min-width:62px !important; max-width:62px !important; }
 html.popup-mode .cc_recenttracks_list div{ flex:1 !important; min-width:0 !important; }
 html.popup-mode .cc_recenttracks_list *{ font-size:0.72rem !important; line-height:1.1 !important; white-space:normal !important; word-break:break-word !important; }
 html.popup-mode .vu-wrap{max-width:300px !important; margin-top:6px !important;}
@@ -122,13 +149,26 @@ function setupChannelNav(){
   }
 }
 function apriPopupPlayer(){ if(window.innerWidth <= 768) return; document.getElementById('radioAudio').pause(); popupWin = window.open(window.location.href.split('?')[0] + '?popup=1', 'RadioSistema3Popup', 'width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let checkChiuso = setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(checkChiuso); popupWin = null; document.getElementById('radioAudio').play().catch(()=>{}); } }, 800); }
-function cleanWhiteBorder(img){ if(img.dataset.cleaned==="1") return; img.dataset.cleaned="1"; const isMobile=window.innerWidth<768; const finalSize=window.location.search.includes('popup=1')?62:(isMobile?68:82); const tempImg=new Image();tempImg.crossOrigin="anonymous"; tempImg.onload=function(){ const w=tempImg.width,h=tempImg.height; const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d'); canvas.width=w;canvas.height=h;ctx.drawImage(tempImg,0,0); const data=ctx.getImageData(0,0,w,h).data; let top=0,bottom=h,left=0,right=w; for(let y=0;y<h;y++){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){top=y;break;}} for(let y=h-1;y>=0;y--){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){bottom=y+1;break;}} for(let x=0;x<w;x++){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){left=x;break;}} for(let x=w-1;x>=0;x--){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){right=x+1;break;}} right=right-Math.round(w*0.10);left=left+Math.round(w*0.02);top=top+Math.round(h*0.02);bottom=bottom-Math.round(h*0.02); const cw=right-left,ch=bottom-top; const out=document.createElement('canvas');out.width=finalSize;out.height=finalSize; const octx=out.getContext('2d');octx.imageSmoothingQuality='high'; octx.drawImage(canvas,left,top,cw,ch,0,0,finalSize,finalSize); img.src=out.toDataURL('image/jpeg',0.92); img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="5px";img.style.display="inline-block";img.style.margin="0";img.style.opacity="1";img.style.border="none"; }; tempImg.src=img.src; }
+function cleanWhiteBorder(img){
+  if(img.dataset.cleaned==="1") return;
+  img.dataset.cleaned="1";
+  const isMobile=window.innerWidth<768;
+  const finalSize=window.location.search.includes('popup=1')?62:(isMobile?68:82);
+  img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.minWidth=finalSize+"px";img.style.maxWidth=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="8px";img.style.display="block";img.style.opacity="1";img.style.background="#000";img.style.border="none";
+}
 const list=document.querySelector('.cc_recenttracks_list'); if(list){ new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);}).observe(list,{childList:true,subtree:true}); setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);},1000); }
 const vuCanvas = document.getElementById('vuCanvas'); const vuCtx = vuCanvas.getContext('2d'); const radioEl = document.getElementById('radioAudio'); const vuPeakEl = document.getElementById('vuPeak');
 let isPlayingVU=false, levelL=0, levelR=0;
 function drawStereo(){ const W=vuCanvas.width, H=vuCanvas.height; vuCtx.clearRect(0,0,W,H); vuCtx.fillStyle='#0a0a0a'; vuCtx.fillRect(0,0,W,H); let bars=36, barW=W/bars, gap=1.5, rowH=H/2-2; let activeL=Math.floor((levelL/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeL; let color=i<bars*0.6?(lit?'#00ff2a':'#001a05'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } vuCtx.fillStyle='#333'; vuCtx.fillRect(0, H/2-0.5, W, 1); let activeR=Math.floor((levelR/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeR; let color=i<bars*0.6?(lit?'#00d4ff':'#001a1a'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=H/2+1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } requestAnimationFrame(drawStereo); }
 function updateStereo(){ 
   if(!isPlayingVU){ levelL+=(0-levelL)*0.08; levelR+=(0-levelR)*0.08; return; } 
+  const isPopup = window.location.search.includes('popup=1');
+  if(isPopup){
+    let isPeak = Math.random() < 0.07;
+    if(isPeak){ levelL = 78 + Math.random()*18; levelR = 76 + Math.random()*18; }
+    else { let base = 32 + Math.random()*18; let targetL = base + Math.random()*10; let targetR = base*0.9 + Math.random()*10; levelL += (targetL - levelL) * 0.20; levelR += (targetR - levelR) * 0.18; }
+    return;
+  }
   let base = 40 + Math.random()*45;
   let isPeak = Math.random() < 0.18;
   let targetL = isPeak ? 88 + Math.random()*12 : base + Math.random()*18;
