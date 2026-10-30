@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - SOUL FUNK v32 FINALE</title>
+<title>Radio Sistema 3 - SOUL FUNK v33 VIOLA</title>
 <script>
 if(window.location.search.includes('popup=1')){
   document.documentElement.classList.add('popup-mode');
@@ -28,48 +28,21 @@ const PLACEHOLDER_HTML = `<div style="width:100%;height:180px;border:2px dashed 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:Segoe UI,Arial,sans-serif;color:white;text-align:center;background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),url("studio-radio.jpeg");background-size:cover;background-position:center;background-attachment:fixed;}
-.container{max-width:900px;margin:25px auto;padding:30px;background:rgba(255,255,255,.08);backdrop-filter:blur(8px);border-radius:25px;border:1px solid #ff3b9a;}
-.logo-wrap{display:inline-block;padding:5px;border-radius:26px;background:linear-gradient(135deg,#ff3b9a,#ff512f,#ffd966,#ff3b9a);background-size:300% 300%;animation:gradientMove 4s ease infinite;}
+.container{max-width:900px;margin:25px auto;padding:30px;background:rgba(255,255,255,.08);backdrop-filter:blur(8px);border-radius:25px;border:1px solid #7b1fa2;}
+.logo-wrap{display:inline-block;padding:5px;border-radius:26px;background:linear-gradient(135deg,#7b1fa2,#4a148c,#ffb300,#7b1fa2);background-size:300% 300%;animation:gradientMove 4s ease infinite;}
 @keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 .logo{width:260px;height:260px;object-fit:cover;border-radius:20px;display:block;background:#fff;}
-h1{margin-top:20px;font-size:3rem;color:#ff3b9a;}
-.live{margin-top:15px;color:#ff3b9a;font-size:1.6rem;font-weight:bold;animation:pulse 1.4s infinite;}
+h1{margin-top:20px;font-size:3rem;color:#9c27b0;}
+.live{margin-top:15px;color:#ce93d8;font-size:1.6rem;font-weight:bold;animation:pulse 1.4s infinite;}
 @keyframes pulse{0%{opacity:1}50%{opacity:.4}100%{opacity:1}}
 .player-box{margin-top:15px;background:rgba(255,255,255,.10);padding:12px;border-radius:20px;width:400px;max-width:92%;margin:0 auto;}
-.section-title{font-size:1.4rem;margin-bottom:8px;color:#ffd966;}
+.section-title{font-size:1.4rem;margin-bottom:8px;color:#ffb300;}
 audio{width:100%;max-width:340px;height:36px;}
-/* BRANO IN ONDA FIX - COME MAIN */
-.cc_recenttracks_list{
-  margin-top:8px !important;
-  color:white !important;
-  text-align:left !important;
-  max-width:400px !important;
-  margin-left:auto !important;
-  margin-right:auto !important;
-  background:rgba(0,0,0,0.65) !important;
-  padding:10px 12px !important;
-  border-radius:14px !important;
-  display:flex !important;
-  flex-direction:row !important;
-  align-items:center !important;
-  gap:12px !important;
-  min-height:90px !important;
-}
-.cc_recenttracks_list img{
-  width:82px !important;
-  height:82px !important;
-  min-width:82px !important;
-  max-width:82px !important;
-  object-fit:cover !important;
-  border-radius:8px !important;
-  display:block !important;
-  opacity:1 !important;
-  background:#000 !important;
-  border:none !important;
-}
+.cc_recenttracks_list{margin-top:8px !important;color:white !important;text-align:left !important;max-width:400px !important;margin-left:auto !important;margin-right:auto !important;background:rgba(0,0,0,0.65) !important;padding:10px 12px !important;border-radius:14px !important;display:flex !important;flex-direction:row !important;align-items:center !important;gap:12px !important;min-height:90px !important;}
+.cc_recenttracks_list img{width:82px !important;height:82px !important;min-width:82px !important;max-width:82px !important;object-fit:cover !important;border-radius:8px !important;display:block !important;opacity:1 !important;background:#000 !important;border:none !important;}
 .cc_recenttracks_list *{color:white !important;line-height:1.25 !important;font-size:0.92rem !important;text-align:left !important;}
 .cc_recenttracks_list .ccbuy{display:none !important;}
-.btn-novita{margin-top:20px;background:#ff3b9a;color:#fff;font-weight:900;padding:14px 26px;border:none;border-radius:50px;font-size:1.1rem;cursor:pointer;}
+.btn-novita{margin-top:20px;background:#7b1fa2;color:#fff;font-weight:900;padding:14px 26px;border:none;border-radius:50px;font-size:1.1rem;cursor:pointer;box-shadow:0 0 15px rgba(123,31,162,.4)}
 .vu-wrap{margin-top:8px;background:rgba(0,0,0,.75);padding:4px 6px;border-radius:8px;border:1px solid rgba(255,255,255,.2);max-width:320px;margin:auto;}
 #vuCanvas{width:100%;height:32px;display:block;border-radius:4px;background:#0a0a0a;}
 .vu-label{font-size:.65rem;color:#aaa;margin-top:2px;display:flex;justify-content:space-between;font-family:monospace;}
@@ -77,23 +50,22 @@ audio{width:100%;max-width:340px;height:36px;}
 .ch-chooser{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
 .ch-btn{flex:1;padding:10px 0;border-radius:30px;border:none;font-weight:900;font-size:0.85rem;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center}
 .ch-main{background:#fff;color:#222}
-.ch-soul{background:#ff3b9a;color:#fff;box-shadow:0 0 10px #ff3b9a}
-.ch-btn.active{outline:3px solid #ffe600;transform:scale(1.05)}
-/* PLAYLIST IDENTICA A MAIN */
+.ch-soul{background:#7b1fa2;color:#fff;box-shadow:0 0 12px #7b1fa2}
+.ch-btn.active{outline:3px solid #ffb300;transform:scale(1.05)}
 #novitaSection{display:none;margin-top:20px;background:rgba(0,0,0,.60);padding:16px;border-radius:20px;border:1px solid rgba(255,255,255,.15);text-align:left}
 #novitaPlayerMain{margin:0 auto 16px auto;max-width:520px}
 #novitaPlayerMain iframe{width:100%;height:292px;border:none;border-radius:12px}
 #novitaList{display:flex;flex-direction:column;gap:8px}
 .novita-row{display:flex !important;flex-direction:row !important;align-items:center !important;gap:12px !important;background:rgba(0,0,0,.75) !important;padding:10px 14px !important;border-radius:12px !important;cursor:pointer !important;width:100% !important;border:1px solid rgba(255,255,255,.08) !important}
-.novita-row:hover{background:rgba(255,59,154,.25) !important}
-.novita-row.active{background:#ff3b9a !important}
+.novita-row:hover{background:rgba(123,31,162,.30) !important}
+.novita-row.active{background:#7b1fa2 !important}
 .novita-row img{width:56px !important;height:38px !important;border-radius:6px !important;object-fit:cover !important;flex-shrink:0 !important}
 .novita-row b{color:#fff !important;font-size:1rem !important;font-weight:800 !important}
 .novita-row span{color:#aaa !important;font-size:.82rem !important}
-html.popup-mode, body.popup-mode{ background:#020a18 !important; background-image:linear-gradient(180deg,#0a1830 0%,#020a18 100%) !important; overflow:hidden !important; height:380px !important;}
+html.popup-mode, body.popup-mode{ background:#1a0a2e !important; background-image:linear-gradient(180deg,#2e1a4a 0%,#1a0a2e 100%) !important; overflow:hidden !important; height:380px !important;}
 html.popup-mode .logo-wrap, body.popup-mode .logo-wrap, html.popup-mode h1, body.popup-mode h1, html.popup-mode .live, body.popup-mode .live, html.popup-mode #novitaSection, body.popup-mode #novitaSection, html.popup-mode .footer, body.popup-mode .footer, html.popup-mode .btn-novita, body.popup-mode .btn-novita, html.popup-mode #btnPopup, body.popup-mode #btnPopup{display:none !important;}
 html.popup-mode .container{ max-width:360px !important;margin:0 auto !important;padding:8px !important; background:transparent !important;border:none !important;backdrop-filter:none !important; height:380px !important; overflow:hidden !important; }
-html.popup-mode #popupBrand{display:block !important; font-size:0.68rem !important; color:#ffd966 !important; letter-spacing:2.5px !important; font-weight:900 !important; margin-bottom:4px !important;}
+html.popup-mode #popupBrand{display:block !important; font-size:0.68rem !important; color:#ffb300 !important; letter-spacing:2.5px !important; font-weight:900 !important; margin-bottom:4px !important;}
 html.popup-mode .player-box{ margin:0 auto 6px auto !important;padding:8px !important;background:rgba(255,255,255,.10) !important;}
 html.popup-mode .cc_recenttracks_list{ display:flex !important; flex-direction:row !important; min-height:92px !important; height:92px !important; background:rgba(0,0,0,.55) !important; padding:6px 8px !important; border-radius:12px !important; }
 html.popup-mode .cc_recenttracks_list img{ width:62px !important; height:62px !important; min-width:62px !important; max-width:62px !important; }
@@ -103,7 +75,7 @@ html.popup-mode .cc_recenttracks_list img{ width:62px !important; height:62px !i
 <div class="container">
 <div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo"></div>
 <h1>SOUL FUNK</h1>
-<div class="live">💗 SOUL ON AIR</div>
+<div class="live">💜 SOUL ON AIR</div>
 <div id="popupBrand">RADIO SISTEMA 3 - SOUL FUNK</div>
 <div class="player-box">
 <div class="ch-chooser">
@@ -112,8 +84,8 @@ html.popup-mode .cc_recenttracks_list img{ width:62px !important; height:62px !i
 </div>
 <div class="section-title">♪ Ascolta in diretta</div>
 <audio id="radioAudio" controls autoplay preload="none"><source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg"></audio>
-<div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak" style="color:#ff3b9a">STOP</span></div></div>
-<button id="btnPopup" onclick="apriPopupPlayer()" style="margin-top:12px;background:#ff3b9a;color:#fff;font-weight:bold;padding:10px 20px;border:none;border-radius:30px;cursor:pointer;">⧉ APRI POPUP PLAYER</button>
+<div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak" style="color:#ce93d8">STOP</span></div></div>
+<button id="btnPopup" onclick="apriPopupPlayer()" style="margin-top:12px;background:#7b1fa2;color:#fff;font-weight:bold;padding:10px 20px;border:none;border-radius:30px;cursor:pointer;">⧉ APRI POPUP PLAYER</button>
 </div>
 <div class="section-title" style="margin-top:8px;font-size:1.3rem">♪ Brano in onda</div>
 <div class="cc_recenttracks_list" data-username="tbqmsenb"></div>
@@ -127,7 +99,7 @@ const STREAM_URL = "https://control.myshoutca.st/proxy/tbqmsenb/stream";
 function apriNovita(){ document.getElementById('radioAudio').pause(); document.getElementById('novitaSection').style.display='block'; document.getElementById('btnNovita').style.display='none'; document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML; renderNovita(); }
 function chiudiNovita(){ document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML; document.getElementById('novitaList').innerHTML = ""; document.getElementById('novitaList').dataset.done = "0"; document.getElementById('novitaSection').style.display='none'; document.getElementById('btnNovita').style.display='inline-block'; document.getElementById('radioAudio').play().catch(()=>{}); }
 function playNovita(id, el){ document.getElementById('radioAudio').pause(); document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active')); el.classList.add('active'); document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>'; }
-function renderNovita(){ const c=document.getElementById('novitaList'); if(c.dataset.done=="1") return; c.dataset.done="1"; c.innerHTML = BRANI_NOVITA.map(b=>`<div class="novita-row" onclick="playNovita('${b.id}', this)"><img src="https://i.ytimg.com/vi/${b.id}/hqdefault.jpg"><div><b>${b.artista}</b><br><span>${b.titolo}</span></div><div style="margin-left:auto;color:#ff2040;font-size:1.1rem">▶</div></div>`).join(''); }
+function renderNovita(){ const c=document.getElementById('novitaList'); if(c.dataset.done=="1") return; c.dataset.done="1"; c.innerHTML = BRANI_NOVITA.map(b=>`<div class="novita-row" onclick="playNovita('${b.id}', this)"><img src="https://i.ytimg.com/vi/${b.id}/hqdefault.jpg"><div><b>${b.artista}</b><br><span>${b.titolo}</span></div><div style="margin-left:auto;color:#ffb300;font-size:1.1rem">▶</div></div>`).join(''); }
 function setupChannelNav(){
   const isPopup = window.location.search.includes('popup=1');
   const btnMain = document.getElementById('btnMain');
@@ -143,13 +115,12 @@ function setupChannelNav(){
     });
   }
 }
-function apriPopupPlayer(){ if(window.innerWidth <= 768) return; document.getElementById('radioAudio').pause(); popupWin = window.open(window.location.href.split('?')[0] + '?popup=1&v=32', 'RadioSistema3SoulPopup', 'width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let checkChiuso = setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(checkChiuso); popupWin = null; document.getElementById('radioAudio').play().catch(()=>{}); } }, 800); }
+function apriPopupPlayer(){ if(window.innerWidth <= 768) return; document.getElementById('radioAudio').pause(); popupWin = window.open(window.location.href.split('?')[0] + '?popup=1&v=33viola', 'RadioSistema3SoulPopup', 'width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let checkChiuso = setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(checkChiuso); popupWin = null; document.getElementById('radioAudio').play().catch(()=>{}); } }, 800); }
 function cleanWhiteBorder(img){
   if(img.dataset.cleaned==="1") return;
   const finalSize=window.location.search.includes('popup=1')?62:82;
   img.dataset.cleaned="1";
   img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.minWidth=finalSize+"px";img.style.maxWidth=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="8px";img.style.display="block";img.style.opacity="1";img.style.background="#000";
-  if(img.src.includes('shoutca') || img.src.startsWith('http')) return;
 }
 const list=document.querySelector('.cc_recenttracks_list');
 if(list){
@@ -164,7 +135,7 @@ if(list){
 }
 const vuCanvas = document.getElementById('vuCanvas'); const vuCtx = vuCanvas.getContext('2d'); const radioEl = document.getElementById('radioAudio'); const vuPeakEl = document.getElementById('vuPeak');
 let isPlayingVU=false, levelL=0, levelR=0;
-function drawStereo(){ const W=vuCanvas.width, H=vuCanvas.height; vuCtx.clearRect(0,0,W,H); vuCtx.fillStyle='#0a0a0a'; vuCtx.fillRect(0,0,W,H); let bars=36, barW=W/bars, gap=1.5, rowH=H/2-2; let activeL=Math.floor((levelL/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeL; let color=i<bars*0.6?(lit?'#00ff2a':'#001a05'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } vuCtx.fillStyle='#333'; vuCtx.fillRect(0, H/2-0.5, W, 1); let activeR=Math.floor((levelR/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeR; let color=i<bars*0.6?(lit?'#ff3b9a':'#1a0010'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=H/2+1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } requestAnimationFrame(drawStereo); }
+function drawStereo(){ const W=vuCanvas.width, H=vuCanvas.height; vuCtx.clearRect(0,0,W,H); vuCtx.fillStyle='#0a0a0a'; vuCtx.fillRect(0,0,W,H); let bars=36, barW=W/bars, gap=1.5, rowH=H/2-2; let activeL=Math.floor((levelL/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeL; let color=i<bars*0.6?(lit?'#00ff2a':'#001a05'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } vuCtx.fillStyle='#333'; vuCtx.fillRect(0, H/2-0.5, W, 1); let activeR=Math.floor((levelR/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeR; let color=i<bars*0.6?(lit?'#9c27b0':'#1a001a'):i<bars*0.84?(lit?'#ffb300':'#1a1500'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=H/2+1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } requestAnimationFrame(drawStereo); }
 function updateStereo(){ 
   if(!isPlayingVU){ levelL+=(0-levelL)*0.08; levelR+=(0-levelR)*0.08; return; } 
   const isPopup = window.location.search.includes('popup=1');
