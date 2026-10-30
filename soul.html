@@ -10,46 +10,68 @@
 body{font-family:Arial,sans-serif;color:white;text-align:center;background: linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.6)), url("studio-radio.jpeg");background-size:cover;background-position:center;background-attachment:fixed;background-color:#0d0620}
 .overlay{background:rgba(8,0,18,0.35);min-height:100vh;padding:20px;display:flex;align-items:center;justify-content:center}
 .container{width:100%;max-width:420px;padding:22px;background:rgba(0,0,0,0.82);border-radius:22px;border:1.5px solid #ff3b9a}
-.logo{width:70px;border-radius:12px;background:#fff;padding:3px}
+.top-title{color:#ffe600;font-size:.75rem;letter-spacing:2px;font-weight:900;margin-bottom:10px}
 h1{color:#ffe600;font-size:1.9rem;margin-top:6px}
-.live{color:#ff3b9a;font-weight:900;margin-top:2px;animation:blink 1.2s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.6}}
+.live{color:#ff3b9a;font-weight:900;margin-top:2px}
 .btns{display:flex;gap:8px;justify-content:center;margin:14px 0}
-.btns a{padding:9px 18px;border-radius:20px;text-decoration:none;font-weight:900;font-size:.8rem}
-.main{background:#fff;color:#000}.soul{background:#ff3b9a;color:#fff;border:1px solid #ffe600}
+.btns a{padding:10px 18px;border-radius:22px;text-decoration:none;font-weight:900;font-size:.85rem;flex:1}
+.main{background:#fff;color:#555;border:2px solid #ffe600}.soul{background:#ff3b9a;color:#fff;border:2px solid #ff3b9a;box-shadow:0 0 12px #ff3b9a66}
+.box-title{color:#ffe67a;font-size:1.15rem;margin:12px 0 8px;font-weight:700}
 .box{background:rgba(20,20,20,.75);padding:14px;border-radius:14px;border:1px solid #333}
-audio{width:100%;height:38px}
-.vu-wrap{margin-top:10px;background:#0e0e0e;padding:6px;border-radius:8px;border:1px solid #333}
-#vuCanvas{width:100%;height:34px;background:#0a0a0a;border-radius:4px}
-.vu-label{display:flex;justify-content:space-between;font-size:.6rem;color:#888;margin-top:3px;font-weight:900}
-#trackBox{min-height:96px;background:rgba(0,0,0,.5);padding:10px;border-radius:12px;margin-top:10px}
+audio{width:100%;height:38px;border-radius:20px}
+.vu-wrap{margin-top:10px;background:#1e1e28;padding:6px 8px;border-radius:10px;border:1px solid #333}
+#vuCanvas{width:100%;height:36px;background:#111118;border-radius:4px}
+.vu-label{display:flex;justify-content:space-between;font-size:.6rem;color:#999;margin-top:4px;font-weight:900;letter-spacing:.5px}
+#trackBox{min-height:96px;background:rgba(0,0,0,.45);padding:10px;border-radius:12px;margin-top:6px;text-align:left}
 .cc_recenttracks_list{background:transparent !important;padding:0 !important;display:flex !important;align-items:center !important;gap:12px !important;text-align:left !important}
-.cc_recenttracks_list *{color:white !important;line-height:1.2 !important;font-size:.95rem !important;white-space:normal !important;word-break:break-word !important}
+.cc_recenttracks_list *{color:white !important;line-height:1.2 !important;font-size:.92rem !important;white-space:normal !important;word-break:break-word !important}
 .cc_recenttracks_list .ccbuy{display:none !important}
-.cc_recenttracks_list img{width:76px !important;height:76px !important;min-width:76px !important;object-fit:cover;border-radius:6px;display:block !important;background:#111}
+.cc_recenttracks_list img{width:76px !important;height:76px !important;min-width:76px !important;object-fit:cover;border-radius:4px;display:block !important;background:#111;border:2px solid #fff}
 .cc_recenttracks_list:nth-of-type(n+2){display:none !important}
 .footer{margin-top:14px;font-size:.7rem;color:#aaa}.footer a{color:#ffe600;text-decoration:none;font-weight:900}
+
+/* === MODALITA POPUP uguale alla tua foto === */
+body.popup-mode{background:#1a1a22 !important;background-image:none !important}
+body.popup-mode .overlay{background:transparent !important;min-height:auto !important;padding:10px !important;align-items:flex-start}
+body.popup-mode .container{max-width:360px !important;background:rgba(30,30,40,0.96) !important;border:1.5px solid #3a3a4a !important;box-shadow:0 0 0 1px #000;padding:14px !important;border-radius:18px !important}
+body.popup-mode .logo{display:none}
+body.popup-mode h1{display:none}
+body.popup-mode .live{display:none}
+body.popup-mode .top-title{display:block !important}
+body.popup-mode .box{background:transparent !important;border:none !important;padding:0 !important}
+body.popup-mode .footer{display:none}
+body.popup-mode audio{background:#fff;border-radius:20px}
 </style>
 </head>
 <body>
 <div class="overlay">
 <div class="container">
-<img src="RADIO SISTEMA 3.jpeg" class="logo">
+<div class="top-title" style="display:none">RADIO SISTEMA 3</div>
+<img src="RADIO SISTEMA 3.jpeg" class="logo" style="width:70px;border-radius:12px;background:#fff;padding:3px">
 <h1>SOUL FUNK</h1>
 <div class="live">💗 SOUL ON AIR</div>
-<div class="btns"><a class="main" href="index.html?play=1">MAIN</a><a class="soul">SOUL FUNK</a></div>
+<div class="btns">
+<a class="main" href="index.html?popup=1">MAIN</a>
+<a class="soul">SOUL FUNK</a>
+</div>
+
+<div class="box-title">♪ Ascolta in diretta</div>
 <div class="box">
 <audio id="radioAudio" controls autoplay><source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg"></audio>
-<div class="vu-wrap"><canvas id="vuCanvas" width="600" height="34"></canvas><div class="vu-label"><span>L ● R STEREO</span><span style="color:#0f0">● LIVE</span></div></div>
-<div style="margin-top:10px;color:#ffd966;font-weight:900">♪ Brano in onda</div>
+<div class="vu-wrap"><canvas id="vuCanvas" width="600" height="36"></canvas><div class="vu-label"><span>L ● R STEREO</span><span style="color:#7aff7a">● LIVE</span></div></div>
+<div class="box-title">♪ Brano in onda</div>
 <div id="trackBox"><div class="cc_recenttracks_list" data-username="tbqmsenb"></div></div>
 </div>
+
 <div class="footer">© Radio Sistema 3<br><br><a href="index.html?play=1">⬅ Torna a MAIN</a></div>
 </div>
 </div>
 
 <script>
-// FIX COPERTINA BIANCA + BORDO
+// attiva popup se ?popup=1 come in foto
+if(new URLSearchParams(location.search).get('popup')==='1'){document.body.classList.add('popup-mode');}
+
+// FIX COPERTINA + Unknown
 function isAllWhite(img, cb){
   const t=new Image(); t.crossOrigin="anonymous";
   t.onload=function(){
@@ -61,11 +83,9 @@ function isAllWhite(img, cb){
       cb(white > tot*0.9);
     }catch(e){ cb(false); }
   };
-  t.onerror=()=>cb(false);
-  t.src=img.src;
+  t.onerror=()=>cb(false); t.src=img.src;
 }
 function fetchRealCover(query, targetImg){
-  if(!query) return;
   fetch('https://itunes.apple.com/search?term='+encodeURIComponent(query)+'&media=music&limit=1')
   .then(r=>r.json()).then(j=>{
     if(j.results && j.results[0] && j.results[0].artworkUrl100){
@@ -83,7 +103,6 @@ function handleCover(img){
       txt=txt.replace(/\n+/g,' ').replace(/Unknown/gi,'').trim().substring(0,80);
       if(txt.length>3) fetchRealCover(txt, img);
     } else {
-      // pulisci bordo bianco
       const finalSize=76;
       const t=new Image(); t.crossOrigin="anonymous";
       t.onload=function(){
@@ -98,35 +117,25 @@ function handleCover(img){
         octx.drawImage(c,left,top,cw,ch,0,0,finalSize,finalSize);
         img.src=o.toDataURL('image/jpeg',0.92);
       };
-      t.src=img.src;
-      img.dataset.done="1";
+      t.src=img.src; img.dataset.done="1";
     }
   });
 }
-// Nasconde solo "Unknown" del CD, se c'è nome CD vero lo lascia
 function hideUnknownRow(){
   const box=document.querySelector('.cc_recenttracks_list');
   if(!box) return;
   box.querySelectorAll('*').forEach(el=>{
-    if(el.children.length===0){
-      const txt=el.textContent.trim();
-      if(txt.toLowerCase()==='unknown'){
-        el.style.display='none';
-      }
-    }
+    if(el.children.length===0 && el.textContent.trim().toLowerCase()==='unknown'){el.style.display='none';}
   });
 }
 const list=document.querySelector('.cc_recenttracks_list');
 if(list){
-  new MutationObserver(()=>{
-    document.querySelectorAll('.cc_recenttracks_list img').forEach(handleCover);
-    hideUnknownRow();
-  }).observe(list,{childList:true,subtree:true});
+  new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(handleCover); hideUnknownRow();}).observe(list,{childList:true,subtree:true});
   setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(handleCover); hideUnknownRow();},1500);
 }
-// VU STEREO
+// VU
 const c=document.getElementById('vuCanvas'),x=c.getContext('2d');let l=0,r=0;
-function draw(){x.clearRect(0,0,c.width,c.height);x.fillStyle='#0a0a0a';x.fillRect(0,0,c.width,c.height);let bars=30,bw=c.width/bars,g=1.5,rh=c.height/2-2,al=Math.floor((l/100)*bars),ar=Math.floor((r/100)*bars);for(let i=0;i<bars;i++){let lit=i<al;x.fillStyle=lit?(i<18?'#0f0':i<24?'#ff0':'#f00'):'#1a1a1a';x.fillRect(i*bw+g,1,bw-g*2,lit?rh-1:rh*0.4)}x.fillStyle='#333';x.fillRect(0,c.height/2-.5,c.width,1);for(let i=0;i<bars;i++){let lit=i<ar;x.fillStyle=lit?(i<18?'#0af':i<24?'#ff0':'#f00'):'#1a1a1a';x.fillRect(i*bw+g,c.height/2+1,bw-g*2,lit?rh-1:rh*0.4)}requestAnimationFrame(draw)}function upd(){let b=22+Math.random()*30;l+=(b+Math.random()*15-l)*0.3;r+=(b+Math.random()*15-r)*0.3}draw();setInterval(upd,70);
+function draw(){x.clearRect(0,0,c.width,c.height);x.fillStyle='#111118';x.fillRect(0,0,c.width,c.height);let bars=24,bw=c.width/bars,g=2,rh=c.height/2-2,al=Math.floor((l/100)*bars),ar=Math.floor((r/100)*bars);for(let i=0;i<bars;i++){let lit=i<al;x.fillStyle=lit?(i<16?'#2aff2a':i<20?'#d4ff00':'#ff3b3b'):'#1e2a1e';x.fillRect(i*bw+g,2,bw-g*2,lit?rh-1:rh*0.45)}x.fillStyle='#333';x.fillRect(0,c.height/2-.5,c.width,1);for(let i=0;i<bars;i++){let lit=i<ar;x.fillStyle=lit?(i<16?'#2abfff':i<20?'#ffe600':'#ff3b3b'):'#1e2a2e';x.fillRect(i*bw+g,c.height/2+2,bw-g*2,lit?rh-1:rh*0.45)}requestAnimationFrame(draw)}function upd(){let b=22+Math.random()*30;l+=(b+Math.random()*15-l)*0.3;r+=(b+Math.random()*15-r)*0.3}draw();setInterval(upd,70);
 </script>
 </body>
 </html>
