@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - v24 FIX RITORNO</title>
+<title>Radio Sistema 3 - v25 FIX POPUP NAV</title>
 <script>
 if(window.location.search.includes('popup=1')){
   document.documentElement.classList.add('popup-mode');
@@ -82,8 +82,8 @@ html.popup-mode #vuCanvas{height:32px !important;}
 <div id="popupBrand">RADIO SISTEMA 3</div>
 <div class="player-box">
 <div class="ch-chooser">
-<a class="ch-btn ch-main active">MAIN</a>
-<a class="ch-btn ch-soul" href="soul.html">SOUL FUNK</a>
+<a id="btnMain" class="ch-btn ch-main active" href="index.html">MAIN</a>
+<a id="btnSoul" class="ch-btn ch-soul" href="soul.html">SOUL FUNK</a>
 </div>
 <div class="section-title">♪ Ascolta in diretta</div>
 <audio id="radioAudio" controls autoplay preload="none"><source id="radioSource" src="https://listentomystream.com:8046/;" type="audio/mpeg"></audio>
@@ -99,11 +99,34 @@ html.popup-mode #vuCanvas{height:32px !important;}
 <script>
 let popupWin = null;
 const STREAM_URL = "https://listentomystream.com:8046/;";
+
 function apriNovita(){ document.getElementById('radioAudio').pause(); document.getElementById('novitaSection').style.display='block'; document.getElementById('btnNovita').style.display='none'; document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML; renderNovita(); }
 function chiudiNovita(){ document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML; document.getElementById('novitaList').innerHTML = ""; document.getElementById('novitaList').dataset.done = "0"; document.getElementById('novitaSection').style.display='none'; document.getElementById('btnNovita').style.display='inline-block'; document.getElementById('radioAudio').play().catch(()=>{}); }
 function playNovita(id, el){ document.getElementById('radioAudio').pause(); document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active')); el.classList.add('active'); document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>'; }
 function renderNovita(){ const c=document.getElementById('novitaList'); if(c.dataset.done=="1") return; c.dataset.done="1"; c.innerHTML = BRANI_NOVITA.map(b=>`<div class="novita-row" onclick="playNovita('${b.id}', this)"><img src="https://i.ytimg.com/vi/${b.id}/hqdefault.jpg" style="width:50px;height:38px;border-radius:4px"><div><b style="font-size:0.9rem">${b.artista}</b><br><span style="color:#aaa;font-size:.75rem">${b.titolo}</span></div><div style="margin-left:auto;color:#ff0033">▶</div></div>`).join(''); }
+
+// FIX 3 CLICK CON ORDINE
+function setupChannelNav(){
+  const isPopup = window.location.search.includes('popup=1');
+  const btnMain = document.getElementById('btnMain');
+  const btnSoul = document.getElementById('btnSoul');
+  if(isPopup){
+    btnMain.href = 'index.html?popup=1';
+    btnSoul.href = 'soul.html?popup=1';
+    [btnMain, btnSoul].forEach(btn=>{
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        window.location.href = this.getAttribute('href');
+      });
+    });
+  } else {
+    btnMain.href = 'index.html';
+    btnSoul.href = 'soul.html';
+  }
+}
+
 function apriPopupPlayer(){ if(window.innerWidth <= 768) return; document.getElementById('radioAudio').pause(); popupWin = window.open(window.location.href.split('?')[0] + '?popup=1', 'RadioSistema3Popup', 'width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let checkChiuso = setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(checkChiuso); popupWin = null; document.getElementById('radioAudio').play().catch(()=>{}); } }, 800); }
+
 function cleanWhiteBorder(img){ if(img.dataset.cleaned==="1") return; img.dataset.cleaned="1"; const isMobile=window.innerWidth<768; const finalSize=window.location.search.includes('popup=1')?62:(isMobile?68:82); const tempImg=new Image();tempImg.crossOrigin="anonymous"; tempImg.onload=function(){ const w=tempImg.width,h=tempImg.height; const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d'); canvas.width=w;canvas.height=h;ctx.drawImage(tempImg,0,0); const data=ctx.getImageData(0,0,w,h).data; let top=0,bottom=h,left=0,right=w; for(let y=0;y<h;y++){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){top=y;break;}} for(let y=h-1;y>=0;y--){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){bottom=y+1;break;}} for(let x=0;x<w;x++){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){left=x;break;}} for(let x=w-1;x>=0;x--){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){right=x+1;break;}} right=right-Math.round(w*0.10);left=left+Math.round(w*0.02);top=top+Math.round(h*0.02);bottom=bottom-Math.round(h*0.02); const cw=right-left,ch=bottom-top; const out=document.createElement('canvas');out.width=finalSize;out.height=finalSize; const octx=out.getContext('2d');octx.imageSmoothingQuality='high'; octx.drawImage(canvas,left,top,cw,ch,0,0,finalSize,finalSize); img.src=out.toDataURL('image/jpeg',0.92); img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="5px";img.style.display="inline-block";img.style.margin="0";img.style.opacity="1";img.style.border="none"; }; tempImg.src=img.src; }
 const list=document.querySelector('.cc_recenttracks_list'); if(list){ new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);}).observe(list,{childList:true,subtree:true}); setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);},1000); }
 const vuCanvas = document.getElementById('vuCanvas'); const vuCtx = vuCanvas.getContext('2d'); const radioEl = document.getElementById('radioAudio'); const vuPeakEl = document.getElementById('vuPeak');
@@ -117,10 +140,12 @@ radioEl.addEventListener('play', ()=>{ isPlayingVU=true; vuPeakEl.textContent="�
 drawStereo(); setInterval(updateStereo, 60);
 document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML;
 
-// FIX RITORNO DA SOUL
 if(window.location.search.includes('play=1')){
   setTimeout(()=>{ radioEl.play().catch(()=>{}); }, 500);
 }
+
+document.addEventListener('DOMContentLoaded', setupChannelNav);
+setupChannelNav();
 </script>
 </body>
 </html>
