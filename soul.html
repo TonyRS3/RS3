@@ -14,8 +14,9 @@ body{font-family:Arial,sans-serif;color:white;text-align:center;background: line
 h1{color:#ffe600;font-size:1.9rem;margin-top:6px}
 .live{color:#ff3b9a;font-weight:900;margin-top:2px}
 .btns{display:flex;gap:8px;justify-content:center;margin:14px 0}
-.btns a{padding:10px 18px;border-radius:22px;text-decoration:none;font-weight:900;font-size:.85rem;flex:1}
+.btns a{padding:10px 18px;border-radius:22px;text-decoration:none;font-weight:900;font-size:.85rem;flex:1;cursor:pointer;transition:all 0.2s ease}
 .main{background:#fff;color:#555;border:2px solid #ffe600}.soul{background:#ff3b9a;color:#fff;border:2px solid #ff3b9a;box-shadow:0 0 12px #ff3b9a66}
+.btns a.active{outline:3px solid #ffe600;transform:scale(1.05)}
 .box-title{color:#ffe67a;font-size:1.15rem;margin:12px 0 8px;font-weight:700}
 .box{background:rgba(20,20,20,.75);padding:14px;border-radius:14px;border:1px solid #333}
 audio{width:100%;height:38px;border-radius:20px}
@@ -29,8 +30,6 @@ audio{width:100%;height:38px;border-radius:20px}
 .cc_recenttracks_list img{width:76px !important;height:76px !important;min-width:76px !important;object-fit:cover;border-radius:4px;display:block !important;background:#111;border:2px solid #fff}
 .cc_recenttracks_list:nth-of-type(n+2){display:none !important}
 .footer{margin-top:14px;font-size:.7rem;color:#aaa}.footer a{color:#ffe600;text-decoration:none;font-weight:900}
-
-/* === MODALITA POPUP uguale alla tua foto === */
 body.popup-mode{background:#1a1a22 !important;background-image:none !important}
 body.popup-mode .overlay{background:transparent !important;min-height:auto !important;padding:10px !important;align-items:flex-start}
 body.popup-mode .container{max-width:360px !important;background:rgba(30,30,40,0.96) !important;border:1.5px solid #3a3a4a !important;box-shadow:0 0 0 1px #000;padding:14px !important;border-radius:18px !important}
@@ -51,8 +50,8 @@ body.popup-mode audio{background:#fff;border-radius:20px}
 <h1>SOUL FUNK</h1>
 <div class="live">💗 SOUL ON AIR</div>
 <div class="btns">
-<a class="main" href="index.html?popup=1">MAIN</a>
-<a class="soul">SOUL FUNK</a>
+<a id="btnMain" class="main" href="index.html">MAIN</a>
+<a id="btnSoul" class="soul active" href="soul.html">SOUL FUNK</a>
 </div>
 
 <div class="box-title">♪ Ascolta in diretta</div>
@@ -63,13 +62,37 @@ body.popup-mode audio{background:#fff;border-radius:20px}
 <div id="trackBox"><div class="cc_recenttracks_list" data-username="tbqmsenb"></div></div>
 </div>
 
-<div class="footer">© Radio Sistema 3<br><br><a href="index.html?play=1">⬅ Torna a MAIN</a></div>
+<div class="footer">© Radio Sistema 3<br><br><a id="footerMain" href="index.html?play=1">⬅ Torna a MAIN</a></div>
 </div>
 </div>
 
 <script>
-// attiva popup se ?popup=1 come in foto
+// ATTIVA POPUP
 if(new URLSearchParams(location.search).get('popup')==='1'){document.body.classList.add('popup-mode');}
+
+// === FIX 3 CLICK CON ORDINE ===
+function setupChannelNav(){
+  const isPopup = new URLSearchParams(location.search).get('popup')==='1';
+  const btnMain = document.getElementById('btnMain');
+  const btnSoul = document.getElementById('btnSoul');
+  const footerMain = document.getElementById('footerMain');
+  if(isPopup){
+    btnMain.href = 'index.html?popup=1';
+    btnSoul.href = 'soul.html?popup=1';
+    if(footerMain) footerMain.href = 'index.html?popup=1';
+    [btnMain, btnSoul].forEach(btn=>{
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        window.location.href = this.getAttribute('href');
+      });
+    });
+  } else {
+    btnMain.href = 'index.html';
+    btnSoul.href = 'soul.html';
+    if(footerMain) footerMain.href = 'index.html?play=1';
+  }
+}
+setupChannelNav();
 
 // FIX COPERTINA + Unknown
 function isAllWhite(img, cb){
@@ -133,7 +156,6 @@ if(list){
   new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(handleCover); hideUnknownRow();}).observe(list,{childList:true,subtree:true});
   setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(handleCover); hideUnknownRow();},1500);
 }
-// VU
 const c=document.getElementById('vuCanvas'),x=c.getContext('2d');let l=0,r=0;
 function draw(){x.clearRect(0,0,c.width,c.height);x.fillStyle='#111118';x.fillRect(0,0,c.width,c.height);let bars=24,bw=c.width/bars,g=2,rh=c.height/2-2,al=Math.floor((l/100)*bars),ar=Math.floor((r/100)*bars);for(let i=0;i<bars;i++){let lit=i<al;x.fillStyle=lit?(i<16?'#2aff2a':i<20?'#d4ff00':'#ff3b3b'):'#1e2a1e';x.fillRect(i*bw+g,2,bw-g*2,lit?rh-1:rh*0.45)}x.fillStyle='#333';x.fillRect(0,c.height/2-.5,c.width,1);for(let i=0;i<bars;i++){let lit=i<ar;x.fillStyle=lit?(i<16?'#2abfff':i<20?'#ffe600':'#ff3b3b'):'#1e2a2e';x.fillRect(i*bw+g,c.height/2+2,bw-g*2,lit?rh-1:rh*0.45)}requestAnimationFrame(draw)}function upd(){let b=22+Math.random()*30;l+=(b+Math.random()*15-l)*0.3;r+=(b+Math.random()*15-r)*0.3}draw();setInterval(upd,70);
 </script>
