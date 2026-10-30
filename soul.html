@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - SOUL FUNK v25 FIX VU ROSSO</title>
+<title>Radio Sistema 3 - SOUL FUNK v25 FIX VU ROSSO POPUP BOOST</title>
 <script>
 if(window.location.search.includes('popup=1')){
   document.documentElement.classList.add('popup-mode');
@@ -58,9 +58,6 @@ audio{width:100%;max-width:340px;height:36px;}
 .ch-main{background:#fff;color:#222}
 .ch-soul{background:#ff3b9a;color:#fff;box-shadow:0 0 10px #ff3b9a}
 .ch-btn.active{outline:3px solid #ffe600;transform:scale(1.05)}
-.ch-btn:hover{transform:scale(1.08);box-shadow:0 0 15px #ffe600, 0 0 25px #ff3b9a;filter:brightness(1.3);animation:lampeggio 0.5s infinite alternate}
-@keyframes lampeggio{0%{box-shadow:0 0 5px #ffe600}100%{box-shadow:0 0 25px #ffe600, 0 0 40px #ff3b9a}}
-@media (max-width:768px){ #btnPopup{display:none !important;} }
 html.popup-mode, body.popup-mode{ background:#020a18 !important; background-image:linear-gradient(180deg,#0a1830 0%,#020a18 100%) !important; overflow:hidden !important; height:380px !important; min-height:380px !important; max-height:380px !important; }
 html.popup-mode .logo-wrap, body.popup-mode .logo-wrap, html.popup-mode h1, body.popup-mode h1, html.popup-mode .live, body.popup-mode .live, html.popup-mode #novitaSection, body.popup-mode #novitaSection, html.popup-mode .footer, body.popup-mode .footer, html.popup-mode .btn-novita, body.popup-mode .btn-novita, html.popup-mode #btnPopup, body.popup-mode #btnPopup{display:none !important;}
 html.popup-mode .container{ max-width:360px !important;margin:0 auto !important;padding:8px !important; background:transparent !important;border:none !important;backdrop-filter:none !important; height:380px !important; overflow:hidden !important; }
@@ -76,7 +73,7 @@ html.popup-mode #vuCanvas{height:32px !important;}
 </head>
 <body>
 <div class="container">
-<div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo" onerror="this.src='https://via.placeholder.com/260?text=RADIO+SISTEMA+3'"></div>
+<div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo"></div>
 <h1>SOUL FUNK</h1>
 <div class="live">💗 SOUL ON AIR</div>
 <div id="popupBrand">RADIO SISTEMA 3 - SOUL FUNK</div>
@@ -86,7 +83,7 @@ html.popup-mode #vuCanvas{height:32px !important;}
 <a id="btnSoul" class="ch-btn ch-soul active" href="soul.html">SOUL FUNK</a>
 </div>
 <div class="section-title">♪ Ascolta in diretta</div>
-<audio id="radioAudio" controls autoplay preload="none"><source id="radioSource" src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg"></audio>
+<audio id="radioAudio" controls autoplay preload="none"><source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg"></audio>
 <div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak" style="color:#ff3b9a">STOP</span></div></div>
 <button id="btnPopup" onclick="apriPopupPlayer()" style="margin-top:12px;background:#ff3b9a;color:#fff;font-weight:bold;padding:10px 20px;border:none;border-radius:30px;cursor:pointer;">⧉ APRI POPUP PLAYER</button>
 </div>
@@ -129,12 +126,13 @@ let isPlayingVU=false, levelL=0, levelR=0;
 function drawStereo(){ const W=vuCanvas.width, H=vuCanvas.height; vuCtx.clearRect(0,0,W,H); vuCtx.fillStyle='#0a0a0a'; vuCtx.fillRect(0,0,W,H); let bars=36, barW=W/bars, gap=1.5, rowH=H/2-2; let activeL=Math.floor((levelL/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeL; let color=i<bars*0.6?(lit?'#00ff2a':'#001a05'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } vuCtx.fillStyle='#333'; vuCtx.fillRect(0, H/2-0.5, W, 1); let activeR=Math.floor((levelR/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeR; let color=i<bars*0.6?(lit?'#ff3b9a':'#1a0010'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=H/2+1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } requestAnimationFrame(drawStereo); }
 function updateStereo(){ 
   if(!isPlayingVU){ levelL+=(0-levelL)*0.08; levelR+=(0-levelR)*0.08; return; } 
-  let base = 40 + Math.random()*45;
-  let isPeak = Math.random() < 0.18;
-  let targetL = isPeak ? 88 + Math.random()*12 : base + Math.random()*18;
-  let targetR = isPeak ? 85 + Math.random()*15 : base*0.9 + Math.random()*20;
-  levelL+=(targetL-levelL)*0.38; 
-  levelR+=(targetR-levelR)*0.34; 
+  const isPopup = window.location.search.includes('popup=1');
+  let base = isPopup ? 60 + Math.random()*40 : 40 + Math.random()*45;
+  let isPeak = Math.random() < (isPopup ? 0.28 : 0.18);
+  let targetL = isPeak ? 90 + Math.random()*10 : base + Math.random()*18;
+  let targetR = isPeak ? 88 + Math.random()*12 : base*0.9 + Math.random()*20;
+  levelL+=(targetL-levelL)*0.42; 
+  levelR+=(targetR-levelR)*0.38; 
   if(levelL>100)levelL=100; if(levelR>100)levelR=100;
 }
 let lastPause = 0; let isForcing = false;
