@@ -40,10 +40,11 @@ body.popup-mode .top-title{display:block !important}
 body.popup-mode .box{background:transparent !important;border:none !important;padding:0 !important}
 body.popup-mode .footer{display:none}
 body.popup-mode audio{background:#fff;border-radius:20px}
-body.popup-mode #vuCanvas{height:32px !important}
-body.popup-mode .cc_recenttracks_list{min-height:92px !important; height:92px !important; max-height:92px !important; overflow:hidden !important; background:rgba(0,0,0,.55) !important; border-radius:12px !important; padding:6px 8px !important;}
+body.popup-mode .vu-wrap{max-width:260px !important; padding:3px 5px !important; margin-top:4px !important;}
+body.popup-mode #vuCanvas{height:26px !important;}
+body.popup-mode .cc_recenttracks_list{min-height:76px !important; height:76px !important; max-height:76px !important; overflow:hidden !important; background:rgba(0,0,0,.55) !important; border-radius:12px !important; padding:5px 7px !important;}
 body.popup-mode .cc_recenttracks_list img{width:62px !important; height:62px !important; min-width:62px !important;}
-body.popup-mode .vu-wrap{max-width:300px !important; margin-top:6px !important;}
+body.popup-mode #trackBox{min-height:76px !important;}
 </style>
 </head>
 <body>
@@ -57,7 +58,6 @@ body.popup-mode .vu-wrap{max-width:300px !important; margin-top:6px !important;}
 <a id="btnMain" class="main" href="index.html">MAIN</a>
 <a id="btnSoul" class="soul active" href="soul.html">SOUL FUNK</a>
 </div>
-
 <div class="box-title">♪ Ascolta in diretta</div>
 <div class="box">
 <audio id="radioAudio" controls autoplay><source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg"></audio>
@@ -65,11 +65,9 @@ body.popup-mode .vu-wrap{max-width:300px !important; margin-top:6px !important;}
 <div class="box-title">♪ Brano in onda</div>
 <div id="trackBox"><div class="cc_recenttracks_list" data-username="tbqmsenb"></div></div>
 </div>
-
 <div class="footer">© Radio Sistema 3<br><br><a id="footerMain" href="index.html?play=1">⬅ Torna a MAIN</a></div>
 </div>
 </div>
-
 <script>
 if(new URLSearchParams(location.search).get('popup')==='1'){document.body.classList.add('popup-mode');}
 function setupChannelNav(){
@@ -94,7 +92,6 @@ function setupChannelNav(){
   }
 }
 setupChannelNav();
-
 function isAllWhite(img, cb){
   const t=new Image(); t.crossOrigin="anonymous";
   t.onload=function(){
@@ -118,7 +115,6 @@ function fetchRealCover(query, targetImg){
 }
 function handleCover(img){
   if(img.dataset.done=="1") return;
-  // FIX: dimensione corretta uguale al MAIN
   const isPopup = new URLSearchParams(location.search).get('popup')==='1';
   const finalSize = isPopup ? 62 : 76;
   isAllWhite(img, (allWhite)=>{
@@ -138,7 +134,6 @@ function handleCover(img){
         for(let y=h-1;y>=0;y--){let wr=true;for(let x=0;x<w;x++){let i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){wr=false;break;}}if(!wr){bottom=y+1;break;}}
         for(let x=0;x<w;x++){let wc=true;for(let y=top;y<bottom;y++){let i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){wc=false;break;}}if(!wc){left=x;break;}}
         for(let x=w-1;x>=0;x--){let wc=true;for(let y=top;y<bottom;y++){let i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){wc=false;break;}}if(!wc){right=x+1;break;}}
-        // FIX: non tagliare 10% a destra come prima, solo 2%
         right=right-Math.round(w*0.02);left=left+Math.round(w*0.02);top=top+Math.round(h*0.02);bottom=bottom-Math.round(h*0.02);
         const cw=right-left,ch=bottom-top; const o=document.createElement('canvas');o.width=finalSize;o.height=finalSize;const octx=o.getContext('2d');
         octx.imageSmoothingQuality='high';
@@ -162,7 +157,6 @@ if(list){
   new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(handleCover); hideUnknownRow();}).observe(list,{childList:true,subtree:true});
   setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(handleCover); hideUnknownRow();},1500);
 }
-// VU FIX - uguale al MAIN 36 barre, altezza 32px
 const c=document.getElementById('vuCanvas'),x=c.getContext('2d');let l=0,r=0;
 function draw(){
   x.clearRect(0,0,c.width,c.height);x.fillStyle='#111118';x.fillRect(0,0,c.width,c.height);
