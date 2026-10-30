@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SOUL FUNK - Radio Sistema 3</title>
 <script>
-if(new URLSearchParams(location.search).get('popup')==='1' || window.innerWidth <= 400){
+if(new URLSearchParams(location.search).get('popup')==='1'){
   document.documentElement.classList.add('popup-mode');
   document.addEventListener('DOMContentLoaded',()=>{
     document.body.classList.add('popup-mode');
@@ -46,13 +46,13 @@ audio{width:100%;height:38px;border-radius:20px}
 html.popup-mode, body.popup-mode{ background:#020a18 !important; background-image:linear-gradient(180deg,#0a1830 0%,#020a18 100%) !important; overflow:hidden !important; height:380px !important; min-height:380px !important; max-height:380px !important; }
 html.popup-mode .logo, body.popup-mode .logo, html.popup-mode h1, body.popup-mode h1, html.popup-mode .live, body.popup-mode .live, html.popup-mode .footer, body.popup-mode .footer{display:none !important}
 html.popup-mode .overlay{background:transparent !important;min-height:auto !important;padding:0 !important;align-items:flex-start !important}
-html.popup-mode .container{max-width:360px !important;margin:0 auto !important;padding:8px !important; background:transparent !important;border:none !important;backdrop-filter:none !important; height:380px !important; overflow:hidden !important; border-radius:0 !important}
-html.popup-mode #popupBrand{display:block !important; font-size:0.68rem !important; color:#ffd966 !important; letter-spacing:2.5px !important; font-weight:900 !important; margin-bottom:4px !important; opacity:0.9 !important; text-align:center}
+html.popup-mode .container{max-width:360px !important;margin:0 auto !important;padding:8px !important; background:transparent !important;border:none !important; height:380px !important; overflow:hidden !important; border-radius:0 !important}
+html.popup-mode #popupBrand{display:block !important; font-size:0.68rem !important; color:#ffd966 !important; letter-spacing:2.5px !important; font-weight:900 !important; margin-bottom:4px !important; text-align:center}
 html.popup-mode .box{background:rgba(255,255,255,.10) !important;border:none !important;padding:8px !important;border-radius:14px !important;margin-top:0 !important}
 html.popup-mode .box-title{font-size:0.85rem !important;margin:4px 0 !important;color:#ffd966 !important}
 html.popup-mode .vu-wrap{max-width:300px !important; margin-top:6px !important; padding:4px 6px !important;}
 html.popup-mode #vuCanvas{height:32px !important;}
-html.popup-mode #trackBox{background:rgba(0,0,0,.55) !important; border-radius:12px !important; min-height:92px !important; height:92px !important; max-height:92px !important; overflow:hidden !important; padding:6px 8px !important; margin-top:6px !important; display:flex !important; align-items:center !important;}
+html.popup-mode #trackBox{background:rgba(0,0,0,.55) !important; border-radius:12px !important; min-height:92px !important; height:92px !important; overflow:hidden !important; padding:6px 8px !important; margin-top:6px !important; display:flex !important; align-items:center !important;}
 html.popup-mode .cc_recenttracks_list{height:92px !important; min-height:92px !important; background:transparent !important; gap:6px !important;}
 html.popup-mode .cc_recenttracks_list img{width:62px !important; height:62px !important; min-width:62px !important; max-width:62px !important; border:none !important;}
 html.popup-mode .cc_recenttracks_list *{font-size:0.72rem !important; line-height:1.1 !important;}
@@ -81,11 +81,11 @@ html.popup-mode .cc_recenttracks_list *{font-size:0.72rem !important; line-heigh
 </div>
 </div>
 <script>
-let popupWin = null;
-const STREAM_URL = "https://listentomystream.com:8060/stream";
-function apriPopupPlayer(){ if(window.innerWidth <= 768) return; const a=document.getElementById('radioAudio'); a.pause(); popupWin = window.open(window.location.href.split('?')[0] + '?popup=1', 'RadioSistema3SoulPopup', 'width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let check=setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(check); popupWin=null; a.play().catch(()=>{}); } },800); }
+let popupWin=null;
+const STREAM_URL="https://listentomystream.com:8060/stream";
+function apriPopupPlayer(){ if(window.innerWidth<=768) return; const a=document.getElementById('radioAudio'); a.pause(); popupWin=window.open(window.location.href.split('?')[0]+'?popup=1','RadioSistema3SoulPopup','width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let check=setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(check); popupWin=null; a.play().catch(()=>{});} },800); }
 function setupChannelNav(){
-  const isPopup = new URLSearchParams(location.search).get('popup')==='1' || window.innerWidth <= 400 || window.opener;
+  const isPopup = new URLSearchParams(location.search).get('popup')==='1' || !!window.opener;
   const btnMain=document.getElementById('btnMain'),btnSoul=document.getElementById('btnSoul'),footerMain=document.getElementById('footerMain');
   btnMain.href = isPopup ? 'index.html?popup=1' : 'index.html';
   btnSoul.href = isPopup ? 'soul.html?popup=1' : 'soul.html';
@@ -95,75 +95,52 @@ function setupChannelNav(){
   }
 }
 setupChannelNav();
-function cleanWhiteBorder(img){
-  if(img.dataset.cleaned==="1") return;
-  img.dataset.cleaned="1";
-  const isMobile=window.innerWidth<768;
-  const isPopup=new URLSearchParams(location.search).get('popup')==='1' || window.innerWidth<=400;
-  const finalSize=isPopup?62:(isMobile?68:76);
-  img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.minWidth=finalSize+"px";img.style.maxWidth=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="8px";img.style.display="block";img.style.opacity="1";img.style.background="#000";img.style.border="none";
-}
 const list=document.querySelector('.cc_recenttracks_list');
 if(list){
-  new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);}).observe(list,{childList:true,subtree:true});
-  setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);},1000);
   function updateMediaSessionCover(){
     try{
-      const imgEl = document.querySelector('.cc_recenttracks_list img');
-      if(!imgEl || !imgEl.src) return;
-      let src = imgEl.src;
-      if(src.includes('via.placeholder') || src.toLowerCase().includes('radio+sistema')) return;
-      if(src.startsWith('//')) src = 'https:' + src;
-      src = src.replace('http://','https://');
-      let title = "SOUL FUNK";
-      let artist = "Radio Sistema 3";
-      const tc = document.querySelector('.cc_recenttracks_list');
+      const imgEl=document.querySelector('.cc_recenttracks_list img');
+      if(!imgEl||!imgEl.src) return;
+      let src=imgEl.src;
+      if(src.includes('via.placeholder')||src.toLowerCase().includes('radio+sistema')) return;
+      if(src.startsWith('//')) src='https:'+src;
+      src=src.replace('http://','https://');
+      let title="SOUL FUNK",artist="Radio Sistema 3";
+      const tc=document.querySelector('.cc_recenttracks_list');
       if(tc){
-        let raw = tc.innerText.trim();
-        let parts = raw.split('\n').map(s=>s.trim()).filter(Boolean);
+        let raw=tc.innerText.trim();
+        let parts=raw.split('\n').map(s=>s.trim()).filter(Boolean);
         if(parts.length>0){
-          let last = parts[parts.length-1];
+          let last=parts[parts.length-1];
           if(last.includes('-')){
-            let sp = last.split('-');
-            artist = sp[0].trim();
-            title = sp.slice(1).join('-').trim();
+            let sp=last.split('-');
+            artist=sp[0].trim();
+            title=sp.slice(1).join('-').trim();
           } else {
-            title = last;
-            if(parts.length>1) artist = parts[0];
+            title=last;
+            if(parts.length>1) artist=parts[0];
           }
         }
       }
       if('mediaSession' in navigator){
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: title.substring(0,80),
-          artist: artist.substring(0,80),
-          album: "Radio Sistema 3 - SOUL FUNK",
-          artwork: [{ src: src, sizes: "512x512", type: "image/jpeg" },{ src: src, sizes: "256x256", type: "image/jpeg" },{ src: src, sizes: "96x96", type: "image/jpeg" }]
+        navigator.mediaSession.metadata=new MediaMetadata({
+          title:title.substring(0,80),
+          artist:artist.substring(0,80),
+          album:"Radio Sistema 3 - SOUL FUNK",
+          artwork:[{src:src,sizes:"512x512",type:"image/jpeg"}]
         });
-        navigator.mediaSession.playbackState = "playing";
       }
     }catch(e){}
   }
-  setInterval(updateMediaSessionCover, 3000);
-  new MutationObserver(()=>{ setTimeout(updateMediaSessionCover, 800); }).observe(list,{childList:true,subtree:true,attributes:true});
-  if('mediaSession' in navigator){
-    try{
-      const ra=document.getElementById('radioAudio');
-      navigator.mediaSession.setActionHandler('play', ()=>{ ra.play().catch(()=>{}); });
-      navigator.mediaSession.setActionHandler('pause', ()=>{ ra.pause(); });
-    }catch(e){}
-  }
+  setInterval(updateMediaSessionCover,3000);
 }
-const vuCanvas=document.getElementById('vuCanvas'),vuCtx=vuCanvas.getContext('2d'),radioEl=document.getElementById('radioAudio'),vuPeakEl=document.getElementById('vuPeak');
+const vuCanvas=document.getElementById('vuCanvas'),vuCtx=vuCanvas.getContext('2d'),radioEl=document.getElementById('radioAudio');
 let isPlayingVU=false,levelL=0,levelR=0;
 function drawStereo(){ const W=vuCanvas.width,H=vuCanvas.height; vuCtx.clearRect(0,0,W,H); vuCtx.fillStyle='#111118'; vuCtx.fillRect(0,0,W,H); let bars=36,barW=W/bars,gap=1.5,rowH=H/2-2; let activeL=Math.floor((levelL/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeL; let color=i<bars*0.6?(lit?'#ff3b9a':'#2a0a1a'):i<bars*0.84?(lit?'#ffe600':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } vuCtx.fillStyle='#333'; vuCtx.fillRect(0, H/2-0.5, W, 1); let activeR=Math.floor((levelR/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeR; let color=i<bars*0.6?(lit?'#7b1fa2':'#1a0a2a'):i<bars*0.84?(lit?'#ffe600':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=H/2+1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } requestAnimationFrame(drawStereo); }
-function updateStereo(){ if(!isPlayingVU){ levelL+=(0-levelL)*0.08; levelR+=(0-levelR)*0.08; return; } const isPopup = new URLSearchParams(location.search).get('popup')==='1' || window.innerWidth<=400; if(isPopup){ let isPeak = Math.random() < 0.07; if(isPeak){ levelL = 78 + Math.random()*18; levelR = 76 + Math.random()*18; } else { let base = 32 + Math.random()*18; let targetL = base + Math.random()*10; let targetR = base*0.9 + Math.random()*10; levelL += (targetL - levelL) * 0.20; levelR += (targetR - levelR) * 0.18; } return; } let base = 40 + Math.random()*45; let isPeak = Math.random() < 0.18; let targetL = isPeak ? 88 + Math.random()*12 : base + Math.random()*18; let targetR = isPeak ? 85 + Math.random()*15 : base*0.9 + Math.random()*20; levelL+=(targetL-levelL)*0.38; levelR+=(targetR-levelR)*0.34; if(levelL>100)levelL=100; if(levelR>100)levelR=100; }
-let lastPause=0,isForcing=false;
-function forzaLive(){ if(isForcing) return; isForcing=true; radioEl.pause(); radioEl.src=STREAM_URL+"?live="+Date.now(); radioEl.load(); radioEl.play().catch(()=>{}).finally(()=>{ setTimeout(()=>{ isForcing=false; },1200); }); }
-radioEl.addEventListener('pause', ()=>{ lastPause=Date.now(); isPlayingVU=false; vuPeakEl.textContent="STOP"; vuPeakEl.style.color="#ff4444"; if('mediaSession' in navigator) try{navigator.mediaSession.playbackState="paused";}catch(e){} });
-radioEl.addEventListener('play', ()=>{ isPlayingVU=true; vuPeakEl.textContent="● LIVE"; vuPeakEl.style.color="#7aff7a"; vuPeakEl.style.animation="pulse 0.8s infinite"; if(popupWin && !popupWin.closed){ popupWin.close(); popupWin=null; } if(!isForcing && lastPause>0 && (Date.now()-lastPause>15000)){ forzaLive(); return; } document.querySelectorAll('.cc_recenttracks_list img').forEach(img=>{ img.dataset.cleaned="0"; }); const s=document.createElement('script'); s.src='https://manage.myshoutca.st/system/recenttracks.js?play_now='+Date.now(); document.head.appendChild(s); setTimeout(()=>s.remove(),3000); if('mediaSession' in navigator) try{navigator.mediaSession.playbackState="playing";}catch(e){} });
+function updateStereo(){ if(!isPlayingVU){ levelL+=(0-levelL)*0.08; levelR+=(0-levelR)*0.08; return; } const isPopup = new URLSearchParams(location.search).get('popup')==='1' || !!window.opener; if(isPopup){ let isPeak = Math.random() < 0.07; if(isPeak){ levelL = 78 + Math.random()*18; levelR = 76 + Math.random()*18; } else { let base = 32 + Math.random()*18; let targetL = base + Math.random()*10; let targetR = base*0.9 + Math.random()*10; levelL += (targetL - levelL) * 0.20; levelR += (targetR - levelR) * 0.18; } return; } let base = 40 + Math.random()*45; let isPeak = Math.random() < 0.18; let targetL = isPeak ? 88 + Math.random()*12 : base + Math.random()*18; let targetR = isPeak ? 85 + Math.random()*15 : base*0.9 + Math.random()*20; levelL+=(targetL-levelL)*0.38; levelR+=(targetR-levelR)*0.34; if(levelL>100)levelL=100; if(levelR>100)levelR=100; }
+radioEl.addEventListener('pause', ()=>{ isPlayingVU=false; });
+radioEl.addEventListener('play', ()=>{ isPlayingVU=true; });
 drawStereo(); setInterval(updateStereo,60);
-if(new URLSearchParams(location.search).get('play')==='1'){ setTimeout(()=>{ radioEl.play().catch(()=>{}); },500); }
 </script>
 </body>
 </html>
