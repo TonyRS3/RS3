@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - v26 VIOLA COORDINATO - FIX COVER CARPLAY</title>
+<title>Radio Sistema 3 - v26 VIOLA COORDINATO</title>
 <script>
 if(window.location.search.includes('popup=1')){
   document.documentElement.classList.add('popup-mode');
@@ -38,11 +38,38 @@ h1{margin-top:20px;font-size:3rem;}
 .player-box{margin-top:15px;background:rgba(255,255,255,.10);padding:12px;border-radius:20px;width:400px;max-width:92%;margin:0 auto;}
 .section-title{font-size:1.4rem;margin-bottom:8px;color:#ffd966;}
 audio{width:100%;max-width:340px;height:36px;}
-.cc_recenttracks_list{margin-top:8px !important;color:white !important;text-align:left !important;max-width:400px !important;margin-left:auto !important;margin-right:auto !important;background:rgba(0,0,0,0.65) !important;padding:10px 12px !important;border-radius:14px !important;display:flex !important;flex-direction:row !important;align-items:center !important;gap:12px !important;min-height:90px !important;}
-.cc_recenttracks_list img{width:82px !important;height:82px !important;min-width:82px !important;max-width:82px !important;object-fit:cover !important;border-radius:8px !important;display:block !important;opacity:1 !important;background:#000 !important;border:none !important;}
+.cc_recenttracks_list{
+  margin-top:8px !important;
+  color:white !important;
+  text-align:left !important;
+  max-width:400px !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  background:rgba(0,0,0,0.65) !important;
+  padding:10px 12px !important;
+  border-radius:14px !important;
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  gap:12px !important;
+  min-height:90px !important;
+}
+.cc_recenttracks_list img{
+  width:82px !important;
+  height:82px !important;
+  min-width:82px !important;
+  max-width:82px !important;
+  object-fit:cover !important;
+  border-radius:8px !important;
+  display:block !important;
+  opacity:1 !important;
+  background:#000 !important;
+  border:none !important;
+}
 .cc_recenttracks_list *{color:white !important;line-height:1.25 !important;font-size:0.92rem !important;text-align:left !important;}
 .cc_recenttracks_list .ccbuy{display:none !important;}
-.btn-novita{margin-top:20px;background:#ff0033;color:#fff;font-weight:900;padding:14px 26px;border:none;border-radius:50px;font-size:1.1rem;cursor:pointer;}
+.btn-novita{margin-top:20px;background:#ff0033;color:#fff;font-weight:900;padding:14px 26px;border:none;border-radius:50px;font-size:1.1rem;cursor:pointer;transition:all 0.25s ease;}
+#btnPopup{transition:all 0.25s ease;}
 #novitaSection{display:none;margin-top:20px;background:rgba(0,0,0,.6);padding:15px;border-radius:20px;}
 #novitaPlayerMain{width:65%;max-width:340px;aspect-ratio:16/9;background:#1a1a1a;border-radius:12px;margin:0 auto 12px auto;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border:2px dashed #555;}
 #novitaPlayerMain iframe{width:100%;height:100%;border:0;position:absolute;top:0;left:0}
@@ -57,6 +84,8 @@ audio{width:100%;max-width:340px;height:36px;}
 .ch-main{background:#fff;color:#222}
 .ch-soul{background:#7b1fa2;color:#fff;box-shadow:0 0 12px #7b1fa2}
 .ch-btn.active{outline:3px solid #ffe600;transform:scale(1.05)}
+.ch-btn:hover{transform:scale(1.08);box-shadow:0 0 15px #ffe600, 0 0 25px #7b1fa2;filter:brightness(1.3);animation:lampeggio 0.5s infinite alternate}
+@keyframes lampeggio{0%{box-shadow:0 0 5px #ffe600}100%{box-shadow:0 0 25px #ffe600, 0 0 40px #7b1fa2}}
 @media (max-width:768px){ #btnPopup{display:none !important;} }
 html.popup-mode, body.popup-mode{ background:#020a18 !important; background-image:linear-gradient(180deg,#0a1830 0%,#020a18 100%) !important; overflow:hidden !important; height:380px !important; min-height:380px !important; max-height:380px !important; }
 html.popup-mode .logo-wrap, body.popup-mode .logo-wrap, html.popup-mode h1, body.popup-mode h1, html.popup-mode .live, body.popup-mode .live, html.popup-mode #novitaSection, body.popup-mode #novitaSection, html.popup-mode .footer, body.popup-mode .footer, html.popup-mode .btn-novita, body.popup-mode .btn-novita, html.popup-mode #btnPopup, body.popup-mode #btnPopup{display:none !important;}
@@ -65,11 +94,15 @@ html.popup-mode #popupBrand{display:block !important; font-size:0.68rem !importa
 html.popup-mode .player-box{ margin:0 auto 6px auto !important;padding:8px !important;background:rgba(255,255,255,.10) !important; margin-top:0 !important; }
 html.popup-mode .cc_recenttracks_list{ display:flex !important; flex-direction:row !important; visibility:visible !important; opacity:1 !important; margin-bottom:6px !important; background:rgba(0,0,0,.55) !important; min-height:92px !important; height:92px !important; max-height:92px !important; overflow:hidden !important; padding:6px 8px !important; align-items:center !important; border-radius:12px !important; gap:6px !important; }
 html.popup-mode .cc_recenttracks_list img{ width:62px !important; height:62px !important; min-width:62px !important; max-width:62px !important; }
+html.popup-mode .cc_recenttracks_list div{ flex:1 !important; min-width:0 !important; }
+html.popup-mode .cc_recenttracks_list *{ font-size:0.72rem !important; line-height:1.1 !important; white-space:normal !important; word-break:break-word !important; }
+html.popup-mode .vu-wrap{max-width:300px !important; margin-top:6px !important;}
+html.popup-mode #vuCanvas{height:32px !important;}
 </style>
 </head>
 <body>
 <div class="container">
-<div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo"></div>
+<div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo" onerror="this.src='https://via.placeholder.com/260?text=RADIO+SISTEMA+3'"></div>
 <h1>RADIO SISTEMA 3</h1>
 <div class="live">🔴 ON AIR 24/7</div>
 <div id="popupBrand">RADIO SISTEMA 3</div>
@@ -156,17 +189,20 @@ if(list){
           title: title.substring(0,80),
           artist: artist.substring(0,80),
           album: "Radio Sistema 3 - MAIN",
-          artwork: [
-            { src: src, sizes: "512x512", type: "image/jpeg" },
-            { src: src, sizes: "256x256", type: "image/jpeg" },
-            { src: src, sizes: "96x96", type: "image/jpeg" }
-          ]
+          artwork: [{ src: src, sizes: "512x512", type: "image/jpeg" }]
         });
         navigator.mediaSession.playbackState = "playing";
       }
     }catch(e){}
   }
-  setInterval(updateMediaSessionCover, 2500);
+  setInterval(updateMediaSessionCover, 3000);
+  new MutationObserver(()=>{ setTimeout(updateMediaSessionCover, 800); }).observe(list,{childList:true,subtree:true,attributes:true});
+  if('mediaSession' in navigator){
+    try{
+      navigator.mediaSession.setActionHandler('play', ()=>{ radioEl.play().catch(()=>{}); });
+      navigator.mediaSession.setActionHandler('pause', ()=>{ radioEl.pause(); });
+    }catch(e){}
+  }
 }
 const vuCanvas = document.getElementById('vuCanvas'); const vuCtx = vuCanvas.getContext('2d'); const radioEl = document.getElementById('radioAudio'); const vuPeakEl = document.getElementById('vuPeak');
 let isPlayingVU=false, levelL=0, levelR=0;
@@ -186,20 +222,19 @@ function updateStereo(){
   let targetR = isPeak ? 85 + Math.random()*15 : base*0.9 + Math.random()*20;
   levelL+=(targetL-levelL)*0.38; 
   levelR+=(targetR-levelR)*0.34; 
+  if(levelL>100)levelL=100; if(levelR>100)levelR=100;
 }
 let lastPause = 0; let isForcing = false;
 function forzaLive(){ if(isForcing) return; isForcing = true; radioEl.pause(); radioEl.src = STREAM_URL + "?live=" + Date.now(); radioEl.load(); radioEl.play().catch(()=>{}).finally(()=>{ setTimeout(()=>{ isForcing=false; }, 1200); }); }
-radioEl.addEventListener('pause', ()=>{ lastPause = Date.now(); isPlayingVU=false; vuPeakEl.textContent="STOP"; vuPeakEl.style.color="#ff4444"; if('mediaSession' in navigator) navigator.mediaSession.playbackState="paused"; });
-radioEl.addEventListener('play', ()=>{ isPlayingVU=true; vuPeakEl.textContent="● LIVE"; vuPeakEl.style.color="#00ff2a"; if(popupWin && !popupWin.closed){ popupWin.close(); popupWin = null; } if(!isForcing && lastPause > 0 && (Date.now() - lastPause > 15000)){ forzaLive(); return; } document.querySelectorAll('.cc_recenttracks_list img').forEach(img=>{ img.dataset.cleaned="0"; }); const s = document.createElement('script'); s.src = 'https://manage.myshoutca.st/system/recenttracks.js?play_now=' + Date.now(); document.head.appendChild(s); setTimeout(()=>s.remove(), 3000); if('mediaSession' in navigator) navigator.mediaSession.playbackState="playing"; });
+radioEl.addEventListener('pause', ()=>{ lastPause = Date.now(); isPlayingVU=false; vuPeakEl.textContent="STOP"; vuPeakEl.style.color="#ff4444"; vuPeakEl.style.animation="none"; if('mediaSession' in navigator) try{navigator.mediaSession.playbackState="paused";}catch(e){} });
+radioEl.addEventListener('play', ()=>{ isPlayingVU=true; vuPeakEl.textContent="● LIVE"; vuPeakEl.style.color="#00ff2a"; vuPeakEl.style.animation="pulse 0.8s infinite"; if(popupWin && !popupWin.closed){ popupWin.close(); popupWin = null; } if(!isForcing && lastPause > 0 && (Date.now() - lastPause > 15000)){ forzaLive(); return; } document.querySelectorAll('.cc_recenttracks_list img').forEach(img=>{ img.dataset.cleaned="0"; }); const s = document.createElement('script'); s.src = 'https://manage.myshoutca.st/system/recenttracks.js?play_now=' + Date.now(); document.head.appendChild(s); setTimeout(()=>s.remove(), 3000); if('mediaSession' in navigator) try{navigator.mediaSession.playbackState="playing";}catch(e){} });
 drawStereo(); setInterval(updateStereo, 60);
 document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML;
-if(window.location.search.includes('play=1')){ setTimeout(()=>{ radioEl.play().catch(()=>{}); }, 500); }
+if(window.location.search.includes('play=1')){
+  setTimeout(()=>{ radioEl.play().catch(()=>{}); }, 500);
+}
 document.addEventListener('DOMContentLoaded', setupChannelNav);
 setupChannelNav();
-if('mediaSession' in navigator){
-  navigator.mediaSession.setActionHandler('play', ()=>{ radioEl.play(); });
-  navigator.mediaSession.setActionHandler('pause', ()=>{ radioEl.pause(); });
-}
 </script>
 </body>
 </html>
