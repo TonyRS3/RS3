@@ -1,48 +1,15 @@
-
 <!DOCTYPE html>
-<html lang="it">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOUL FUNK</title>
-<script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
-<style>
-body{margin:0;font-family:Arial;color:#fff;text-align:center;background:#1a0a2e;padding:15px}
-.box{max-width:400px;margin:20px auto;background:rgba(255,255,255,.1);padding:20px;border-radius:20px}
-audio{width:100%;height:54px;background:#000;border-radius:10px}
-button{margin-top:12px;background:#ffb300;color:#000;font-weight:900;padding:16px 20px;border:none;border-radius:30px;width:100%;font-size:1.2rem}
-#msg{font-size:.8rem;color:#ce93d8;margin-top:8px}
-</style>
-</head>
-<body>
-<h1>💜 SOUL FUNK</h1>
-<div class="box">
-<audio id="player" controls playsinline preload="none"></audio>
-<button id="playBtn" onclick="playNow()">▶️ TAP PER ASCOLTARE</button>
-<div id="msg">Pronto</div>
-</div>
-<div class="cc_recenttracks_list" data-username="tbqmsenb"></div>
-
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SOUL</title></head>
+<body style="background:#1a0a2e;color:white;text-align:center;padding:20px;font-family:Arial">
+<h1>SOUL FUNK</h1>
+<audio id="p" controls style="width:90%;max-width:400px;height:50px;margin-top:20px"></audio><br>
+<button onclick="playSoul()" style="margin-top:15px;background:#ffb300;color:black;font-weight:900;padding:15px 30px;border:none;border-radius:30px;font-size:18px">▶ TAP PER ASCOLTARE</button>
 <script>
-const player = document.getElementById('player');
-const msg = document.getElementById('msg');
-const btn = document.getElementById('playBtn');
-
-// Proxy CORS https che prende http://manage.myshoutca.st:8062/stream
-const STREAM = "https://corsproxy.io/?http://manage.myshoutca.st:8062/stream";
-
-function playNow(){
-  msg.textContent = "Collegamento...";
-  player.src = STREAM + "?_=" + Date.now();
-  player.load();
-  player.play().then(()=>{
-    msg.textContent = "● LIVE SOUL - https://rsistema3.eu";
-    msg.style.color="#00ff2a";
-    btn.style.display="none";
-  }).catch(e=>{
-    msg.textContent = "Errore: "+e.message;
-    btn.textContent="▶️ RIPROVA";
-  });
+function playSoul(){
+  let player = document.getElementById('p');
+  player.src = "https://corsproxy.io/?http://manage.myshoutca.st:8062/stream?_=" + Date.now();
+  player.play();
 }
 </script>
 </body>
