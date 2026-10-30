@@ -3,35 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOUL FUNK</title>
+<title>SOUL FUNK - Radio Sistema 3</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial,sans-serif;color:white;text-align:center;background:#0d0620 url('soul-funk.jpeg') no-repeat center 40% / 85% auto;background-attachment:fixed}
-.overlay{background:rgba(8,0,18,0.55);min-height:100vh;padding:20px;display:flex;align-items:center;justify-content:center}
-.container{width:100%;max-width:400px;padding:20px;background:rgba(0,0,0,0.82);border-radius:22px;border:1.5px solid #ff3b9a;box-shadow:0 0 30px rgba(255,59,154,.4)}
+body{
+  font-family:Arial,sans-serif;color:white;text-align:center;
+  /* PC = studio-radio come MAIN */
+  background: linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.6)), url("studio-radio.jpeg");
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+  background-color:#0d0620;
+}
+.overlay{background:rgba(8,0,18,0.35);min-height:100vh;padding:20px;display:flex;align-items:center;justify-content:center}
+.container{width:100%;max-width:420px;padding:22px;background:rgba(0,0,0,0.82);border-radius:22px;border:1.5px solid #ff3b9a;box-shadow:0 0 30px rgba(255,59,154,.4)}
 .logo{width:70px;border-radius:12px;background:#fff;padding:3px}
-h1{color:#ffe600;font-size:1.8rem;margin-top:6px;text-shadow:0 0 10px #ff3b9a}
+h1{color:#ffe600;font-size:1.9rem;margin-top:6px;text-shadow:0 0 10px #ff3b9a}
 .sub{font-size:.8rem;color:#ccc}
 .live{color:#ff3b9a;font-weight:900;margin-top:2px}
 .btns{display:flex;gap:8px;justify-content:center;margin:14px 0}
 .btns a{padding:9px 18px;border-radius:20px;text-decoration:none;font-weight:900;font-size:.8rem}
 .main{background:#fff;color:#000}
 .soul{background:#ff3b9a;color:#fff;border:1px solid #ffe600}
-.box{background:rgba(20,20,20,.7);padding:14px;border-radius:14px;border:1px solid #333}
+.box{background:rgba(20,20,20,.75);padding:14px;border-radius:14px;border:1px solid #333}
 audio{width:100%;height:38px}
 .vu-wrap{margin-top:10px;background:#0e0e0e;padding:6px;border-radius:8px;border:1px solid #333}
 #vuCanvas{width:100%;height:34px;background:#0a0a0a;border-radius:4px}
 .vu-label{display:flex;justify-content:space-between;font-size:.6rem;color:#888;margin-top:3px;font-weight:900}
-/* FIX 1 BRANO SOLO */
 .cc_recenttracks_list{background:rgba(0,0,0,.5);padding:10px;border-radius:12px;display:flex !important;align-items:center !important;gap:12px !important;text-align:left !important;max-width:400px;margin:10px auto 0 auto}
 .cc_recenttracks_list *{color:white !important;line-height:1.2 !important;font-size:.95rem !important;white-space:normal !important;word-break:break-word !important;writing-mode:horizontal-tb !important}
 .cc_recenttracks_list .ccbuy{display:none !important}
 .cc_recenttracks_list img{width:76px !important;height:76px !important;min-width:76px !important;object-fit:cover;border-radius:6px;opacity:1 !important;display:block !important}
-/* nascondi dal 2° in poi */
 .cc_recenttracks_list:nth-of-type(n+2){display:none !important}
-.footer{margin-top:14px;font-size:.7rem;color:#999}
+.footer{margin-top:14px;font-size:.7rem;color:#aaa}
 .footer a{color:#ffe600;text-decoration:none;font-weight:900}
+
+/* Su cellulare se vuoi rimettere soul-funk.jpeg, decommenta questo */
+/*
+@media (max-width:768px){
+  body{
+    background: linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.6)), url("soul-funk.jpeg");
+    background-size:85% auto;
+    background-position:center 40%;
+  }
+}
+*/
 </style>
 </head>
 <body>
@@ -43,7 +60,7 @@ audio{width:100%;height:38px}
 <div class="live">💗 SOUL ON AIR</div>
 <div class="btns"><a class="main" href="index.html?play=1">MAIN</a><a class="soul">SOUL FUNK</a></div>
 <div class="box">
-<audio id="radioAudio" controls autoplay><source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg"></audio>
+<audio controls autoplay><source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg"></audio>
 <div class="vu-wrap"><canvas id="vuCanvas" width="600" height="34"></canvas><div class="vu-label"><span>L ● R STEREO</span><span style="color:#0f0">● LIVE</span></div></div>
 <div style="margin-top:10px;color:#ffd966;font-weight:900">♪ Brano in onda</div>
 <div class="cc_recenttracks_list" data-username="tbqmsenb"></div>
@@ -52,7 +69,6 @@ audio{width:100%;height:38px}
 </div>
 </div>
 <script>
-// VU STEREO UGUALE
 const c=document.getElementById('vuCanvas'),x=c.getContext('2d');let l=0,r=0;
 function draw(){x.clearRect(0,0,c.width,c.height);x.fillStyle='#0a0a0a';x.fillRect(0,0,c.width,c.height);let bars=30,bw=c.width/bars,g=1.5,rh=c.height/2-2,al=Math.floor((l/100)*bars),ar=Math.floor((r/100)*bars);for(let i=0;i<bars;i++){let lit=i<al;x.fillStyle=lit?(i<18?'#0f0':i<24?'#ff0':'#f00'):'#1a1a1a';x.fillRect(i*bw+g,1,bw-g*2,lit?rh-1:rh*0.4)}x.fillStyle='#333';x.fillRect(0,c.height/2-.5,c.width,1);for(let i=0;i<bars;i++){let lit=i<ar;x.fillStyle=lit?(i<18?'#0af':i<24?'#ff0':'#f00'):'#1a1a1a';x.fillRect(i*bw+g,c.height/2+1,bw-g*2,lit?rh-1:rh*0.4)}requestAnimationFrame(draw)}function upd(){let b=22+Math.random()*30;l+=(b+Math.random()*15-l)*0.3;r+=(b+Math.random()*15-r)*0.3}draw();setInterval(upd,70);
 </script>
