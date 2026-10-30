@@ -1,16 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SOUL</title></head>
-<body style="background:#1a0a2e;color:white;text-align:center;padding:20px;font-family:Arial">
-<h1>SOUL FUNK</h1>
-<audio id="p" controls style="width:90%;max-width:400px;height:50px;margin-top:20px"></audio><br>
-<button onclick="playSoul()" style="margin-top:15px;background:#ffb300;color:black;font-weight:900;padding:15px 30px;border:none;border-radius:30px;font-size:18px">▶ TAP PER ASCOLTARE</button>
-<script>
-function playSoul(){
-  let player = document.getElementById('p');
-  player.src = "https://corsproxy.io/?http://manage.myshoutca.st:8062/stream?_=" + Date.now();
-  player.play();
-}
-</script>
-</body>
-</html>
+<audio controls autoplay style="width:100%">
+  <source src="https://api.allorigins.win/raw?url=http://manage.myshoutca.st:8062/stream" type="audio/mpeg">
+</audio>
