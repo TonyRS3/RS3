@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - SOUL FUNK v33 VIOLA</title>
+<title>Radio Sistema 3 - SOUL FUNK v34 MOBILE FIX</title>
 <script>
 if(window.location.search.includes('popup=1')){
   document.documentElement.classList.add('popup-mode');
@@ -62,6 +62,7 @@ audio{width:100%;max-width:340px;height:36px;}
 .novita-row img{width:56px !important;height:38px !important;border-radius:6px !important;object-fit:cover !important;flex-shrink:0 !important}
 .novita-row b{color:#fff !important;font-size:1rem !important;font-weight:800 !important}
 .novita-row span{color:#aaa !important;font-size:.82rem !important}
+@media (max-width:768px){ #btnPopup{display:none !important;} }
 html.popup-mode, body.popup-mode{ background:#1a0a2e !important; background-image:linear-gradient(180deg,#2e1a4a 0%,#1a0a2e 100%) !important; overflow:hidden !important; height:380px !important;}
 html.popup-mode .logo-wrap, body.popup-mode .logo-wrap, html.popup-mode h1, body.popup-mode h1, html.popup-mode .live, body.popup-mode .live, html.popup-mode #novitaSection, body.popup-mode #novitaSection, html.popup-mode .footer, body.popup-mode .footer, html.popup-mode .btn-novita, body.popup-mode .btn-novita, html.popup-mode #btnPopup, body.popup-mode #btnPopup{display:none !important;}
 html.popup-mode .container{ max-width:360px !important;margin:0 auto !important;padding:8px !important; background:transparent !important;border:none !important;backdrop-filter:none !important; height:380px !important; overflow:hidden !important; }
@@ -83,7 +84,7 @@ html.popup-mode .cc_recenttracks_list img{ width:62px !important; height:62px !i
 <a id="btnSoul" class="ch-btn ch-soul active" href="soul.html">SOUL FUNK</a>
 </div>
 <div class="section-title">♪ Ascolta in diretta</div>
-<audio id="radioAudio" controls autoplay preload="none"><source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg"></audio>
+<audio id="radioAudio" controls autoplay playsinline preload="auto" crossorigin="anonymous"><source src="https://control.myshoutca.st/proxy/tbqmsenb/stream" type="audio/mpeg"></audio>
 <div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak" style="color:#ce93d8">STOP</span></div></div>
 <button id="btnPopup" onclick="apriPopupPlayer()" style="margin-top:12px;background:#7b1fa2;color:#fff;font-weight:bold;padding:10px 20px;border:none;border-radius:30px;cursor:pointer;">⧉ APRI POPUP PLAYER</button>
 </div>
@@ -115,7 +116,7 @@ function setupChannelNav(){
     });
   }
 }
-function apriPopupPlayer(){ if(window.innerWidth <= 768) return; document.getElementById('radioAudio').pause(); popupWin = window.open(window.location.href.split('?')[0] + '?popup=1&v=33viola', 'RadioSistema3SoulPopup', 'width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let checkChiuso = setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(checkChiuso); popupWin = null; document.getElementById('radioAudio').play().catch(()=>{}); } }, 800); }
+function apriPopupPlayer(){ if(window.innerWidth <= 768) return; document.getElementById('radioAudio').pause(); popupWin = window.open(window.location.href.split('?')[0] + '?popup=1&v=34mobile', 'RadioSistema3SoulPopup', 'width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let checkChiuso = setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(checkChiuso); popupWin = null; document.getElementById('radioAudio').play().catch(()=>{}); } }, 800); }
 function cleanWhiteBorder(img){
   if(img.dataset.cleaned==="1") return;
   const finalSize=window.location.search.includes('popup=1')?62:82;
@@ -155,6 +156,19 @@ let lastPause = 0; let isForcing = false;
 function forzaLive(){ if(isForcing) return; isForcing = true; radioEl.pause(); radioEl.src = STREAM_URL + "?live=" + Date.now(); radioEl.load(); radioEl.play().catch(()=>{}).finally(()=>{ setTimeout(()=>{ isForcing=false; }, 1200); }); }
 radioEl.addEventListener('pause', ()=>{ lastPause = Date.now(); isPlayingVU=false; vuPeakEl.textContent="STOP"; });
 radioEl.addEventListener('play', ()=>{ isPlayingVU=true; vuPeakEl.textContent="● LIVE"; if(popupWin && !popupWin.closed){ popupWin.close(); popupWin = null; } if(!isForcing && lastPause > 0 && (Date.now() - lastPause > 15000)){ forzaLive(); return; } const s = document.createElement('script'); s.src = 'https://manage.myshoutca.st/system/recenttracks.js?play_now=' + Date.now(); document.head.appendChild(s); setTimeout(()=>s.remove(), 3000); });
+radioEl.addEventListener('error', ()=>{ vuPeakEl.textContent="RETRY..."; setTimeout(()=>{ radioEl.load(); radioEl.play().catch(()=>{}); }, 1500); });
+// FIX AUTOPLAY MOBILE - parte al primo tap ovunque
+let audioUnlocked = false;
+function unlockAudio(){
+  if(audioUnlocked) return;
+  audioUnlocked = true;
+  radioEl.play().catch(()=>{});
+  document.removeEventListener('touchstart', unlockAudio);
+  document.removeEventListener('click', unlockAudio);
+}
+document.addEventListener('touchstart', unlockAudio, {once:true});
+document.addEventListener('click', unlockAudio, {once:true});
+
 drawStereo(); setInterval(updateStereo, 70);
 document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML;
 if(window.location.search.includes('play=1')){ setTimeout(()=>{ radioEl.play().catch(()=>{}); }, 500); }
