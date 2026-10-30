@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - SOUL FUNK v26 BALANCED</title>
+<title>Radio Sistema 3 - SOUL FUNK v27 LOW POPUP</title>
 <script>
 if(window.location.search.includes('popup=1')){
   document.documentElement.classList.add('popup-mode');
@@ -103,12 +103,9 @@ function setupChannelNav(){
         window.location.href = this.getAttribute('href');
       });
     });
-  } else {
-    btnMain.href = 'index.html';
-    btnSoul.href = 'soul.html';
   }
 }
-function apriPopupPlayer(){ if(window.innerWidth <= 768) return; document.getElementById('radioAudio').pause(); popupWin = window.open(window.location.href.split('?')[0] + '?popup=1', 'RadioSistema3SoulPopup', 'width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let checkChiuso = setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(checkChiuso); popupWin = null; document.getElementById('radioAudio').play().catch(()=>{}); } }, 800); }
+function apriPopupPlayer(){ if(window.innerWidth <= 768) return; document.getElementById('radioAudio').pause(); popupWin = window.open(window.location.href.split('?')[0] + '?popup=1&v=27low', 'RadioSistema3SoulPopup', 'width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let checkChiuso = setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(checkChiuso); popupWin = null; document.getElementById('radioAudio').play().catch(()=>{}); } }, 800); }
 function cleanWhiteBorder(img){ if(img.dataset.cleaned==="1") return; img.dataset.cleaned="1"; const isMobile=window.innerWidth<768; const finalSize=window.location.search.includes('popup=1')?62:(isMobile?68:82); const tempImg=new Image();tempImg.crossOrigin="anonymous"; tempImg.onload=function(){ const w=tempImg.width,h=tempImg.height; const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d'); canvas.width=w;canvas.height=h;ctx.drawImage(tempImg,0,0); const data=ctx.getImageData(0,0,w,h).data; let top=0,bottom=h,left=0,right=w; for(let y=0;y<h;y++){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){top=y;break;}} for(let y=h-1;y>=0;y--){let whiteRow=true;for(let x=0;x<w;x++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteRow=false;break;}}if(!whiteRow){bottom=y+1;break;}} for(let x=0;x<w;x++){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){left=x;break;}} for(let x=w-1;x>=0;x--){let whiteCol=true;for(let y=top;y<bottom;y++){const i=(y*w+x)*4;if(data[i]<230||data[i+1]<230||data[i+2]<230){whiteCol=false;break;}}if(!whiteCol){right=x+1;break;}} right=right-Math.round(w*0.10);left=left+Math.round(w*0.02);top=top+Math.round(h*0.02);bottom=bottom-Math.round(h*0.02); const cw=right-left,ch=bottom-top; const out=document.createElement('canvas');out.width=finalSize;out.height=finalSize; const octx=out.getContext('2d');octx.imageSmoothingQuality='high'; octx.drawImage(canvas,left,top,cw,ch,0,0,finalSize,finalSize); img.src=out.toDataURL('image/jpeg',0.92); img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="5px";img.style.display="inline-block";img.style.opacity="1"; }; tempImg.src=img.src; }
 const list=document.querySelector('.cc_recenttracks_list'); if(list){ new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);}).observe(list,{childList:true,subtree:true}); setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);},1000); }
 const vuCanvas = document.getElementById('vuCanvas'); const vuCtx = vuCanvas.getContext('2d'); const radioEl = document.getElementById('radioAudio'); const vuPeakEl = document.getElementById('vuPeak');
@@ -118,13 +115,12 @@ function updateStereo(){
   if(!isPlayingVU){ levelL+=(0-levelL)*0.08; levelR+=(0-levelR)*0.08; return; } 
   const isPopup = window.location.search.includes('popup=1');
   if(isPopup){
-    let base = 52 + Math.random()*22;
-    let isPeak = Math.random() < 0.12;
-    let targetL = isPeak ? 84 + Math.random()*12 : base + Math.random()*12;
-    let targetR = isPeak ? 82 + Math.random()*14 : base*0.9 + Math.random()*14;
-    levelL += (targetL - levelL) * 0.30;
-    levelR += (targetR - levelR) * 0.28;
-    if(levelL>100)levelL=100; if(levelR>100)levelR=100;
+    // LOW POPUP - NON ARRIVA MAI AL ROSSO
+    let base = 28 + Math.random()*16; // 28-44%
+    let targetL = base + Math.random()*8;
+    let targetR = base*0.9 + Math.random()*8;
+    levelL += (targetL - levelL) * 0.18;
+    levelR += (targetR - levelR) * 0.16;
     return;
   }
   let base = 40 + Math.random()*45;
@@ -133,13 +129,12 @@ function updateStereo(){
   let targetR = isPeak ? 85 + Math.random()*15 : base*0.9 + Math.random()*20;
   levelL+=(targetL-levelL)*0.38; 
   levelR+=(targetR-levelR)*0.34; 
-  if(levelL>100)levelL=100; if(levelR>100)levelR=100;
 }
 let lastPause = 0; let isForcing = false;
 function forzaLive(){ if(isForcing) return; isForcing = true; radioEl.pause(); radioEl.src = STREAM_URL + "?live=" + Date.now(); radioEl.load(); radioEl.play().catch(()=>{}).finally(()=>{ setTimeout(()=>{ isForcing=false; }, 1200); }); }
-radioEl.addEventListener('pause', ()=>{ lastPause = Date.now(); isPlayingVU=false; vuPeakEl.textContent="STOP"; vuPeakEl.style.color="#ff4444"; });
-radioEl.addEventListener('play', ()=>{ isPlayingVU=true; vuPeakEl.textContent="● LIVE"; vuPeakEl.style.color="#ff3b9a"; if(popupWin && !popupWin.closed){ popupWin.close(); popupWin = null; } if(!isForcing && lastPause > 0 && (Date.now() - lastPause > 15000)){ forzaLive(); return; } document.querySelectorAll('.cc_recenttracks_list img').forEach(img=>{ img.dataset.cleaned="0"; }); const s = document.createElement('script'); s.src = 'https://manage.myshoutca.st/system/recenttracks.js?play_now=' + Date.now(); document.head.appendChild(s); setTimeout(()=>s.remove(), 3000); });
-drawStereo(); setInterval(updateStereo, 60);
+radioEl.addEventListener('pause', ()=>{ lastPause = Date.now(); isPlayingVU=false; vuPeakEl.textContent="STOP"; });
+radioEl.addEventListener('play', ()=>{ isPlayingVU=true; vuPeakEl.textContent="● LIVE"; if(popupWin && !popupWin.closed){ popupWin.close(); popupWin = null; } if(!isForcing && lastPause > 0 && (Date.now() - lastPause > 15000)){ forzaLive(); return; } const s = document.createElement('script'); s.src = 'https://manage.myshoutca.st/system/recenttracks.js?play_now=' + Date.now(); document.head.appendChild(s); setTimeout(()=>s.remove(), 3000); });
+drawStereo(); setInterval(updateStereo, 70);
 document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML;
 if(window.location.search.includes('play=1')){ setTimeout(()=>{ radioEl.play().catch(()=>{}); }, 500); }
 document.addEventListener('DOMContentLoaded', setupChannelNav);
