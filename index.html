@@ -16,6 +16,7 @@ if(window.location.search.includes('popup=1')){
 </script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
+const RADIO_LOGO_FISSO = "RADIO SISTEMA 3.jpeg";
 const BRANI_NOVITA = [
   { id: "ofywN3NgGqY", artista: "Sombr", titolo: "My body isn't ready" },
   { id: "PshqcQwshdU", artista: "Sfera Ebbasta", titolo: "Lontano" },
@@ -153,23 +154,29 @@ function setupChannelNav(){
 }
 function apriPopupPlayer(){ if(window.innerWidth <= 768) return; document.getElementById('radioAudio').pause(); popupWin = window.open(window.location.href.split('?')[0] + '?popup=1', 'RadioSistema3Popup', 'width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let checkChiuso = setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(checkChiuso); popupWin = null; document.getElementById('radioAudio').play().catch(()=>{}); } }, 800); }
 function cleanWhiteBorder(img){
-  if(img.dataset.cleaned==="1") return;
-  img.dataset.cleaned="1";
   const isMobile=window.innerWidth<768;
   const finalSize=window.location.search.includes('popup=1')?62:(isMobile?68:82);
+  if(img.src && !img.src.includes('RADIO%20SISTEMA%203') && !img.src.includes('RADIO SISTEMA 3.jpeg')){
+     img.src = RADIO_LOGO_FISSO;
+  }
   img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.minWidth=finalSize+"px";img.style.maxWidth=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="8px";img.style.display="block";img.style.opacity="1";img.style.background="#000";img.style.border="none";
 }
 const list=document.querySelector('.cc_recenttracks_list'); 
 if(list){ 
-  new MutationObserver(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);}).observe(list,{childList:true,subtree:true}); 
+  new MutationObserver((muts)=>{
+    muts.forEach(m=>{
+      if(m.type==='attributes' && m.attributeName==='src'){
+        const img = m.target;
+        if(img.tagName==='IMG' && !img.src.includes('RADIO SISTEMA 3.jpeg') && !img.src.includes('RADIO%20SISTEMA')){
+          img.src = RADIO_LOGO_FISSO;
+        }
+      }
+    });
+    document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);
+  }).observe(list,{childList:true,subtree:true,attributes:true,attributeFilter:['src']}); 
   setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);},1000);
   function updateMediaSessionCover(){
     try{
-      const imgEl = document.querySelector('.cc_recenttracks_list img');
-      if(!imgEl || !imgEl.src) return;
-      let src = imgEl.src;
-      if(src.includes('via.placeholder') || src.toLowerCase().includes('radio+sistema')) return;
-      if(src.startsWith('//')) src = 'https:' + src;
       let title = "Radio Sistema 3";
       let artist = "Live";
       const tc = document.querySelector('.cc_recenttracks_list');
@@ -193,7 +200,7 @@ if(list){
           title: title.substring(0,80),
           artist: artist.substring(0,80),
           album: "Radio Sistema 3 - MAIN",
-          artwork: [{ src: src, sizes: "512x512", type: "image/jpeg" }]
+          artwork: [{ src: RADIO_LOGO_FISSO, sizes: "512x512", type: "image/jpeg" }]
         });
         navigator.mediaSession.playbackState = "playing";
       }
@@ -231,7 +238,7 @@ function updateStereo(){
 let lastPause = 0; let isForcing = false;
 function forzaLive(){ if(isForcing) return; isForcing = true; radioEl.pause(); radioEl.src = STREAM_URL + "?live=" + Date.now(); radioEl.load(); radioEl.play().catch(()=>{}).finally(()=>{ setTimeout(()=>{ isForcing=false; }, 1200); }); }
 radioEl.addEventListener('pause', ()=>{ lastPause = Date.now(); isPlayingVU=false; vuPeakEl.textContent="STOP"; vuPeakEl.style.color="#ff4444"; vuPeakEl.style.animation="none"; if('mediaSession' in navigator) try{navigator.mediaSession.playbackState="paused";}catch(e){} });
-radioEl.addEventListener('play', ()=>{ isPlayingVU=true; vuPeakEl.textContent="● LIVE"; vuPeakEl.style.color="#00ff2a"; vuPeakEl.style.animation="pulse 0.8s infinite"; if(popupWin && !popupWin.closed){ popupWin.close(); popupWin = null; } if(!isForcing && lastPause > 0 && (Date.now() - lastPause > 15000)){ forzaLive(); return; } document.querySelectorAll('.cc_recenttracks_list img').forEach(img=>{ img.dataset.cleaned="0"; }); const s = document.createElement('script'); s.src = 'https://manage.myshoutca.st/system/recenttracks.js?play_now=' + Date.now(); document.head.appendChild(s); setTimeout(()=>s.remove(), 3000); if('mediaSession' in navigator) try{navigator.mediaSession.playbackState="playing";}catch(e){} });
+radioEl.addEventListener('play', ()=>{ isPlayingVU=true; vuPeakEl.textContent="● LIVE"; vuPeakEl.style.color="#00ff2a"; vuPeakEl.style.animation="pulse 0.8s infinite"; if(popupWin && !popupWin.closed){ popupWin.close(); popupWin = null; } if(!isForcing && lastPause > 0 && (Date.now() - lastPause > 15000)){ forzaLive(); return; } const s = document.createElement('script'); s.src = 'https://manage.myshoutca.st/system/recenttracks.js?play_now=' + Date.now(); document.head.appendChild(s); setTimeout(()=>s.remove(), 3000); if('mediaSession' in navigator) try{navigator.mediaSession.playbackState="playing";}catch(e){} });
 drawStereo(); setInterval(updateStereo, 60);
 document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML;
 if(window.location.search.includes('play=1')){
