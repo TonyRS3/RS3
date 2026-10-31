@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - v26 VIOLA COORDINATO</title>
+<title>Radio Sistema 3 - v27 LOGO FISSO CARPLAY</title>
 <script>
 if(window.location.search.includes('popup=1')){
   document.documentElement.classList.add('popup-mode');
@@ -16,7 +16,17 @@ if(window.location.search.includes('popup=1')){
 </script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
-const RADIO_LOGO_FISSO = "RADIO SISTEMA 3.jpeg";
+const RADIO_LOGO_FISSO_NOME = "RADIO SISTEMA 3.jpeg";
+function getLogoAssoluto(){
+  try{
+    const logoImg = document.querySelector('.logo');
+    if(logoImg && logoImg.src && logoImg.src.startsWith('http')) return logoImg.src;
+    const base = window.location.href.substring(0, window.location.href.lastIndexOf('/')+1);
+    return base + encodeURI(RADIO_LOGO_FISSO_NOME);
+  }catch(e){
+    return RADIO_LOGO_FISSO_NOME;
+  }
+}
 const BRANI_NOVITA = [
   { id: "ofywN3NgGqY", artista: "Sombr", titolo: "My body isn't ready" },
   { id: "PshqcQwshdU", artista: "Sfera Ebbasta", titolo: "Lontano" },
@@ -153,30 +163,38 @@ function setupChannelNav(){
   }
 }
 function apriPopupPlayer(){ if(window.innerWidth <= 768) return; document.getElementById('radioAudio').pause(); popupWin = window.open(window.location.href.split('?')[0] + '?popup=1', 'RadioSistema3Popup', 'width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let checkChiuso = setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(checkChiuso); popupWin = null; document.getElementById('radioAudio').play().catch(()=>{}); } }, 800); }
+
 function cleanWhiteBorder(img){
   const isMobile=window.innerWidth<768;
   const finalSize=window.location.search.includes('popup=1')?62:(isMobile?68:82);
-  if(img.src && !img.src.includes('RADIO%20SISTEMA%203') && !img.src.includes('RADIO SISTEMA 3.jpeg')){
-     img.src = RADIO_LOGO_FISSO;
+  // FIX v27 - LOGO FISSO ASSOLUTO PER CARPLAY
+  const logoAssoluto = getLogoAssoluto();
+  if(img.src && !img.src.includes('RADIO%20SISTEMA') && !img.src.includes('RADIO SISTEMA 3')){
+     if(img.src !== logoAssoluto) img.src = logoAssoluto;
   }
   img.style.width=finalSize+"px";img.style.height=finalSize+"px";img.style.minWidth=finalSize+"px";img.style.maxWidth=finalSize+"px";img.style.objectFit="cover";img.style.borderRadius="8px";img.style.display="block";img.style.opacity="1";img.style.background="#000";img.style.border="none";
 }
+
 const list=document.querySelector('.cc_recenttracks_list'); 
 if(list){ 
   new MutationObserver((muts)=>{
     muts.forEach(m=>{
       if(m.type==='attributes' && m.attributeName==='src'){
         const img = m.target;
-        if(img.tagName==='IMG' && !img.src.includes('RADIO SISTEMA 3.jpeg') && !img.src.includes('RADIO%20SISTEMA')){
-          img.src = RADIO_LOGO_FISSO;
+        const logoAssoluto = getLogoAssoluto();
+        if(img.tagName==='IMG' && img.src !== logoAssoluto && !img.src.includes('RADIO SISTEMA 3')){
+          img.src = logoAssoluto;
         }
       }
     });
     document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);
   }).observe(list,{childList:true,subtree:true,attributes:true,attributeFilter:['src']}); 
-  setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);},1000);
+
+  setInterval(()=>{document.querySelectorAll('.cc_recenttracks_list img').forEach(cleanWhiteBorder);},1200);
+
   function updateMediaSessionCover(){
     try{
+      const logoAssoluto = getLogoAssoluto();
       let title = "Radio Sistema 3";
       let artist = "Live";
       const tc = document.querySelector('.cc_recenttracks_list');
@@ -197,16 +215,20 @@ if(list){
       }
       if('mediaSession' in navigator){
         navigator.mediaSession.metadata = new MediaMetadata({
-          title: title.substring(0,80),
-          artist: artist.substring(0,80),
+          title: title.substring(0,80) || "Radio Sistema 3",
+          artist: artist.substring(0,80) || "Live",
           album: "Radio Sistema 3 - MAIN",
-          artwork: [{ src: RADIO_LOGO_FISSO, sizes: "512x512", type: "image/jpeg" }]
+          artwork: [
+            { src: logoAssoluto, sizes: "512x512", type: "image/jpeg" },
+            { src: logoAssoluto, sizes: "256x256", type: "image/jpeg" },
+            { src: logoAssoluto, sizes: "96x96", type: "image/jpeg" }
+          ]
         });
         navigator.mediaSession.playbackState = "playing";
       }
     }catch(e){}
   }
-  setInterval(updateMediaSessionCover, 3000);
+  setInterval(updateMediaSessionCover, 2500);
   new MutationObserver(()=>{ setTimeout(updateMediaSessionCover, 800); }).observe(list,{childList:true,subtree:true,attributes:true});
   if('mediaSession' in navigator){
     try{
