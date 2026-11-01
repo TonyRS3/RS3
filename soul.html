@@ -100,5 +100,44 @@ radioEl.addEventListener('pause', ()=>{ isPlayingVU=false; });
 radioEl.addEventListener('play', ()=>{ isPlayingVU=true; });
 drawStereo(); setInterval(updateStereo,60);
 </script>
+
+<!-- FIX COVER SOUL - LOGO VIOLA QUANDO NON C'E' COVER -->
+<script>
+const FALLBACK_SOUL = "RS3_SOUL_viola_scuro.jpg";
+function fixCoverSoul(){
+  document.querySelectorAll('.cc_recenttracks_list img').forEach(img=>{
+    const src = (img.getAttribute('src') || img.src || "").toLowerCase();
+    if(!src || src.includes('noart') || src.includes('default') || src.includes('nothumb') || src.includes('placeholder') || src.trim()===""){
+      if(!img.src.includes('RS3_SOUL_viola_scuro')) img.src = FALLBACK_SOUL;
+    }
+    img.onerror = function(){
+      this.onerror = null;
+      this.src = FALLBACK_SOUL;
+    };
+    if(img.naturalWidth < 5 && img.complete){
+       img.src = FALLBACK_SOUL;
+    }
+    img.style.borderColor = "#7b1fa2";
+    img.style.background = "#1a0a2a";
+  });
+  const box = document.getElementById('trackBox');
+  if(box){
+    const list = box.querySelector('.cc_recenttracks_list');
+    if(list && !list.querySelector('img')){
+      const newImg = document.createElement('img');
+      newImg.src = FALLBACK_SOUL;
+      newImg.style.cssText = "width:76px !important;height:76px !important;min-width:76px !important;object-fit:cover;border-radius:6px;display:block !important;background:#111;border:2px solid #7b1fa2";
+      list.prepend(newImg);
+    }
+  }
+}
+setInterval(fixCoverSoul, 800);
+window.addEventListener('load', ()=>{
+  setTimeout(fixCoverSoul, 800);
+  setTimeout(fixCoverSoul, 2000);
+  setTimeout(fixCoverSoul, 4000);
+});
+</script>
+
 </body>
 </html>
