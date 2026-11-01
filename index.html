@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - v35 SENZA ORARIO</title>
+<title>Radio Sistema 3 - v36 CON TRATTINO</title>
 <script>
 if(window.location.search.includes('popup=1')){
   document.documentElement.classList.add('popup-mode');
@@ -141,9 +141,29 @@ function pulisciTitolo(raw){
   t = t.replace(/Radio Sistema 3/gi,'');
   t = t.replace(/^\s*\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM|am|pm)?\s*/g,'');
   t = t.replace(/^\s*(?:AM|PM|am|pm)\s*/g,'');
-  t = t.replace(/\s+/g,' ').replace(/\s*-\s*-\s*/g,' - ').trim();
-  t = t.replace(/^\s*\d{1,2}:\d{2}\s*/g,'').trim();
-  return t.trim();
+  t = t.replace(/\s+/g,' ').trim();
+  t = t.replace(/([a-z])([A-Z])/g, '$1 $2');
+  if(t.includes(' - ') || t.includes(' – ') || t.includes('-')){
+    t = t.replace(/\s*–\s*/g,' - ').replace(/\s*-\s*/g,' - ');
+    t = t.replace(/\s+/g,' ').trim();
+    return t;
+  }
+  let words = t.split(/\s+/);
+  if(words.length >= 4){
+    let titolo = words.slice(0, -2).join(' ');
+    let autore = words.slice(-2).join(' ');
+    if(/^[A-ZÀ-ÖØ-Þ]/.test(autore)){
+      return titolo + ' - ' + autore;
+    }
+  }
+  if(words.length === 3){
+    let titolo = words[0];
+    let autore = words.slice(1).join(' ');
+    if(/^[A-Z]/.test(autore)){
+      return titolo + ' - ' + autore;
+    }
+  }
+  return t;
 }
 
 function rebuildTrackBox(){
@@ -168,7 +188,18 @@ function rebuildTrackBox(){
   tempDiv.innerHTML = wrap.innerHTML;
   tempDiv.querySelectorAll('img, .ccbuy, a').forEach(el=>el.remove());
   let txt = tempDiv.innerText.trim();
-  rawText = pulisciTitolo(txt);
+  let txtWithLines = txt;
+  if(tempDiv.innerText.includes('\n')){
+    let lines = tempDiv.innerText.split('\n').map(s=>s.trim()).filter(Boolean).map(s=>pulisciTitolo(s));
+    lines = lines.filter(Boolean);
+    if(lines.length>=2){
+      rawText = lines.join(' - ');
+    } else {
+      rawText = pulisciTitolo(txtWithLines);
+    }
+  } else {
+    rawText = pulisciTitolo(txtWithLines);
+  }
   if(rawText.length<2) rawText = "Radio Sistema 3 - Live";
   
   if(!existingBox){
@@ -208,10 +239,10 @@ if(list){
       let title = "Radio Sistema 3"; let artist = "Live";
       if(info){
         let raw = info.textContent.trim();
-        if(raw.includes('-')){
-          let sp = raw.split('-');
-          artist = sp[0].trim();
-          title = sp.slice(1).join('-').trim();
+        if(raw.includes(' - ')){
+          let sp = raw.split(' - ');
+          title = sp[0].trim();
+          artist = sp.slice(1).join(' - ').trim();
         } else {
           title = raw;
         }
