@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - v38 STOP VERO DEFINITIVO</title>
+<title>Radio Sistema 3 - v39 PC FIX STOP</title>
 <script>
 if(window.location.search.includes('popup=1')){
   document.documentElement.classList.add('popup-mode');
@@ -109,18 +109,12 @@ html.popup-mode #vuCanvas{height:32px !important;}
 </div>
 <script>
 let popupWin = null;
-const STREAM_URL = "https://listentomystream.com:8046/stream";
 let userPausedManually = false;
 let autoResumeTimer = null;
-let lastUserInteraction = 0;
-function markInteraction(){ lastUserInteraction = Date.now(); }
-['mousedown','touchstart','click','keydown','pointerdown'].forEach(ev=>{
-  document.addEventListener(ev, markInteraction, true);
-});
 
-function apriNovita(){ userPausedManually=true; lastUserInteraction=Date.now(); document.getElementById('radioAudio').pause(); document.getElementById('novitaSection').style.display='block'; document.getElementById('btnNovita').style.display='none'; document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML; renderNovita(); }
+function apriNovita(){ userPausedManually=true; document.getElementById('radioAudio').pause(); document.getElementById('novitaSection').style.display='block'; document.getElementById('btnNovita').style.display='none'; document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML; renderNovita(); }
 function chiudiNovita(){ document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML; document.getElementById('novitaList').innerHTML = ""; document.getElementById('novitaList').dataset.done = "0"; document.getElementById('novitaSection').style.display='none'; document.getElementById('btnNovita').style.display='inline-block'; userPausedManually=false; document.getElementById('radioAudio').play().catch(()=>{}); }
-function playNovita(id, el){ userPausedManually=true; lastUserInteraction=Date.now(); document.getElementById('radioAudio').pause(); document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active')); el.classList.add('active'); document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>'; }
+function playNovita(id, el){ userPausedManually=true; document.getElementById('radioAudio').pause(); document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active')); el.classList.add('active'); document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>'; }
 function renderNovita(){ const c=document.getElementById('novitaList'); if(c.dataset.done=="1") return; c.dataset.done="1"; c.innerHTML = BRANI_NOVITA.map(b=>`<div class="novita-row" onclick="playNovita('${b.id}', this)"><img src="https://i.ytimg.com/vi/${b.id}/hqdefault.jpg" style="width:50px;height:38px;border-radius:4px"><div><b style="font-size:0.9rem">${b.artista}</b><br><span style="color:#aaa;font-size:.75rem">${b.titolo}</span></div><div style="margin-left:auto;color:#ff0033">▶</div></div>`).join(''); }
 function setupChannelNav(){
   const isPopup = window.location.search.includes('popup=1');
@@ -140,7 +134,7 @@ function setupChannelNav(){
     btnSoul.href = 'soul.html';
   }
 }
-function apriPopupPlayer(){ if(window.innerWidth <= 768) return; userPausedManually=true; lastUserInteraction=Date.now(); document.getElementById('radioAudio').pause(); popupWin = window.open(window.location.href.split('?')[0] + '?popup=1', 'RadioSistema3Popup', 'width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let checkChiuso = setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(checkChiuso); popupWin = null; userPausedManually=false; document.getElementById('radioAudio').play().catch(()=>{}); } }, 800); }
+function apriPopupPlayer(){ if(window.innerWidth <= 768) return; userPausedManually=true; document.getElementById('radioAudio').pause(); popupWin = window.open(window.location.href.split('?')[0] + '?popup=1', 'RadioSistema3Popup', 'width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let checkChiuso = setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(checkChiuso); popupWin = null; userPausedManually=false; document.getElementById('radioAudio').play().catch(()=>{}); } }, 800); }
 
 function pulisciTitolo(raw){
   let t = raw || "";
@@ -159,13 +153,6 @@ function pulisciTitolo(raw){
     let titolo = words.slice(0, -2).join(' ');
     let autore = words.slice(-2).join(' ');
     if(/^[A-ZÀ-ÖØ-Þ]/.test(autore)){
-      return titolo + ' - ' + autore;
-    }
-  }
-  if(words.length === 3){
-    let titolo = words[0];
-    let autore = words.slice(1).join(' ');
-    if(/^[A-Z]/.test(autore)){
       return titolo + ' - ' + autore;
     }
   }
@@ -194,20 +181,18 @@ function rebuildTrackBox(){
   tempDiv.innerHTML = wrap.innerHTML;
   tempDiv.querySelectorAll('img, .ccbuy, a').forEach(el=>el.remove());
   let txt = tempDiv.innerText.trim();
-  let txtWithLines = txt;
   if(tempDiv.innerText.includes('\n')){
     let lines = tempDiv.innerText.split('\n').map(s=>s.trim()).filter(Boolean).map(s=>pulisciTitolo(s));
     lines = lines.filter(Boolean);
     if(lines.length>=2){
       rawText = lines.join(' - ');
     } else {
-      rawText = pulisciTitolo(txtWithLines);
+      rawText = pulisciTitolo(txt);
     }
   } else {
-    rawText = pulisciTitolo(txtWithLines);
+    rawText = pulisciTitolo(txt);
   }
   if(rawText.length<2) rawText = "Radio Sistema 3 - Live";
-  
   if(!existingBox){
     wrap.innerHTML = '';
     const box = document.createElement('div');
@@ -238,50 +223,13 @@ const list=document.querySelector('.cc_recenttracks_list');
 if(list){ 
   new MutationObserver(()=>{ setTimeout(rebuildTrackBox, 50); }).observe(list,{childList:true,subtree:true,attributes:true,attributeFilter:['src']}); 
   setInterval(()=>{ rebuildTrackBox(); }, 1500);
-  function updateMediaSessionCover(){
-    try{
-      const logoAssoluto = getLogoAssoluto();
-      const info = document.querySelector('.rs3-info');
-      let title = "Radio Sistema 3"; let artist = "Live";
-      if(info){
-        let raw = info.textContent.trim();
-        if(raw.includes(' - ')){
-          let sp = raw.split(' - ');
-          title = sp[0].trim();
-          artist = sp.slice(1).join(' - ').trim();
-        } else {
-          title = raw;
-        }
-      }
-      if('mediaSession' in navigator){
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: title.substring(0,80) || "Radio Sistema 3",
-          artist: artist.substring(0,80) || "Live",
-          album: "Radio Sistema 3 - MAIN",
-          artwork: [
-            { src: logoAssoluto, sizes: "512x512", type: "image/jpeg" },
-            { src: logoAssoluto, sizes: "256x256", type: "image/jpeg" },
-            { src: logoAssoluto, sizes: "96x96", type: "image/jpeg" }
-          ]
-        });
-        navigator.mediaSession.playbackState = "playing";
-      }
-    }catch(e){}
-  }
-  setInterval(updateMediaSessionCover, 2500);
 }
+
 const vuCanvas = document.getElementById('vuCanvas'); const vuCtx = vuCanvas.getContext('2d'); const radioEl = document.getElementById('radioAudio'); const vuPeakEl = document.getElementById('vuPeak');
 let isPlayingVU=false, levelL=0, levelR=0;
 function drawStereo(){ const W=vuCanvas.width, H=vuCanvas.height; vuCtx.clearRect(0,0,W,H); vuCtx.fillStyle='#0a0a0a'; vuCtx.fillRect(0,0,W,H); let bars=36, barW=W/bars, gap=1.5, rowH=H/2-2; let activeL=Math.floor((levelL/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeL; let color=i<bars*0.6?(lit?'#00ff2a':'#001a05'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } vuCtx.fillStyle='#333'; vuCtx.fillRect(0, H/2-0.5, W, 1); let activeR=Math.floor((levelR/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeR; let color=i<bars*0.6?(lit?'#00d4ff':'#001a1a'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=H/2+1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } requestAnimationFrame(drawStereo); }
 function updateStereo(){ 
   if(!isPlayingVU){ levelL+=(0-levelL)*0.08; levelR+=(0-levelR)*0.08; return; } 
-  const isPopup = window.location.search.includes('popup=1');
-  if(isPopup){
-    let isPeak = Math.random() < 0.07;
-    if(isPeak){ levelL = 78 + Math.random()*18; levelR = 76 + Math.random()*18; }
-    else { let base = 32 + Math.random()*18; let targetL = base + Math.random()*10; let targetR = base*0.9 + Math.random()*10; levelL += (targetL - levelL) * 0.20; levelR += (targetR - levelR) * 0.18; }
-    return;
-  }
   let base = 40 + Math.random()*45;
   let isPeak = Math.random() < 0.18;
   let targetL = isPeak ? 88 + Math.random()*12 : base + Math.random()*18;
@@ -291,27 +239,15 @@ function updateStereo(){
   if(levelL>100)levelL=100; if(levelR>100)levelR=100;
 }
 function tryAutoResume(reason){
-  if(userPausedManually){ return; }
+  if(userPausedManually) return;
   if(radioEl.paused){
-    radioEl.play().then(()=>{
-      vuPeakEl.textContent="● LIVE";
-      vuPeakEl.style.color="#00ff2a";
-      if('mediaSession' in navigator) try{navigator.mediaSession.playbackState="playing";}catch(e){}
-    }).catch(()=>{});
+    radioEl.play().catch(()=>{});
   }
 }
 
 radioEl.addEventListener('pause', ()=>{
-  const recentInteraction = (Date.now() - lastUserInteraction) < 2000;
-  if(recentInteraction){
-    userPausedManually = true;
-    clearTimeout(autoResumeTimer);
-  } else {
-    if(!userPausedManually){
-      clearTimeout(autoResumeTimer);
-      autoResumeTimer = setTimeout(()=>tryAutoResume("pause-system"), 1500);
-    }
-  }
+  userPausedManually = true;
+  clearTimeout(autoResumeTimer);
   isPlayingVU=false; 
   vuPeakEl.textContent="STOP"; vuPeakEl.style.color="#ff4444"; vuPeakEl.style.animation="none"; 
   if('mediaSession' in navigator) try{navigator.mediaSession.playbackState="paused";}catch(e){}
@@ -327,27 +263,29 @@ radioEl.addEventListener('play', ()=>{
 });
 
 radioEl.addEventListener('stalled', ()=>{ 
-  const recent = (Date.now() - lastUserInteraction) < 2000;
-  if(!userPausedManually && !recent) setTimeout(()=>tryAutoResume("stalled"), 1200); 
+  if(!userPausedManually){
+    clearTimeout(autoResumeTimer);
+    autoResumeTimer = setTimeout(()=>{ userPausedManually=false; tryAutoResume("stalled"); }, 2000);
+  }
 });
-radioEl.addEventListener('ended', ()=>{ 
-  const recent = (Date.now() - lastUserInteraction) < 2000;
-  if(!userPausedManually && !recent) setTimeout(()=>tryAutoResume("ended"), 1000); 
+radioEl.addEventListener('error', ()=>{ 
+  if(!userPausedManually){
+    clearTimeout(autoResumeTimer);
+    autoResumeTimer = setTimeout(()=>{ userPausedManually=false; tryAutoResume("error"); }, 2000);
+  }
 });
 
 if('mediaSession' in navigator){
   try{
     navigator.mediaSession.setActionHandler('play', ()=>{ userPausedManually=false; radioEl.play().catch(()=>{}); });
-    navigator.mediaSession.setActionHandler('pause', ()=>{ userPausedManually=true; lastUserInteraction = Date.now(); radioEl.pause(); });
+    navigator.mediaSession.setActionHandler('pause', ()=>{ userPausedManually=true; radioEl.pause(); });
   }catch(e){}
 }
-drawStereo(); setInterval(updateStereo, 60);
+drawStereo(); setInterval(updateStereo, 70);
 document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML;
-document.addEventListener('DOMContentLoaded', ()=>{ setupChannelNav(); setTimeout(rebuildTrackBox, 800); setTimeout(rebuildTrackBox, 2000); });
+document.addEventListener('DOMContentLoaded', ()=>{ setupChannelNav(); setTimeout(rebuildTrackBox, 800); });
 setupChannelNav();
 setTimeout(rebuildTrackBox, 600);
-setTimeout(rebuildTrackBox, 1800);
-setTimeout(rebuildTrackBox, 3500);
 </script>
 </body>
 </html>
