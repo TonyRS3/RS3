@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - v39 PC FIX STOP</title>
+<title>Radio Sistema 3 - v40 TRATTINO ACCENTI FIX</title>
 <script>
 if(window.location.search.includes('popup=1')){
   document.documentElement.classList.add('popup-mode');
@@ -139,22 +139,27 @@ function apriPopupPlayer(){ if(window.innerWidth <= 768) return; userPausedManua
 function pulisciTitolo(raw){
   let t = raw || "";
   t = t.replace(/Radio Sistema 3/gi,'');
-  t = t.replace(/^\s*\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM|am|pm)?\s*/g,'');
-  t = t.replace(/^\s*(?:AM|PM|am|pm)\s*/g,'');
+  t = t.replace(/^\s*\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM|am|pm)?\s*/gi,'');
+  t = t.replace(/^\s*(?:AM|PM)\s*/gi,'');
   t = t.replace(/\s+/g,' ').trim();
-  t = t.replace(/([a-z])([A-Z])/g, '$1 $2');
-  if(t.includes(' - ') || t.includes(' – ') || t.includes('-')){
+  t = t.replace(/([a-zàèéìòùáéíóúäëïöü])([A-ZÀÈÉÌÒÙÁÉÍÓÚÄËÏÖÜ])/g, '$1 $2');
+  t = t.replace(/([a-zàèéìòù])([A-Z])/g, '$1 $2');
+  if(t.includes('-') || t.includes('–')){
     t = t.replace(/\s*–\s*/g,' - ').replace(/\s*-\s*/g,' - ');
     t = t.replace(/\s+/g,' ').trim();
     return t;
   }
-  let words = t.split(/\s+/);
+  let words = t.split(/\s+/).filter(Boolean);
   if(words.length >= 4){
     let titolo = words.slice(0, -2).join(' ');
     let autore = words.slice(-2).join(' ');
-    if(/^[A-ZÀ-ÖØ-Þ]/.test(autore)){
-      return titolo + ' - ' + autore;
-    }
+    return titolo + ' - ' + autore;
+  }
+  if(words.length === 3){
+    return words[0] + ' - ' + words.slice(1).join(' ');
+  }
+  if(words.length === 2){
+    return words[0] + ' - ' + words[1];
   }
   return t;
 }
@@ -186,6 +191,7 @@ function rebuildTrackBox(){
     lines = lines.filter(Boolean);
     if(lines.length>=2){
       rawText = lines.join(' - ');
+      rawText = rawText.replace(/ - - /g,' - ').replace(/\s*-\s*-\s*/g,' - ');
     } else {
       rawText = pulisciTitolo(txt);
     }
@@ -244,7 +250,6 @@ function tryAutoResume(reason){
     radioEl.play().catch(()=>{});
   }
 }
-
 radioEl.addEventListener('pause', ()=>{
   userPausedManually = true;
   clearTimeout(autoResumeTimer);
@@ -252,7 +257,6 @@ radioEl.addEventListener('pause', ()=>{
   vuPeakEl.textContent="STOP"; vuPeakEl.style.color="#ff4444"; vuPeakEl.style.animation="none"; 
   if('mediaSession' in navigator) try{navigator.mediaSession.playbackState="paused";}catch(e){}
 });
-
 radioEl.addEventListener('play', ()=>{
   userPausedManually = false;
   isPlayingVU=true; 
@@ -261,7 +265,6 @@ radioEl.addEventListener('play', ()=>{
   const s = document.createElement('script'); s.src = 'https://manage.myshoutca.st/system/recenttracks.js?play_now=' + Date.now(); document.head.appendChild(s); setTimeout(()=>s.remove(), 3000); 
   if('mediaSession' in navigator) try{navigator.mediaSession.playbackState="playing";}catch(e){}
 });
-
 radioEl.addEventListener('stalled', ()=>{ 
   if(!userPausedManually){
     clearTimeout(autoResumeTimer);
@@ -274,7 +277,6 @@ radioEl.addEventListener('error', ()=>{
     autoResumeTimer = setTimeout(()=>{ userPausedManually=false; tryAutoResume("error"); }, 2000);
   }
 });
-
 if('mediaSession' in navigator){
   try{
     navigator.mediaSession.setActionHandler('play', ()=>{ userPausedManually=false; radioEl.play().catch(()=>{}); });
