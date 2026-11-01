@@ -20,7 +20,6 @@ if(new URLSearchParams(location.search).get('popup')==='1'){
 body{font-family:Arial,sans-serif;color:white;text-align:center;background: linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.6)), url("studio-radio.jpeg");background-size:cover;background-position:center;background-attachment:fixed;background-color:#0d0620}
 .overlay{background:rgba(8,0,18,0.35);min-height:100vh;padding:20px;display:flex;align-items:center;justify-content:center}
 .container{width:100%;max-width:420px;padding:22px;background:rgba(0,0,0,0.82);border-radius:22px;border:1.5px solid #7b1fa2}
-.top-title{color:#ffe600;font-size:.75rem;letter-spacing:2px;font-weight:900;margin-bottom:10px}
 h1{color:#ffe600;font-size:1.9rem;margin-top:6px}
 .live{color:#b388ff;font-weight:900;margin-top:2px;animation:pulse 1.4s infinite}
 @keyframes pulse{0%{opacity:1}50%{opacity:.5}100%{opacity:1}}
@@ -28,7 +27,6 @@ h1{color:#ffe600;font-size:1.9rem;margin-top:6px}
 .btns a{padding:10px 18px;border-radius:22px;text-decoration:none;font-weight:900;font-size:.85rem;flex:1;cursor:pointer;transition:all 0.3s ease}
 .main{background:#fff;color:#555;border:2px solid #ffe600}.soul{background:#7b1fa2;color:#fff;border:2px solid #7b1fa2;box-shadow:0 0 12px #7b1fa266}
 .btns a.active{outline:3px solid #ffe600;transform:scale(1.05)}
-.btns a:hover{transform:scale(1.08);box-shadow:0 0 15px #ffe600, 0 0 25px #b388ff;filter:brightness(1.2)}
 .box-title{color:#ffe67a;font-size:1.15rem;margin:12px 0 8px;font-weight:700}
 .box{background:rgba(20,20,20,.75);padding:14px;border-radius:14px;border:1px solid #333}
 audio{width:100%;height:38px;border-radius:20px}
@@ -39,7 +37,7 @@ audio{width:100%;height:38px;border-radius:20px}
 .cc_recenttracks_list{background:transparent !important;padding:0 !important;display:flex !important;align-items:center !important;gap:10px !important;text-align:left !important}
 .cc_recenttracks_list *{color:white !important;line-height:1.2 !important;font-size:.92rem !important;white-space:normal !important;word-break:break-word !important}
 .cc_recenttracks_list .ccbuy{display:none !important}
-.cc_recenttracks_list img{width:76px !important;height:76px !important;min-width:76px !important;object-fit:cover;border-radius:6px;display:block !important;background:#111;border:2px solid #fff}
+.cc_recenttracks_list img{width:76px !important;height:76px !important;min-width:76px !important;object-fit:cover;border-radius:6px;display:block !important;background:#1a0a2a;border:2px solid #7b1fa2}
 .cc_recenttracks_list:nth-of-type(n+2){display:none !important}
 .footer{margin-top:14px;font-size:.7rem;color:#aaa}.footer a{color:#ffe600;text-decoration:none;font-weight:900}
 #popupBrand{display:none}
@@ -59,7 +57,7 @@ html.popup-mode #trackBox{background:rgba(0,0,0,.55) !important; border-radius:1
 <div class="overlay">
 <div class="container">
 <div id="popupBrand">RADIO SISTEMA 3 - SOUL</div>
-<img src="RADIO SISTEMA 3.jpeg" class="logo" style="width:70px;border-radius:12px;background:#fff;padding:3px">
+<img src="RADIO%20SISTEMA%203.jpeg" class="logo" style="width:70px;border-radius:12px;background:#fff;padding:3px">
 <h1>SOUL FUNK</h1>
 <div class="live">💜 SOUL ON AIR</div>
 <div class="btns">
@@ -79,7 +77,6 @@ html.popup-mode #trackBox{background:rgba(0,0,0,.55) !important; border-radius:1
 </div>
 <script>
 let popupWin=null;
-const STREAM_URL="https://listentomystream.com:8046/soul";
 function apriPopupPlayer(){ if(window.innerWidth<=768) return; const a=document.getElementById('radioAudio'); a.pause(); popupWin=window.open(window.location.href.split('?')[0]+'?popup=1','RadioSistema3SoulPopup','width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let check=setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(check); popupWin=null; a.play().catch(()=>{});} },800); }
 function setupChannelNav(){
   const isPopup = new URLSearchParams(location.search).get('popup')==='1' || !!window.opener;
@@ -101,43 +98,78 @@ radioEl.addEventListener('play', ()=>{ isPlayingVU=true; });
 drawStereo(); setInterval(updateStereo,60);
 </script>
 
-<!-- FIX COVER SOUL - LOGO VIOLA QUANDO NON C'E' COVER -->
+<!-- FIX COPERTINA + MEDIA SESSION PER MACCHINA / IPHONE / CARPLAY -->
 <script>
-const FALLBACK_SOUL = "RS3_SOUL_viola_scuro.jpg";
+const FALLBACK_SOUL = "RS3_SOUL_viola_scuro.jpg?v=3";
+const FALLBACK_CAR = FALLBACK_SOUL;
+
+function updateMediaSession(titleText, artworkUrl){
+  if('mediaSession' in navigator){
+    try{
+      let art = artworkUrl || FALLBACK_CAR;
+      if(!art.startsWith('http')){
+        art = new URL(art, window.location.href).href;
+      }
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: titleText || "SOUL FUNK",
+        artist: "Radio Sistema 3",
+        album: "RS3 SOUL Live",
+        artwork: [
+          { src: art, sizes: "96x96", type: "image/jpeg" },
+          { src: art, sizes: "128x128", type: "image/jpeg" },
+          { src: art, sizes: "192x192", type: "image/jpeg" },
+          { src: art, sizes: "512x512", type: "image/jpeg" }
+        ]
+      });
+      navigator.mediaSession.playbackState = "playing";
+    }catch(e){}
+  }
+}
+
 function fixCoverSoul(){
   document.querySelectorAll('.cc_recenttracks_list img').forEach(img=>{
-    const src = (img.getAttribute('src') || img.src || "").toLowerCase();
-    if(!src || src.includes('noart') || src.includes('default') || src.includes('nothumb') || src.includes('placeholder') || src.trim()===""){
+    let src = (img.getAttribute('src') || img.src || "").toLowerCase();
+    if(!src || src.includes('noart') || src.includes('default') || src.includes('nothumb') || src.includes('placeholder') || src.trim()==="" || src.includes('no-cover')){
       if(!img.src.includes('RS3_SOUL_viola_scuro')) img.src = FALLBACK_SOUL;
     }
-    img.onerror = function(){
-      this.onerror = null;
-      this.src = FALLBACK_SOUL;
-    };
-    if(img.naturalWidth < 5 && img.complete){
-       img.src = FALLBACK_SOUL;
-    }
-    img.style.borderColor = "#7b1fa2";
-    img.style.background = "#1a0a2a";
+    img.onerror = function(){ this.onerror=null; this.src=FALLBACK_SOUL; };
+    if(img.complete && img.naturalWidth < 10){ img.src=FALLBACK_SOUL; }
+    img.style.borderColor="#7b1fa2"; img.style.background="#1a0a2a"; img.style.display="block";
   });
-  const box = document.getElementById('trackBox');
+  const box=document.getElementById('trackBox');
   if(box){
-    const list = box.querySelector('.cc_recenttracks_list');
+    const list=box.querySelector('.cc_recenttracks_list');
     if(list && !list.querySelector('img')){
-      const newImg = document.createElement('img');
-      newImg.src = FALLBACK_SOUL;
-      newImg.style.cssText = "width:76px !important;height:76px !important;min-width:76px !important;object-fit:cover;border-radius:6px;display:block !important;background:#111;border:2px solid #7b1fa2";
+      const newImg=document.createElement('img');
+      newImg.src=FALLBACK_SOUL;
+      newImg.style.cssText="width:76px !important;height:76px !important;min-width:76px !important;object-fit:cover;border-radius:6px;display:block !important;background:#1a0a2a;border:2px solid #7b1fa2";
       list.prepend(newImg);
     }
   }
 }
-setInterval(fixCoverSoul, 800);
+
+function observeForCar(){
+  const list=document.querySelector('.cc_recenttracks_list');
+  if(!list) return;
+  const getTitle=()=>{ let t=list.textContent.trim(); return t.length>2 ? t : "SOUL FUNK - Radio Sistema 3"; };
+  const getArt=()=>{ let img=list.querySelector('img'); if(img && img.src && !img.src.toLowerCase().includes('noart') && img.naturalWidth>10){ return img.src; } return FALLBACK_CAR; };
+  updateMediaSession(getTitle(), getArt());
+  const obs=new MutationObserver(()=>{ setTimeout(()=>{ fixCoverSoul(); updateMediaSession(getTitle(), getArt()); }, 600); });
+  obs.observe(list,{childList:true,subtree:true,characterData:true});
+  setInterval(()=>{ updateMediaSession(getTitle(), getArt()); }, 2500);
+}
+
+setInterval(fixCoverSoul, 700);
 window.addEventListener('load', ()=>{
-  setTimeout(fixCoverSoul, 800);
-  setTimeout(fixCoverSoul, 2000);
-  setTimeout(fixCoverSoul, 4000);
+  setTimeout(()=>{ fixCoverSoul(); observeForCar(); }, 500);
+  setTimeout(()=>{ fixCoverSoul(); observeForCar(); }, 1500);
+  setTimeout(()=>{ fixCoverSoul(); observeForCar(); }, 3000);
+});
+document.getElementById('radioAudio')?.addEventListener('play', ()=>{
+  let tl=document.querySelector('.cc_recenttracks_list')?.textContent?.trim() || "SOUL FUNK";
+  let im=document.querySelector('.cc_recenttracks_list img')?.src || FALLBACK_CAR;
+  updateMediaSession(tl, im);
 });
 </script>
-
 </body>
 </html>
