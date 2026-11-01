@@ -37,6 +37,31 @@ const BRANI_NOVITA = [
   { id: "D3zkX-Am4o4", artista: "Madonna", titolo: "Danceteria" },
 ];
 const PLACEHOLDER_HTML = `<div style="text-align:center"><div style="color:#fff;font-weight:bold">Scegli un brano</div><div style="font-size:2rem">👇</div></div>`;
+
+// --- FIX COVER PER PLAY / AUTO - UNICA PARTE NUOVA ---
+function aggiornaMediaSessionCover(coverUrl, titoloPulito){
+  if(!('mediaSession' in navigator)) return;
+  try{
+    let safeCover = coverUrl;
+    if(!safeCover.startsWith('http')){
+      safeCover = new URL(safeCover, window.location.href).href;
+    }
+    safeCover = safeCover.replace('http://','https://');
+    // Google vuole almeno 512 per Auto
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: titoloPulito || 'Radio Sistema 3',
+      artist: 'Radio Sistema 3',
+      album: 'RS3 Live',
+      artwork: [
+        { src: safeCover, sizes: '96x96', type: 'image/jpeg' },
+        { src: safeCover, sizes: '128x128', type: 'image/jpeg' },
+        { src: safeCover, sizes: '192x192', type: 'image/jpeg' },
+        { src: safeCover, sizes: '256x256', type: 'image/jpeg' },
+        { src: safeCover, sizes: '512x512', type: 'image/jpeg' }
+      ]
+    });
+  }catch(e){}
+}
 </script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -213,6 +238,7 @@ function rebuildTrackBox(){
     box.appendChild(imgEl);
     box.appendChild(infoEl);
     wrap.appendChild(box);
+    aggiornaMediaSessionCover(rawImgSrc, rawText);
   } else {
     const infoEl = existingBox.querySelector('.rs3-info');
     if(infoEl && infoEl.textContent.trim() !== rawText){
@@ -221,6 +247,10 @@ function rebuildTrackBox(){
     const imgEl = existingBox.querySelector('.rs3-cover');
     if(imgEl && imgEl.src !== rawImgSrc){
       imgEl.src = rawImgSrc;
+    }
+    // aggiorna cover per Auto/Play solo se cambia qualcosa
+    if(infoEl && infoEl.textContent.trim() === rawText){
+       aggiornaMediaSessionCover(rawImgSrc, rawText);
     }
   }
 }
