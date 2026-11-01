@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - v34 REBUILD BOX</title>
+<title>Radio Sistema 3 - v35 SENZA ORARIO</title>
 <script>
 if(window.location.search.includes('popup=1')){
   document.documentElement.classList.add('popup-mode');
@@ -136,6 +136,16 @@ function setupChannelNav(){
 }
 function apriPopupPlayer(){ if(window.innerWidth <= 768) return; userPausedManually=true; document.getElementById('radioAudio').pause(); popupWin = window.open(window.location.href.split('?')[0] + '?popup=1', 'RadioSistema3Popup', 'width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let checkChiuso = setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(checkChiuso); popupWin = null; userPausedManually=false; document.getElementById('radioAudio').play().catch(()=>{}); } }, 800); }
 
+function pulisciTitolo(raw){
+  let t = raw || "";
+  t = t.replace(/Radio Sistema 3/gi,'');
+  t = t.replace(/^\s*\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM|am|pm)?\s*/g,'');
+  t = t.replace(/^\s*(?:AM|PM|am|pm)\s*/g,'');
+  t = t.replace(/\s+/g,' ').replace(/\s*-\s*-\s*/g,' - ').trim();
+  t = t.replace(/^\s*\d{1,2}:\d{2}\s*/g,'').trim();
+  return t.trim();
+}
+
 function rebuildTrackBox(){
   const wrap = document.querySelector('.cc_recenttracks_list');
   if(!wrap) return;
@@ -157,9 +167,8 @@ function rebuildTrackBox(){
   let tempDiv = document.createElement('div');
   tempDiv.innerHTML = wrap.innerHTML;
   tempDiv.querySelectorAll('img, .ccbuy, a').forEach(el=>el.remove());
-  rawText = tempDiv.innerText.trim();
-  rawText = rawText.replace(/Radio Sistema 3/gi,'').replace(/\s+/g,' ').trim();
-  rawText = rawText.replace(/\s*-\s*-\s*/g,' - ').replace(/\s{2,}/g,' ').trim();
+  let txt = tempDiv.innerText.trim();
+  rawText = pulisciTitolo(txt);
   if(rawText.length<2) rawText = "Radio Sistema 3 - Live";
   
   if(!existingBox){
