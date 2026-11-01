@@ -61,20 +61,15 @@ html.popup-mode #trackBox{background:rgba(0,0,0,.55) !important; border-radius:1
 <div id="popupBrand">RADIO SISTEMA 3 - SOUL</div>
 <img src="RADIO SISTEMA 3.jpeg" class="logo" style="width:70px;border-radius:12px;background:#fff;padding:3px">
 <h1>SOUL FUNK</h1>
-<div class="live">💜 SOUL ON AIR - 8046</div>
+<div class="live">💜 SOUL ON AIR</div>
 <div class="btns">
 <a id="btnMain" class="main" href="index.html">MAIN</a>
 <a id="btnSoul" class="soul active" href="soul.html">SOUL FUNK</a>
 </div>
 <div class="box-title">♪ Ascolta in diretta</div>
 <div class="box">
-<audio id="radioAudio" controls autoplay preload="none">
-<source src="https://listentomystream.com:8046/stream/2" type="audio/mpeg">
-<source src="http://listentomystream.com:8046/stream/2" type="audio/mpeg">
-<source src="https://listentomystream.com:8046/stream/2?sid=2" type="audio/mpeg">
-<source src="https://listentomystream.com:8046/soul" type="audio/mpeg">
-</audio>
-<div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak" style="color:#b388ff">● LIVE 8046</span></div></div>
+<audio id="radioAudio" controls autoplay preload="none"><source src="https://listentomystream.com:8046/soul" type="audio/mpeg"></audio>
+<div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak" style="color:#b388ff">● LIVE</span></div></div>
 <button id="btnPopup" onclick="apriPopupPlayer()" style="margin-top:12px;background:#00d4ff;color:#000;font-weight:bold;padding:10px 20px;border:none;border-radius:30px;cursor:pointer;">⧉ APRI POPUP PLAYER</button>
 <div class="box-title" style="margin-top:10px">♪ Brano in onda</div>
 <div id="trackBox"><div class="cc_recenttracks_list" data-username="tbqmsenb"></div></div>
@@ -84,7 +79,7 @@ html.popup-mode #trackBox{background:rgba(0,0,0,.55) !important; border-radius:1
 </div>
 <script>
 let popupWin=null;
-const STREAM_URL="https://listentomystream.com:8046/stream/2";
+const STREAM_URL="https://listentomystream.com:8046/soul";
 function apriPopupPlayer(){ if(window.innerWidth<=768) return; const a=document.getElementById('radioAudio'); a.pause(); popupWin=window.open(window.location.href.split('?')[0]+'?popup=1','RadioSistema3SoulPopup','width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let check=setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(check); popupWin=null; a.play().catch(()=>{});} },800); }
 function setupChannelNav(){
   const isPopup = new URLSearchParams(location.search).get('popup')==='1' || !!window.opener;
