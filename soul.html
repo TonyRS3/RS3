@@ -98,10 +98,10 @@ radioEl.addEventListener('play', ()=>{ isPlayingVU=true; });
 drawStereo(); setInterval(updateStereo,60);
 </script>
 
-<!-- FIX COPERTINA + MEDIA SESSION PER MACCHINA / IPHONE / CARPLAY -->
+<!-- FIX COPERTINA + MEDIA SESSION PER MACCHINA / IPHONE / CARPLAY - FIX v4 PC -->
 <script>
-const FALLBACK_SOUL = "RS3_SOUL_viola_scuro.jpg?v=3";
-const FALLBACK_CAR = FALLBACK_SOUL;
+const FALLBACK_SOUL = "./RS3_SOUL_viola_scuro.jpg?v=4";
+const FALLBACK_CAR = "./RS3_SOUL_viola_scuro.jpg?v=4";
 
 function updateMediaSession(titleText, artworkUrl){
   if('mediaSession' in navigator){
