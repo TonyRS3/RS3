@@ -98,15 +98,15 @@ radioEl.addEventListener('play', ()=>{ isPlayingVU=true; });
 drawStereo(); setInterval(updateStereo,60);
 </script>
 
-<!-- FIX COPERTINA + MEDIA SESSION PER MACCHINA / IPHONE / CARPLAY - FIX v5 PC -->
+<!-- FIX VIOLA SCURO FISSO - IGNORA VECCHIO SERVER tbqmsenb - v6 -->
 <script>
-const FALLBACK_SOUL = "./RS3_SOUL_viola_scuro.jpg?v=5";
-const FALLBACK_CAR = "./RS3_SOUL_viola_scuro.jpg?v=5";
+const FALLBACK_SOUL = "./RS3_SOUL_viola_scuro.jpg?v=6";
+const FALLBACK_CAR = "./RS3_SOUL_viola_scuro.jpg?v=6";
 
 function updateMediaSession(titleText, artworkUrl){
   if('mediaSession' in navigator){
     try{
-      let art = artworkUrl || FALLBACK_CAR;
+      let art = FALLBACK_CAR; // SEMPRE VIOLA SCURO
       if(!art.startsWith('http')){
         art = new URL(art, window.location.href).href;
       }
@@ -128,22 +128,29 @@ function updateMediaSession(titleText, artworkUrl){
 
 function fixCoverSoul(){
   document.querySelectorAll('.cc_recenttracks_list img').forEach(img=>{
-    let src = (img.getAttribute('src') || img.src || "").toLowerCase();
-    if(!src || src.includes('noart') || src.includes('default') || src.includes('nothumb') || src.includes('placeholder') || src.trim()==="" || src.includes('no-cover')){
-      if(!img.src.includes('RS3_SOUL_viola_scuro')) img.src = FALLBACK_SOUL;
+    // FORZA SEMPRE VIOLA SCURO - IGNORA VECCHIO SERVER
+    if(img.src !== FALLBACK_SOUL && !img.src.includes('RS3_SOUL_viola_scuro')){
+       img.src = FALLBACK_SOUL;
     }
     img.onerror = function(){ this.onerror=null; this.src=FALLBACK_SOUL; };
-    if(img.complete && img.naturalWidth < 10){ img.src=FALLBACK_SOUL; }
     img.style.borderColor="#7b1fa2"; img.style.background="#1a0a2a"; img.style.display="block";
   });
   const box=document.getElementById('trackBox');
   if(box){
     const list=box.querySelector('.cc_recenttracks_list');
-    if(list && !list.querySelector('img')){
-      const newImg=document.createElement('img');
-      newImg.src=FALLBACK_SOUL;
-      newImg.style.cssText="width:76px !important;height:76px !important;min-width:76px !important;object-fit:cover;border-radius:6px;display:block !important;background:#1a0a2a;border:2px solid #7b1fa2";
-      list.prepend(newImg);
+    if(list){
+      if(!list.querySelector('img')){
+        const newImg=document.createElement('img');
+        newImg.src=FALLBACK_SOUL;
+        newImg.style.cssText="width:76px !important;height:76px !important;min-width:76px !important;object-fit:cover;border-radius:6px;display:block !important;background:#1a0a2a;border:2px solid #7b1fa2";
+        list.prepend(newImg);
+      } else {
+        // Se esiste già, forziamo viola
+        let existing = list.querySelector('img');
+        if(existing && !existing.src.includes('RS3_SOUL_viola_scuro')){
+          existing.src = FALLBACK_SOUL;
+        }
+      }
     }
   }
 }
@@ -152,23 +159,21 @@ function observeForCar(){
   const list=document.querySelector('.cc_recenttracks_list');
   if(!list) return;
   const getTitle=()=>{ let t=list.textContent.trim(); return t.length>2 ? t : "SOUL FUNK - Radio Sistema 3"; };
-  const getArt=()=>{ let img=list.querySelector('img'); if(img && img.src && !img.src.toLowerCase().includes('noart') && img.naturalWidth>10){ return img.src; } return FALLBACK_CAR; };
-  updateMediaSession(getTitle(), getArt());
-  const obs=new MutationObserver(()=>{ setTimeout(()=>{ fixCoverSoul(); updateMediaSession(getTitle(), getArt()); }, 600); });
+  updateMediaSession(getTitle(), FALLBACK_CAR);
+  const obs=new MutationObserver(()=>{ setTimeout(()=>{ fixCoverSoul(); updateMediaSession(getTitle(), FALLBACK_CAR); }, 300); });
   obs.observe(list,{childList:true,subtree:true,characterData:true});
-  setInterval(()=>{ updateMediaSession(getTitle(), getArt()); }, 2500);
+  setInterval(()=>{ fixCoverSoul(); updateMediaSession(getTitle(), FALLBACK_CAR); }, 1000);
 }
 
-setInterval(fixCoverSoul, 700);
+setInterval(fixCoverSoul, 500);
 window.addEventListener('load', ()=>{
-  setTimeout(()=>{ fixCoverSoul(); observeForCar(); }, 500);
-  setTimeout(()=>{ fixCoverSoul(); observeForCar(); }, 1500);
-  setTimeout(()=>{ fixCoverSoul(); observeForCar(); }, 3000);
+  setTimeout(()=>{ fixCoverSoul(); observeForCar(); }, 300);
+  setTimeout(()=>{ fixCoverSoul(); observeForCar(); }, 1000);
+  setTimeout(()=>{ fixCoverSoul(); observeForCar(); }, 2000);
 });
 document.getElementById('radioAudio')?.addEventListener('play', ()=>{
   let tl=document.querySelector('.cc_recenttracks_list')?.textContent?.trim() || "SOUL FUNK";
-  let im=document.querySelector('.cc_recenttracks_list img')?.src || FALLBACK_CAR;
-  updateMediaSession(tl, im);
+  updateMediaSession(tl, FALLBACK_CAR);
 });
 </script>
 </body>
