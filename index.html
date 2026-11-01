@@ -99,7 +99,7 @@ html.popup-mode #vuCanvas{height:32px !important;}
 <a id="btnSoul" class="ch-btn ch-soul" href="soul.html">SOUL FUNK</a>
 </div>
 <div class="section-title">♪ Ascolta in diretta</div>
-<audio id="radioAudio" controls autoplay preload="none" playsinline><source id="radioSource" src="https://listentomystream.com:8046/;" type="audio/mpeg"></audio>
+<audio id="radioAudio" controls autoplay preload="none" playsinline><source id="radioSource" src="https://listentomystream.com:8046/stream" type="audio/mpeg"></audio>
 <div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak" style="color:#ff4444">STOP</span></div></div>
 <button id="btnPopup" onclick="apriPopupPlayer()" style="margin-top:12px;background:#00d4ff;color:#000;font-weight:bold;padding:10px 20px;border:none;border-radius:30px;cursor:pointer;">⧉ APRI POPUP PLAYER</button>
 </div>
@@ -111,7 +111,7 @@ html.popup-mode #vuCanvas{height:32px !important;}
 </div>
 <script>
 let popupWin = null;
-const STREAM_URL = "https://listentomystream.com:8046/;";
+const STREAM_URL = "https://listentomystream.com:8046/stream";
 let userPausedManually = false;
 let autoResumeTimer = null;
 
