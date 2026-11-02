@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - v41 AUTO-RESUME FIX</title>
+<title>Radio Sistema 3 - v42 CALL FIX</title>
 <script>
 if(window.location.search.includes('popup=1')){
   document.documentElement.classList.add('popup-mode');
@@ -136,9 +136,10 @@ let userPausedManually = false;
 let autoResumeTimer = null;
 let lastUserClickOnAudio = 0;
 let resumeAttempts = 0;
+let interruptedBySystem = false; // FIX CHIAMATA
 
 function apriNovita(){ userPausedManually=true; document.getElementById('radioAudio').pause(); document.getElementById('novitaSection').style.display='block'; document.getElementById('btnNovita').style.display='none'; document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML; renderNovita(); }
-function chiudiNovita(){ document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML; document.getElementById('novitaList').innerHTML = ""; document.getElementById('novitaList').dataset.done = "0"; document.getElementById('novitaSection').style.display='none'; document.getElementById('btnNovita').style.display='inline-block'; userPausedManually=false; document.getElementById('radioAudio').play().catch(()=>{}); }
+function chiudiNovita(){ document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML; document.getElementById('novitaList').innerHTML = ""; document.getElementById('novitaList').dataset.done = "0"; document.getElementById('novitaSection').style.display='none'; document.getElementById('btnNovita').style.display='inline-block'; userPausedManually=false; interruptedBySystem=false; document.getElementById('radioAudio').play().catch(()=>{}); }
 function playNovita(id, el){ userPausedManually=true; document.getElementById('radioAudio').pause(); document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active')); el.classList.add('active'); document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>'; }
 function renderNovita(){ const c=document.getElementById('novitaList'); if(c.dataset.done=="1") return; c.dataset.done="1"; c.innerHTML = BRANI_NOVITA.map(b=>`<div class="novita-row" onclick="playNovita('${b.id}', this)"><img src="https://i.ytimg.com/vi/${b.id}/hqdefault.jpg" style="width:50px;height:38px;border-radius:4px"><div><b style="font-size:0.9rem">${b.artista}</b><br><span style="color:#aaa;font-size:.75rem">${b.titolo}</span></div><div style="margin-left:auto;color:#ff0033">▶</div></div>`).join(''); }
 function setupChannelNav(){
@@ -159,7 +160,7 @@ function setupChannelNav(){
     btnSoul.href = 'soul.html';
   }
 }
-function apriPopupPlayer(){ if(window.innerWidth <= 768) return; userPausedManually=true; document.getElementById('radioAudio').pause(); popupWin = window.open(window.location.href.split('?')[0] + '?popup=1', 'RadioSistema3Popup', 'width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let checkChiuso = setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(checkChiuso); popupWin = null; userPausedManually=false; document.getElementById('radioAudio').play().catch(()=>{}); } }, 800); }
+function apriPopupPlayer(){ if(window.innerWidth <= 768) return; userPausedManually=true; document.getElementById('radioAudio').pause(); popupWin = window.open(window.location.href.split('?')[0] + '?popup=1', 'RadioSistema3Popup', 'width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let checkChiuso = setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(checkChiuso); popupWin = null; userPausedManually=false; interruptedBySystem=false; document.getElementById('radioAudio').play().catch(()=>{}); } }, 800); }
 
 function pulisciTitolo(raw){
   let t = raw || "";
@@ -281,70 +282,80 @@ function scheduleAutoResume(reason){
   const tryPlay = () => {
     if(userPausedManually) return;
     if(radioEl.paused){
+      radioEl.volume = 1.0;
       radioEl.play().then(()=>{
         resumeAttempts = 0;
+        interruptedBySystem = false;
       }).catch(()=>{
-        if(resumeAttempts < 5){
+        if(resumeAttempts < 8){
           resumeAttempts++;
-          autoResumeTimer = setTimeout(tryPlay, 1200);
+          autoResumeTimer = setTimeout(tryPlay, 1500);
         }
       });
     }
   };
-  autoResumeTimer = setTimeout(tryPlay, 1200);
+  autoResumeTimer = setTimeout(tryPlay, 800);
 }
 
-// --- LOGICA PAUSA UTENTE vs SISTEMA ---
+// --- LOGICA PAUSA UTENTE vs SISTEMA - FIX v42 ---
 radioEl.addEventListener('mousedown', ()=>{ lastUserClickOnAudio = Date.now(); });
 radioEl.addEventListener('touchstart', ()=>{ lastUserClickOnAudio = Date.now(); }, {passive:true});
 radioEl.addEventListener('click', ()=>{ lastUserClickOnAudio = Date.now(); });
 
 radioEl.addEventListener('pause', ()=>{
+  radioEl.volume = 1.0;
   const isUserClick = (Date.now() - lastUserClickOnAudio) < 1000;
   if(isUserClick){
-    // Utente ha cliccato davvero pausa
     userPausedManually = true;
+    interruptedBySystem = false;
     clearTimeout(autoResumeTimer);
   } else {
-    // Pausa di sistema (Maps, messaggio, chiamata) -> NON bloccare, riprogramma resume
     if(!userPausedManually){
-      scheduleAutoResume('system-pause');
+      interruptedBySystem = true;
+      clearTimeout(autoResumeTimer);
     }
   }
   isPlayingVU=false; 
-  vuPeakEl.textContent="STOP"; vuPeakEl.style.color="#ff4444"; vuPeakEl.style.animation="none"; 
+  vuPeakEl.textContent="STOP"; vuPeakEl.style.color="#ff4444"; 
   if('mediaSession' in navigator) try{navigator.mediaSession.playbackState="paused";}catch(e){}
 });
 
 radioEl.addEventListener('play', ()=>{
   userPausedManually = false;
+  interruptedBySystem = false;
   clearTimeout(autoResumeTimer);
   resumeAttempts = 0;
+  radioEl.volume = 1.0;
   isPlayingVU=true; 
-  vuPeakEl.textContent="● LIVE"; vuPeakEl.style.color="#00ff2a"; vuPeakEl.style.animation="pulse 0.8s infinite"; 
+  vuPeakEl.textContent="● LIVE"; vuPeakEl.style.color="#00ff2a"; 
   if(popupWin && !popupWin.closed){ popupWin.close(); popupWin = null; } 
   const s = document.createElement('script'); s.src = 'https://manage.myshoutca.st/system/recenttracks.js?play_now=' + Date.now(); document.head.appendChild(s); setTimeout(()=>s.remove(), 3000); 
   if('mediaSession' in navigator) try{navigator.mediaSession.playbackState="playing";}catch(e){}
 });
 
-radioEl.addEventListener('stalled', ()=>{ scheduleAutoResume('stalled'); });
-radioEl.addEventListener('error', ()=>{ scheduleAutoResume('error'); });
-radioEl.addEventListener('emptied', ()=>{ scheduleAutoResume('emptied'); });
-
-// Quando torni in primo piano dopo una notifica in auto
+// Riprendi SOLO quando torni visibile o a fuoco dopo la chiamata
 document.addEventListener('visibilitychange', ()=>{
   if(document.visibilityState === 'visible'){
-    if(!userPausedManually && radioEl.paused){
-      scheduleAutoResume('visible');
+    if(interruptedBySystem && !userPausedManually && radioEl.paused){
+      scheduleAutoResume('visible-after-call');
     }
   }
 });
+window.addEventListener('focus', ()=>{
+  if(interruptedBySystem && !userPausedManually && radioEl.paused){
+    scheduleAutoResume('focus-after-call');
+  }
+});
+
+radioEl.addEventListener('stalled', ()=>{ if(!interruptedBySystem) scheduleAutoResume('stalled'); });
+radioEl.addEventListener('error', ()=>{ if(!interruptedBySystem) scheduleAutoResume('error'); });
+radioEl.addEventListener('emptied', ()=>{ if(!interruptedBySystem) scheduleAutoResume('emptied'); });
 
 if('mediaSession' in navigator){
   try{
-    navigator.mediaSession.setActionHandler('play', ()=>{ userPausedManually=false; radioEl.play().catch(()=>{}); });
-    navigator.mediaSession.setActionHandler('pause', ()=>{ userPausedManually=true; radioEl.pause(); });
-    navigator.mediaSession.setActionHandler('stop', ()=>{ userPausedManually=true; radioEl.pause(); });
+    navigator.mediaSession.setActionHandler('play', ()=>{ userPausedManually=false; interruptedBySystem=false; radioEl.play().catch(()=>{}); });
+    navigator.mediaSession.setActionHandler('pause', ()=>{ userPausedManually=true; interruptedBySystem=false; radioEl.pause(); });
+    navigator.mediaSession.setActionHandler('stop', ()=>{ userPausedManually=true; interruptedBySystem=false; radioEl.pause(); });
   }catch(e){}
 }
 
