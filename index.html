@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - v40 TRATTINO ACCENTI FIX</title>
+<title>Radio Sistema 3 - v41 AUTO-RESUME FIX</title>
 <script>
 if(window.location.search.includes('popup=1')){
   document.documentElement.classList.add('popup-mode');
@@ -38,7 +38,6 @@ const BRANI_NOVITA = [
 ];
 const PLACEHOLDER_HTML = `<div style="text-align:center"><div style="color:#fff;font-weight:bold">Scegli un brano</div><div style="font-size:2rem">👇</div></div>`;
 
-// --- FIX COVER PER PLAY / AUTO - UNICA PARTE NUOVA ---
 function aggiornaMediaSessionCover(coverUrl, titoloPulito){
   if(!('mediaSession' in navigator)) return;
   try{
@@ -47,7 +46,6 @@ function aggiornaMediaSessionCover(coverUrl, titoloPulito){
       safeCover = new URL(safeCover, window.location.href).href;
     }
     safeCover = safeCover.replace('http://','https://');
-    // Google vuole almeno 512 per Auto
     navigator.mediaSession.metadata = new MediaMetadata({
       title: titoloPulito || 'Radio Sistema 3',
       artist: 'Radio Sistema 3',
@@ -136,6 +134,8 @@ html.popup-mode #vuCanvas{height:32px !important;}
 let popupWin = null;
 let userPausedManually = false;
 let autoResumeTimer = null;
+let lastUserClickOnAudio = 0;
+let resumeAttempts = 0;
 
 function apriNovita(){ userPausedManually=true; document.getElementById('radioAudio').pause(); document.getElementById('novitaSection').style.display='block'; document.getElementById('btnNovita').style.display='none'; document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML; renderNovita(); }
 function chiudiNovita(){ document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML; document.getElementById('novitaList').innerHTML = ""; document.getElementById('novitaList').dataset.done = "0"; document.getElementById('novitaSection').style.display='none'; document.getElementById('btnNovita').style.display='inline-block'; userPausedManually=false; document.getElementById('radioAudio').play().catch(()=>{}); }
@@ -248,7 +248,6 @@ function rebuildTrackBox(){
     if(imgEl && imgEl.src !== rawImgSrc){
       imgEl.src = rawImgSrc;
     }
-    // aggiorna cover per Auto/Play solo se cambia qualcosa
     if(infoEl && infoEl.textContent.trim() === rawText){
        aggiornaMediaSessionCover(rawImgSrc, rawText);
     }
@@ -274,45 +273,81 @@ function updateStereo(){
   levelR+=(targetR-levelR)*0.34; 
   if(levelL>100)levelL=100; if(levelR>100)levelR=100;
 }
-function tryAutoResume(reason){
+
+function scheduleAutoResume(reason){
   if(userPausedManually) return;
-  if(radioEl.paused){
-    radioEl.play().catch(()=>{});
-  }
-}
-radioEl.addEventListener('pause', ()=>{
-  userPausedManually = true;
   clearTimeout(autoResumeTimer);
+  resumeAttempts = 0;
+  const tryPlay = () => {
+    if(userPausedManually) return;
+    if(radioEl.paused){
+      radioEl.play().then(()=>{
+        resumeAttempts = 0;
+      }).catch(()=>{
+        if(resumeAttempts < 5){
+          resumeAttempts++;
+          autoResumeTimer = setTimeout(tryPlay, 1200);
+        }
+      });
+    }
+  };
+  autoResumeTimer = setTimeout(tryPlay, 1200);
+}
+
+// --- LOGICA PAUSA UTENTE vs SISTEMA ---
+radioEl.addEventListener('mousedown', ()=>{ lastUserClickOnAudio = Date.now(); });
+radioEl.addEventListener('touchstart', ()=>{ lastUserClickOnAudio = Date.now(); }, {passive:true});
+radioEl.addEventListener('click', ()=>{ lastUserClickOnAudio = Date.now(); });
+
+radioEl.addEventListener('pause', ()=>{
+  const isUserClick = (Date.now() - lastUserClickOnAudio) < 1000;
+  if(isUserClick){
+    // Utente ha cliccato davvero pausa
+    userPausedManually = true;
+    clearTimeout(autoResumeTimer);
+  } else {
+    // Pausa di sistema (Maps, messaggio, chiamata) -> NON bloccare, riprogramma resume
+    if(!userPausedManually){
+      scheduleAutoResume('system-pause');
+    }
+  }
   isPlayingVU=false; 
   vuPeakEl.textContent="STOP"; vuPeakEl.style.color="#ff4444"; vuPeakEl.style.animation="none"; 
   if('mediaSession' in navigator) try{navigator.mediaSession.playbackState="paused";}catch(e){}
 });
+
 radioEl.addEventListener('play', ()=>{
   userPausedManually = false;
+  clearTimeout(autoResumeTimer);
+  resumeAttempts = 0;
   isPlayingVU=true; 
   vuPeakEl.textContent="● LIVE"; vuPeakEl.style.color="#00ff2a"; vuPeakEl.style.animation="pulse 0.8s infinite"; 
   if(popupWin && !popupWin.closed){ popupWin.close(); popupWin = null; } 
   const s = document.createElement('script'); s.src = 'https://manage.myshoutca.st/system/recenttracks.js?play_now=' + Date.now(); document.head.appendChild(s); setTimeout(()=>s.remove(), 3000); 
   if('mediaSession' in navigator) try{navigator.mediaSession.playbackState="playing";}catch(e){}
 });
-radioEl.addEventListener('stalled', ()=>{ 
-  if(!userPausedManually){
-    clearTimeout(autoResumeTimer);
-    autoResumeTimer = setTimeout(()=>{ userPausedManually=false; tryAutoResume("stalled"); }, 2000);
+
+radioEl.addEventListener('stalled', ()=>{ scheduleAutoResume('stalled'); });
+radioEl.addEventListener('error', ()=>{ scheduleAutoResume('error'); });
+radioEl.addEventListener('emptied', ()=>{ scheduleAutoResume('emptied'); });
+
+// Quando torni in primo piano dopo una notifica in auto
+document.addEventListener('visibilitychange', ()=>{
+  if(document.visibilityState === 'visible'){
+    if(!userPausedManually && radioEl.paused){
+      scheduleAutoResume('visible');
+    }
   }
 });
-radioEl.addEventListener('error', ()=>{ 
-  if(!userPausedManually){
-    clearTimeout(autoResumeTimer);
-    autoResumeTimer = setTimeout(()=>{ userPausedManually=false; tryAutoResume("error"); }, 2000);
-  }
-});
+
 if('mediaSession' in navigator){
   try{
     navigator.mediaSession.setActionHandler('play', ()=>{ userPausedManually=false; radioEl.play().catch(()=>{}); });
     navigator.mediaSession.setActionHandler('pause', ()=>{ userPausedManually=true; radioEl.pause(); });
+    navigator.mediaSession.setActionHandler('stop', ()=>{ userPausedManually=true; radioEl.pause(); });
   }catch(e){}
 }
+
 drawStereo(); setInterval(updateStereo, 70);
 document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML;
 document.addEventListener('DOMContentLoaded', ()=>{ setupChannelNav(); setTimeout(rebuildTrackBox, 800); });
