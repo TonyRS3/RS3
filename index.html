@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - v44 iPHONE CALL FIX</title>
+<title>Radio Sistema 3 - v45 BACKGROUND OK</title>
 <script>
 if(window.location.search.includes('popup=1')){
   document.documentElement.classList.add('popup-mode');
@@ -161,7 +161,7 @@ function updateStereo(){ if(!isPlayingVU){ levelL+=(0-levelL)*0.08; levelR+=(0-l
 
 function scheduleAutoResume(reason){
   if(userPausedManually) return;
-  if(document.hidden || document.visibilityState === 'hidden') return;
+  if(document.hidden) return;
   clearTimeout(autoResumeTimer);
   resumeAttempts = 0;
   const tryPlay = () => {
@@ -177,21 +177,10 @@ function scheduleAutoResume(reason){
   autoResumeTimer = setTimeout(tryPlay, 800);
 }
 
-// --- LOGICA v44 SICURA iPHONE ---
+// --- LOGICA v45 BACKGROUND OK ---
 radioEl.addEventListener('mousedown', ()=>{ lastUserClickOnAudio = Date.now(); });
 radioEl.addEventListener('touchstart', ()=>{ lastUserClickOnAudio = Date.now(); }, {passive:true});
 radioEl.addEventListener('click', ()=>{ lastUserClickOnAudio = Date.now(); });
-
-function forcePauseForCall(){
-  if(!userPausedManually){
-    interruptedBySystem = true;
-    clearTimeout(autoResumeTimer);
-    if(!radioEl.paused){ try{ radioEl.pause(); }catch(e){} }
-    radioEl.volume = 1.0;
-    isPlayingVU=false;
-    vuPeakEl.textContent="STOP"; vuPeakEl.style.color="#ff4444";
-  }
-}
 
 radioEl.addEventListener('pause', ()=>{
   radioEl.volume = 1.0;
@@ -210,16 +199,12 @@ radioEl.addEventListener('play', ()=>{
 });
 
 document.addEventListener('visibilitychange', ()=>{
-  if(document.visibilityState === 'hidden'){ forcePauseForCall(); }
-  else if(document.visibilityState === 'visible'){
-    if(interruptedBySystem && !userPausedManually && radioEl.paused){ scheduleAutoResume('visible-after-call'); }
+  if(document.visibilityState === 'visible'){
+    if(interruptedBySystem && !userPausedManually && radioEl.paused){
+      scheduleAutoResume('visible-after-call');
+    }
   }
 });
-window.addEventListener('blur', forcePauseForCall);
-window.addEventListener('pagehide', forcePauseForCall);
-document.addEventListener('freeze', forcePauseForCall);
-window.addEventListener('beforeunload', forcePauseForCall);
-window.addEventListener('focus', ()=>{ if(interruptedBySystem && !userPausedManually && radioEl.paused){ scheduleAutoResume('focus-after-call'); } });
 
 radioEl.addEventListener('stalled', ()=>{ if(!interruptedBySystem && !document.hidden) scheduleAutoResume('stalled'); });
 radioEl.addEventListener('error', ()=>{ if(!interruptedBySystem && !document.hidden) scheduleAutoResume('error'); });
