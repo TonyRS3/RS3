@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOUL FUNK - Radio Sistema 3 - v46.6 STABLE</title>
+<title>SOUL FUNK - Radio Sistema 3 - v46.7 NO SNIPPET</title>
 <script>
 if(new URLSearchParams(location.search).get('popup')==='1'){
   document.documentElement.classList.add('popup-mode');
@@ -54,24 +54,24 @@ html.popup-mode .box{background:rgba(255,255,255,.10) !important;border:none !im
 <div id="popupBrand">RADIO SISTEMA 3 - SOUL</div>
 <img src="RADIO%20SISTEMA%203.jpeg" class="logo" style="width:70px;border-radius:12px;background:#fff;padding:3px">
 <h1>SOUL FUNK</h1>
-<div class="live" id="liveLabel">💜 SOUL ON AIR</div>
+<div class="live" id="liveLabel">⌛ Controllo...</div>
 <div class="btns"><a id="btnMain" class="main" href="index.html">MAIN</a><a id="btnSoul" class="soul active" href="soul.html">SOUL FUNK</a></div>
 <div class="box-title">♪ Ascolta in diretta</div>
 <div class="box">
-<div id="playerLive">
-<audio id="radioAudio" controls preload="none" playsinline><source src="https://listentomystream.com:8046/soul" type="audio/mpeg"></audio>
+<div id="playerLive" style="display:none">
+<audio id="radioAudio" controls preload="none" playsinline></audio>
 <div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak">● LIVE</span></div></div>
 <button id="btnPopup" onclick="apriPopupPlayer()">⧉ APRI POPUP PLAYER</button>
 <div class="box-title" style="margin-top:10px">♪ Brano in onda</div>
-<div id="trackBox"><img src="./RS3_SOUL_viola_scuro.jpg"><div id="trackText">SOUL FUNK - Live Non Stop</div></div>
+<div id="trackBox"><img src="./RS3_SOUL_viola_scuro.jpg"><div id="trackText">SOUL FUNK</div></div>
 </div>
-<div id="offAirBox"><img src="offair-soul.jpg" alt="OFF AIR"></div>
+<div id="offAirBox" style="display:none"><img src="offair-soul.jpg" alt="OFF AIR"></div>
 </div>
 <div class="footer">© Radio Sistema 3<br><br><a href="index.html">⬅ Torna a MAIN</a></div>
 </div>
 </div>
 <script>
-let popupWin=null, userPausedManually=false, isOffAir=false;
+let popupWin=null, userPausedManually=false, isOffAir=true;
 function hidePopupOnMobile(){ const b=document.getElementById('btnPopup'); if(!b) return; const m=window.innerWidth<=768||/Mobi|Android|iPhone/i.test(navigator.userAgent); b.style.display=m?'none':'block'; }
 function apriPopupPlayer(){ if(window.innerWidth<=768) return; const a=document.getElementById('radioAudio'); userPausedManually=true; a.pause(); popupWin=window.open(location.href.split('?')[0]+'?popup=1','RS3Soul','width=380,height=380'); let c=setInterval(()=>{ if(popupWin&&popupWin.closed){ clearInterval(c); popupWin=null; userPausedManually=false; if(!isOffAir) a.play().catch(()=>{});} },800); }
 const radioEl=document.getElementById('radioAudio');
@@ -79,34 +79,36 @@ const vuCanvas=document.getElementById('vuCanvas'),vuCtx=vuCanvas.getContext('2d
 let isPlayingVU=false,levelL=0,levelR=0;
 function drawStereo(){ const W=vuCanvas.width,H=vuCanvas.height; vuCtx.clearRect(0,0,W,H); vuCtx.fillStyle='#111118'; vuCtx.fillRect(0,0,W,H); let bars=36,barW=W/bars; let aL=Math.floor((levelL/100)*bars); for(let i=0;i<bars;i++){ vuCtx.fillStyle=i<aL?'#7b1fa2':'#2a0a1a'; vuCtx.fillRect(i*barW+1,1,barW-2,13); } vuCtx.fillStyle='#333'; vuCtx.fillRect(0,15.5,W,1); let aR=Math.floor((levelR/100)*bars); for(let i=0;i<bars;i++){ vuCtx.fillStyle=i<aR?'#b388ff':'#1a0a2a'; vuCtx.fillRect(i*barW+1,17,barW-2,13); } requestAnimationFrame(drawStereo); }
 function updateStereo(){ if(!isPlayingVU){ levelL*=0.92; levelR*=0.92; return; } levelL=40+Math.random()*50; levelR=40+Math.random()*50; }
+
 function goOffAirNow(){
-  if(isOffAir) return;
   isOffAir=true;
   document.getElementById('offAirBox').style.display='block';
   document.getElementById('playerLive').style.display='none';
   document.getElementById('liveLabel').textContent='🔧 Prove tecniche in corso';
-  try{ radioEl.pause(); }catch(e){}
+  try{ radioEl.pause(); radioEl.removeAttribute('src'); radioEl.load(); }catch(e){}
   isPlayingVU=false;
+  localStorage.setItem('soulOffAir','1');
 }
 function goLiveNow(){
-  if(!isOffAir){
-    document.getElementById('offAirBox').style.display='none';
-    document.getElementById('playerLive').style.display='block';
-    document.getElementById('liveLabel').textContent='💜 SOUL ON AIR';
-    return;
-  }
   isOffAir=false;
   document.getElementById('offAirBox').style.display='none';
   document.getElementById('playerLive').style.display='block';
   document.getElementById('liveLabel').textContent='💜 SOUL ON AIR';
   userPausedManually=false;
-  try{ radioEl.src='https://listentomystream.com:8046/soul'; radioEl.load(); radioEl.play().catch(()=>{}); }catch(e){}
+  try{
+    if(!radioEl.src || !radioEl.src.includes('/soul')){
+      radioEl.src='https://listentomystream.com:8046/soul';
+      radioEl.load();
+    }
+    radioEl.play().catch(()=>{});
+  }catch(e){}
   isPlayingVU=true;
+  localStorage.setItem('soulOffAir','0');
 }
+
+radioEl.addEventListener('play', ()=>{ userPausedManually=false; isPlayingVU=true; });
 radioEl.addEventListener('pause', ()=>{ if(!isOffAir) userPausedManually=true; isPlayingVU=false; });
-radioEl.addEventListener('play', ()=>{ userPausedManually=false; isPlayingVU=true; document.getElementById('offAirBox').style.display='none'; document.getElementById('playerLive').style.display='block'; isOffAir=false; });
-radioEl.addEventListener('playing', ()=>{ document.getElementById('offAirBox').style.display='none'; document.getElementById('playerLive').style.display='block'; isOffAir=false; isPlayingVU=true; });
-// NIENTE PIU' goOffAir su error/stalled/emptied - solo il server decide
+
 drawStereo(); setInterval(updateStereo,80);
 
 async function checkSoulLive(){
@@ -117,40 +119,83 @@ async function checkSoulLive(){
     if(!Array.isArray(src)) src=[src];
     let soul=src.find(s=>(s.listenurl||'').includes('/soul'));
     let live=!!soul;
-    if(!live && !isOffAir){ 
-      console.log('Server dice OFF - vado OFF');
-      goOffAirNow(); 
-    }
-    if(live && isOffAir){ 
-      console.log('Server dice ON - vado ON');
-      goLiveNow(); 
-    }
-    if(live && !isOffAir){
-      document.getElementById('offAirBox').style.display='none';
-      document.getElementById('playerLive').style.display='block';
-    }
+    if(live && isOffAir) goLiveNow();
+    if(!live && !isOffAir) goOffAirNow();
     return live;
-  }catch(e){ 
-    console.log('Check fallito, resto come sono');
-    return null; 
-  }
+  }catch(e){ return null; }
 }
 
 hidePopupOnMobile();
-// All'avvio mostra SEMPRE il player, non andare mai OFF da solo
-document.getElementById('playerLive').style.display='block';
-document.getElementById('offAirBox').style.display='none';
-document.getElementById('liveLabel').textContent='💜 SOUL ON AIR';
 
-// Primo check dopo 3 secondi, poi ogni 5 secondi
-setTimeout(checkSoulLive, 3000);
+// FIX PRINCIPALE: all'apertura BLOCCA tutto, controlla prima di far partire musica
+(async function initSoul(){
+  // 1. Blocca subito qualsiasi audio
+  try{ radioEl.pause(); radioEl.removeAttribute('src'); }catch(e){}
+  document.getElementById('playerLive').style.display='none';
+  document.getElementById('offAirBox').style.display='none';
+  document.getElementById('liveLabel').textContent='⌛ Controllo SOUL...';
+
+  // 2. Se l'ultima volta eravamo OFF, mostra subito OFF senza far partire musica
+  let lastOff = localStorage.getItem('soulOffAir');
+  if(lastOff==='1'){
+    goOffAirNow();
+  }
+
+  // 3. Controlla il server
+  let live = await checkSoulLive();
+  
+  if(live===true){
+    goLiveNow();
+  } else if(live===false){
+    goOffAirNow();
+  } else {
+    // se il check fallisce (CORS), prova a vedere se RadioBOSS è davvero ON provando a suonare
+    // se dopo 2 sec non suona, vai OFF
+    setTimeout(async ()=>{
+      let live2 = await checkSoulLive();
+      if(live2===true){
+        goLiveNow();
+      } else if(live2===false){
+        goOffAirNow();
+      } else {
+        // ultimo tentativo: prova a far partire lo stream, se parte è LIVE
+        try{
+          radioEl.src='https://listentomystream.com:8046/soul';
+          radioEl.load();
+          let p = radioEl.play();
+          if(p){
+            p.then(()=>{
+              goLiveNow();
+            }).catch(()=>{
+              goOffAirNow();
+            });
+          }
+          setTimeout(()=>{
+            if(radioEl.paused && isOffAir===false){
+              // se ancora in pausa e non siamo OFF, riprova
+            }
+            if(radioEl.paused && radioEl.currentTime===0){
+              // se proprio non parte, considera OFF
+              if(document.getElementById('playerLive').style.display==='none' && document.getElementById('offAirBox').style.display==='none'){
+                goOffAirNow();
+              }
+            }
+          }, 2000);
+        }catch(e){
+          goOffAirNow();
+        }
+      }
+    }, 1000);
+  }
+})();
+
 setInterval(checkSoulLive, 5000);
 </script>
 <script>
 let lastTitle="";
 function setTitle(text){ if(!text||text.length<2) return; if(text===lastTitle) return; lastTitle=text; document.getElementById('trackText').textContent=text; }
 async function fetchTitleDirect(){ if(isOffAir) return; try{ let r=await fetch('https://listentomystream.com:8046/status-json.xsl?cb='+Date.now(),{cache:'no-store'}); let j=await r.json(); let src=j.icestats.source; if(Array.isArray(src)){ let s=src.find(x=>(x.listenurl||'').includes('/soul')); if(s&&s.title) setTitle(s.title); } }catch(e){} }
-setTimeout(fetchTitleDirect,1500); setInterval(fetchTitleDirect,8000);
+setTimeout(fetchTitleDirect,2000); setInterval(fetchTitleDirect,8000);
 </script>
 </body>
 </html>
