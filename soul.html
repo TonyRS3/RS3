@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOUL FUNK - Radio Sistema 3 - v46.7 NO SNIPPET</title>
+<title>SOUL FUNK - Radio Sistema 3 - v43 CENTERED</title>
 <script>
 if(new URLSearchParams(location.search).get('popup')==='1'){
   document.documentElement.classList.add('popup-mode');
@@ -23,8 +23,9 @@ h1{color:#ffe600;font-size:1.9rem;margin-top:6px}
 .live{color:#b388ff;font-weight:900;margin-top:2px;animation:pulse 1.4s infinite}
 @keyframes pulse{0%{opacity:1}50%{opacity:.5}100%{opacity:1}}
 .btns{display:flex;gap:8px;justify-content:center;margin:14px 0}
-.btns a{padding:10px 18px;border-radius:22px;text-decoration:none;font-weight:900;font-size:.85rem;flex:1}
-.main{background:#fff;color:#555;border:2px solid #ffe600}.soul{background:#7b1fa2;color:#fff;border:2px solid #7b1fa2}
+.btns a{padding:10px 18px;border-radius:22px;text-decoration:none;font-weight:900;font-size:.85rem;flex:1;cursor:pointer;transition:all 0.3s ease}
+.main{background:#fff;color:#555;border:2px solid #ffe600}.soul{background:#7b1fa2;color:#fff;border:2px solid #7b1fa2;box-shadow:0 0 12px #7b1fa266}
+.btns a.active{outline:3px solid #ffe600;transform:scale(1.05)}
 .box-title{color:#ffe67a;font-size:1.15rem;margin:12px 0 8px;font-weight:700}
 .box{background:rgba(20,20,20,.75);padding:14px;border-radius:14px;border:1px solid #333}
 audio{width:100%;height:38px;border-radius:20px}
@@ -32,20 +33,37 @@ audio{width:100%;height:38px;border-radius:20px}
 #vuCanvas{width:100%;height:32px;background:#111118;border-radius:4px;display:block}
 .vu-label{display:flex;justify-content:space-between;font-size:.6rem;color:#999;margin-top:4px;font-weight:900;font-family:monospace}
 #trackBox{min-height:92px;background:rgba(0,0,0,.45);padding:8px;border-radius:12px;margin-top:6px;display:flex;align-items:center;gap:10px;text-align:left}
-#trackBox img{width:76px;height:76px;min-width:76px;object-fit:cover;border-radius:6px;border:2px solid #7b1fa2}
-#trackText{color:white;font-size:.92rem}
+#trackBox img{width:76px;height:76px;min-width:76px;object-fit:cover;border-radius:6px;display:block;background:#1a0a2a;border:2px solid #7b1fa2}
+#trackText{color:white;font-size:.92rem;line-height:1.2;white-space:normal;word-break:break-word}
 .footer{margin-top:14px;font-size:.7rem;color:#aaa}.footer a{color:#ffe600;text-decoration:none;font-weight:900}
 #popupBrand{display:none}
-#btnPopup{display:block !important;margin:12px auto 0 auto !important;width:fit-content !important;background:#00d4ff;color:#000;font-weight:bold;padding:10px 20px;border:none;border-radius:30px;cursor:pointer}
-#offAirBox{display:none}
-#offAirBox img{width:100%;border-radius:14px;border:1.5px solid #7b1fa2;display:block}
+#btnPopup{
+  display:block !important;
+  margin:12px auto 0 auto !important;
+  width:fit-content !important;
+  max-width:90% !important;
+  background:#00d4ff;
+  color:#000;
+  font-weight:bold;
+  padding:10px 20px;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  text-align:center;
+}
 @media (max-width:768px){ #btnPopup{display:none !important;} }
-html.popup-mode, body.popup-mode{ background:#020a18 !important; height:380px !important; overflow:hidden !important; }
+@media (pointer:coarse){ #btnPopup{display:none !important;} }
+@media (hover:none){ #btnPopup{display:none !important;} }
+html.popup-mode, body.popup-mode{ background:#020a18 !important; background-image:linear-gradient(180deg,#0a1830 0%,#020a18 100%) !important; overflow:hidden !important; height:380px !important; min-height:380px !important; max-height:380px !important; }
 html.popup-mode .logo, body.popup-mode .logo, html.popup-mode h1, body.popup-mode h1, html.popup-mode .live, body.popup-mode .live, html.popup-mode .footer, body.popup-mode .footer{display:none !important}
-html.popup-mode .overlay{background:transparent !important;min-height:auto !important;padding:0 !important}
-html.popup-mode .container{max-width:360px !important;margin:0 auto !important;padding:8px !important; background:transparent !important;border:none !important; height:380px !important; overflow:hidden !important}
+html.popup-mode .overlay{background:transparent !important;min-height:auto !important;padding:0 !important;align-items:flex-start !important}
+html.popup-mode .container{max-width:360px !important;margin:0 auto !important;padding:8px !important; background:transparent !important;border:none !important; height:380px !important; overflow:hidden !important; border-radius:0 !important}
 html.popup-mode #popupBrand{display:block !important; font-size:0.68rem !important; color:#ffd966 !important; letter-spacing:2.5px !important; font-weight:900 !important; margin-bottom:4px !important; text-align:center}
-html.popup-mode .box{background:rgba(255,255,255,.10) !important;border:none !important;padding:8px !important;border-radius:14px !important}
+html.popup-mode .box{background:rgba(255,255,255,.10) !important;border:none !important;padding:8px !important;border-radius:14px !important;margin-top:0 !important}
+html.popup-mode .box-title{font-size:0.85rem !important;margin:4px 0 !important;color:#ffd966 !important}
+html.popup-mode .vu-wrap{max-width:300px !important; margin-top:6px !important; padding:4px 6px !important;}
+html.popup-mode #vuCanvas{height:32px !important;}
+html.popup-mode #trackBox{background:rgba(0,0,0,.55) !important; border-radius:12px !important; min-height:92px !important; height:92px !important; overflow:hidden !important; padding:6px 8px !important; margin-top:6px !important;}
 </style>
 </head>
 <body>
@@ -54,148 +72,151 @@ html.popup-mode .box{background:rgba(255,255,255,.10) !important;border:none !im
 <div id="popupBrand">RADIO SISTEMA 3 - SOUL</div>
 <img src="RADIO%20SISTEMA%203.jpeg" class="logo" style="width:70px;border-radius:12px;background:#fff;padding:3px">
 <h1>SOUL FUNK</h1>
-<div class="live" id="liveLabel">⌛ Controllo...</div>
-<div class="btns"><a id="btnMain" class="main" href="index.html">MAIN</a><a id="btnSoul" class="soul active" href="soul.html">SOUL FUNK</a></div>
+<div class="live">💜 SOUL ON AIR</div>
+<div class="btns">
+<a id="btnMain" class="main" href="index.html">MAIN</a>
+<a id="btnSoul" class="soul active" href="soul.html">SOUL FUNK</a>
+</div>
 <div class="box-title">♪ Ascolta in diretta</div>
 <div class="box">
-<div id="playerLive" style="display:none">
-<audio id="radioAudio" controls preload="none" playsinline></audio>
-<div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak">● LIVE</span></div></div>
+<audio id="radioAudio" controls preload="none" playsinline><source src="https://listentomystream.com:8046/soul" type="audio/mpeg"></audio>
+<div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak" style="color:#b388ff">● LIVE</span></div></div>
 <button id="btnPopup" onclick="apriPopupPlayer()">⧉ APRI POPUP PLAYER</button>
 <div class="box-title" style="margin-top:10px">♪ Brano in onda</div>
-<div id="trackBox"><img src="./RS3_SOUL_viola_scuro.jpg"><div id="trackText">SOUL FUNK</div></div>
+<div id="trackBox"><img src="./RS3_SOUL_viola_scuro.jpg" alt="cover"><div id="trackText">SOUL FUNK - Live Non Stop</div></div>
 </div>
-<div id="offAirBox" style="display:none"><img src="offair-soul.jpg" alt="OFF AIR"></div>
-</div>
-<div class="footer">© Radio Sistema 3<br><br><a href="index.html">⬅ Torna a MAIN</a></div>
+<div class="footer">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389<br><br><a id="footerMain" href="index.html?play=1">⬅ Torna a MAIN</a></div>
 </div>
 </div>
 <script>
-let popupWin=null, userPausedManually=false, isOffAir=true;
-function hidePopupOnMobile(){ const b=document.getElementById('btnPopup'); if(!b) return; const m=window.innerWidth<=768||/Mobi|Android|iPhone/i.test(navigator.userAgent); b.style.display=m?'none':'block'; }
-function apriPopupPlayer(){ if(window.innerWidth<=768) return; const a=document.getElementById('radioAudio'); userPausedManually=true; a.pause(); popupWin=window.open(location.href.split('?')[0]+'?popup=1','RS3Soul','width=380,height=380'); let c=setInterval(()=>{ if(popupWin&&popupWin.closed){ clearInterval(c); popupWin=null; userPausedManually=false; if(!isOffAir) a.play().catch(()=>{});} },800); }
-const radioEl=document.getElementById('radioAudio');
-const vuCanvas=document.getElementById('vuCanvas'),vuCtx=vuCanvas.getContext('2d');
-let isPlayingVU=false,levelL=0,levelR=0;
-function drawStereo(){ const W=vuCanvas.width,H=vuCanvas.height; vuCtx.clearRect(0,0,W,H); vuCtx.fillStyle='#111118'; vuCtx.fillRect(0,0,W,H); let bars=36,barW=W/bars; let aL=Math.floor((levelL/100)*bars); for(let i=0;i<bars;i++){ vuCtx.fillStyle=i<aL?'#7b1fa2':'#2a0a1a'; vuCtx.fillRect(i*barW+1,1,barW-2,13); } vuCtx.fillStyle='#333'; vuCtx.fillRect(0,15.5,W,1); let aR=Math.floor((levelR/100)*bars); for(let i=0;i<bars;i++){ vuCtx.fillStyle=i<aR?'#b388ff':'#1a0a2a'; vuCtx.fillRect(i*barW+1,17,barW-2,13); } requestAnimationFrame(drawStereo); }
-function updateStereo(){ if(!isPlayingVU){ levelL*=0.92; levelR*=0.92; return; } levelL=40+Math.random()*50; levelR=40+Math.random()*50; }
-
-function goOffAirNow(){
-  isOffAir=true;
-  document.getElementById('offAirBox').style.display='block';
-  document.getElementById('playerLive').style.display='none';
-  document.getElementById('liveLabel').textContent='🔧 Prove tecniche in corso';
-  try{ radioEl.pause(); radioEl.removeAttribute('src'); radioEl.load(); }catch(e){}
-  isPlayingVU=false;
-  localStorage.setItem('soulOffAir','1');
-}
-function goLiveNow(){
-  isOffAir=false;
-  document.getElementById('offAirBox').style.display='none';
-  document.getElementById('playerLive').style.display='block';
-  document.getElementById('liveLabel').textContent='💜 SOUL ON AIR';
-  userPausedManually=false;
+let popupWin=null;
+let userPausedManually=false;
+let autoResumeTimer=null;
+function hidePopupOnMobile(){
   try{
-    if(!radioEl.src || !radioEl.src.includes('/soul')){
-      radioEl.src='https://listentomystream.com:8046/soul';
-      radioEl.load();
-    }
-    radioEl.play().catch(()=>{});
+    const btn = document.getElementById('btnPopup');
+    if(!btn) return;
+    const isMobile = window.innerWidth <= 768 || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+    if(isMobile){ btn.style.display='none'; }
+    else { btn.style.display='block'; btn.style.margin='12px auto 0 auto'; }
   }catch(e){}
-  isPlayingVU=true;
-  localStorage.setItem('soulOffAir','0');
 }
-
-radioEl.addEventListener('play', ()=>{ userPausedManually=false; isPlayingVU=true; });
-radioEl.addEventListener('pause', ()=>{ if(!isOffAir) userPausedManually=true; isPlayingVU=false; });
-
-drawStereo(); setInterval(updateStereo,80);
-
-async function checkSoulLive(){
-  try{
-    let r=await fetch('https://listentomystream.com:8046/status-json.xsl?cb='+Date.now(),{cache:'no-store'});
-    let j=await r.json();
-    let src=j.icestats.source;
-    if(!Array.isArray(src)) src=[src];
-    let soul=src.find(s=>(s.listenurl||'').includes('/soul'));
-    let live=!!soul;
-    if(live && isOffAir) goLiveNow();
-    if(!live && !isOffAir) goOffAirNow();
-    return live;
-  }catch(e){ return null; }
+function apriPopupPlayer(){ 
+  if(window.innerWidth<=768) return; 
+  if(/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) return;
+  const a=document.getElementById('radioAudio'); 
+  userPausedManually=true;
+  a.pause(); 
+  popupWin=window.open(window.location.href.split('?')[0]+'?popup=1','RadioSistema3SoulPopup','width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); 
+  let check=setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(check); popupWin=null; userPausedManually=false; a.play().catch(()=>{});} },800); 
 }
-
+function setupChannelNav(){
+  const isPopup = new URLSearchParams(location.search).get('popup')==='1' || !!window.opener;
+  const btnMain=document.getElementById('btnMain'),btnSoul=document.getElementById('btnSoul'),footerMain=document.getElementById('footerMain');
+  btnMain.href = isPopup ? 'index.html?popup=1' : 'index.html';
+  btnSoul.href = isPopup ? 'soul.html?popup=1' : 'soul.html';
+  if(footerMain) footerMain.href = isPopup ? 'index.html?popup=1' : 'index.html?play=1';
+  if(isPopup){
+    [btnMain,btnSoul,footerMain].forEach(btn=>{ if(!btn) return; btn.addEventListener('click',function(e){e.preventDefault();window.location.href=this.getAttribute('href');});});
+  }
+}
+setupChannelNav();
 hidePopupOnMobile();
-
-// FIX PRINCIPALE: all'apertura BLOCCA tutto, controlla prima di far partire musica
-(async function initSoul(){
-  // 1. Blocca subito qualsiasi audio
-  try{ radioEl.pause(); radioEl.removeAttribute('src'); }catch(e){}
-  document.getElementById('playerLive').style.display='none';
-  document.getElementById('offAirBox').style.display='none';
-  document.getElementById('liveLabel').textContent='⌛ Controllo SOUL...';
-
-  // 2. Se l'ultima volta eravamo OFF, mostra subito OFF senza far partire musica
-  let lastOff = localStorage.getItem('soulOffAir');
-  if(lastOff==='1'){
-    goOffAirNow();
-  }
-
-  // 3. Controlla il server
-  let live = await checkSoulLive();
-  
-  if(live===true){
-    goLiveNow();
-  } else if(live===false){
-    goOffAirNow();
-  } else {
-    // se il check fallisce (CORS), prova a vedere se RadioBOSS è davvero ON provando a suonare
-    // se dopo 2 sec non suona, vai OFF
-    setTimeout(async ()=>{
-      let live2 = await checkSoulLive();
-      if(live2===true){
-        goLiveNow();
-      } else if(live2===false){
-        goOffAirNow();
-      } else {
-        // ultimo tentativo: prova a far partire lo stream, se parte è LIVE
-        try{
-          radioEl.src='https://listentomystream.com:8046/soul';
-          radioEl.load();
-          let p = radioEl.play();
-          if(p){
-            p.then(()=>{
-              goLiveNow();
-            }).catch(()=>{
-              goOffAirNow();
-            });
-          }
-          setTimeout(()=>{
-            if(radioEl.paused && isOffAir===false){
-              // se ancora in pausa e non siamo OFF, riprova
-            }
-            if(radioEl.paused && radioEl.currentTime===0){
-              // se proprio non parte, considera OFF
-              if(document.getElementById('playerLive').style.display==='none' && document.getElementById('offAirBox').style.display==='none'){
-                goOffAirNow();
-              }
-            }
-          }, 2000);
-        }catch(e){
-          goOffAirNow();
-        }
-      }
-    }, 1000);
-  }
-})();
-
-setInterval(checkSoulLive, 5000);
+window.addEventListener('resize', hidePopupOnMobile);
+const vuCanvas=document.getElementById('vuCanvas'),vuCtx=vuCanvas.getContext('2d'),radioEl=document.getElementById('radioAudio');
+let isPlayingVU=false,levelL=0,levelR=0;
+function drawStereo(){ const W=vuCanvas.width,H=vuCanvas.height; vuCtx.clearRect(0,0,W,H); vuCtx.fillStyle='#111118'; vuCtx.fillRect(0,0,W,H); let bars=36,barW=W/bars,gap=1.5,rowH=H/2-2; let activeL=Math.floor((levelL/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeL; let color=i<bars*0.6?(lit?'#7b1fa2':'#2a0a1a'):i<bars*0.84?(lit?'#ffe600':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } vuCtx.fillStyle='#333'; vuCtx.fillRect(0, H/2-0.5, W, 1); let activeR=Math.floor((levelR/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeR; let color=i<bars*0.6?(lit?'#b388ff':'#1a0a2a'):i<bars*0.84?(lit?'#ffe600':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=H/2+1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } requestAnimationFrame(drawStereo); }
+function updateStereo(){ if(!isPlayingVU){ levelL+=(0-levelL)*0.08; levelR+=(0-levelR)*0.08; return; } const isPopup = new URLSearchParams(location.search).get('popup')==='1' || !!window.opener; if(isPopup){ let isPeak = Math.random() < 0.07; if(isPeak){ levelL = 78 + Math.random()*18; levelR = 76 + Math.random()*18; } else { let base = 32 + Math.random()*18; let targetL = base + Math.random()*10; let targetR = base*0.9 + Math.random()*10; levelL += (targetL - levelL) * 0.20; levelR += (targetR - levelR) * 0.18; } return; } let base = 40 + Math.random()*45; let isPeak = Math.random() < 0.18; let targetL = isPeak ? 88 + Math.random()*12 : base + Math.random()*18; let targetR = isPeak ? 85 + Math.random()*15 : base*0.9 + Math.random()*20; levelL+=(targetL-levelL)*0.38; levelR+=(targetR-levelR)*0.34; if(levelL>100)levelL=100; if(levelR>100)levelR=100; }
+function tryAutoResume(){ if(userPausedManually) return; if(radioEl.paused) radioEl.play().catch(()=>{}); }
+radioEl.addEventListener('pause', ()=>{ userPausedManually=true; clearTimeout(autoResumeTimer); isPlayingVU=false; document.getElementById('vuPeak').textContent='STOP'; document.getElementById('vuPeak').style.color='#ff4444'; });
+radioEl.addEventListener('play', ()=>{ userPausedManually=false; isPlayingVU=true; document.getElementById('vuPeak').textContent='● LIVE'; document.getElementById('vuPeak').style.color='#b388ff'; });
+radioEl.addEventListener('stalled', ()=>{ if(!userPausedManually){ clearTimeout(autoResumeTimer); autoResumeTimer=setTimeout(()=>{ userPausedManually=false; tryAutoResume(); },2000); } });
+radioEl.addEventListener('error', ()=>{ if(!userPausedManually){ clearTimeout(autoResumeTimer); autoResumeTimer=setTimeout(()=>{ userPausedManually=false; tryAutoResume(); },2000); } });
+drawStereo(); setInterval(updateStereo,60);
 </script>
 <script>
-let lastTitle="";
-function setTitle(text){ if(!text||text.length<2) return; if(text===lastTitle) return; lastTitle=text; document.getElementById('trackText').textContent=text; }
-async function fetchTitleDirect(){ if(isOffAir) return; try{ let r=await fetch('https://listentomystream.com:8046/status-json.xsl?cb='+Date.now(),{cache:'no-store'}); let j=await r.json(); let src=j.icestats.source; if(Array.isArray(src)){ let s=src.find(x=>(x.listenurl||'').includes('/soul')); if(s&&s.title) setTitle(s.title); } }catch(e){} }
-setTimeout(fetchTitleDirect,2000); setInterval(fetchTitleDirect,8000);
+const FALLBACK_COVER = "./RS3_SOUL_viola_scuro.jpg";
+let lastTitle = "";
+function pulisciTitoloSoul(raw){
+  let t = raw || "";
+  t = t.replace(/Radio Sistema 3/gi,'').replace(/SOUL FUNK/gi,'').trim();
+  t = t.replace(/^\s*\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM|am|pm)?\s*/gi,'');
+  t = t.replace(/\s+/g,' ').trim();
+  t = t.replace(/([a-zàèéìòùáéíóúäëïöü])([A-ZÀÈÉÌÒÙÁÉÍÓÚÄËÏÖÜ])/g, '$1 $2');
+  if(t.includes('-') || t.includes('–')){
+    t = t.replace(/\s*–\s*/g,' - ').replace(/\s*-\s*/g,' - ');
+    return t.replace(/\s+/g,' ').trim();
+  }
+  let words = t.split(/\s+/).filter(Boolean);
+  if(words.length >= 4){ return words.slice(0, -2).join(' ') + ' - ' + words.slice(-2).join(' '); }
+  if(words.length === 3){ return words[0] + ' - ' + words.slice(1).join(' '); }
+  return t;
+}
+function updateMediaSession(titleText){
+  if('mediaSession' in navigator){
+    try{
+      let art = new URL(FALLBACK_COVER, window.location.href).href;
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: titleText || "SOUL FUNK",
+        artist: "Radio Sistema 3",
+        album: "RS3 SOUL Live",
+        artwork: [{ src: art, sizes: "512x512", type: "image/jpeg" }]
+      });
+      navigator.mediaSession.playbackState = "playing";
+    }catch(e){}
+  }
+}
+function setTitle(text){
+  if(!text || text.length<2) return;
+  text = pulisciTitoloSoul(text.trim());
+  if(text.toLowerCase().includes("funkorama") && lastTitle!=="") return;
+  if(text === lastTitle) return;
+  lastTitle = text;
+  document.getElementById('trackText').textContent = text;
+  updateMediaSession(text);
+}
+async function fetchTitleDirect(){
+  const endpoints = [
+    'https://listentomystream.com:8046/currentsong?sid=2',
+    'https://listentomystream.com:8046/currentsong?sid=3',
+    'https://listentomystream.com:8046/currentsong?sid=4',
+    'https://listentomystream.com:8046/currentsong?mount=/soul',
+    'https://listentomystream.com:8046/status-json.xsl',
+    'https://listentomystream.com:8046/currentsong?sid=1'
+  ];
+  for(let base of endpoints){
+    try{
+      let url = base + (base.includes('?') ? '&' : '?') + 'cb='+Date.now();
+      let r = await fetch(url, {cache:'no-store'});
+      if(r.ok){
+        let txt = await r.text();
+        if(txt.trim().startsWith('{')){
+          try{
+            let j = JSON.parse(txt);
+            let src = j?.icestats?.source;
+            if(Array.isArray(src)){
+              let soul = src.find(s=> (s.listenurl||'').includes('/soul'));
+              if(soul && soul.title && soul.title.length>2){ setTitle(soul.title); return; }
+              if(src[1] && src[1].title){ setTitle(src[1].title); return; }
+            } else if(src && src.title){ setTitle(src.title); return; }
+          }catch(_){}
+        } else {
+          let t = txt.trim();
+          if(t.includes('<body>')){
+            let p = t.split(',');
+            if(p.length>=7){ let title = p[6].replace('</body>','').trim(); if(title.length>2){ setTitle(title); return; } }
+          } else if(t.length>2 && t.length<250 && !t.includes('<html') && !t.toLowerCase().includes('not found')){
+            if(!t.toLowerCase().includes('unknown')){ setTitle(t); return; }
+          }
+        }
+      }
+    }catch(e){}
+  }
+}
+setTimeout(fetchTitleDirect, 1500);
+setInterval(fetchTitleDirect, 8000);
+document.getElementById('radioAudio')?.addEventListener('play', ()=>{ fetchTitleDirect(); });
+updateMediaSession("SOUL FUNK - Radio Sistema 3");
 </script>
 </body>
 </html>
