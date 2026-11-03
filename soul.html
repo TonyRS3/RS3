@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOUL FUNK - Radio Sistema 3 - v46.5 FINAL</title>
+<title>SOUL FUNK - Radio Sistema 3 - v46.6 STABLE</title>
 <script>
 if(new URLSearchParams(location.search).get('popup')==='1'){
   document.documentElement.classList.add('popup-mode');
@@ -71,7 +71,7 @@ html.popup-mode .box{background:rgba(255,255,255,.10) !important;border:none !im
 </div>
 </div>
 <script>
-let popupWin=null, userPausedManually=false, isOffAir=false, stallTimer=null;
+let popupWin=null, userPausedManually=false, isOffAir=false;
 function hidePopupOnMobile(){ const b=document.getElementById('btnPopup'); if(!b) return; const m=window.innerWidth<=768||/Mobi|Android|iPhone/i.test(navigator.userAgent); b.style.display=m?'none':'block'; }
 function apriPopupPlayer(){ if(window.innerWidth<=768) return; const a=document.getElementById('radioAudio'); userPausedManually=true; a.pause(); popupWin=window.open(location.href.split('?')[0]+'?popup=1','RS3Soul','width=380,height=380'); let c=setInterval(()=>{ if(popupWin&&popupWin.closed){ clearInterval(c); popupWin=null; userPausedManually=false; if(!isOffAir) a.play().catch(()=>{});} },800); }
 const radioEl=document.getElementById('radioAudio');
@@ -85,13 +85,14 @@ function goOffAirNow(){
   document.getElementById('offAirBox').style.display='block';
   document.getElementById('playerLive').style.display='none';
   document.getElementById('liveLabel').textContent='🔧 Prove tecniche in corso';
-  try{ radioEl.pause(); radioEl.src=''; radioEl.load(); radioEl.removeAttribute('src'); }catch(e){}
+  try{ radioEl.pause(); }catch(e){}
   isPlayingVU=false;
 }
 function goLiveNow(){
   if(!isOffAir){
     document.getElementById('offAirBox').style.display='none';
     document.getElementById('playerLive').style.display='block';
+    document.getElementById('liveLabel').textContent='💜 SOUL ON AIR';
     return;
   }
   isOffAir=false;
@@ -103,11 +104,9 @@ function goLiveNow(){
   isPlayingVU=true;
 }
 radioEl.addEventListener('pause', ()=>{ if(!isOffAir) userPausedManually=true; isPlayingVU=false; });
-radioEl.addEventListener('play', ()=>{ userPausedManually=false; isPlayingVU=true; clearTimeout(stallTimer); document.getElementById('offAirBox').style.display='none'; document.getElementById('playerLive').style.display='block'; });
-radioEl.addEventListener('playing', ()=>{ document.getElementById('offAirBox').style.display='none'; document.getElementById('playerLive').style.display='block'; document.getElementById('liveLabel').textContent='💜 SOUL ON AIR'; isOffAir=false; isPlayingVU=true; });
-radioEl.addEventListener('stalled', ()=>{ if(!userPausedManually && !isOffAir){ clearTimeout(stallTimer); stallTimer=setTimeout(goOffAirNow, 1200); } });
-radioEl.addEventListener('error', ()=>{ if(!userPausedManually) setTimeout(goOffAirNow, 800); });
-radioEl.addEventListener('emptied', ()=>{ if(!userPausedManually && !isOffAir){ clearTimeout(stallTimer); stallTimer=setTimeout(goOffAirNow, 1500); } });
+radioEl.addEventListener('play', ()=>{ userPausedManually=false; isPlayingVU=true; document.getElementById('offAirBox').style.display='none'; document.getElementById('playerLive').style.display='block'; isOffAir=false; });
+radioEl.addEventListener('playing', ()=>{ document.getElementById('offAirBox').style.display='none'; document.getElementById('playerLive').style.display='block'; isOffAir=false; isPlayingVU=true; });
+// NIENTE PIU' goOffAir su error/stalled/emptied - solo il server decide
 drawStereo(); setInterval(updateStereo,80);
 
 async function checkSoulLive(){
@@ -118,27 +117,37 @@ async function checkSoulLive(){
     if(!Array.isArray(src)) src=[src];
     let soul=src.find(s=>(s.listenurl||'').includes('/soul'));
     let live=!!soul;
-    if(!live && !isOffAir) goOffAirNow();
-    if(live && isOffAir) goLiveNow();
+    if(!live && !isOffAir){ 
+      console.log('Server dice OFF - vado OFF');
+      goOffAirNow(); 
+    }
+    if(live && isOffAir){ 
+      console.log('Server dice ON - vado ON');
+      goLiveNow(); 
+    }
+    if(live && !isOffAir){
+      document.getElementById('offAirBox').style.display='none';
+      document.getElementById('playerLive').style.display='block';
+    }
     return live;
-  }catch(e){ return null; }
+  }catch(e){ 
+    console.log('Check fallito, resto come sono');
+    return null; 
+  }
 }
 
-// All'apertura: mostra subito il player, poi dopo 2 secondi controlla se è davvero OFF
-// Così non c'è pezzettino fantasma, ma il player si vede subito quando è ON
 hidePopupOnMobile();
+// All'avvio mostra SEMPRE il player, non andare mai OFF da solo
 document.getElementById('playerLive').style.display='block';
 document.getElementById('offAirBox').style.display='none';
-setTimeout(async ()=>{
-  let live = await checkSoulLive();
-  if(live===false){
-    goOffAirNow();
-  }
-}, 2000);
+document.getElementById('liveLabel').textContent='💜 SOUL ON AIR';
+
+// Primo check dopo 3 secondi, poi ogni 5 secondi
+setTimeout(checkSoulLive, 3000);
 setInterval(checkSoulLive, 5000);
 </script>
 <script>
-const FALLBACK_COVER="./RS3_SOUL_viola_scuro.jpg"; let lastTitle="";
+let lastTitle="";
 function setTitle(text){ if(!text||text.length<2) return; if(text===lastTitle) return; lastTitle=text; document.getElementById('trackText').textContent=text; }
 async function fetchTitleDirect(){ if(isOffAir) return; try{ let r=await fetch('https://listentomystream.com:8046/status-json.xsl?cb='+Date.now(),{cache:'no-store'}); let j=await r.json(); let src=j.icestats.source; if(Array.isArray(src)){ let s=src.find(x=>(x.listenurl||'').includes('/soul')); if(s&&s.title) setTitle(s.title); } }catch(e){} }
 setTimeout(fetchTitleDirect,1500); setInterval(fetchTitleDirect,8000);
