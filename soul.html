@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOUL FUNK - Radio Sistema 3 - v46 FIX DEFINITIVO</title>
+<title>SOUL FUNK - Radio Sistema 3 - v46.1 FIX APERTURA</title>
 <script>
 if(new URLSearchParams(location.search).get('popup')==='1'){
   document.documentElement.classList.add('popup-mode');
@@ -56,24 +56,24 @@ html.popup-mode .box{background:rgba(255,255,255,.10) !important;border:none !im
 <div id="popupBrand">RADIO SISTEMA 3 - SOUL</div>
 <img src="RADIO%20SISTEMA%203.jpeg" class="logo" style="width:70px;border-radius:12px;background:#fff;padding:3px">
 <h1>SOUL FUNK</h1>
-<div class="live" id="liveLabel">💜 SOUL ON AIR</div>
+<div class="live" id="liveLabel">⌛ Controllo...</div>
 <div class="btns"><a id="btnMain" class="main" href="index.html">MAIN</a><a id="btnSoul" class="soul active" href="soul.html">SOUL FUNK</a></div>
 <div class="box-title">♪ Ascolta in diretta</div>
 <div class="box">
-<div id="playerLive">
+<div id="playerLive" style="display:none">
 <audio id="radioAudio" controls preload="none" playsinline><source src="https://listentomystream.com:8046/soul" type="audio/mpeg"></audio>
 <div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak" style="color:#b388ff">● LIVE</span></div></div>
 <button id="btnPopup" onclick="apriPopupPlayer()">⧉ APRI POPUP PLAYER</button>
 <div class="box-title" style="margin-top:10px">♪ Brano in onda</div>
 <div id="trackBox"><img src="./RS3_SOUL_viola_scuro.jpg"><div id="trackText">SOUL FUNK - Live Non Stop</div></div>
 </div>
-<div id="offAirBox"><img src="offair-soul.jpg" alt="OFF AIR"></div>
+<div id="offAirBox" style="display:none"><img src="offair-soul.jpg" alt="OFF AIR"></div>
 </div>
 <div class="footer">© Radio Sistema 3<br><br><a id="footerMain" href="index.html?play=1">⬅ Torna a MAIN</a></div>
 </div>
 </div>
 <script>
-let popupWin=null, userPausedManually=false, isOffAir=false, stallTimer=null;
+let popupWin=null, userPausedManually=false, isOffAir=true, stallTimer=null;
 function hidePopupOnMobile(){ const btn=document.getElementById('btnPopup'); if(!btn) return; const isMobile=window.innerWidth<=768||/Mobi|Android|iPhone/i.test(navigator.userAgent); btn.style.display=isMobile?'none':'block'; }
 function apriPopupPlayer(){ if(window.innerWidth<=768) return; const a=document.getElementById('radioAudio'); userPausedManually=true; a.pause(); popupWin=window.open(location.href.split('?')[0]+'?popup=1','RS3Soul','width=380,height=380'); let c=setInterval(()=>{ if(popupWin&&popupWin.closed){ clearInterval(c); popupWin=null; userPausedManually=false; if(!isOffAir) a.play().catch(()=>{});} },800); }
 function setupChannelNav(){ const isPopup=new URLSearchParams(location.search).get('popup')==='1'||!!window.opener; const bM=document.getElementById('btnMain'),bS=document.getElementById('btnSoul'),fM=document.getElementById('footerMain'); bM.href=isPopup?'index.html?popup=1':'index.html'; bS.href=isPopup?'soul.html?popup=1':'soul.html'; if(fM) fM.href=isPopup?'index.html?popup=1':'index.html?play=1'; }
@@ -83,17 +83,53 @@ const vuCanvas=document.getElementById('vuCanvas'),vuCtx=vuCanvas.getContext('2d
 let isPlayingVU=false,levelL=0,levelR=0;
 function drawStereo(){ const W=vuCanvas.width,H=vuCanvas.height; vuCtx.clearRect(0,0,W,H); vuCtx.fillStyle='#111118'; vuCtx.fillRect(0,0,W,H); let bars=36,barW=W/bars,gap=1.5,rowH=H/2-2; let activeL=Math.floor((levelL/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeL; let c=i<bars*0.6?(lit?'#7b1fa2':'#2a0a1a'):i<bars*0.84?(lit?'#ffe600':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=c; vuCtx.fillRect(x+gap,1,barW-gap*2,rowH-1); } vuCtx.fillStyle='#333'; vuCtx.fillRect(0,H/2-0.5,W,1); let activeR=Math.floor((levelR/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeR; let c=i<bars*0.6?(lit?'#b388ff':'#1a0a2a'):i<bars*0.84?(lit?'#ffe600':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=c; vuCtx.fillRect(x+gap,H/2+1,barW-gap*2,rowH-1); } requestAnimationFrame(drawStereo); }
 function updateStereo(){ if(!isPlayingVU){ levelL+=(0-levelL)*0.08; levelR+=(0-levelR)*0.08; return; } let base=40+Math.random()*45; levelL+=(base+Math.random()*18-levelL)*0.38; levelR+=(base*0.9+Math.random()*20-levelR)*0.34; }
-function goOffAirNow(){ if(isOffAir) return; isOffAir=true; document.getElementById('offAirBox').style.display='block'; document.getElementById('playerLive').style.display='none'; document.getElementById('liveLabel').textContent='🔧 Prove tecniche in corso'; try{ radioEl.pause(); radioEl.src=''; radioEl.load(); radioEl.removeAttribute('src'); }catch(e){} clearTimeout(stallTimer); isPlayingVU=false; }
-function goLiveNow(){ if(!isOffAir) return; isOffAir=false; document.getElementById('offAirBox').style.display='none'; document.getElementById('playerLive').style.display='block'; document.getElementById('liveLabel').textContent='💜 SOUL ON AIR'; userPausedManually=false; try{ radioEl.src='https://listentomystream.com:8046/soul'; radioEl.load(); radioEl.play().catch(()=>{}); }catch(e){} }
+function goOffAirNow(){ if(isOffAir) return; isOffAir=true; document.getElementById('offAirBox').style.display='block'; document.getElementById('playerLive').style.display='none'; document.getElementById('liveLabel').textContent='🔧 Prove tecniche in corso'; try{ radioEl.pause(); radioEl.src=''; radioEl.load(); radioEl.removeAttribute('src'); }catch(e){} clearTimeout(stallTimer); isPlayingVU=false; document.getElementById('vuPeak').textContent='STOP'; document.getElementById('vuPeak').style.color='#ff4444'; }
+function goLiveNow(){ isOffAir=false; document.getElementById('offAirBox').style.display='none'; document.getElementById('playerLive').style.display='block'; document.getElementById('liveLabel').textContent='💜 SOUL ON AIR'; userPausedManually=false; try{ radioEl.src='https://listentomystream.com:8046/soul'; radioEl.load(); radioEl.play().catch(()=>{}); }catch(e){} isPlayingVU=true; document.getElementById('vuPeak').textContent='● LIVE'; document.getElementById('vuPeak').style.color='#b388ff'; }
 radioEl.addEventListener('pause', ()=>{ if(!isOffAir) userPausedManually=true; isPlayingVU=false; document.getElementById('vuPeak').textContent='STOP'; document.getElementById('vuPeak').style.color='#ff4444'; });
 radioEl.addEventListener('play', ()=>{ userPausedManually=false; isPlayingVU=true; document.getElementById('vuPeak').textContent='● LIVE'; document.getElementById('vuPeak').style.color='#b388ff'; clearTimeout(stallTimer); });
-radioEl.addEventListener('stalled', ()=>{ if(!userPausedManually){ clearTimeout(stallTimer); stallTimer=setTimeout(goOffAirNow, 1000); } });
-radioEl.addEventListener('error', ()=>{ if(!userPausedManually) goOffAirNow(); });
-radioEl.addEventListener('ended', ()=>{ if(!userPausedManually) goOffAirNow(); });
-radioEl.addEventListener('emptied', ()=>{ if(!userPausedManually){ clearTimeout(stallTimer); stallTimer=setTimeout(goOffAirNow, 1200); } });
+radioEl.addEventListener('stalled', ()=>{ if(!userPausedManually && !isOffAir){ clearTimeout(stallTimer); stallTimer=setTimeout(goOffAirNow, 1000); } });
+radioEl.addEventListener('error', ()=>{ if(!userPausedManually && !isOffAir) goOffAirNow(); });
+radioEl.addEventListener('ended', ()=>{ if(!userPausedManually && !isOffAir) goOffAirNow(); });
+radioEl.addEventListener('emptied', ()=>{ if(!userPausedManually && !isOffAir){ clearTimeout(stallTimer); stallTimer=setTimeout(goOffAirNow, 1200); } });
 drawStereo(); setInterval(updateStereo,60);
-async function checkSoulLive(){ try{ let r=await fetch('https://listentomystream.com:8046/status-json.xsl?cb='+Date.now(),{cache:'no-store'}); let j=await r.json(); let src=j.icestats.source; if(!Array.isArray(src)) src=[src]; let soul=src.find(s=>(s.listenurl||'').includes('/soul')); let live=!!soul; if(live&&isOffAir) goLiveNow(); else if(!live&&!isOffAir) goOffAirNow(); }catch(e){} }
-setTimeout(checkSoulLive,2000); setInterval(checkSoulLive,4000);
+
+async function checkSoulLive(){
+  try{
+    let r=await fetch('https://listentomystream.com:8046/status-json.xsl?cb='+Date.now(),{cache:'no-store'});
+    let j=await r.json();
+    let src=j.icestats.source;
+    if(!Array.isArray(src)) src=[src];
+    let soul=src.find(s=>(s.listenurl||'').includes('/soul'));
+    let live=!!soul;
+    if(live && isOffAir){ goLiveNow(); }
+    else if(!live && !isOffAir){ goOffAirNow(); }
+    else if(!live && isOffAir){ // primo avvio già OFF
+        document.getElementById('offAirBox').style.display='block';
+        document.getElementById('playerLive').style.display='none';
+        document.getElementById('liveLabel').textContent='🔧 Prove tecniche in corso';
+    }
+    return live;
+  }catch(e){ return false; }
+}
+
+async function initialCheck(){
+  try{ radioEl.pause(); }catch(e){}
+  document.getElementById('playerLive').style.display='none';
+  document.getElementById('offAirBox').style.display='none';
+  document.getElementById('liveLabel').textContent='⌛ Controllo...';
+  let live = await checkSoulLive();
+  if(live){
+    goLiveNow();
+  } else {
+    isOffAir=true;
+    document.getElementById('offAirBox').style.display='block';
+    document.getElementById('playerLive').style.display='none';
+    document.getElementById('liveLabel').textContent='🔧 Prove tecniche in corso';
+  }
+}
+
+initialCheck();
+setInterval(checkSoulLive,4000);
 </script>
 <script>
 const FALLBACK_COVER="./RS3_SOUL_viola_scuro.jpg"; let lastTitle="";
