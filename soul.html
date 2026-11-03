@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOUL FUNK - Radio Sistema 3 - v45 IMAGE</title>
+<title>SOUL FUNK - Radio Sistema 3 - v45 ANTI-LOOP</title>
 <script>
 if(new URLSearchParams(location.search).get('popup')==='1'){
   document.documentElement.classList.add('popup-mode');
@@ -121,11 +121,12 @@ let isPlayingVU=false,levelL=0,levelR=0;
 function drawStereo(){ const W=vuCanvas.width,H=vuCanvas.height; vuCtx.clearRect(0,0,W,H); vuCtx.fillStyle='#111118'; vuCtx.fillRect(0,0,W,H); let bars=36,barW=W/bars,gap=1.5,rowH=H/2-2; let activeL=Math.floor((levelL/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeL; let color=i<bars*0.6?(lit?'#7b1fa2':'#2a0a1a'):i<bars*0.84?(lit?'#ffe600':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } vuCtx.fillStyle='#333'; vuCtx.fillRect(0, H/2-0.5, W, 1); let activeR=Math.floor((levelR/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeR; let color=i<bars*0.6?(lit?'#b388ff':'#1a0a2a'):i<bars*0.84?(lit?'#ffe600':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=H/2+1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } requestAnimationFrame(drawStereo); }
 function updateStereo(){ if(!isPlayingVU){ levelL+=(0-levelL)*0.08; levelR+=(0-levelR)*0.08; return; } const isPopup = new URLSearchParams(location.search).get('popup')==='1' || !!window.opener; if(isPopup){ let isPeak = Math.random() < 0.07; if(isPeak){ levelL = 78 + Math.random()*18; levelR = 76 + Math.random()*18; } else { let base = 32 + Math.random()*18; let targetL = base + Math.random()*10; let targetR = base*0.9 + Math.random()*10; levelL += (targetL - levelL) * 0.20; levelR += (targetR - levelR) * 0.18; } return; } let base = 40 + Math.random()*45; let isPeak = Math.random() < 0.18; let targetL = isPeak ? 88 + Math.random()*12 : base + Math.random()*18; let targetR = isPeak ? 85 + Math.random()*15 : base*0.9 + Math.random()*20; levelL+=(targetL-levelL)*0.38; levelR+=(targetR-levelR)*0.34; if(levelL>100)levelL=100; if(levelR>100)levelR=100; }
 function tryAutoResume(){ if(userPausedManually || isOffAir) return; if(radioEl.paused) radioEl.play().catch(()=>{}); }
-radioEl.addEventListener('pause', ()=>{ userPausedManually=true; clearTimeout(autoResumeTimer); isPlayingVU=false; document.getElementById('vuPeak').textContent='STOP'; document.getElementById('vuPeak').style.color='#ff4444'; });
+radioEl.addEventListener('pause', ()=>{ if(!isOffAir){ userPausedManually=true; } clearTimeout(autoResumeTimer); isPlayingVU=false; document.getElementById('vuPeak').textContent='STOP'; document.getElementById('vuPeak').style.color='#ff4444'; });
 radioEl.addEventListener('play', ()=>{ userPausedManually=false; isPlayingVU=true; document.getElementById('vuPeak').textContent='● LIVE'; document.getElementById('vuPeak').style.color='#b388ff'; });
 radioEl.addEventListener('stalled', ()=>{ if(!userPausedManually && !isOffAir){ clearTimeout(autoResumeTimer); autoResumeTimer=setTimeout(()=>{ userPausedManually=false; tryAutoResume(); },2000); } });
 radioEl.addEventListener('error', ()=>{ if(!userPausedManually && !isOffAir){ clearTimeout(autoResumeTimer); autoResumeTimer=setTimeout(()=>{ userPausedManually=false; tryAutoResume(); },2000); } });
 drawStereo(); setInterval(updateStereo,60);
+
 async function checkSoulLive(){
   const offBox=document.getElementById('offAirBox');
   const liveWrap=document.getElementById('playerLive');
@@ -143,17 +144,19 @@ async function checkSoulLive(){
       liveWrap.style.display='block';
       liveLabel.textContent='💜 SOUL ON AIR';
       userPausedManually=false;
+      try{ radioEl.src='https://listentomystream.com:8046/soul'; radioEl.load(); }catch(e){}
       radioEl.play().catch(()=>{});
     }else if(!isLiveNow && !isOffAir){
       isOffAir=true;
       offBox.style.display='block';
       liveWrap.style.display='none';
       liveLabel.textContent='🔧 Prove tecniche in corso';
+      try{ radioEl.pause(); radioEl.removeAttribute('src'); radioEl.load(); }catch(e){}
     }
   }catch(e){}
 }
 setTimeout(checkSoulLive,2000);
-setInterval(checkSoulLive,10000);
+setInterval(checkSoulLive,8000);
 </script>
 <script>
 const FALLBACK_COVER = "./RS3_SOUL_viola_scuro.jpg";
