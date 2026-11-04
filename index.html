@@ -2,67 +2,31 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radio Sistema 3 - v50 FINALE VICINO</title>
-<script>
-if(window.location.search.includes('popup=1')){
-  document.documentElement.classList.add('popup-mode');
-  document.addEventListener('DOMContentLoaded',()=>{
-    document.body.classList.add('popup-mode');
-    const a=document.getElementById('radioAudio');
-    if(a){ a.autoplay=true; setTimeout(()=>a.play().catch(()=>{}), 500); }
-  });
-}
-</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Radio Sistema 3 - v52 FIX MOBILE</title>
+<script>if(window.location.search.includes('popup=1')){document.documentElement.classList.add('popup-mode');document.addEventListener('DOMContentLoaded',()=>{document.body.classList.add('popup-mode');const a=document.getElementById('radioAudio');if(a){a.autoplay=true;setTimeout(()=>a.play().catch(()=>{}),500);}});}</script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
-const RADIO_LOGO_FISSO_NOME = "RADIO SISTEMA 3.jpeg";
-function getLogoAssoluto(){
-  try{
-    const logoImg = document.querySelector('.logo');
-    if(logoImg && logoImg.src && logoImg.src.startsWith('http')) return logoImg.src;
-    const base = window.location.href.substring(0, window.location.href.lastIndexOf('/')+1);
-    return base + encodeURI(RADIO_LOGO_FISSO_NOME);
-  }catch(e){ return RADIO_LOGO_FISSO_NOME; }
-}
-const BRANI_NOVITA = [
-  { id: "ofywN3NgGqY", artista: "Sombr", titolo: "My body isn't ready" },
-  { id: "PshqcQwshdU", artista: "Sfera Ebbasta", titolo: "Lontano" },
-  { id: "2r1njyfmREA", artista: "SOFI TUKKER & OneRepublic", titolo: "TSUNAMI" },
-  { id: "0xuFBG6o6EU", artista: "Gaia", titolo: "Senz'Allegria" },
-  { id: "pzvhHsEqMzo", artista: "Marco Mengoni", titolo: "Giornate Perse" },
-  { id: "fRIhCiUVaKs", artista: "Karol G", titolo: "Bby Wow" }, 
-  { id: "z5qAtdZh5Uo", artista: "Giorgia", titolo: "SIAMO L'ECCEZIONE" },
-  { id: "rSiBJ4JRTv4", artista: "Alfa & Gigi D'Alessio", titolo: "Genova E Napoli" },
-  { id: "D3zkX-Am4o4", artista: "Madonna", titolo: "Danceteria" },
-];
-const PLACEHOLDER_HTML = `<div style="text-align:center"><div style="color:#fff;font-weight:bold">Scegli un brano</div><div style="font-size:2rem">👇</div></div>`;
-function aggiornaMediaSessionCover(coverUrl, titoloPulito){
-  if(!('mediaSession' in navigator)) return;
-  try{
-    let safeCover = coverUrl;
-    if(!safeCover.startsWith('http')){ safeCover = new URL(safeCover, window.location.href).href; }
-    safeCover = safeCover.replace('http://','https://');
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: titoloPulito || 'Radio Sistema 3', artist: 'Radio Sistema 3', album: 'RS3 Live',
-      artwork: [{ src: safeCover, sizes: '512x512', type: 'image/jpeg' }]
-    });
-  }catch(e){}
-}
+const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
+function getLogoAssoluto(){try{const logoImg=document.querySelector('.logo');if(logoImg&&logoImg.src&&logoImg.src.startsWith('http'))return logoImg.src;const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(RADIO_LOGO_FISSO_NOME);}catch(e){return RADIO_LOGO_FISSO_NOME;}}
+const BRANI_NOVITA=[{id:"ofywN3NgGqY",artista:"Sombr",titolo:"My body isn't ready"},{id:"PshqcQwshdU",artista:"Sfera Ebbasta",titolo:"Lontano"},{id:"2r1njyfmREA",artista:"SOFI TUKKER & OneRepublic",titolo:"TSUNAMI"},{id:"0xuFBG6o6EU",artista:"Gaia",titolo:"Senz'Allegria"},{id:"pzvhHsEqMzo",artista:"Marco Mengoni",titolo:"Giornate Perse"},{id:"fRIhCiUVaKs",artista:"Karol G",titolo:"Bby Wow"},{id:"z5qAtdZh5Uo",artista:"Giorgia",titolo:"SIAMO L'ECCEZIONE"},{id:"rSiBJ4JRTv4",artista:"Alfa & Gigi D'Alessio",titolo:"Genova E Napoli"},{id:"D3zkX-Am4o4",artista:"Madonna",titolo:"Danceteria"},];
+const PLACEHOLDER_HTML=`<div style="text-align:center"><div style="color:#fff;font-weight:bold">Scegli un brano</div><div style="font-size:2rem">👇</div></div>`;
+function aggiornaMediaSessionCover(coverUrl,titoloPulito){if(!('mediaSession' in navigator))return;try{let safeCover=coverUrl;if(!safeCover.startsWith('http')){safeCover=new URL(safeCover,window.location.href).href;}safeCover=safeCover.replace('http://','https://');navigator.mediaSession.metadata=new MediaMetadata({title:titoloPulito||'Radio Sistema 3',artist:'Radio Sistema 3',album:'RS3 Live',artwork:[{src:safeCover,sizes:'512x512',type:'image/jpeg'}]});}catch(e){}}
 </script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:Segoe UI,Arial,sans-serif;color:white;text-align:center;background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),url("studio-radio.jpeg");background-size:cover;background-position:center;background-attachment:fixed;}
-.page-layout{display:grid;grid-template-columns:145px minmax(0,900px) 145px;gap:2px;max-width:1210px;margin:0 auto;padding:4px 2px;align-items:start;justify-content:center;}
-.meteo-side{background:rgba(0,0,0,.72);border:1px solid rgba(255,217,102,.45);border-radius:14px;padding:6px 4px;position:sticky;top:6px;}
+body{font-family:Segoe UI,Arial,sans-serif;color:white;text-align:center;background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),url("studio-radio.jpeg");background-size:cover;background-position:center;background-attachment:fixed;overflow-x:hidden;}
+.page-layout{display:grid;grid-template-columns:145px minmax(0,900px) 145px;gap:0px;max-width:1210px;margin:0 auto;padding:2px;align-items:start;justify-content:center;}
+.meteo-side{background:rgba(0,0,0,.78);border:1px solid rgba(255,217,102,.5);border-radius:14px;padding:6px 4px;position:sticky;top:6px;z-index:2;}
+.meteo-side.left{margin-right:-12px;transform:translateX(8px);}
+.meteo-side.right{margin-left:-12px;transform:translateX(-8px);}
 .meteo-side-title{font-size:0.65rem;color:#ffd966;font-weight:900;letter-spacing:0.7px;margin-bottom:5px;}
 .meteo-side-grid{display:flex;flex-direction:column;gap:5px;}
-.meteo-mini{background:rgba(255,255,255,.08);border-radius:8px;padding:4px 2px;border:1px solid rgba(255,255,255,.1);}
+.meteo-mini{background:rgba(255,255,255,.09);border-radius:8px;padding:4px 2px;border:1px solid rgba(255,255,255,.12);}
 .meteo-mini b{font-size:0.68rem;display:block;}
 .meteo-mini img{width:26px;height:26px;margin:1px 0;}
 .meteo-mini .temp{font-size:0.9rem;font-weight:900;color:#ffd966;line-height:1;}
-.meteo-mini .desc{font-size:0.5rem;color:#bbb;text-transform:capitalize;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.container{max-width:900px;margin:0 auto;padding:28px;background:rgba(255,255,255,.08);backdrop-filter:blur(8px);border-radius:25px;border:1px solid rgba(255,255,255,.15);}
+.container{max-width:900px;margin:0 auto;padding:28px;background:rgba(255,255,255,.08);backdrop-filter:blur(8px);border-radius:25px;border:1px solid rgba(255,255,255,.15);position:relative;z-index:1;}
 .logo-wrap{display:inline-block;padding:5px;border-radius:26px;background:linear-gradient(135deg,#ff512f,#dd2476,#ffd966,#00d4ff,#ff512f);background-size:300% 300%;animation:gradientMove 4s ease infinite;}
 @keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 .logo{width:260px;height:260px;object-fit:cover;border-radius:20px;display:block;background:#fff;}
@@ -91,16 +55,17 @@ audio{width:100%;max-width:340px;height:36px;}
 .ch-main{background:#fff;color:#222}
 .ch-soul{background:#7b1fa2;color:#fff;box-shadow:0 0 12px #7b1fa2}
 .ch-btn.active{outline:3px solid #ffe600;transform:scale(1.05)}
+/* FIX MOBILE v52 */
 @media (max-width:1200px){
-  .page-layout{grid-template-columns:1fr;gap:6px;max-width:900px;padding:4px;}
-  .meteo-side{position:static;order:1;background:rgba(0,0,0,.75);padding:5px 3px;border-radius:10px;}
-  .meteo-side.left{order:1;} .meteo-side.right{order:2;} .container{order:3;}
-  .meteo-side-title{font-size:0.6rem;margin-bottom:3px;}
-  .meteo-side-grid{display:grid !important;grid-template-columns:repeat(5,1fr) !important;gap:3px !important;overflow:visible !important;}
-  .meteo-mini{min-width:0 !important;width:100% !important;flex:none !important;padding:3px 1px !important;border-radius:5px !important;}
-  .meteo-mini b{font-size:0.52rem !important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .meteo-mini img{width:20px !important;height:20px !important;margin:1px 0 !important;}
-  .meteo-mini .temp{font-size:0.72rem !important;}
+  .page-layout{display:flex !important;flex-direction:column !important;gap:6px !important;max-width:100% !important;width:100% !important;padding:2px !important;overflow-x:hidden !important;}
+  .meteo-side{width:100% !important;max-width:100% !important;position:static !important;order:1 !important;transform:none !important;margin:0 !important;padding:4px 2px !important;border-radius:10px !important;box-sizing:border-box !important;}
+  .meteo-side.left{order:1 !important;} .meteo-side.right{order:2 !important;} .container{order:3 !important;width:100% !important;max-width:100% !important;margin:0 !important;box-sizing:border-box !important;}
+  .meteo-side-title{font-size:0.6rem !important;margin-bottom:3px !important;}
+  .meteo-side-grid{display:grid !important;grid-template-columns:repeat(5, minmax(0,1fr)) !important;gap:2px !important;width:100% !important;overflow:hidden !important;}
+  .meteo-mini{min-width:0 !important;width:100% !important;max-width:100% !important;flex:none !important;padding:3px 1px !important;border-radius:6px !important;box-sizing:border-box !important;overflow:hidden !important;}
+  .meteo-mini b{font-size:0.48rem !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;display:block !important;width:100% !important;}
+  .meteo-mini img{width:18px !important;height:18px !important;margin:1px 0 !important;}
+  .meteo-mini .temp{font-size:0.68rem !important;}
   .meteo-mini .desc{display:none !important;}
 }
 @media (max-width:768px){ #btnPopup{display:none !important;} .logo{width:200px;height:200px;} h1{font-size:2.2rem;} }
@@ -115,20 +80,14 @@ html.popup-mode .player-box{ margin:0 auto 6px auto !important;padding:8px !impo
 </head>
 <body>
 <div class="page-layout">
-  <div class="meteo-side left">
-    <div class="meteo-side-title">☀️ NORD</div>
-    <div id="meteo-left" class="meteo-side-grid">...</div>
-  </div>
+  <div class="meteo-side left"><div class="meteo-side-title">☀️ NORD</div><div id="meteo-left" class="meteo-side-grid">...</div></div>
   <div class="container">
     <div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo"></div>
     <h1>RADIO SISTEMA 3</h1>
     <div class="live">🔴 ON AIR 24/7</div>
     <div id="popupBrand">RADIO SISTEMA 3</div>
     <div class="player-box">
-      <div class="ch-chooser">
-        <a id="btnMain" class="ch-btn ch-main active" href="index.html">MAIN</a>
-        <a id="btnSoul" class="ch-btn ch-soul" href="soul.html">SOUL FUNK</a>
-      </div>
+      <div class="ch-chooser"><a id="btnMain" class="ch-btn ch-main active" href="index.html">MAIN</a><a id="btnSoul" class="ch-btn ch-soul" href="soul.html">SOUL FUNK</a></div>
       <div class="section-title">♪ Ascolta in diretta</div>
       <audio id="radioAudio" controls preload="none" playsinline><source id="radioSource" src="https://listentomystream.com:8046/stream" type="audio/mpeg"></audio>
       <div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L ● R STEREO</span><span id="vuPeak" style="color:#ff4444">STOP</span></div></div>
@@ -140,42 +99,39 @@ html.popup-mode .player-box{ margin:0 auto 6px auto !important;padding:8px !impo
     <div id="novitaSection"><div class="section-title">🔥 Playlist</div><div id="novitaPlayerMain"></div><div id="novitaList"></div><button style="background:#333;color:#fff;margin-top:12px;padding:8px 18px;border:none;border-radius:20px;cursor:pointer" onclick="chiudiNovita()">✕ Chiudi</button></div>
     <div class="footer" style="margin-top:20px;font-size:0.85rem">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
   </div>
-  <div class="meteo-side right">
-    <div class="meteo-side-title">☀️ CENTRO SUD</div>
-    <div id="meteo-right" class="meteo-side-grid">...</div>
-  </div>
+  <div class="meteo-side right"><div class="meteo-side-title">☀️ CENTRO SUD</div><div id="meteo-right" class="meteo-side-grid">...</div></div>
 </div>
 <script>
-let popupWin = null; let userPausedManually = false; let autoResumeTimer = null; let lastUserClickOnAudio = 0; let resumeAttempts = 0; let interruptedBySystem = false;
-function apriNovita(){ userPausedManually=true; document.getElementById('radioAudio').pause(); document.getElementById('novitaSection').style.display='block'; document.getElementById('btnNovita').style.display='none'; document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML; renderNovita(); }
-function chiudiNovita(){ document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML; document.getElementById('novitaList').innerHTML = ""; document.getElementById('novitaList').dataset.done = "0"; document.getElementById('novitaSection').style.display='none'; document.getElementById('btnNovita').style.display='inline-block'; userPausedManually=false; interruptedBySystem=false; document.getElementById('radioAudio').play().catch(()=>{}); }
-function playNovita(id, el){ userPausedManually=true; document.getElementById('radioAudio').pause(); document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active')); el.classList.add('active'); document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>'; }
-function renderNovita(){ const c=document.getElementById('novitaList'); if(c.dataset.done=="1") return; c.dataset.done="1"; c.innerHTML = BRANI_NOVITA.map(b=>`<div class="novita-row" onclick="playNovita('${b.id}', this)"><img src="https://i.ytimg.com/vi/${b.id}/hqdefault.jpg" style="width:50px;height:38px;border-radius:4px"><div><b style="font-size:0.9rem">${b.artista}</b><br><span style="color:#aaa;font-size:.75rem">${b.titolo}</span></div><div style="margin-left:auto;color:#ff0033">▶</div></div>`).join(''); }
-function setupChannelNav(){ const isPopup = window.location.search.includes('popup=1'); const btnMain = document.getElementById('btnMain'); const btnSoul = document.getElementById('btnSoul'); if(isPopup){ btnMain.href = 'index.html?popup=1'; btnSoul.href = 'soul.html?popup=1'; [btnMain, btnSoul].forEach(btn=>{ btn.addEventListener('click', function(e){ e.preventDefault(); window.location.href = this.getAttribute('href'); }); }); } else { btnMain.href = 'index.html'; btnSoul.href = 'soul.html'; } }
-function apriPopupPlayer(){ if(window.innerWidth <= 768) return; userPausedManually=true; document.getElementById('radioAudio').pause(); popupWin = window.open(window.location.href.split('?')[0] + '?popup=1', 'RadioSistema3Popup', 'width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no'); let checkChiuso = setInterval(()=>{ if(popupWin && popupWin.closed){ clearInterval(checkChiuso); popupWin = null; userPausedManually=false; interruptedBySystem=false; document.getElementById('radioAudio').play().catch(()=>{}); } }, 800); }
-function pulisciTitolo(raw){ let t = raw || ""; t = t.replace(/Radio Sistema 3/gi,''); t = t.replace(/^\s*\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM|am|pm)?\s*/gi,''); t = t.replace(/^\s*(?:AM|PM)\s*/gi,''); t = t.replace(/\s+/g,' ').trim(); t = t.replace(/([a-zàèéìòùáéíóúäëïöü])([A-ZÀÈÉÌÒÙÁÉÍÓÚÄËÏÖÜ])/g, '$1 $2'); t = t.replace(/([a-zàèéìòù])([A-Z])/g, '$1 $2'); if(t.includes('-') || t.includes('–')){ t = t.replace(/\s*–\s*/g,' - ').replace(/\s*-\s*/g,' - '); t = t.replace(/\s+/g,' ').trim(); return t; } let words = t.split(/\s+/).filter(Boolean); if(words.length >= 4){ return words.slice(0, -2).join(' ') + ' - ' + words.slice(-2).join(' '); } if(words.length === 3){ return words[0] + ' - ' + words.slice(1).join(' '); } if(words.length === 2){ return words[0] + ' - ' + words[1]; } return t; }
-function rebuildTrackBox(){ const wrap = document.querySelector('.cc_recenttracks_list'); if(!wrap) return; let existingBox = wrap.querySelector('.rs3-trackbox'); let rawText = ""; let rawImgSrc = getLogoAssoluto(); const imgs = wrap.querySelectorAll('img'); if(imgs.length>0){ for(let im of imgs){ if(im.src && im.src.trim()!=""){ rawImgSrc = im.src.includes('RADIO%20SISTEMA') ? im.src : getLogoAssoluto(); } } } let tempDiv = document.createElement('div'); tempDiv.innerHTML = wrap.innerHTML; tempDiv.querySelectorAll('img, .ccbuy, a').forEach(el=>el.remove()); let txt = tempDiv.innerText.trim(); if(tempDiv.innerText.includes('\n')){ let lines = tempDiv.innerText.split('\n').map(s=>s.trim()).filter(Boolean).map(s=>pulisciTitolo(s)).filter(Boolean); rawText = lines.length>=2 ? lines.join(' - ').replace(/ - - /g,' - ') : pulisciTitolo(txt); } else { rawText = pulisciTitolo(txt); } if(rawText.length<2) rawText = "Radio Sistema 3 - Live"; if(!existingBox){ wrap.innerHTML = ''; const box = document.createElement('div'); box.className = 'rs3-trackbox'; const imgEl = document.createElement('img'); imgEl.className = 'rs3-cover'; imgEl.src = rawImgSrc; const infoEl = document.createElement('div'); infoEl.className = 'rs3-info'; infoEl.textContent = rawText; box.appendChild(imgEl); box.appendChild(infoEl); wrap.appendChild(box); aggiornaMediaSessionCover(rawImgSrc, rawText); } else { const infoEl = existingBox.querySelector('.rs3-info'); if(infoEl && infoEl.textContent.trim() !== rawText){ infoEl.textContent = rawText; } const imgEl = existingBox.querySelector('.rs3-cover'); if(imgEl && imgEl.src !== rawImgSrc){ imgEl.src = rawImgSrc; } if(infoEl) aggiornaMediaSessionCover(rawImgSrc, rawText); } }
-const list=document.querySelector('.cc_recenttracks_list'); if(list){ new MutationObserver(()=>{ setTimeout(rebuildTrackBox, 50); }).observe(list,{childList:true,subtree:true,attributes:true,attributeFilter:['src']}); setInterval(()=>{ rebuildTrackBox(); }, 1500); }
-const METEO_API_KEY = "cf67ed7472bdfb3087a25f37627f5d74";
-const LEFT_CITIES = [{q:"Torino,IT", label:"Torino"},{q:"Milano,IT", label:"Milano"},{q:"Venezia,IT", label:"Venezia"},{q:"Bologna,IT", label:"Bologna"},{q:"Firenze,IT", label:"Firenze"}];
-const RIGHT_CITIES = [{q:"Roma,IT", label:"Roma"},{q:"Ancona,IT", label:"Ancona"},{q:"Napoli,IT", label:"Napoli"},{q:"Palermo,IT", label:"Palermo"},{q:"Cagliari,IT", label:"Cagliari"}];
-async function renderMeteoSide(cities, elementId){ const grid = document.getElementById(elementId); if(!grid) return; let html = ""; for(let c of cities){ try{ const r = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${c.q}&appid=${METEO_API_KEY}&units=metric&lang=it`); const d = await r.json(); if(d.cod !== 200) throw new Error(d.message); const temp = Math.round(d.main.temp); const icon = d.weather[0].icon; html += `<div class="meteo-mini"><b>${c.label}</b><img src="https://openweathermap.org/img/wn/${icon}.png"><div class="temp">${temp}°C</div></div>`; }catch(e){ html += `<div class="meteo-mini"><b>${c.label}</b><div class="temp">--°</div></div>`; } } grid.innerHTML = html; }
-function caricaMeteoLati(){ renderMeteoSide(LEFT_CITIES, 'meteo-left'); renderMeteoSide(RIGHT_CITIES, 'meteo-right'); }
-const vuCanvas = document.getElementById('vuCanvas'); const vuCtx = vuCanvas.getContext('2d'); const radioEl = document.getElementById('radioAudio'); const vuPeakEl = document.getElementById('vuPeak');
-let isPlayingVU=false, levelL=0, levelR=0;
-function drawStereo(){ const W=vuCanvas.width, H=vuCanvas.height; vuCtx.clearRect(0,0,W,H); vuCtx.fillStyle='#0a0a0a'; vuCtx.fillRect(0,0,W,H); let bars=36, barW=W/bars, gap=1.5, rowH=H/2-2; let activeL=Math.floor((levelL/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeL; let color=i<bars*0.6?(lit?'#00ff2a':'#001a05'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } vuCtx.fillStyle='#333'; vuCtx.fillRect(0, H/2-0.5, W, 1); let activeR=Math.floor((levelR/100)*bars); for(let i=0;i<bars;i++){ let x=i*barW; let lit=i<activeR; let color=i<bars*0.6?(lit?'#00d4ff':'#001a1a'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000'); vuCtx.fillStyle=color; let y=H/2+1; let bh=lit?rowH-1:rowH*0.4; vuCtx.fillRect(x+gap, y+(rowH-bh)/2, barW-gap*2, bh); } requestAnimationFrame(drawStereo); }
-function updateStereo(){ if(!isPlayingVU){ levelL+=(0-levelL)*0.08; levelR+=(0-levelR)*0.08; return; } let base = 40 + Math.random()*45; let isPeak = Math.random() < 0.18; let targetL = isPeak ? 88 + Math.random()*12 : base + Math.random()*18; let targetR = isPeak ? 85 + Math.random()*15 : base*0.9 + Math.random()*20; levelL+=(targetL-levelL)*0.38; levelR+=(targetR-levelR)*0.34; if(levelL>100)levelL=100; if(levelR>100)levelR=100; }
-function scheduleAutoResume(reason){ if(userPausedManually) return; if(document.hidden) return; clearTimeout(autoResumeTimer); resumeAttempts = 0; const tryPlay = () => { if(userPausedManually) return; if(document.hidden) return; if(radioEl.paused){ radioEl.volume = 1.0; radioEl.play().then(()=>{ resumeAttempts = 0; interruptedBySystem = false; }).catch(()=>{ if(resumeAttempts < 8){ resumeAttempts++; autoResumeTimer = setTimeout(tryPlay, 1500); } }); } }; autoResumeTimer = setTimeout(tryPlay, 800); }
-radioEl.addEventListener('mousedown', ()=>{ lastUserClickOnAudio = Date.now(); }); radioEl.addEventListener('touchstart', ()=>{ lastUserClickOnAudio = Date.now(); }, {passive:true}); radioEl.addEventListener('click', ()=>{ lastUserClickOnAudio = Date.now(); });
-radioEl.addEventListener('pause', ()=>{ radioEl.volume = 1.0; const isUserClick = (Date.now() - lastUserClickOnAudio) < 1000; if(isUserClick){ userPausedManually = true; interruptedBySystem = false; clearTimeout(autoResumeTimer); } else { if(!userPausedManually){ interruptedBySystem = true; clearTimeout(autoResumeTimer); } } isPlayingVU=false; vuPeakEl.textContent="STOP"; vuPeakEl.style.color="#ff4444"; if('mediaSession' in navigator) try{navigator.mediaSession.playbackState="paused";}catch(e){} });
-radioEl.addEventListener('play', ()=>{ userPausedManually = false; interruptedBySystem = false; clearTimeout(autoResumeTimer); resumeAttempts = 0; radioEl.volume = 1.0; isPlayingVU=true; vuPeakEl.textContent="● LIVE"; vuPeakEl.style.color="#00ff2a"; if(popupWin && !popupWin.closed){ popupWin.close(); popupWin = null; } if('mediaSession' in navigator) try{navigator.mediaSession.playbackState="playing";}catch(e){} });
-document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState === 'visible'){ if(interruptedBySystem && !userPausedManually && radioEl.paused){ scheduleAutoResume('visible-after-call'); } } });
-radioEl.addEventListener('stalled', ()=>{ if(!interruptedBySystem && !document.hidden) scheduleAutoResume('stalled'); }); radioEl.addEventListener('error', ()=>{ if(!interruptedBySystem && !document.hidden) scheduleAutoResume('error'); }); radioEl.addEventListener('emptied', ()=>{ if(!interruptedBySystem && !document.hidden) scheduleAutoResume('emptied'); });
-if('mediaSession' in navigator){ try{ navigator.mediaSession.setActionHandler('play', ()=>{ userPausedManually=false; interruptedBySystem=false; radioEl.play().catch(()=>{}); }); navigator.mediaSession.setActionHandler('pause', ()=>{ userPausedManually=true; interruptedBySystem=false; radioEl.pause(); }); navigator.mediaSession.setActionHandler('stop', ()=>{ userPausedManually=true; interruptedBySystem=false; radioEl.pause(); }); }catch(e){} }
-drawStereo(); setInterval(updateStereo, 70);
-document.getElementById('novitaPlayerMain').innerHTML = PLACEHOLDER_HTML;
-document.addEventListener('DOMContentLoaded', ()=>{ setupChannelNav(); setTimeout(rebuildTrackBox, 800); caricaMeteoLati(); setInterval(caricaMeteoLati, 3600000); });
-setupChannelNav(); setTimeout(rebuildTrackBox, 600); if(document.readyState !== 'loading'){ caricaMeteoLati(); }
+let popupWin=null,userPausedManually=false,autoResumeTimer=null,lastUserClickOnAudio=0,resumeAttempts=0,interruptedBySystem=false;
+function apriNovita(){userPausedManually=true;document.getElementById('radioAudio').pause();document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
+function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';userPausedManually=false;interruptedBySystem=false;document.getElementById('radioAudio').play().catch(()=>{});}
+function playNovita(id,el){userPausedManually=true;document.getElementById('radioAudio').pause();document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
+function renderNovita(){const c=document.getElementById('novitaList');if(c.dataset.done=="1")return;c.dataset.done="1";c.innerHTML=BRANI_NOVITA.map(b=>`<div class="novita-row" onclick="playNovita('${b.id}', this)"><img src="https://i.ytimg.com/vi/${b.id}/hqdefault.jpg" style="width:50px;height:38px;border-radius:4px"><div><b style="font-size:0.9rem">${b.artista}</b><br><span style="color:#aaa;font-size:.75rem">${b.titolo}</span></div><div style="margin-left:auto;color:#ff0033">▶</div></div>`).join('');}
+function setupChannelNav(){const isPopup=window.location.search.includes('popup=1');const btnMain=document.getElementById('btnMain');const btnSoul=document.getElementById('btnSoul');if(isPopup){btnMain.href='index.html?popup=1';btnSoul.href='soul.html?popup=1';[btnMain,btnSoul].forEach(btn=>{btn.addEventListener('click',function(e){e.preventDefault();window.location.href=this.getAttribute('href');});});}else{btnMain.href='index.html';btnSoul.href='soul.html';}}
+function apriPopupPlayer(){if(window.innerWidth<=768)return;userPausedManually=true;document.getElementById('radioAudio').pause();popupWin=window.open(window.location.href.split('?')[0]+'?popup=1','RadioSistema3Popup','width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no');let checkChiuso=setInterval(()=>{if(popupWin&&popupWin.closed){clearInterval(checkChiuso);popupWin=null;userPausedManually=false;interruptedBySystem=false;document.getElementById('radioAudio').play().catch(()=>{});}},800);}
+function pulisciTitolo(raw){let t=raw||"";t=t.replace(/Radio Sistema 3/gi,'');t=t.replace(/^\s*\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM|am|pm)?\s*/gi,'');t=t.replace(/^\s*(?:AM|PM)\s*/gi,'');t=t.replace(/\s+/g,' ').trim();t=t.replace(/([a-zàèéìòùáéíóúäëïöü])([A-ZÀÈÉÌÒÙÁÉÍÓÚÄËÏÖÜ])/g,'$1 $2');t=t.replace(/([a-zàèéìòù])([A-Z])/g,'$1 $2');if(t.includes('-')||t.includes('–')){t=t.replace(/\s*–\s*/g,' - ').replace(/\s*-\s*/g,' - ');t=t.replace(/\s+/g,' ').trim();return t;}let words=t.split(/\s+/).filter(Boolean);if(words.length>=4){return words.slice(0,-2).join(' ')+' - '+words.slice(-2).join(' ');}if(words.length===3){return words[0]+' - '+words.slice(1).join(' ');}if(words.length===2){return words[0]+' - '+words[1];}return t;}
+function rebuildTrackBox(){const wrap=document.querySelector('.cc_recenttracks_list');if(!wrap)return;let existingBox=wrap.querySelector('.rs3-trackbox');let rawText="";let rawImgSrc=getLogoAssoluto();const imgs=wrap.querySelectorAll('img');if(imgs.length>0){for(let im of imgs){if(im.src&&im.src.trim()!=""){rawImgSrc=im.src.includes('RADIO%20SISTEMA')?im.src:getLogoAssoluto();}}}let tempDiv=document.createElement('div');tempDiv.innerHTML=wrap.innerHTML;tempDiv.querySelectorAll('img, .ccbuy, a').forEach(el=>el.remove());let txt=tempDiv.innerText.trim();if(tempDiv.innerText.includes('\n')){let lines=tempDiv.innerText.split('\n').map(s=>s.trim()).filter(Boolean).map(s=>pulisciTitolo(s)).filter(Boolean);rawText=lines.length>=2?lines.join(' - ').replace(/ - - /g,' - '):pulisciTitolo(txt);}else{rawText=pulisciTitolo(txt);}if(rawText.length<2)rawText="Radio Sistema 3 - Live";if(!existingBox){wrap.innerHTML='';const box=document.createElement('div');box.className='rs3-trackbox';const imgEl=document.createElement('img');imgEl.className='rs3-cover';imgEl.src=rawImgSrc;const infoEl=document.createElement('div');infoEl.className='rs3-info';infoEl.textContent=rawText;box.appendChild(imgEl);box.appendChild(infoEl);wrap.appendChild(box);aggiornaMediaSessionCover(rawImgSrc,rawText);}else{const infoEl=existingBox.querySelector('.rs3-info');if(infoEl&&infoEl.textContent.trim()!==rawText){infoEl.textContent=rawText;}const imgEl=existingBox.querySelector('.rs3-cover');if(imgEl&&imgEl.src!==rawImgSrc){imgEl.src=rawImgSrc;}if(infoEl)aggiornaMediaSessionCover(rawImgSrc,rawText);}}
+const list=document.querySelector('.cc_recenttracks_list');if(list){new MutationObserver(()=>{setTimeout(rebuildTrackBox,50);}).observe(list,{childList:true,subtree:true,attributes:true,attributeFilter:['src']});setInterval(()=>{rebuildTrackBox();},1500);}
+const METEO_API_KEY="cf67ed7472bdfb3087a25f37627f5d74";
+const LEFT_CITIES=[{q:"Torino,IT",label:"Torino"},{q:"Milano,IT",label:"Milano"},{q:"Venezia,IT",label:"Venezia"},{q:"Bologna,IT",label:"Bologna"},{q:"Firenze,IT",label:"Firenze"}];
+const RIGHT_CITIES=[{q:"Roma,IT",label:"Roma"},{q:"Ancona,IT",label:"Ancona"},{q:"Napoli,IT",label:"Napoli"},{q:"Palermo,IT",label:"Palermo"},{q:"Cagliari,IT",label:"Cagliari"}];
+async function renderMeteoSide(cities,elementId){const grid=document.getElementById(elementId);if(!grid)return;let html="";for(let c of cities){try{const r=await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${c.q}&appid=${METEO_API_KEY}&units=metric&lang=it`);const d=await r.json();if(d.cod!==200)throw new Error(d.message);const temp=Math.round(d.main.temp);const icon=d.weather[0].icon;html+=`<div class="meteo-mini"><b>${c.label}</b><img src="https://openweathermap.org/img/wn/${icon}.png"><div class="temp">${temp}°C</div></div>`;}catch(e){html+=`<div class="meteo-mini"><b>${c.label}</b><div class="temp">--°</div></div>`;}}grid.innerHTML=html;}
+function caricaMeteoLati(){renderMeteoSide(LEFT_CITIES,'meteo-left');renderMeteoSide(RIGHT_CITIES,'meteo-right');}
+const vuCanvas=document.getElementById('vuCanvas');const vuCtx=vuCanvas.getContext('2d');const radioEl=document.getElementById('radioAudio');const vuPeakEl=document.getElementById('vuPeak');
+let isPlayingVU=false,levelL=0,levelR=0;
+function drawStereo(){const W=vuCanvas.width,H=vuCanvas.height;vuCtx.clearRect(0,0,W,H);vuCtx.fillStyle='#0a0a0a';vuCtx.fillRect(0,0,W,H);let bars=36,barW=W/bars,gap=1.5,rowH=H/2-2;let activeL=Math.floor((levelL/100)*bars);for(let i=0;i<bars;i++){let x=i*barW;let lit=i<activeL;let color=i<bars*0.6?(lit?'#00ff2a':'#001a05'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000');vuCtx.fillStyle=color;let y=1;let bh=lit?rowH-1:rowH*0.4;vuCtx.fillRect(x+gap,y+(rowH-bh)/2,barW-gap*2,bh);}vuCtx.fillStyle='#333';vuCtx.fillRect(0,H/2-0.5,W,1);let activeR=Math.floor((levelR/100)*bars);for(let i=0;i<bars;i++){let x=i*barW;let lit=i<activeR;let color=i<bars*0.6?(lit?'#00d4ff':'#001a1a'):i<bars*0.84?(lit?'#ffea00':'#1a1a00'):(lit?'#ff1a1a':'#1a0000');vuCtx.fillStyle=color;let y=H/2+1;let bh=lit?rowH-1:rowH*0.4;vuCtx.fillRect(x+gap,y+(rowH-bh)/2,barW-gap*2,bh);}requestAnimationFrame(drawStereo);}
+function updateStereo(){if(!isPlayingVU){levelL+=(0-levelL)*0.08;levelR+=(0-levelR)*0.08;return;}let base=40+Math.random()*45;let isPeak=Math.random()<0.18;let targetL=isPeak?88+Math.random()*12:base+Math.random()*18;let targetR=isPeak?85+Math.random()*15:base*0.9+Math.random()*20;levelL+=(targetL-levelL)*0.38;levelR+=(targetR-levelR)*0.34;if(levelL>100)levelL=100;if(levelR>100)levelR=100;}
+function scheduleAutoResume(reason){if(userPausedManually)return;if(document.hidden)return;clearTimeout(autoResumeTimer);resumeAttempts=0;const tryPlay=()=>{if(userPausedManually)return;if(document.hidden)return;if(radioEl.paused){radioEl.volume=1.0;radioEl.play().then(()=>{resumeAttempts=0;interruptedBySystem=false;}).catch(()=>{if(resumeAttempts<8){resumeAttempts++;autoResumeTimer=setTimeout(tryPlay,1500);}});}};autoResumeTimer=setTimeout(tryPlay,800);}
+radioEl.addEventListener('mousedown',()=>{lastUserClickOnAudio=Date.now();});radioEl.addEventListener('touchstart',()=>{lastUserClickOnAudio=Date.now();},{passive:true});radioEl.addEventListener('click',()=>{lastUserClickOnAudio=Date.now();});
+radioEl.addEventListener('pause',()=>{radioEl.volume=1.0;const isUserClick=(Date.now()-lastUserClickOnAudio)<1000;if(isUserClick){userPausedManually=true;interruptedBySystem=false;clearTimeout(autoResumeTimer);}else{if(!userPausedManually){interruptedBySystem=true;clearTimeout(autoResumeTimer);}}isPlayingVU=false;vuPeakEl.textContent="STOP";vuPeakEl.style.color="#ff4444";if('mediaSession' in navigator)try{navigator.mediaSession.playbackState="paused";}catch(e){}});
+radioEl.addEventListener('play',()=>{userPausedManually=false;interruptedBySystem=false;clearTimeout(autoResumeTimer);resumeAttempts=0;radioEl.volume=1.0;isPlayingVU=true;vuPeakEl.textContent="● LIVE";vuPeakEl.style.color="#00ff2a";if(popupWin&&!popupWin.closed){popupWin.close();popupWin=null;}if('mediaSession' in navigator)try{navigator.mediaSession.playbackState="playing";}catch(e){}});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){if(interruptedBySystem&&!userPausedManually&&radioEl.paused){scheduleAutoResume('visible-after-call');}}});
+radioEl.addEventListener('stalled',()=>{if(!interruptedBySystem&&!document.hidden)scheduleAutoResume('stalled');});radioEl.addEventListener('error',()=>{if(!interruptedBySystem&&!document.hidden)scheduleAutoResume('error');});radioEl.addEventListener('emptied',()=>{if(!interruptedBySystem&&!document.hidden)scheduleAutoResume('emptied');});
+if('mediaSession' in navigator){try{navigator.mediaSession.setActionHandler('play',()=>{userPausedManually=false;interruptedBySystem=false;radioEl.play().catch(()=>{});});navigator.mediaSession.setActionHandler('pause',()=>{userPausedManually=true;interruptedBySystem=false;radioEl.pause();});navigator.mediaSession.setActionHandler('stop',()=>{userPausedManually=true;interruptedBySystem=false;radioEl.pause();});}catch(e){}}
+drawStereo();setInterval(updateStereo,70);
+document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;
+document.addEventListener('DOMContentLoaded',()=>{setupChannelNav();setTimeout(rebuildTrackBox,800);caricaMeteoLati();setInterval(caricaMeteoLati,3600000);});
+setupChannelNav();setTimeout(rebuildTrackBox,600);if(document.readyState!=='loading'){caricaMeteoLati();}
 </script>
 </body>
 </html>
