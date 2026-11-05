@@ -167,27 +167,71 @@ function pulisciTitolo(raw){
   let t=raw||"";
   t=t.replace(/Radio Sistema 3/gi,'');
   t=t.replace(/\s+/g,' ').trim();
-  // Rimuove orario tipo "12:38 - PM", "12:38 PM -", "12:38 -", "12:38"
   t=t.replace(/^\s*\d{1,2}:\d{2}\s*(AM|PM)?\s*[-–—]?\s*/i,'');
   t=t.replace(/^\s*\d{1,2}:\d{2}\s*[-–—]\s*(AM|PM)?\s*/i,'');
   t=t.replace(/^\s*(AM|PM)\s*[-–—]?\s*/i,'');
   t=t.replace(/^\s*[-–—]\s*/,'');
-  // Se PM incollato tipo "PMFotoromanza"
   t=t.replace(/^PM(?=[A-Z0-9])/i,'');
   t=t.replace(/^AM(?=[A-Z0-9])/i,'');
   t=t.trim();
-  if(t.includes('-')||t.includes('–')){
-    t=t.replace(/\s*–\s*/g,' - ').replace(/\s*-\s*/g,' - ');
+  // normalizza spazi attorno al trattino ma NON inventa trattini nuovi
+  if(t.includes(' - ')||t.includes(' – ')||t.includes('-')||t.includes('–')){
+    t=t.replace(/\s*[–—]\s*/g,' - ');
+    t=t.replace(/\s*-\s*/g,' - ');
     t=t.replace(/\s+/g,' ').trim();
-    return t;
   }
-  let words=t.split(/\s+/).filter(Boolean);
-  if(words.length>=4){return words.slice(0,-2).join(' ')+' - '+words.slice(-2).join(' ');}
-  if(words.length===3){return words[0]+' - '+words.slice(1).join(' ');}
-  if(words.length===2){return words[0]+' - '+words[1];}
   return t;
 }
-function rebuildTrackBox(){const wrap=document.querySelector('.cc_recenttracks_list');if(!wrap)return;let existingBox=wrap.querySelector('.rs3-trackbox');let rawText="";let rawImgSrc=getLogoAssoluto();const imgs=wrap.querySelectorAll('img');if(imgs.length>0){for(let im of imgs){if(im.src&&im.src.trim()!=""){rawImgSrc=im.src.includes('RADIO%20SISTEMA')?im.src:getLogoAssoluto();}}}let tempDiv=document.createElement('div');tempDiv.innerHTML=wrap.innerHTML;tempDiv.querySelectorAll('img, .ccbuy, a').forEach(el=>el.remove());let txt=tempDiv.innerText.trim();rawText=pulisciTitolo(txt);if(rawText.length<2)rawText="Radio Sistema 3 - Live";if(!existingBox){wrap.innerHTML='';const box=document.createElement('div');box.className='rs3-trackbox';const imgEl=document.createElement('img');imgEl.className='rs3-cover';imgEl.src=rawImgSrc;const infoEl=document.createElement('div');infoEl.className='rs3-info';infoEl.textContent=rawText;box.appendChild(imgEl);box.appendChild(infoEl);wrap.appendChild(box);aggiornaMediaSessionCover(rawImgSrc,rawText);}else{const infoEl=existingBox.querySelector('.rs3-info');if(infoEl&&infoEl.textContent.trim()!==rawText){infoEl.textContent=rawText;}const imgEl=existingBox.querySelector('.rs3-cover');if(imgEl&&imgEl.src!==rawImgSrc){imgEl.src=rawImgSrc;}if(infoEl)aggiornaMediaSessionCover(rawImgSrc,rawText);}}
+function rebuildTrackBox(){
+  const wrap=document.querySelector('.cc_recenttracks_list');
+  if(!wrap)return;
+  let existingBox=wrap.querySelector('.rs3-trackbox');
+  let rawText="";let rawImgSrc=getLogoAssoluto();
+  const imgs=wrap.querySelectorAll('img');
+  if(imgs.length>0){for(let im of imgs){if(im.src&&im.src.trim()!=""){rawImgSrc=im.src.includes('RADIO%20SISTEMA')?im.src:getLogoAssoluto();}}}
+  let tempDiv=document.createElement('div');
+  tempDiv.innerHTML=wrap.innerHTML;
+  tempDiv.querySelectorAll('img, .ccbuy, a').forEach(el=>el.remove());
+  let txt=tempDiv.innerText.trim();
+  rawText=pulisciTitolo(txt);
+  if(rawText.length<2)rawText="Radio Sistema 3 - Live";
+  // split artista - titolo per visualizzazione chiara
+  let artista="", titolo="";
+  if(rawText.includes(' - ')){
+    let p=rawText.split(' - ');
+    if(p.length>=2){ artista=p[0].trim(); titolo=p.slice(1).join(' - ').trim(); }
+    else { artista=rawText; }
+  } else { titolo=rawText; }
+
+  if(!existingBox){
+    wrap.innerHTML='';
+    const box=document.createElement('div');box.className='rs3-trackbox';
+    const imgEl=document.createElement('img');imgEl.className='rs3-cover';imgEl.src=rawImgSrc;
+    const infoEl=document.createElement('div');infoEl.className='rs3-info';
+    if(artista && titolo){
+      infoEl.innerHTML='<div style="font-weight:900;color:#fff">'+artista+'</div><div style="color:#ffd966;font-weight:700">'+titolo+'</div>';
+    } else {
+      infoEl.textContent=rawText;
+    }
+    box.appendChild(imgEl);box.appendChild(infoEl);wrap.appendChild(box);
+    aggiornaMediaSessionCover(rawImgSrc,rawText);
+  }else{
+    const infoEl=existingBox.querySelector('.rs3-info');
+    if(infoEl){
+      if(infoEl.dataset.lastText!==rawText){
+        if(artista && titolo){
+          infoEl.innerHTML='<div style="font-weight:900;color:#fff">'+artista+'</div><div style="color:#ffd966;font-weight:700">'+titolo+'</div>';
+        } else {
+          infoEl.textContent=rawText;
+        }
+        infoEl.dataset.lastText=rawText;
+      }
+    }
+    const imgEl=existingBox.querySelector('.rs3-cover');
+    if(imgEl&&imgEl.src!==rawImgSrc){imgEl.src=rawImgSrc;}
+    aggiornaMediaSessionCover(rawImgSrc,rawText);
+  }
+}
 const list=document.querySelector('.cc_recenttracks_list');if(list){new MutationObserver(()=>{setTimeout(rebuildTrackBox,50);}).observe(list,{childList:true,subtree:true,attributes:true,attributeFilter:['src']});setInterval(()=>{rebuildTrackBox();},1500);}
 const METEO_API_KEY="cf67ed7472bdfb3087a25f37627f5d74";
 const LEFT_CITIES=[{q:"Torino,IT",label:"Torino"},{q:"Milano,IT",label:"Milano"},{q:"Venezia,IT",label:"Venezia"},{q:"Bologna,IT",label:"Bologna"},{q:"Firenze,IT",label:"Firenze"}];
