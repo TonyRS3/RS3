@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v67 DEFINITIVA</title>
+<title>Radio Sistema 3 - v68 NO CACHE</title>
 <script>if(window.location.search.includes('popup=1')){document.documentElement.classList.add('popup-mode');document.addEventListener('DOMContentLoaded',()=>{document.body.classList.add('popup-mode');const a=document.getElementById('radioAudio');if(a){a.autoplay=true;setTimeout(()=>a.play().catch(()=>{}),500);}});}</script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
@@ -22,7 +22,7 @@ const BRANI_NOVITA = [
 ];
 function normalizzaBrano(b){if(typeof b==='string')return{id:b,artista:'',titolo:b};return b;}
 const PLACEHOLDER_HTML=`<div style="text-align:center"><div style="color:#fff;font-weight:bold">Scegli un brano</div><div style="font-size:2rem">👇</div></div>`;
-function aggiornaMediaSessionCover(coverUrl,titoloPulito){if(!('mediaSession' in navigator))return;try{let safeCover=coverUrl;if(!safeCover.startsWith('http')){safeCover=new URL(safeCover,window.location.href).href;}safeCover=safeCover.replace('http://','https://');navigator.mediaSession.metadata=new MediaMetadata({title:titoloPulito||'Radio Sistema 3',artist:'Radio Sistema 3',album:'RS3 Live',artwork:[{src:safeCover,sizes:'512x512',type:'image/jpeg'}]});}catch(e){}}
+function aggiornaMediaSessionCover(c,t){if(!('mediaSession' in navigator))return;try{let s=c;if(!s.startsWith('http')){s=new URL(s,window.location.href).href;}s=s.replace('http://','https://');navigator.mediaSession.metadata=new MediaMetadata({title:t||'Radio Sistema 3',artist:'Radio Sistema 3',album:'RS3 Live',artwork:[{src:s,sizes:'512x512',type:'image/jpeg'}]});}catch(e){}}
 </script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -144,21 +144,28 @@ function renderNovita(){const c=document.getElementById('novitaList');if(c.datas
 
 async function fetchAnsaNotizie(rssUrl){
   const opt={cache:'no-store'};
+  // 1 - allorigins GET - fresco
   try{
-    const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(rssUrl)+'&cb='+Date.now(), opt);
+    const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(rssUrl)+'?nocache='+Date.now(), opt);
     const j=await r.json();
     if(j.contents && j.contents.includes('<item')){
       const xml=new DOMParser().parseFromString(j.contents,"text/xml");
       const items=[...xml.querySelectorAll("item")].slice(0,4);
-      if(items.length>0) return items.map(it=>({title:it.querySelector("title")?.textContent||"", link:it.querySelector("link")?.textContent||it.querySelector("guid")?.textContent||"#"}));
+      if(items.length>0) return items.map(it=>({title:it.querySelector("title")?.textContent||"", link:it.querySelector("link")?.textContent||"#"}));
     }
   }catch(e){}
+  // 2 - codetabs - secondo fresco
   try{
-    const r2=await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(rssUrl)+'&_t='+Date.now(), opt);
-    const d2=await r2.json();
-    if(d2.items && d2.items.length>0) return d2.items.slice(0,4).map(n=>({title:n.title, link:n.link}));
+    const r2=await fetch('https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(rssUrl+'?t='+Date.now()), opt);
+    const txt2=await r2.text();
+    if(txt2 && txt2.includes('<item')){
+      const xml2=new DOMParser().parseFromString(txt2,"text/xml");
+      const items2=[...xml2.querySelectorAll("item")].slice(0,4);
+      if(items2.length>0) return items2.map(it=>({title:it.querySelector("title")?.textContent||"", link:it.querySelector("link")?.textContent||"#"}));
+    }
   }catch(e){}
-  const r3=await fetch('https://corsproxy.io/?'+encodeURIComponent(rssUrl+'?_t='+Date.now()), opt);
+  // 3 - corsproxy ultimo
+  const r3=await fetch('https://corsproxy.io/?'+encodeURIComponent(rssUrl+'?t='+Date.now()), opt);
   const txt3=await r3.text();
   const xml3=new DOMParser().parseFromString(txt3,"text/xml");
   return [...xml3.querySelectorAll("item")].slice(0,4).map(it=>({title:it.querySelector("title")?.textContent||"", link:it.querySelector("link")?.textContent||"#"}));
@@ -171,8 +178,8 @@ async function caricaCronacaNord(){
     box.innerHTML=notizie.map(n=>`<div class="news-item"><a href="${n.link}" target="_blank">• ${n.title}</a></div>`).join('');
     if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString();
   }catch(e){ 
-    box.innerHTML='<div class="news-item" style="color:#ffb3b3">Errore caricamento - riprovo tra 1 min</div>';
-    setTimeout(caricaCronacaNord,60000);
+    box.innerHTML='<div class="news-item" style="color:#ffb3b3">Sto ricaricando il fresco... riprovo tra 10s</div>';
+    setTimeout(caricaCronacaNord,10000);
   }
 }
 async function caricaCalcioNazionale(){
@@ -182,8 +189,8 @@ async function caricaCalcioNazionale(){
     box.innerHTML=notizie.map(n=>`<div class="news-item calcio"><a href="${n.link}" target="_blank">• ${n.title}</a></div>`).join('');
     if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString();
   }catch(e){ 
-    box.innerHTML='<div class="news-item calcio" style="color:#ffb3b3">Errore caricamento - riprovo tra 1 min</div>';
-    setTimeout(caricaCalcioNazionale,60000);
+    box.innerHTML='<div class="news-item calcio" style="color:#ffb3b3">Sto ricaricando il fresco... riprovo tra 10s</div>';
+    setTimeout(caricaCalcioNazionale,10000);
   }
 }
 function setupChannelNav(){const isPopup=window.location.search.includes('popup=1');const btnMain=document.getElementById('btnMain');const btnSoul=document.getElementById('btnSoul');if(isPopup){btnMain.href='index.html?popup=1';btnSoul.href='soul.html?popup=1';[btnMain,btnSoul].forEach(btn=>{btn.addEventListener('click',function(e){e.preventDefault();window.location.href=this.getAttribute('href');});});}else{btnMain.href='index.html';btnSoul.href='soul.html';}}
