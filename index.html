@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v64 NEWS FIX DEFINITIVO</title>
+<title>Radio Sistema 3 - v65 AUTO NEWS</title>
 <script>if(window.location.search.includes('popup=1')){document.documentElement.classList.add('popup-mode');document.addEventListener('DOMContentLoaded',()=>{document.body.classList.add('popup-mode');const a=document.getElementById('radioAudio');if(a){a.autoplay=true;setTimeout(()=>a.play().catch(()=>{}),500);}});}</script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
@@ -143,26 +143,28 @@ function playNovita(id,el){userPausedManually=true;document.getElementById('radi
 function renderNovita(){const c=document.getElementById('novitaList');if(c.dataset.done=="1")return;c.dataset.done="1";c.innerHTML=BRANI_NOVITA.map(b=>{const bb=normalizzaBrano(b);const displayTitle=bb.titolo||bb.id;const displayArtista=bb.artista||'YouTube';return `<div class="novita-row" onclick="playNovita('${bb.id}', this)"><img src="https://i.ytimg.com/vi/${bb.id}/hqdefault.jpg" style="width:50px;height:38px;border-radius:4px"><div><b style="font-size:0.9rem">${displayArtista}</b><br><span style="color:#aaa;font-size:.75rem">${displayTitle}</span></div><div style="margin-left:auto;color:#ff0033">▶</div></div>`;}).join('');}
 
 async function fetchAnsaNotizie(rssUrl){
+  const noCacheOpt={cache:'no-store'};
   try{
-    const bust=Date.now();
-    const r=await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(rssUrl)+'&bust='+bust);
+    const r=await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(rssUrl)+'&_t='+Date.now(), noCacheOpt);
     const data=await r.json();
     if(data.items && data.items.length>0){
       return data.items.slice(0,4).map(n=>({title:n.title, link:n.link}));
     }
-    throw new Error('rss2json empty');
-  }catch(e){
-    const prox=`https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}&cb=${Date.now()}`;
-    const r2=await fetch(prox);
-    const j2=await r2.json();
-    if(!j2.contents) throw new Error('allorigins empty');
-    const xml=new DOMParser().parseFromString(j2.contents,"text/xml");
-    const items=[...xml.querySelectorAll("item")].slice(0,4);
-    if(items.length==0) throw new Error('no items');
-    return items.map(it=>({
-      title: it.querySelector("title")?.textContent || "",
-      link: it.querySelector("link")?.textContent || it.querySelector("guid")?.textContent || "#"
-    }));
+    throw new Error('empty rss2json');
+  }catch(e1){
+    try{
+      const r2=await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(rssUrl)+'%3F_t%3D'+Date.now(), noCacheOpt);
+      const txt=await r2.text();
+      const xml=new DOMParser().parseFromString(txt,"text/xml");
+      const items=[...xml.querySelectorAll("item")].slice(0,4);
+      if(items.length>0) return items.map(it=>({title:it.querySelector("title")?.textContent||"", link:it.querySelector("link")?.textContent||it.querySelector("guid")?.textContent||"#"}));
+      throw new Error('empty allorigins raw');
+    }catch(e2){
+      const r3=await fetch('https://corsproxy.io/?'+encodeURIComponent(rssUrl+'?_t='+Date.now()), noCacheOpt);
+      const txt3=await r3.text();
+      const xml3=new DOMParser().parseFromString(txt3,"text/xml");
+      return [...xml3.querySelectorAll("item")].slice(0,4).map(it=>({title:it.querySelector("title")?.textContent||"", link:it.querySelector("link")?.textContent||"#"}));
+    }
   }
 }
 
@@ -173,8 +175,8 @@ async function caricaCronacaNord(){
     box.innerHTML=notizie.map(n=>`<div class="news-item"><a href="${n.link}" target="_blank">• ${n.title}</a></div>`).join('');
     if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString();
   }catch(e){ 
-    box.innerHTML='<div class="news-item" style="color:#aaa">Riprovo tra 2 min... ('+new Date().toLocaleTimeString()+')</div>';
-    setTimeout(caricaCronacaNord,120000);
+    box.innerHTML='<div class="news-item" style="color:#aaa">Riprovo tra 1 min... ('+new Date().toLocaleTimeString()+')</div>';
+    setTimeout(caricaCronacaNord,60000);
   }
 }
 async function caricaCalcioNazionale(){
@@ -184,8 +186,8 @@ async function caricaCalcioNazionale(){
     box.innerHTML=notizie.map(n=>`<div class="news-item calcio"><a href="${n.link}" target="_blank">• ${n.title}</a></div>`).join('');
     if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString();
   }catch(e){ 
-    box.innerHTML='<div class="news-item calcio" style="color:#aaa">Riprovo tra 2 min... ('+new Date().toLocaleTimeString()+')</div>';
-    setTimeout(caricaCalcioNazionale,120000);
+    box.innerHTML='<div class="news-item calcio" style="color:#aaa">Riprovo tra 1 min... ('+new Date().toLocaleTimeString()+')</div>';
+    setTimeout(caricaCalcioNazionale,60000);
   }
 }
 function setupChannelNav(){const isPopup=window.location.search.includes('popup=1');const btnMain=document.getElementById('btnMain');const btnSoul=document.getElementById('btnSoul');if(isPopup){btnMain.href='index.html?popup=1';btnSoul.href='soul.html?popup=1';[btnMain,btnSoul].forEach(btn=>{btn.addEventListener('click',function(e){e.preventDefault();window.location.href=this.getAttribute('href');});});}else{btnMain.href='index.html';btnSoul.href='soul.html';}}
@@ -266,8 +268,7 @@ async function renderMeteoSide(cities,elementId){
   let html="";
   for(let c of cities){
     try{
-      const bust=Date.now();
-      const r=await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${c.q}&appid=${METEO_API_KEY}&units=metric&lang=it&bust=${bust}`);
+      const r=await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${c.q}&appid=${METEO_API_KEY}&units=metric&lang=it&bust=${Date.now()}`, {cache:'no-store'});
       const d=await r.json();
       if(d.cod!==200) throw new Error(d.message);
       const temp=Math.round(d.main.temp);
