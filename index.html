@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v65 AUTO NEWS</title>
+<title>Radio Sistema 3 - v66 FRESCO</title>
 <script>if(window.location.search.includes('popup=1')){document.documentElement.classList.add('popup-mode');document.addEventListener('DOMContentLoaded',()=>{document.body.classList.add('popup-mode');const a=document.getElementById('radioAudio');if(a){a.autoplay=true;setTimeout(()=>a.play().catch(()=>{}),500);}});}</script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
@@ -145,25 +145,26 @@ function renderNovita(){const c=document.getElementById('novitaList');if(c.datas
 async function fetchAnsaNotizie(rssUrl){
   const noCacheOpt={cache:'no-store'};
   try{
-    const r=await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(rssUrl)+'&_t='+Date.now(), noCacheOpt);
-    const data=await r.json();
-    if(data.items && data.items.length>0){
-      return data.items.slice(0,4).map(n=>({title:n.title, link:n.link}));
-    }
-    throw new Error('empty rss2json');
-  }catch(e1){
-    try{
-      const r2=await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(rssUrl)+'%3F_t%3D'+Date.now(), noCacheOpt);
-      const txt=await r2.text();
+    const r=await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(rssUrl)+'%3F_t%3D'+Date.now(), noCacheOpt);
+    const txt=await r.text();
+    if(txt && txt.includes('<item')){
       const xml=new DOMParser().parseFromString(txt,"text/xml");
       const items=[...xml.querySelectorAll("item")].slice(0,4);
-      if(items.length>0) return items.map(it=>({title:it.querySelector("title")?.textContent||"", link:it.querySelector("link")?.textContent||it.querySelector("guid")?.textContent||"#"}));
-      throw new Error('empty allorigins raw');
+      if(items.length>0) return items.map(it=>({title:it.querySelector("title")?.textContent||"", link:it.querySelector("link")?.textContent||"#"}));
+    }
+    throw new Error('raw empty');
+  }catch(e1){
+    try{
+      const r2=await fetch('https://corsproxy.io/?'+encodeURIComponent(rssUrl+'?_t='+Date.now()), noCacheOpt);
+      const txt2=await r2.text();
+      const xml2=new DOMParser().parseFromString(txt2,"text/xml");
+      const items2=[...xml2.querySelectorAll("item")].slice(0,4);
+      if(items2.length>0) return items2.map(it=>({title:it.querySelector("title")?.textContent||"", link:it.querySelector("link")?.textContent||"#"}));
+      throw new Error('corsproxy empty');
     }catch(e2){
-      const r3=await fetch('https://corsproxy.io/?'+encodeURIComponent(rssUrl+'?_t='+Date.now()), noCacheOpt);
-      const txt3=await r3.text();
-      const xml3=new DOMParser().parseFromString(txt3,"text/xml");
-      return [...xml3.querySelectorAll("item")].slice(0,4).map(it=>({title:it.querySelector("title")?.textContent||"", link:it.querySelector("link")?.textContent||"#"}));
+      const r3=await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(rssUrl)+'&_t='+Date.now(), noCacheOpt);
+      const data=await r3.json();
+      return data.items.slice(0,4).map(n=>({title:n.title, link:n.link}));
     }
   }
 }
