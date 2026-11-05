@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v63 NEWS METEO FIX</title>
+<title>Radio Sistema 3 - v64 NEWS FIX DEFINITIVO</title>
 <script>if(window.location.search.includes('popup=1')){document.documentElement.classList.add('popup-mode');document.addEventListener('DOMContentLoaded',()=>{document.body.classList.add('popup-mode');const a=document.getElementById('radioAudio');if(a){a.autoplay=true;setTimeout(()=>a.play().catch(()=>{}),500);}});}</script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
@@ -141,15 +141,36 @@ function apriNovita(){userPausedManually=true;document.getElementById('radioAudi
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';userPausedManually=false;interruptedBySystem=false;document.getElementById('radioAudio').play().catch(()=>{});}
 function playNovita(id,el){userPausedManually=true;document.getElementById('radioAudio').pause();document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
 function renderNovita(){const c=document.getElementById('novitaList');if(c.dataset.done=="1")return;c.dataset.done="1";c.innerHTML=BRANI_NOVITA.map(b=>{const bb=normalizzaBrano(b);const displayTitle=bb.titolo||bb.id;const displayArtista=bb.artista||'YouTube';return `<div class="novita-row" onclick="playNovita('${bb.id}', this)"><img src="https://i.ytimg.com/vi/${bb.id}/hqdefault.jpg" style="width:50px;height:38px;border-radius:4px"><div><b style="font-size:0.9rem">${displayArtista}</b><br><span style="color:#aaa;font-size:.75rem">${displayTitle}</span></div><div style="margin-left:auto;color:#ff0033">▶</div></div>`;}).join('');}
+
+async function fetchAnsaNotizie(rssUrl){
+  try{
+    const bust=Date.now();
+    const r=await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(rssUrl)+'&bust='+bust);
+    const data=await r.json();
+    if(data.items && data.items.length>0){
+      return data.items.slice(0,4).map(n=>({title:n.title, link:n.link}));
+    }
+    throw new Error('rss2json empty');
+  }catch(e){
+    const prox=`https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}&cb=${Date.now()}`;
+    const r2=await fetch(prox);
+    const j2=await r2.json();
+    if(!j2.contents) throw new Error('allorigins empty');
+    const xml=new DOMParser().parseFromString(j2.contents,"text/xml");
+    const items=[...xml.querySelectorAll("item")].slice(0,4);
+    if(items.length==0) throw new Error('no items');
+    return items.map(it=>({
+      title: it.querySelector("title")?.textContent || "",
+      link: it.querySelector("link")?.textContent || it.querySelector("guid")?.textContent || "#"
+    }));
+  }
+}
+
 async function caricaCronacaNord(){
   const box=document.getElementById('newsListNord'); const timeEl=document.getElementById('newsTime');
   try{
-    const bust=Date.now();
-    const r=await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml&bust='+bust);
-    const data=await r.json();
-    if(!data.items || data.items.length==0) throw new Error('no news');
-    const ultime=data.items.slice(0,4);
-    box.innerHTML=ultime.map(n=>`<div class="news-item"><a href="${n.link}" target="_blank">• ${n.title}</a></div>`).join('');
+    const notizie=await fetchAnsaNotizie('https://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml');
+    box.innerHTML=notizie.map(n=>`<div class="news-item"><a href="${n.link}" target="_blank">• ${n.title}</a></div>`).join('');
     if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString();
   }catch(e){ 
     box.innerHTML='<div class="news-item" style="color:#aaa">Riprovo tra 2 min... ('+new Date().toLocaleTimeString()+')</div>';
@@ -159,12 +180,8 @@ async function caricaCronacaNord(){
 async function caricaCalcioNazionale(){
   const box=document.getElementById('newsListCalcio'); const timeEl=document.getElementById('calcioTime');
   try{
-    const bust=Date.now();
-    const r=await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.ansa.it/sito/notizie/sport/calcio/calcio_rss.xml&bust='+bust);
-    const data=await r.json();
-    if(!data.items || data.items.length==0) throw new Error('no news');
-    const ultime=data.items.slice(0,4);
-    box.innerHTML=ultime.map(n=>`<div class="news-item calcio"><a href="${n.link}" target="_blank">• ${n.title}</a></div>`).join('');
+    const notizie=await fetchAnsaNotizie('https://www.ansa.it/sito/notizie/sport/calcio/calcio_rss.xml');
+    box.innerHTML=notizie.map(n=>`<div class="news-item calcio"><a href="${n.link}" target="_blank">• ${n.title}</a></div>`).join('');
     if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString();
   }catch(e){ 
     box.innerHTML='<div class="news-item calcio" style="color:#aaa">Riprovo tra 2 min... ('+new Date().toLocaleTimeString()+')</div>';
