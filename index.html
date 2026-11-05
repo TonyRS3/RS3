@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v70 PARALLELO</title>
+<title>Radio Sistema 3 - v71 CALCIO FIX</title>
 <script>if(window.location.search.includes('popup=1')){document.documentElement.classList.add('popup-mode');document.addEventListener('DOMContentLoaded',()=>{document.body.classList.add('popup-mode');const a=document.getElementById('radioAudio');if(a){a.autoplay=true;setTimeout(()=>a.play().catch(()=>{}),500);}});}</script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
@@ -181,16 +181,29 @@ async function fetchAnsaNotizie(rssUrl){
     fetchOne(rssUrl,'corsproxy'),
     fetchOne(rssUrl,'codetabs')
   ];
-  // primo che risponde vince
   try{
     const result = await Promise.any(promises);
     return result;
   }catch(e){
-    // se tutti falliscono, prova in sequenza l'ultimo
     const settled = await Promise.allSettled(promises);
     for(let s of settled){ if(s.status==='fulfilled' && s.value && s.value.length>0) return s.value; }
     throw e;
   }
+}
+
+async function fetchCalcioRobusto(){
+  const urls = [
+    'https://www.ansa.it/sito/notizie/sport/calcio/calcio_rss.xml',
+    'https://www.ansa.it/sito/notizie/sport/sport_rss.xml',
+    'https://www.gazzetta.it/rss/Calcio.xml'
+  ];
+  for(let url of urls){
+    try{
+      const notizie = await fetchAnsaNotizie(url);
+      if(notizie && notizie.length>0) return notizie;
+    }catch(e){}
+  }
+  throw new Error('calcio vuoto');
 }
 
 function caricaDaCache(){
@@ -215,19 +228,35 @@ async function caricaCronacaNord(){
     }
   }catch(e){ if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString(); }
 }
+
 async function caricaCalcioNazionale(){
-  const box=document.getElementById('newsListCalcio'); const timeEl=document.getElementById('calcioTime');
+  const box=document.getElementById('newsListCalcio'); 
+  const timeEl=document.getElementById('calcioTime');
+  const cache = localStorage.getItem('rs3_calcio');
+  if(cache && cache.length>20 && box.innerHTML.includes('Carico notizie')){
+    box.innerHTML=cache;
+  }
   if(timeEl && !box.innerHTML.includes('Carico notizie')) timeEl.textContent='agg. in corso...';
   try{
-    const notizie=await fetchAnsaNotizie('https://www.ansa.it/sito/notizie/sport/calcio/calcio_rss.xml');
+    const notizie=await fetchCalcioRobusto();
     if(notizie && notizie.length>0){
       const html=notizie.map(n=>`<div class="news-item calcio"><a href="${n.link}" target="_blank">• ${n.title}</a></div>`).join('');
       box.innerHTML=html;
       localStorage.setItem('rs3_calcio', html);
       if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString();
     }
-  }catch(e){ if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString(); }
+  }catch(e){ 
+    if(box.innerHTML.includes('Carico notizie')){
+      if(cache && cache.length>20){
+        box.innerHTML=cache;
+      } else {
+        box.innerHTML='<div class="news-item calcio"><a href="https://www.ansa.it/sito/notizie/sport/calcio/" target="_blank">• Apri notizie Calcio su ANSA</a></div>';
+      }
+    }
+    if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString();
+  }
 }
+
 function setupChannelNav(){const isPopup=window.location.search.includes('popup=1');const btnMain=document.getElementById('btnMain');const btnSoul=document.getElementById('btnSoul');if(isPopup){btnMain.href='index.html?popup=1';btnSoul.href='soul.html?popup=1';[btnMain,btnSoul].forEach(btn=>{btn.addEventListener('click',function(e){e.preventDefault();window.location.href=this.getAttribute('href');});});}else{btnMain.href='index.html';btnSoul.href='soul.html';}}
 function apriPopupPlayer(){if(window.innerWidth<=768)return;userPausedManually=true;document.getElementById('radioAudio').pause();popupWin=window.open(window.location.href.split('?')[0]+'?popup=1','RadioSistema3Popup','width=380,height=380,top=50,left=50,resizable=yes,scrollbars=no');let checkChiuso=setInterval(()=>{if(popupWin&&popupWin.closed){clearInterval(checkChiuso);popupWin=null;userPausedManually=false;interruptedBySystem=false;document.getElementById('radioAudio').play().catch(()=>{});}},800);}
 function pulisciTitolo(raw){
