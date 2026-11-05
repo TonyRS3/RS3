@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v61 METEO ORIZZONTALE</title>
+<title>Radio Sistema 3 - v62 FIX TITOLI</title>
 <script>if(window.location.search.includes('popup=1')){document.documentElement.classList.add('popup-mode');document.addEventListener('DOMContentLoaded',()=>{document.body.classList.add('popup-mode');const a=document.getElementById('radioAudio');if(a){a.autoplay=true;setTimeout(()=>a.play().catch(()=>{}),500);}});}</script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
@@ -174,7 +174,10 @@ function pulisciTitolo(raw){
   t=t.replace(/^PM(?=[A-Z0-9])/i,'');
   t=t.replace(/^AM(?=[A-Z0-9])/i,'');
   t=t.trim();
-  // normalizza spazi attorno al trattino ma NON inventa trattini nuovi
+  // FIX parole attaccate tipo BrainDen, FreshKool - VALE PER TUTTE LE CANZONI
+  t=t.replace(/([a-z])([A-Z])/g,'$1 $2');
+  t=t.replace(/([A-Z])([A-Z][a-z])/g,'$1 $2');
+  t=t.replace(/\s{2,}/g,' ').trim();
   if(t.includes(' - ')||t.includes(' – ')||t.includes('-')||t.includes('–')){
     t=t.replace(/\s*[–—]\s*/g,' - ');
     t=t.replace(/\s*-\s*/g,' - ');
@@ -195,14 +198,12 @@ function rebuildTrackBox(){
   let txt=tempDiv.innerText.trim();
   rawText=pulisciTitolo(txt);
   if(rawText.length<2)rawText="Radio Sistema 3 - Live";
-  // split artista - titolo per visualizzazione chiara
   let artista="", titolo="";
   if(rawText.includes(' - ')){
     let p=rawText.split(' - ');
     if(p.length>=2){ artista=p[0].trim(); titolo=p.slice(1).join(' - ').trim(); }
     else { artista=rawText; }
   } else { titolo=rawText; }
-
   if(!existingBox){
     wrap.innerHTML='';
     const box=document.createElement('div');box.className='rs3-trackbox';
