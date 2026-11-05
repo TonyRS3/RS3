@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v73 3 MIN - SOUL BLOCCATO</title>
+<title>Radio Sistema 3 - v74 TMW VALANGA - SOUL BLOCCATO</title>
 <script>if(window.location.search.includes('popup=1')){document.documentElement.classList.add('popup-mode');document.addEventListener('DOMContentLoaded',()=>{document.body.classList.add('popup-mode');const a=document.getElementById('radioAudio');if(a){a.autoplay=true;setTimeout(()=>a.play().catch(()=>{}),500);}});}</script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
@@ -131,7 +131,7 @@ html.popup-mode .player-box{ margin:0 auto 6px auto !important;padding:8px !impo
       <div id="newsListNord">Carico notizie...</div>
     </div>
     <div id="newsBoxSud" class="news-box-side calcio">
-      <div class="news-title calcio">⚽ SPORT CALCIO <span id="calcioTime" style="font-size:0.6rem;color:#aaa;font-weight:400"></span></div>
+      <div class="news-title calcio">⚽ SPORT CALCIO - TMW LIVE <span id="calcioTime" style="font-size:0.6rem;color:#aaa;font-weight:400"></span></div>
       <div id="newsListCalcio">Carico notizie...</div>
     </div>
   </div>
@@ -142,6 +142,16 @@ function apriNovita(){userPausedManually=true;document.getElementById('radioAudi
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';userPausedManually=false;interruptedBySystem=false;document.getElementById('radioAudio').play().catch(()=>{});}
 function playNovita(id,el){userPausedManually=true;document.getElementById('radioAudio').pause();document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
 function renderNovita(){const c=document.getElementById('novitaList');if(c.dataset.done=="1")return;c.dataset.done="1";c.innerHTML=BRANI_NOVITA.map(b=>{const bb=normalizzaBrano(b);const displayTitle=bb.titolo||bb.id;const displayArtista=bb.artista||'YouTube';return `<div class="novita-row" onclick="playNovita('${bb.id}', this)"><img src="https://i.ytimg.com/vi/${bb.id}/hqdefault.jpg" style="width:50px;height:38px;border-radius:4px"><div><b style="font-size:0.9rem">${displayArtista}</b><br><span style="color:#aaa;font-size:.75rem">${displayTitle}</span></div><div style="margin-left:auto;color:#ff0033">▶</div></div>`;}).join('');}
+function dedupNotizie(list){
+  if(!list) return [];
+  const visti = new Set();
+  return list.filter(n=>{
+    const k = (n.title||'').toLowerCase().trim().slice(0,75);
+    if(!k || visti.has(k)) return false;
+    visti.add(k);
+    return true;
+  });
+}
 async function fetchOne(url, type){
   const ctrl = new AbortController();
   const timeout = setTimeout(()=>ctrl.abort(), 4000);
@@ -182,18 +192,27 @@ async function fetchAnsaNotizie(rssUrl){
     throw e;
   }
 }
+async function fetchTMW_Diretto(){
+  const urls = ['https://www.tuttomercatoweb.com/rss/','https://www.tuttomercatoweb.com/rss/tmw.xml','https://www.tuttomercatoweb.com/feed/'];
+  for(let rss of urls){
+    try{
+      const r = await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(rss)+'&_t='+Date.now(), {cache:'no-store'});
+      const d = await r.json();
+      if(d.items && d.items.length>0) return d.items.slice(0,10).map(it=>({title:it.title, link:it.link}));
+    }catch(e){}
+  } return null;
+}
 async function fetchCalcioRobusto(){
-  try{ const n = await fetchAnsaNotizie('https://www.ansa.it/sito/notizie/sport/calcio/calcio_rss.xml'); if(n && n.length>0) return n; }catch(e){}
-  try{ const n2 = await fetchAnsaNotizie('https://www.ansa.it/sito/notizie/sport/sport_rss.xml'); if(n2 && n2.length>0) return n2; }catch(e){}
-  const rssFallbacks = ['https://www.gazzetta.it/rss/Calcio.xml','https://www.corrieredellosport.it/rss/calcio/','https://www.tuttomercatoweb.com/rss/'];
+  try{ const tmw = await fetchTMW_Diretto(); if(tmw && tmw.length>0) return dedupNotizie(tmw).slice(0,4); }catch(e){}
+  try{ const n = await fetchAnsaNotizie('https://www.ansa.it/sito/notizie/sport/calcio/calcio_rss.xml'); if(n && n.length>0) return dedupNotizie(n); }catch(e){}
+  const rssFallbacks = ['https://www.gazzetta.it/rss/Calcio.xml'];
   for(let rss of rssFallbacks){
     try{
       const r = await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(rss)+'&_t='+Date.now(), {cache:'no-store'});
       const d = await r.json();
-      if(d.items && d.items.length>0) return d.items.slice(0,4).map(it=>({title:it.title, link:it.link}));
+      if(d.items && d.items.length>0) return dedupNotizie(d.items.slice(0,4).map(it=>({title:it.title, link:it.link})));
     }catch(e){}
-  }
-  throw new Error('calcio vuoto');
+  } throw new Error('calcio vuoto');
 }
 function caricaDaCache(){
   try{
@@ -205,12 +224,13 @@ function caricaDaCache(){
 }
 async function caricaCronacaNord(){
   const box=document.getElementById('newsListNord'); const timeEl=document.getElementById('newsTime');
-  if(timeEl && !box.innerHTML.includes('Carico notizie')) timeEl.textContent='agg. in corso...';
+  if(timeEl) timeEl.textContent='agg. in corso...';
   try{
-    const notizie=await fetchAnsaNotizie('https://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml');
+    let notizie=await fetchAnsaNotizie('https://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml');
+    notizie = dedupNotizie(notizie);
     if(notizie && notizie.length>0){
-      const html=notizie.map(n=>`<div class="news-item"><a href="${n.link}" target="_blank">• ${n.title}</a></div>`).join('');
-      box.innerHTML=html; localStorage.setItem('rs3_cronaca', html);
+      const html=notizie.map(n=>`<div class="news-item"><a href="${n.link}" target="_blank" rel="noopener">• ${n.title}</a></div>`).join('');
+      if(box.innerHTML!==html){ box.innerHTML=html; localStorage.setItem('rs3_cronaca', html); }
       if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString();
     }
   }catch(e){ if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString(); }
@@ -219,18 +239,19 @@ async function caricaCalcioNazionale(){
   const box=document.getElementById('newsListCalcio'); const timeEl=document.getElementById('calcioTime');
   const cache = localStorage.getItem('rs3_calcio');
   if(cache && cache.length>20 && box.innerHTML.includes('Carico notizie')) box.innerHTML=cache;
-  if(timeEl && !box.innerHTML.includes('Carico notizie')) timeEl.textContent='agg. in corso...';
+  if(timeEl) timeEl.textContent='agg. TMW...';
   try{
-    const notizie=await fetchCalcioRobusto();
+    let notizie=await fetchCalcioRobusto();
+    notizie = dedupNotizie(notizie);
     if(notizie && notizie.length>0){
-      const html=notizie.map(n=>`<div class="news-item calcio"><a href="${n.link}" target="_blank">• ${n.title}</a></div>`).join('');
-      box.innerHTML=html; localStorage.setItem('rs3_calcio', html);
-      if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString();
+      const html=notizie.map(n=>`<div class="news-item calcio"><a href="${n.link}" target="_blank" rel="noopener">• ${n.title}</a></div>`).join('');
+      if(box.innerHTML!==html){ box.innerHTML=html; localStorage.setItem('rs3_calcio', html); }
+      if(timeEl) timeEl.textContent='TMW agg. '+new Date().toLocaleTimeString();
     }
   }catch(e){ 
     if(box.innerHTML.includes('Carico notizie')){
       if(cache && cache.length>20) box.innerHTML=cache;
-      else box.innerHTML='<div class="news-item calcio"><a href="https://www.gazzetta.it/calcio/" target="_blank">• Apri notizie Calcio su Gazzetta</a></div>';
+      else box.innerHTML='<div class="news-item calcio"><a href="https://www.tuttomercatoweb.com/" target="_blank">• Apri TMW - ultime calcio</a></div>';
     }
     if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString();
   }
@@ -304,8 +325,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   caricaDaCache();
   setupChannelNav(); setTimeout(rebuildTrackBox,800); caricaMeteoLati(); caricaCronacaNord(); caricaCalcioNazionale();
   setInterval(caricaMeteoLati,3600000); 
-  setInterval(caricaCronacaNord,180000);
-  setInterval(caricaCalcioNazionale,180000);
+  setInterval(caricaCronacaNord,120000);
+  setInterval(caricaCalcioNazionale,90000);
 });
 setupChannelNav(); setTimeout(rebuildTrackBox,600);
 if(document.readyState!=='loading'){ caricaDaCache(); caricaMeteoLati(); caricaCronacaNord(); caricaCalcioNazionale(); }
