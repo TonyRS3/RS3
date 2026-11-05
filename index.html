@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v77 BYPASS DIRETTO - SOUL BLOCCATO</title>
+<title>Radio Sistema 3 - v78 ULTRA NO OFFLINE - SOUL BLOCCATO</title>
 <script>if(window.location.search.includes('popup=1')){document.documentElement.classList.add('popup-mode');document.addEventListener('DOMContentLoaded',()=>{document.body.classList.add('popup-mode');const a=document.getElementById('radioAudio');if(a){a.autoplay=true;setTimeout(()=>a.play().catch(()=>{}),500);}});}</script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
@@ -138,59 +138,70 @@ html.popup-mode .player-box{ margin:0 auto 6px auto !important;padding:8px !impo
 </div>
 <script>
 let popupWin=null,userPausedManually=false,autoResumeTimer=null,lastUserClickOnAudio=0,resumeAttempts=0,interruptedBySystem=false;
-const CACHE_VERSION = 'v77_BYPASS';
-const CACHE_MAX_AGE = 2 * 60 * 1000;
+const CACHE_VERSION = 'v78_ULTRA';
+const CACHE_MAX_AGE = 5 * 60 * 1000;
 function apriNovita(){userPausedManually=true;document.getElementById('radioAudio').pause();document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';userPausedManually=false;interruptedBySystem=false;document.getElementById('radioAudio').play().catch(()=>{});}
 function playNovita(id,el){userPausedManually=true;document.getElementById('radioAudio').pause();document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
 function renderNovita(){const c=document.getElementById('novitaList');if(c.dataset.done=="1")return;c.dataset.done="1";c.innerHTML=BRANI_NOVITA.map(b=>{const bb=normalizzaBrano(b);const displayTitle=bb.titolo||bb.id;const displayArtista=bb.artista||'YouTube';return `<div class="novita-row" onclick="playNovita('${bb.id}', this)"><img src="https://i.ytimg.com/vi/${bb.id}/hqdefault.jpg" style="width:50px;height:38px;border-radius:4px"><div><b style="font-size:0.9rem">${displayArtista}</b><br><span style="color:#aaa;font-size:.75rem">${displayTitle}</span></div><div style="margin-left:auto;color:#ff0033">▶</div></div>`;}).join('');}
 function dedupNotizie(list){if(!list) return []; const visti = new Set(); return list.filter(n=>{const k = (n.title||'').toLowerCase().trim().slice(0,75); if(!k || visti.has(k)) return false; visti.add(k); return true;});}
 
-async function fetchRSSDirect(rssUrl){
-  const proxies = [
-    (url)=>`https://api.allorigins.win/get?url=${encodeURIComponent(url+'?t='+Date.now())}`,
-    (url)=>`https://corsproxy.io/?${encodeURIComponent(url+'?t='+Date.now())}`
-  ];
-  for(let make of proxies){
-    try{
-      const ctrl = new AbortController(); const to=setTimeout(()=>ctrl.abort(), 3500);
-      const proxUrl = make(rssUrl);
-      let xmlText;
-      if(proxUrl.includes('allorigins')){
-        const r = await fetch(proxUrl, {cache:'no-store', signal:ctrl.signal});
-        const j = await r.json(); xmlText = j.contents;
-      }else{
-        const r = await fetch(proxUrl, {cache:'no-store', signal:ctrl.signal});
-        xmlText = await r.text();
+async function fetchRSS_Ultra(url){
+  const ts = Date.now();
+  const cleanUrl = url + (url.includes('?') ? '&' : '?') + 't=' + ts;
+  const attempts = [
+    async () => {
+      const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(cleanUrl)}`, {cache:'no-store'});
+      const j = await r.json(); return j.contents;
+    },
+    async () => {
+      const r = await fetch(`https://corsproxy.io/?${encodeURIComponent(cleanUrl)}`, {cache:'no-store'});
+      return await r.text();
+    },
+    async () => {
+      const r = await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(cleanUrl)}`, {cache:'no-store'});
+      return await r.text();
+    },
+    async () => {
+      const r = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&_t=${ts}`, {cache:'no-store'});
+      const d = await r.json();
+      if(d.items && d.items.length>0){
+        let fakeXml = '<rss><channel>';
+        d.items.slice(0,4).forEach(it=>{ fakeXml+=`<item><title><![CDATA[${it.title}]]></title><link>${it.link}</link></item>`; });
+        fakeXml+='</channel></rss>';
+        return fakeXml;
       }
-      clearTimeout(to);
+      throw new Error('no items');
+    }
+  ];
+  for(let fn of attempts){
+    try{
+      const xmlText = await Promise.race([ fn(), new Promise((_,rej)=>setTimeout(()=>rej('timeout'), 4000)) ]);
       if(!xmlText || !xmlText.includes('<item')) continue;
       const xml = new DOMParser().parseFromString(xmlText, "text/xml");
       const items = [...xml.querySelectorAll("item")].slice(0,4);
       if(items.length>0) return items.map(it=>({title:it.querySelector("title")?.textContent||"", link:it.querySelector("link")?.textContent||"#"}));
-    }catch(e){}
+    }catch(e){ continue; }
   }
   return null;
 }
 
 async function fetchCronacaRobusto(){
-  let r = await fetchRSSDirect('https://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml');
-  if(r && r.length>0) return dedupNotizie(r);
-  r = await fetchRSSDirect('https://www.ansa.it/sito/notizie/topnews/topnews_rss.xml');
-  if(r && r.length>0) return dedupNotizie(r);
-  throw new Error('cronaca vuota');
+  let r = await fetchRSS_Ultra('https://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml');
+  if(r) return dedupNotizie(r);
+  r = await fetchRSS_Ultra('https://www.ansa.it/sito/notizie/topnews/topnews_rss.xml');
+  if(r) return dedupNotizie(r);
+  return null;
 }
-
 async function fetchCalcioRobusto(){
-  let r = await fetchRSSDirect('https://www.tuttomercatoweb.com/rss/');
-  if(r && r.length>0) return dedupNotizie(r);
-  r = await fetchRSSDirect('https://www.tuttomercatoweb.com/rss/tmw.xml');
-  if(r && r.length>0) return dedupNotizie(r);
-  r = await fetchRSSDirect('https://www.ansa.it/sito/notizie/sport/calcio/calcio_rss.xml');
-  if(r && r.length>0) return dedupNotizie(r);
-  throw new Error('calcio vuoto');
+  let r = await fetchRSS_Ultra('https://www.tuttomercatoweb.com/rss/');
+  if(r) return dedupNotizie(r);
+  r = await fetchRSS_Ultra('https://www.tuttomercatoweb.com/rss/tmw.xml');
+  if(r) return dedupNotizie(r);
+  r = await fetchRSS_Ultra('https://www.ansa.it/sito/notizie/sport/calcio/calcio_rss.xml');
+  if(r) return dedupNotizie(r);
+  return null;
 }
-
 function caricaDaCache(){
   try{
     const ver = localStorage.getItem('rs3_version');
@@ -204,27 +215,29 @@ function caricaDaCache(){
 }
 async function caricaCronacaNord(){
   const box=document.getElementById('newsListNord'); const timeEl=document.getElementById('newsTime');
-  if(timeEl) timeEl.textContent='agg. diretto...';
   try{
     let notizie=await fetchCronacaRobusto();
     if(notizie && notizie.length>0){
       const html=notizie.map(n=>`<div class="news-item"><a href="${n.link}" target="_blank" rel="noopener">• ${n.title}</a></div>`).join('');
       box.innerHTML=html; localStorage.setItem('rs3_cronaca', html); localStorage.setItem('rs3_cronaca_time', Date.now());
-      if(timeEl) timeEl.textContent='diretto '+new Date().toLocaleTimeString();
+      if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString(); return;
     }
-  }catch(e){ box.innerHTML='<div class="news-item"><a href="https://www.ansa.it/sito/notizie/cronaca/cronaca/" target="_blank">• ANSA Cronaca - apri ultime</a></div>'; if(timeEl) timeEl.textContent='offline '+new Date().toLocaleTimeString(); }
+  }catch(e){}
+  const cache = localStorage.getItem('rs3_cronaca');
+  if(cache && cache.length>20){ box.innerHTML=cache; if(timeEl) timeEl.textContent='cache '+new Date().toLocaleTimeString(); }
 }
 async function caricaCalcioNazionale(){
   const box=document.getElementById('newsListCalcio'); const timeEl=document.getElementById('calcioTime');
-  if(timeEl) timeEl.textContent='TMW diretto...';
   try{
     let notizie=await fetchCalcioRobusto();
     if(notizie && notizie.length>0){
       const html=notizie.map(n=>`<div class="news-item calcio"><a href="${n.link}" target="_blank" rel="noopener">• ${n.title}</a></div>`).join('');
       box.innerHTML=html; localStorage.setItem('rs3_calcio', html); localStorage.setItem('rs3_calcio_time', Date.now());
-      if(timeEl) timeEl.textContent='TMW diretto '+new Date().toLocaleTimeString();
+      if(timeEl) timeEl.textContent='TMW agg. '+new Date().toLocaleTimeString(); return;
     }
-  }catch(e){ const cache = localStorage.getItem('rs3_calcio'); if(cache && cache.length>20) box.innerHTML=cache; else box.innerHTML='<div class="news-item calcio"><a href="https://www.tuttomercatoweb.com/" target="_blank">• Apri TMW - ultime calcio</a></div>'; if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString(); }
+  }catch(e){}
+  const cache = localStorage.getItem('rs3_calcio');
+  if(cache && cache.length>20){ box.innerHTML=cache; if(timeEl) timeEl.textContent='cache '+new Date().toLocaleTimeString(); }
 }
 function setupChannelNav(){
   const isPopup=window.location.search.includes('popup=1');
