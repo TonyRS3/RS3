@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v59 METEO STRETTO NEWS LARGA</title>
+<title>Radio Sistema 3 - v60 METEO SX NEWS DX LARGA</title>
 <script>if(window.location.search.includes('popup=1')){document.documentElement.classList.add('popup-mode');document.addEventListener('DOMContentLoaded',()=>{document.body.classList.add('popup-mode');const a=document.getElementById('radioAudio');if(a){a.autoplay=true;setTimeout(()=>a.play().catch(()=>{}),500);}});}</script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
@@ -27,14 +27,12 @@ function aggiornaMediaSessionCover(coverUrl,titoloPulito){if(!('mediaSession' in
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:Segoe UI,Arial,sans-serif;color:white;text-align:center;background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),url("studio-radio.jpeg");background-size:cover;background-position:center;background-attachment:fixed;overflow-x:hidden;}
-.page-layout{display:grid;grid-template-columns:210px minmax(0,900px) 210px;gap:8px;max-width:1340px;margin:0 auto;padding:0px;align-items:start;justify-content:center;}
-.meteo-side{background:rgba(0,0,0,.85);border:1px solid rgba(255,217,102,.6);border-radius:14px;padding:6px 6px;position:sticky;top:6px;z-index:3;box-shadow:0 0 12px rgba(0,0,0,.8);width:210px;}
-.meteo-side.left{margin-right:-25px;transform:translateX(15px);}
-.meteo-side.right{margin-left:-25px;transform:translateX(-15px);}
+.page-layout{display:grid;grid-template-columns:145px minmax(0,900px) 310px;gap:6px;max-width:1370px;margin:0 auto;padding:0px;align-items:start;justify-content:center;}
+.meteo-side{background:rgba(0,0,0,.85);border:1px solid rgba(255,217,102,.6);border-radius:14px;padding:6px 5px;position:sticky;top:6px;z-index:3;box-shadow:0 0 12px rgba(0,0,0,.8);}
+.meteo-side.left{width:145px;margin-right:-40px;transform:translateX(30px);}
+.meteo-side.right{width:310px;margin-left:-40px;transform:translateX(-30px);background:transparent;border:none;box-shadow:none;padding:0;position:sticky;top:6px;display:flex;flex-direction:column;gap:12px;}
 .meteo-side-title{font-size:0.70rem;color:#ffd966;font-weight:900;letter-spacing:0.7px;margin-bottom:6px;text-align:center;}
-.meteo-side-grid{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;width:130px;}
-.meteo-side.left .meteo-side-grid{margin-left:auto;margin-right:0;}
-.meteo-side.right .meteo-side-grid{margin-left:0;margin-right:auto;}
+.meteo-side-grid{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
 .meteo-mini{background:rgba(255,255,255,.10);border-radius:8px;padding:4px 4px;border:1px solid rgba(255,255,255,.14);}
 .meteo-mini b{font-size:0.68rem;display:block;}
 .meteo-mini img{width:26px;height:26px;margin:1px 0;}
@@ -68,27 +66,27 @@ audio{width:100%;max-width:340px;height:36px;}
 .ch-main{background:#fff;color:#222}
 .ch-soul{background:#7b1fa2;color:#fff;box-shadow:0 0 12px #7b1fa2}
 .ch-btn.active{outline:3px solid #ffe600;transform:scale(1.05)}
-.news-box-side{background:rgba(0,0,0,.88);border:1px solid #ff0033;border-radius:10px;padding:10px 10px;margin:0 auto;text-align:left;box-shadow:0 0 10px rgba(255,0,51,.35);width:100%;min-height:110px;}
-.news-title{font-size:0.75rem;color:#ff4444;font-weight:900;letter-spacing:0.8px;margin-bottom:8px;text-align:center;}
+.news-box-side{background:rgba(0,0,0,.88);border:1px solid #ff0033;border-radius:12px;padding:12px 12px;text-align:left;box-shadow:0 0 10px rgba(255,0,51,.35);width:100%;}
+.news-title{font-size:0.80rem;color:#ff4444;font-weight:900;letter-spacing:0.8px;margin-bottom:8px;text-align:left;}
 .news-title.calcio{color:#00d4ff;}
 .news-box-side.calcio{border-color:#00d4ff;box-shadow:0 0 10px rgba(0,212,255,.35);}
-.news-item{font-size:0.78rem;line-height:1.3;margin-bottom:9px;border-left:2px solid #ff0033;padding-left:8px;white-space:normal;word-wrap:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.news-item{font-size:0.88rem;line-height:1.35;margin-bottom:10px;border-left:3px solid #ff0033;padding-left:10px;white-space:normal;word-wrap:break-word;word-break:normal;overflow:visible;display:block;}
 .news-item.calcio{border-left-color:#00d4ff;}
-.news-item a{color:#ffd966;text-decoration:none;}
+.news-item a{color:#ffd966;text-decoration:none;display:block;white-space:normal;}
 .news-item a:hover{color:#fff;text-decoration:underline;}
 .news-item.calcio a{color:#aee8ff;}
 @media (max-width:1200px){
   .page-layout{display:flex !important;flex-direction:column !important;gap:6px !important;max-width:100% !important;width:100% !important;padding:2px !important;overflow-x:hidden !important;}
-  .meteo-side{width:100% !important;max-width:100% !important;position:static !important;order:1 !important;transform:none !important;margin:0 !important;padding:4px 2px !important;border-radius:10px !important;box-sizing:border-box !important;}
-  .meteo-side.left{order:1 !important;} .meteo-side.right{order:2 !important;} .container{order:3 !important;width:100% !important;max-width:100% !important;margin:0 !important;box-sizing:border-box !important;}
+  .meteo-side{width:100% !important;max-width:100% !important;position:static !important;order:1 !important;transform:none !important;margin:0 !important;padding:4px 2px !important;border-radius:10px !important;box-sizing:border-box !important;background:rgba(0,0,0,.85) !important;border:1px solid rgba(255,217,102,.6) !important;}
+  .meteo-side.left{order:1 !important;} .meteo-side.right{order:2 !important;background:transparent !important;border:none !important;gap:6px !important;} .container{order:3 !important;width:100% !important;max-width:100% !important;margin:0 !important;box-sizing:border-box !important;}
   .meteo-side-title{font-size:0.6rem !important;margin-bottom:3px !important;}
-  .meteo-side-grid{display:grid !important;grid-template-columns:repeat(5, minmax(0,1fr)) !important;gap:2px !important;width:100% !important;overflow:hidden !important;margin-bottom:6px !important;margin-left:0 !important;margin-right:0 !important;}
+  .meteo-side-grid{display:grid !important;grid-template-columns:repeat(5, minmax(0,1fr)) !important;gap:2px !important;width:100% !important;overflow:hidden !important;margin-bottom:6px !important;}
   .meteo-mini{min-width:0 !important;width:100% !important;max-width:100% !important;flex:none !important;padding:3px 1px !important;border-radius:6px !important;box-sizing:border-box !important;overflow:hidden !important;}
   .meteo-mini b{font-size:0.48rem !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;display:block !important;width:100% !important;}
   .meteo-mini img{width:18px !important;height:18px !important;margin:1px 0 !important;}
   .meteo-mini .temp{font-size:0.68rem !important;}
-  .news-box-side{margin-top:6px !important;min-height:auto !important;}
-  .news-item{font-size:0.80rem !important;-webkit-line-clamp:3 !important;}
+  .news-box-side{margin-top:0 !important;}
+  .news-item{font-size:0.82rem !important;}
 }
 @media (max-width:768px){ #btnPopup{display:none !important;} .logo{width:200px;height:200px;} h1{font-size:2.2rem;} }
 html.popup-mode, body.popup-mode{ background:#020a18 !important; background-image:linear-gradient(180deg,#0a1830 0%,#020a18 100%) !important; overflow:hidden !important; height:380px !important; }
@@ -105,10 +103,8 @@ html.popup-mode .player-box{ margin:0 auto 6px auto !important;padding:8px !impo
   <div class="meteo-side left">
     <div class="meteo-side-title">☀️ NORD</div>
     <div id="meteo-left" class="meteo-side-grid">...</div>
-    <div id="newsBoxNord" class="news-box-side">
-      <div class="news-title">📰 CRONACA NAZIONALE</div>
-      <div id="newsListNord">Carico notizie...</div>
-    </div>
+    <div class="meteo-side-title">☀️ CENTRO SUD</div>
+    <div id="meteo-right" class="meteo-side-grid">...</div>
   </div>
   <div class="container">
     <div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo"></div>
@@ -129,8 +125,10 @@ html.popup-mode .player-box{ margin:0 auto 6px auto !important;padding:8px !impo
     <div class="footer" style="margin-top:20px;font-size:0.85rem">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
   </div>
   <div class="meteo-side right">
-    <div class="meteo-side-title">☀️ CENTRO SUD</div>
-    <div id="meteo-right" class="meteo-side-grid">...</div>
+    <div id="newsBoxNord" class="news-box-side">
+      <div class="news-title">📰 CRONACA NAZIONALE</div>
+      <div id="newsListNord">Carico notizie...</div>
+    </div>
     <div id="newsBoxSud" class="news-box-side calcio">
       <div class="news-title calcio">⚽ CALCIO NAZIONALE</div>
       <div id="newsListCalcio">Carico notizie...</div>
@@ -149,7 +147,7 @@ async function caricaCronacaNord(){
     const r=await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml');
     const data=await r.json();
     if(!data.items || data.items.length==0) throw new Error('no news');
-    const ultime=data.items.slice(0,3);
+    const ultime=data.items.slice(0,4);
     box.innerHTML=ultime.map(n=>`<div class="news-item"><a href="${n.link}" target="_blank">• ${n.title}</a></div>`).join('');
   }catch(e){ box.innerHTML='<div class="news-item" style="color:#aaa">Notizie cronaca non disponibili</div>'; }
 }
@@ -159,7 +157,7 @@ async function caricaCalcioNazionale(){
     const r=await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.ansa.it/sito/notizie/sport/calcio/calcio_rss.xml');
     const data=await r.json();
     if(!data.items || data.items.length==0) throw new Error('no news');
-    const ultime=data.items.slice(0,3);
+    const ultime=data.items.slice(0,4);
     box.innerHTML=ultime.map(n=>`<div class="news-item calcio"><a href="${n.link}" target="_blank">• ${n.title}</a></div>`).join('');
   }catch(e){ box.innerHTML='<div class="news-item calcio" style="color:#aaa">Notizie calcio non disponibili</div>'; }
 }
