@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v68 NO CACHE</title>
+<title>Radio Sistema 3 - v69 NO VUOTO</title>
 <script>if(window.location.search.includes('popup=1')){document.documentElement.classList.add('popup-mode');document.addEventListener('DOMContentLoaded',()=>{document.body.classList.add('popup-mode');const a=document.getElementById('radioAudio');if(a){a.autoplay=true;setTimeout(()=>a.play().catch(()=>{}),500);}});}</script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
@@ -66,7 +66,7 @@ audio{width:100%;max-width:340px;height:36px;}
 .ch-main{background:#fff;color:#222}
 .ch-soul{background:#7b1fa2;color:#fff;box-shadow:0 0 12px #7b1fa2}
 .ch-btn.active{outline:3px solid #ffe600;transform:scale(1.05)}
-.news-box-side{background:rgba(0,0,0,.88);border:1px solid #ff0033;border-radius:12px;padding:12px 12px;text-align:left;box-shadow:0 0 10px rgba(255,0,51,.35);width:100%;}
+.news-box-side{background:rgba(0,0,0,.88);border:1px solid #ff0033;border-radius:12px;padding:12px 12px;text-align:left;box-shadow:0 0 10px rgba(255,0,51,.35);width:100%;min-height:80px;}
 .news-title{font-size:0.80rem;color:#ff4444;font-weight:900;letter-spacing:0.8px;margin-bottom:8px;text-align:left;}
 .news-title.calcio{color:#00d4ff;}
 .news-box-side.calcio{border-color:#00d4ff;box-shadow:0 0 10px rgba(0,212,255,.35);}
@@ -102,9 +102,9 @@ html.popup-mode .player-box{ margin:0 auto 6px auto !important;padding:8px !impo
 <div class="page-layout">
   <div class="meteo-side left">
     <div class="meteo-side-title">☀️ NORD</div>
-    <div id="meteo-left" class="meteo-side-grid">Carico...</div>
+    <div id="meteo-left" class="meteo-side-grid">...</div>
     <div class="meteo-side-title">☀️ CENTRO SUD</div>
-    <div id="meteo-right" class="meteo-side-grid">Carico...</div>
+    <div id="meteo-right" class="meteo-side-grid">...</div>
   </div>
   <div class="container">
     <div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo"></div>
@@ -144,7 +144,6 @@ function renderNovita(){const c=document.getElementById('novitaList');if(c.datas
 
 async function fetchAnsaNotizie(rssUrl){
   const opt={cache:'no-store'};
-  // 1 - allorigins GET - fresco
   try{
     const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(rssUrl)+'?nocache='+Date.now(), opt);
     const j=await r.json();
@@ -154,7 +153,6 @@ async function fetchAnsaNotizie(rssUrl){
       if(items.length>0) return items.map(it=>({title:it.querySelector("title")?.textContent||"", link:it.querySelector("link")?.textContent||"#"}));
     }
   }catch(e){}
-  // 2 - codetabs - secondo fresco
   try{
     const r2=await fetch('https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(rssUrl+'?t='+Date.now()), opt);
     const txt2=await r2.text();
@@ -164,33 +162,50 @@ async function fetchAnsaNotizie(rssUrl){
       if(items2.length>0) return items2.map(it=>({title:it.querySelector("title")?.textContent||"", link:it.querySelector("link")?.textContent||"#"}));
     }
   }catch(e){}
-  // 3 - corsproxy ultimo
   const r3=await fetch('https://corsproxy.io/?'+encodeURIComponent(rssUrl+'?t='+Date.now()), opt);
   const txt3=await r3.text();
   const xml3=new DOMParser().parseFromString(txt3,"text/xml");
   return [...xml3.querySelectorAll("item")].slice(0,4).map(it=>({title:it.querySelector("title")?.textContent||"", link:it.querySelector("link")?.textContent||"#"}));
 }
 
+function caricaDaCache(){
+  try{
+    const c1=localStorage.getItem('rs3_cronaca');
+    const c2=localStorage.getItem('rs3_calcio');
+    if(c1 && c1.length>20) document.getElementById('newsListNord').innerHTML=c1;
+    if(c2 && c2.length>20) document.getElementById('newsListCalcio').innerHTML=c2;
+  }catch(e){}
+}
+
 async function caricaCronacaNord(){
   const box=document.getElementById('newsListNord'); const timeEl=document.getElementById('newsTime');
+  // NON cancellare, tieni quello che c'è
+  if(timeEl && !box.innerHTML.includes('Carico notizie')) timeEl.textContent='agg. in corso...';
   try{
     const notizie=await fetchAnsaNotizie('https://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml');
-    box.innerHTML=notizie.map(n=>`<div class="news-item"><a href="${n.link}" target="_blank">• ${n.title}</a></div>`).join('');
-    if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString();
+    if(notizie && notizie.length>0){
+      const html=notizie.map(n=>`<div class="news-item"><a href="${n.link}" target="_blank">• ${n.title}</a></div>`).join('');
+      box.innerHTML=html;
+      localStorage.setItem('rs3_cronaca', html);
+      if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString();
+    }
   }catch(e){ 
-    box.innerHTML='<div class="news-item" style="color:#ffb3b3">Sto ricaricando il fresco... riprovo tra 10s</div>';
-    setTimeout(caricaCronacaNord,10000);
+    if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString();
   }
 }
 async function caricaCalcioNazionale(){
   const box=document.getElementById('newsListCalcio'); const timeEl=document.getElementById('calcioTime');
+  if(timeEl && !box.innerHTML.includes('Carico notizie')) timeEl.textContent='agg. in corso...';
   try{
     const notizie=await fetchAnsaNotizie('https://www.ansa.it/sito/notizie/sport/calcio/calcio_rss.xml');
-    box.innerHTML=notizie.map(n=>`<div class="news-item calcio"><a href="${n.link}" target="_blank">• ${n.title}</a></div>`).join('');
-    if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString();
+    if(notizie && notizie.length>0){
+      const html=notizie.map(n=>`<div class="news-item calcio"><a href="${n.link}" target="_blank">• ${n.title}</a></div>`).join('');
+      box.innerHTML=html;
+      localStorage.setItem('rs3_calcio', html);
+      if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString();
+    }
   }catch(e){ 
-    box.innerHTML='<div class="news-item calcio" style="color:#ffb3b3">Sto ricaricando il fresco... riprovo tra 10s</div>';
-    setTimeout(caricaCalcioNazionale,10000);
+    if(timeEl) timeEl.textContent='agg. '+new Date().toLocaleTimeString();
   }
 }
 function setupChannelNav(){const isPopup=window.location.search.includes('popup=1');const btnMain=document.getElementById('btnMain');const btnSoul=document.getElementById('btnSoul');if(isPopup){btnMain.href='index.html?popup=1';btnSoul.href='soul.html?popup=1';[btnMain,btnSoul].forEach(btn=>{btn.addEventListener('click',function(e){e.preventDefault();window.location.href=this.getAttribute('href');});});}else{btnMain.href='index.html';btnSoul.href='soul.html';}}
@@ -256,11 +271,12 @@ if('mediaSession' in navigator){try{navigator.mediaSession.setActionHandler('pla
 drawStereo();setInterval(updateStereo,70);
 document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;
 document.addEventListener('DOMContentLoaded',()=>{
+  caricaDaCache();
   setupChannelNav(); setTimeout(rebuildTrackBox,800); caricaMeteoLati(); caricaCronacaNord(); caricaCalcioNazionale();
   setInterval(caricaMeteoLati,3600000); setInterval(caricaCronacaNord,300000); setInterval(caricaCalcioNazionale,300000);
 });
 setupChannelNav(); setTimeout(rebuildTrackBox,600);
-if(document.readyState!=='loading'){ caricaMeteoLati(); caricaCronacaNord(); caricaCalcioNazionale(); }
+if(document.readyState!=='loading'){ caricaDaCache(); caricaMeteoLati(); caricaCronacaNord(); caricaCalcioNazionale(); }
 </script>
 </body>
 </html>
