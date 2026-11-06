@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v92 POPUP BLU SENZA STEMMA</title>
+<title>Radio Sistema 3 - v93 POPUP CORTO</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
@@ -11,7 +11,7 @@ function getLogoAssoluto(){try{const base=window.location.href.substring(0,windo
 const BRANI_NOVITA=[{id:"ofywN3NgGqY",artista:"Sombr",titolo:"My body isn't ready"},{id:"PshqcQwshdU",artista:"Sfera Ebbasta",titolo:"Lontano"},{id:"2r1njyfmREA",artista:"SOFI TUKKER & OneRepublic",titolo:"TSUNAMI"},{id:"0xuFBG6o6EU",artista:"Gaia",titolo:"Senz'Allegria"},{id:"pzvhHsEqMzo",artista:"Marco Mengoni",titolo:"Giornate Perse"},{id:"fRIhCiUVaKs",artista:"Karol G",titolo:"Bby Wow"},{id:"z5qAtdZh5Uo",artista:"Giorgia",titolo:"SIAMO L'ECCEZIONE"},{id:"rSiBJ4JRTv4",artista:"Alfa & Gigi D'Alessio",titolo:"Genova E Napoli"},{id:"D3zkX-Am4o4",artista:"Madonna",titolo:"Danceteria"}];
 function normalizzaBrano(b){if(typeof b==='string')return{id:b,artista:'',titolo:b};return b;}
 const PLACEHOLDER_HTML=`<div style="text-align:center"><div style="color:#fff;font-weight:bold">Scegli un brano</div><div style="font-size:2rem">👇</div></div>`;
-function apriPopup(){window.open(window.location.pathname + '?popup=1','RadioSistema3Popup','width=380,height=620,resizable=yes,scrollbars=no');}
+function apriPopup(){window.open(window.location.pathname + '?popup=1','RadioSistema3Popup','width=380,height=460,resizable=yes,scrollbars=no');}
 if(window.location.search.includes('popup=1')){document.documentElement.classList.add('is-popup');}
 </script>
 <style>
@@ -67,13 +67,17 @@ audio{width:100%;max-width:340px;height:36px;}
 .news-item a{color:#ffd966;text-decoration:none;display:block;}
 .news-item.calcio a{color:#aee8ff;}
 .footer-copy{margin-top:20px;padding:16px 10px;text-align:center;font-size:0.85rem;color:#ddd;background:rgba(0,0,0,0.85);border-top:1px solid rgba(255,255,255,0.15);letter-spacing:0.3px;}
-/* POPUP PERFETTO v92 - BLU SCURO SENZA STEMMA */
-html.is-popup body{background:#0a1931 !important;}
+/* POPUP v93 - CORTO BLU SENZA STEMMA - FINISCE SOTTO BRANO */
+html.is-popup body{background:#0a1931 !important;overflow:hidden !important;}
 html.is-popup .page-layout{display:block !important;max-width:100% !important;padding:0 !important;}
 html.is-popup .meteo-side, html.is-popup .meteo-side.right, html.is-popup .news-box-side, html.is-popup .btn-novita, html.is-popup #novitaSection, html.is-popup .footer-copy, html.is-popup .btn-popup, html.is-popup .logo-wrap{display:none !important;}
-html.is-popup .container{max-width:100% !important;margin:0 !important;border-radius:0 !important;padding:14px 10px !important;background:rgba(10,25,49,0.98) !important;}
-html.is-popup h1{font-size:1.5rem !important;margin-top:5px !important;}
-html.is-popup .player-box{width:100% !important;max-width:100% !important;}
+html.is-popup .container{max-width:100% !important;margin:0 !important;border-radius:0 !important;padding:8px 10px 4px 10px !important;background:rgba(10,25,49,0.98) !important;}
+html.is-popup h1{font-size:1.3rem !important;margin-top:2px !important;margin-bottom:2px !important;}
+html.is-popup .live{margin-top:2px !important;margin-bottom:3px !important;font-size:0.9rem !important;}
+html.is-popup .player-box{margin-top:3px !important;padding:6px !important;}
+html.is-popup .section-title{font-size:1.1rem !important;margin-bottom:4px !important;}
+html.is-popup .cc_recenttracks_list{margin-top:4px !important;margin-bottom:0 !important;min-height:90px !important;}
+html.is-popup .rs3-trackbox{min-height:90px !important;padding:8px !important;}
 @media (max-width:1200px){
   .page-layout{display:flex !important;flex-direction:column !important;gap:6px !important;max-width:100% !important;width:100% !important;padding:2px !important;overflow-x:hidden !important;}
   .meteo-side{width:100% !important;max-width:100% !important;position:static !important;transform:none !important;margin:0 !important;padding:4px 2px !important;}
@@ -128,7 +132,7 @@ html.is-popup .player-box{width:100% !important;max-width:100% !important;}
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v92_POPUP_BLU_SENZA_STEMMA';
+const CACHE_VERSION='v93_POPUP_CORTO';
 function apriNovita(){document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';document.getElementById('radioAudio').play().catch(()=>{});}
 function playNovita(id,el){document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
