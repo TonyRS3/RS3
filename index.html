@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v115 NO COVER MOBILE</title>
+<title>Radio Sistema 3 - v116 METEO NUOVO</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
@@ -90,7 +90,6 @@ html.is-popup .container{max-width:100% !important;margin:0 !important;border-ra
 .btn-novita,#novitaSection,.btn-popup{display:none !important;} 
 .page-layout{display:block !important;padding:0 !important;} 
 .container{max-width:100% !important;margin:0 !important;border-radius:0 !important;padding:16px 12px !important;grid-column:auto !important;}
-/* v115 - TOLTA COVER GRANDE SU MOBILE - RICHIESTA UTENTE */
 .logo-wrap{display:none !important;}
 h1{font-size:2.2rem !important;margin-top:10px !important;}
 }
@@ -124,7 +123,7 @@ h1{font-size:2.2rem !important;margin-top:10px !important;}
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v115_NO_COVER_MOBILE';
+const CACHE_VERSION='v116_METEO_OPENMETEO_PRUDENZA';
 function apriNovita(){document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';tryAutoPlay();}
 function playNovita(id,el){document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -217,21 +216,14 @@ function rebuildTrackBox(){
     if(parole.length>=3){
       const last2 = parole.slice(-2).join(' ');
       const firstPart = parole.slice(0,-2).join(' ');
-      if(/^[A-ZÀ-Ú]/.test(parole[parole.length-2]) && /^[A-ZÀ-Ú]/.test(parole[parole.length-1])){
-        artista = last2;
-        titolo = firstPart;
-      } else {
-        artista = last2;
-        titolo = firstPart;
-      }
+      artista = last2;
+      titolo = firstPart;
     } else if(parole.length===2){
       artista = parole[1];
       titolo = parole[0];
-      if(/^[A-Z]/.test(parole[0]) && /^[A-Z]/.test(parole[1]) && parole[0].length>2 && parole[1].length>2){
-        if(parole.length===2 && rawText.split(' ').length===2){
+      if(parole.length===2 && rawText.split(' ').length===2 && /^[A-Z]/.test(parole[0]) && /^[A-Z]/.test(parole[1])){
           artista = rawText;
           titolo = "";
-        }
       }
     } else {
       titolo = rawText;
@@ -271,10 +263,40 @@ if(list){const obs=new MutationObserver((muts)=>{if(_isRebuilding) return; for(l
 let _fastInterval=setInterval(rebuildTrackBox,300);
 setTimeout(()=>{clearInterval(_fastInterval); _fastInterval=setInterval(rebuildTrackBox,2000);},5000);
 const radioEl=document.getElementById('radioAudio'); let userPaused=false; let wasPlayingBeforeHide=false; function tryAutoPlay(){const a=document.getElementById('radioAudio'); a.play().then(()=>{isPlaying=true; vuPeakEl.textContent="LIVE"; vuPeakEl.style.color="#00ff2a";}).catch(()=>{});} radioEl.addEventListener('play',()=>{userPaused=false; wasPlayingBeforeHide=true;}); radioEl.addEventListener('pause',()=>{if(document.hidden){wasPlayingBeforeHide=true; return;} if(!userPaused && wasPlayingBeforeHide){setTimeout(()=>{tryAutoPlay();}, 800);}}); document.addEventListener('visibilitychange',()=>{if(!document.hidden && wasPlayingBeforeHide && radioEl.paused && !userPaused){setTimeout(()=>{tryAutoPlay();}, 500);}}); window.addEventListener('pagehide',()=>{wasPlayingBeforeHide=!radioEl.paused;}); window.addEventListener('pageshow',()=>{if(wasPlayingBeforeHide && radioEl.paused) tryAutoPlay();});
-const METEO_API_KEY="cf67ed7472bdfb3087a25f37627f5d74";
-const LEFT=[{q:"Torino,IT",label:"Torino"},{q:"Milano,IT",label:"Milano"},{q:"Venezia,IT",label:"Venezia"},{q:"Bologna,IT",label:"Bologna"},{q:"Firenze,IT",label:"Firenze"}];
-const RIGHT=[{q:"Roma,IT",label:"Roma"},{q:"Ancona,IT",label:"Ancona"},{q:"Napoli,IT",label:"Napoli"},{q:"Palermo,IT",label:"Palermo"},{q:"Brindisi,IT",label:"Brindisi"}];
-async function renderMeteo(cities,id){const grid=document.getElementById(id); let h=""; for(let c of cities){try{const r=await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${c.q}&appid=${METEO_API_KEY}&units=metric&lang=it&bust=${Date.now()}`,{cache:'no-store'});const d=await r.json();const temp=Math.round(d.main.temp);const icon=d.weather[0].icon;h+=`<div class="meteo-mini"><b>${c.label}</b><img src="https://openweathermap.org/img/wn/${icon}.png"><div class="temp">${temp}°C</div></div>`;}catch(e){h+=`<div class="meteo-mini"><b>${c.label}</b><div class="temp">--°</div></div>`;}}grid.innerHTML=h;}
+// v116 - METEO NUOVO OPEN-METEO SENZA CHIAVE - NON SI BLOCCA
+const CITIES_COORDS = {
+  "Torino": {lat:45.07, lon:7.68}, "Milano": {lat:45.46, lon:9.19}, "Venezia": {lat:45.44, lon:12.33},
+  "Bologna": {lat:44.49, lon:11.34}, "Firenze": {lat:43.77, lon:11.25},
+  "Roma": {lat:41.90, lon:12.49}, "Ancona": {lat:43.61, lon:13.51},
+  "Napoli": {lat:40.85, lon:14.26}, "Palermo": {lat:38.11, lon:13.36}, "Brindisi": {lat:40.63, lon:17.94}
+};
+const LEFT=[{label:"Torino"},{label:"Milano"},{label:"Venezia"},{label:"Bologna"},{label:"Firenze"}];
+const RIGHT=[{label:"Roma"},{label:"Ancona"},{label:"Napoli"},{label:"Palermo"},{label:"Brindisi"}];
+async function renderMeteo(cities,id){
+  const grid=document.getElementById(id); if(!grid) return;
+  let h="";
+  for(let c of cities){
+    try{
+      const coord=CITIES_COORDS[c.label];
+      const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coord.lat}&longitude=${coord.lon}&current=temperature_2m,weather_code&timezone=Europe%2FRome&_t=${Date.now()}`,{cache:'no-store'});
+      const d=await r.json();
+      const temp=Math.round(d.current.temperature_2m);
+      const code=d.current.weather_code;
+      let icon="01d";
+      if(code===1 || code===2) icon="02d";
+      if(code===3) icon="03d";
+      if(code===45 || code===48) icon="50d";
+      if(code>=51 && code<=67) icon="09d";
+      if(code>=71 && code<=77) icon="13d";
+      if(code>=80 && code<=82) icon="09d";
+      if(code>=95) icon="11d";
+      h+=`<div class="meteo-mini"><b>${c.label}</b><img src="https://openweathermap.org/img/wn/${icon}.png"><div class="temp">${temp}°C</div></div>`;
+    }catch(e){
+      h+=`<div class="meteo-mini"><b>${c.label}</b><div class="temp">--°</div></div>`;
+    }
+  }
+  grid.innerHTML=h;
+}
 function caricaMeteo(){if(document.documentElement.classList.contains('is-popup'))return;renderMeteo(LEFT,'meteo-left'); renderMeteo(RIGHT,'meteo-right');}
 const vuCanvas=document.getElementById('vuCanvas'); const vuCtx=vuCanvas.getContext('2d'); const vuPeakEl=document.getElementById('vuPeak'); let isPlaying=false,lL=0,lR=0; function draw(){const W=vuCanvas.width,H=vuCanvas.height;vuCtx.clearRect(0,0,W,H);vuCtx.fillStyle='#0a0a0a';vuCtx.fillRect(0,0,W,H);let bars=36,barW=W/bars,gap=1.5,rowH=H/2-2;let aL=Math.floor((lL/100)*bars);for(let i=0;i<bars;i++){let x=i*barW;let lit=i<aL;vuCtx.fillStyle=lit?(i<21?'#00ff2a':i<30?'#ffea00':'#ff1a1a'):'#1a1a1a';vuCtx.fillRect(x+gap,1+(rowH-(lit?rowH-1:rowH*0.4))/2,barW-gap*2,lit?rowH-1:rowH*0.4);}vuCtx.fillStyle='#333';vuCtx.fillRect(0,H/2-0.5,W,1);let aR=Math.floor((lR/100)*bars);for(let i=0;i<bars;i++){let x=i*barW;let lit=i<aR;vuCtx.fillStyle=lit?(i<21?'#00d4ff':i<30?'#ffea00':'#ff1a1a'):'#1a1a1a';vuCtx.fillRect(x+gap,H/2+1+(rowH-(lit?rowH-1:rowH*0.4))/2,barW-gap*2,lit?rowH-1:rowH*0.4);}requestAnimationFrame(draw);} function upd(){if(!isPlaying){lL+=(0-lL)*0.08;lR+=(0-lR)*0.08;return;}let base=40+Math.random()*45;let peak=Math.random()<0.18;let tL=peak?88+Math.random()*12:base+Math.random()*18;let tR=peak?85+Math.random()*15:base*0.9+Math.random()*20;lL+=(tL-lL)*0.38;lR+=(tR-lR)*0.34;}draw();setInterval(upd,70); radioEl.addEventListener('play',()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";}); radioEl.addEventListener('pause',()=>{isPlaying=false;vuPeakEl.textContent="STOP";vuPeakEl.style.color="#ff4444";});
 document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;
