@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v96 TITOLO DISTANZIATO</title>
+<title>Radio Sistema 3 - v97 FIX TAGLIO</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
@@ -39,11 +39,11 @@ h1{margin-top:20px;font-size:3rem;}
 audio{width:100%;max-width:340px;height:36px;}
 .btn-popup{margin-top:10px;background:#222;color:#ffd966;border:1px solid #ffd966;padding:8px 16px;border-radius:20px;font-weight:900;font-size:0.85rem;cursor:pointer;}
 .btn-popup:hover{background:#ffd966;color:#000;}
-.cc_recenttracks_list{margin-top:8px !important;max-width:400px !important;margin-left:auto !important;margin-right:auto !important;background:rgba(0,0,0,0.85) !important;padding:0 !important;border-radius:14px !important;min-height:106px !important;overflow:hidden !important;}
-.cc_recenttracks_list:not(.rs3-ready){background:rgba(0,0,0,0.85) !important;}
+.cc_recenttracks_list{margin-top:8px !important;max-width:400px !important;margin-left:auto !important;margin-right:auto !important;background:rgba(0,0,0,0.85) !important;padding:0 !important;border-radius:14px !important;min-height:115px !important;overflow:visible !important;}
+.cc_recenttracks_list:not(.rs3-ready){background:rgba(0,0,0,0.85) !important;min-height:115px !important;}
 .cc_recenttracks_list:not(.rs3-ready) *{display:none !important;}
 .cc_recenttracks_list.rs3-ready .rs3-trackbox{display:flex !important;}
-.rs3-trackbox{display:flex !important;flex-direction:row !important;flex-wrap:nowrap !important;align-items:center !important;gap:14px !important;padding:14px 12px !important;width:100% !important;min-height:110px !important;}
+.rs3-trackbox{display:flex !important;flex-direction:row !important;flex-wrap:nowrap !important;align-items:center !important;gap:14px !important;padding:14px 12px 16px 12px !important;width:100% !important;min-height:115px !important;}
 .rs3-cover{width:82px !important;height:82px !important;min-width:82px !important;max-width:82px !important;min-height:82px !important;max-height:82px !important;object-fit:cover !important;border-radius:8px !important;background:#000 !important;display:block !important;flex:0 0 82px !important;}
 .rs3-info{flex:1 !important;min-width:0 !important;display:flex !important;flex-direction:column !important;justify-content:center !important;text-align:left !important;color:white !important;font-size:0.92rem !important;line-height:1.4 !important;white-space:normal !important;overflow-wrap:anywhere !important;gap:8px !important;}
 .btn-novita{margin-top:20px;background:#ff0033;color:#fff;font-weight:900;padding:14px 26px;border:none;border-radius:50px;font-size:1.1rem;cursor:pointer;}
@@ -78,8 +78,8 @@ html.is-popup h1{font-size:1.3rem !important;margin-top:2px !important;margin-bo
 html.is-popup .live{margin-top:2px !important;margin-bottom:3px !important;font-size:0.9rem !important;}
 html.is-popup .player-box{margin-top:3px !important;padding:6px !important;}
 html.is-popup .section-title{font-size:1.1rem !important;margin-bottom:4px !important;}
-html.is-popup .cc_recenttracks_list{margin-top:4px !important;margin-bottom:0 !important;min-height:90px !important;}
-html.is-popup .rs3-trackbox{min-height:90px !important;padding:8px !important;}
+html.is-popup .cc_recenttracks_list{margin-top:4px !important;margin-bottom:0 !important;min-height:95px !important;}
+html.is-popup .rs3-trackbox{min-height:95px !important;padding:8px 8px 10px 8px !important;}
 @media (max-width:1200px){
   .page-layout{display:flex !important;flex-direction:column !important;gap:6px !important;max-width:100% !important;width:100% !important;padding:2px !important;overflow-x:hidden !important;}
   .meteo-side{width:100% !important;max-width:100% !important;position:static !important;transform:none !important;margin:0 !important;padding:4px 2px !important;}
@@ -134,7 +134,7 @@ html.is-popup .rs3-trackbox{min-height:90px !important;padding:8px !important;}
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v96_TITOLO_DISTANZIATO';
+const CACHE_VERSION='v97_FIX_TAGLIO';
 function apriNovita(){document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';document.getElementById('radioAudio').play().catch(()=>{});}
 function playNovita(id,el){document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -194,22 +194,30 @@ function pulisciTitolo(raw){
 }
 let _isRebuilding=false;
 let _lastRaw="";
+let _lastValidTrack="The Range - The Way It Is Bruce Hornsby";
 function rebuildTrackBox(){
   if(_isRebuilding) return;
   const wrap=document.querySelector('.cc_recenttracks_list'); if(!wrap)return;
   const rawHtml = wrap.innerHTML;
-  if(rawHtml.includes('rs3-trackbox') && rawHtml.length < 350) return;
+  if(rawHtml.includes('rs3-trackbox') && rawHtml.length < 400) return;
   let existingBox=wrap.querySelector('.rs3-trackbox'); 
-  let rawText="Radio Sistema 3 - Live"; 
+  let rawText=""; 
   let rawImg=getLogoAssoluto();
   let temp=document.createElement('div'); 
   temp.innerHTML=wrap.innerHTML; 
-  temp.querySelectorAll('img,a,.rs3-trackbox').forEach(el=>el.remove()); 
-  let txt=temp.innerText.trim(); 
+  temp.querySelectorAll('img,a,.rs3-trackbox,script,style').forEach(el=>el.remove()); 
+  let txt=temp.innerText.trim().split('\n').map(s=>s.trim()).filter(s=>s.length>2)[0] || "";
   if(txt.length>2) rawText=pulisciTitolo(txt);
-  if(!rawText || rawText.length<2) return;
+  if(!rawText || rawText.length<3) return;
+  // FILTRO: se è solo "Radio Sistema 3" o "Live" non aggiornare, tieni ultimo buono
+  const lower = rawText.toLowerCase();
+  if(lower.includes('radio sistema 3') && rawText.replace(/[^a-zA-Z0-9]/g,'').length < 20){
+    rawText = _lastValidTrack;
+  }
+  if(lower === 'live' || lower === '- live' || lower.length < 4) return;
   if(rawText === _lastRaw && existingBox) return;
   _lastRaw = rawText;
+  if(!lower.includes('radio sistema 3')) _lastValidTrack = rawText;
   _isRebuilding = true;
   let artista="", titolo="";
   if(rawText.includes(' - ')){
