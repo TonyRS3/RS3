@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v117 FIX POPUP DEFINITIVO</title>
+<title>Radio Sistema 3 - v117 FINAL</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
@@ -11,21 +11,12 @@ function getLogoAssoluto(){try{const base=window.location.href.substring(0,windo
 const BRANI_NOVITA=[{id:"ofywN3NgGqY",artista:"Sombr",titolo:"My body isn't ready"},{id:"PshqcQwshdU",artista:"Sfera Ebbasta",titolo:"Lontano"},{id:"2r1njyfmREA",artista:"SOFI TUKKER & OneRepublic",titolo:"TSUNAMI"},{id:"0xuFBG6o6EU",artista:"Gaia",titolo:"Senz'Allegria"},{id:"pzvhHsEqMzo",artista:"Marco Mengoni",titolo:"Giornate Perse"},{id:"fRIhCiUVaKs",artista:"Karol G",titolo:"Bby Wow"},{id:"z5qAtdZh5Uo",artista:"Giorgia",titolo:"SIAMO L'ECCEZIONE"},{id:"rSiBJ4JRTv4",artista:"Alfa & Gigi D'Alessio",titolo:"Genova E Napoli"},{id:"D3zkX-Am4o4",artista:"Madonna",titolo:"Danceteria"}];
 function normalizzaBrano(b){if(typeof b==='string')return{id:b,artista:'',titolo:b};return b;}
 const PLACEHOLDER_HTML=`<div style="text-align:center"><div style="color:#fff;font-weight:bold">Scegli un brano</div><div style="font-size:2rem">👇</div></div>`;
-// FIX POPUP DEFINITIVO
-window._rs3PopupWin = null;
+window._rs3Popup = null;
 function apriPopup(){
-  try{
-    var a = document.getElementById('radioAudio');
-    if(a){ a.pause(); }
-    localStorage.setItem('RS3_POPUP','1');
-  }catch(e){}
-  window._rs3PopupWin = window.open(window.location.pathname + '?popup=1','RadioSistema3Popup','width=380,height=460,resizable=yes,scrollbars=no');
-  var iv = setInterval(function(){
-    if(!window._rs3PopupWin || window._rs3PopupWin.closed){
-      clearInterval(iv);
-      try{ localStorage.removeItem('RS3_POPUP'); }catch(e){}
-    }
-  }, 800);
+  var a = document.getElementById('radioAudio');
+  if(a){ a.pause(); }
+  try{ localStorage.setItem('RS3_POPUP','1'); }catch(e){}
+  window._rs3Popup = window.open(window.location.pathname + '?popup=1','RadioSistema3Popup','width=380,height=460');
 }
 if(window.location.search.includes('popup=1')){document.documentElement.classList.add('is-popup');}
 </script>
@@ -138,7 +129,7 @@ h1{font-size:2.2rem !important;margin-top:10px !important;}
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v117_FIX_POPUP_DEFINITIVO';
+const CACHE_VERSION='v117_FINAL';
 function apriNovita(){document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';tryAutoPlay();}
 function playNovita(id,el){document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -277,19 +268,26 @@ let _fastInterval=setInterval(rebuildTrackBox,300);
 setTimeout(()=>{clearInterval(_fastInterval); _fastInterval=setInterval(rebuildTrackBox,2000);},5000);
 const radioEl=document.getElementById('radioAudio'); let userPaused=false; let wasPlayingBeforeHide=false; 
 function tryAutoPlay(){
-  try{ if(localStorage.getItem('RS3_POPUP')==='1') return; if(window._rs3PopupWin && !window._rs3PopupWin.closed) return; }catch(e){}
+  try{ if(localStorage.getItem('RS3_POPUP')==='1' && !document.documentElement.classList.contains('is-popup')) return; }catch(e){}
   const a=document.getElementById('radioAudio'); a.play().then(()=>{isPlaying=true; vuPeakEl.textContent="LIVE"; vuPeakEl.style.color="#00ff2a";}).catch(()=>{});} 
 radioEl.addEventListener('play',()=>{userPaused=false; wasPlayingBeforeHide=true;}); 
 radioEl.addEventListener('pause',()=>{
   if(document.hidden){wasPlayingBeforeHide=true; return;} 
-  try{ if(localStorage.getItem('RS3_POPUP')==='1') return; if(window._rs3PopupWin && !window._rs3PopupWin.closed) return; }catch(e){}
+  try{ if(localStorage.getItem('RS3_POPUP')==='1' && !document.documentElement.classList.contains('is-popup')){ return; } }catch(e){}
   if(!userPaused && wasPlayingBeforeHide){setTimeout(()=>{tryAutoPlay();}, 800);}}); 
 document.addEventListener('visibilitychange',()=>{
-  try{ if(localStorage.getItem('RS3_POPUP')==='1') return; if(window._rs3PopupWin && !window._rs3PopupWin.closed) return; }catch(e){}
+  try{ if(localStorage.getItem('RS3_POPUP')==='1' && !document.documentElement.classList.contains('is-popup')) return; }catch(e){}
   if(!document.hidden && wasPlayingBeforeHide && radioEl.paused && !userPaused){setTimeout(()=>{tryAutoPlay();}, 500);}}); 
 window.addEventListener('pagehide',()=>{wasPlayingBeforeHide=!radioEl.paused;}); 
 window.addEventListener('pageshow',()=>{if(wasPlayingBeforeHide && radioEl.paused) tryAutoPlay();});
-// v117 - METEO NUOVO OPEN-METEO SENZA CHIAVE
+// Quando chiudi popup, sblocca main
+setInterval(function(){
+  try{
+    if(window._rs3Popup && window._rs3Popup.closed){
+      localStorage.removeItem('RS3_POPUP');
+    }
+  }catch(e){}
+}, 1000);
 const CITIES_COORDS = {
   "Torino": {lat:45.07, lon:7.68}, "Milano": {lat:45.46, lon:9.19}, "Venezia": {lat:45.44, lon:12.33},
   "Bologna": {lat:44.49, lon:11.34}, "Firenze": {lat:43.77, lon:11.25},
