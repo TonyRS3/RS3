@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v110 SOLO MUSICA</title>
+<title>Radio Sistema 3 - v111 WHITELIST MUSICA</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
@@ -116,18 +116,23 @@ html.is-popup .container{max-width:100% !important;margin:0 !important;border-ra
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v110_SOLO_MUSICA_VERA';
+const CACHE_VERSION='v111_WHITELIST_MUSICA';
 function apriNovita(){document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';tryAutoPlay();}
 function playNovita(id,el){document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
 function renderNovita(){const c=document.getElementById('novitaList');if(c.dataset.done=="1")return;c.dataset.done="1";c.innerHTML=BRANI_NOVITA.map(b=>{const bb=normalizzaBrano(b);return `<div class="novita-row" onclick="playNovita('${bb.id}', this)"><img src="https://i.ytimg.com/vi/${bb.id}/hqdefault.jpg" style="width:50px;height:38px;border-radius:4px"><div><b style="font-size:0.9rem">${bb.artista}</b><br><span style="color:#aaa;font-size:.75rem">${bb.titolo}</span></div><div style="margin-left:auto;color:#ff0033">▶</div></div>`;}).join('');}
 function dedup(list){const v=new Set();return list.filter(n=>{const k=(n.title||'').toLowerCase().slice(0,60).trim();if(!k||v.has(k))return false;v.add(k);return true;});}
+// v111 WHITELIST MUSICA VERA
 function isMusicaVera(titolo){
   if(!titolo) return false;
   const t=titolo.toLowerCase();
-  const blacklist=["libro","romanzo","mondadori","agrippa","robert harris","einaudi","feltrinelli","biblioteca","scrittore","scrittrice","narrativa","saggio","poesia","cultura / libri"];
+  // BLACKLIST LIBRI
+  const blacklist=["libro","romanzo","narrativa","premio fiesole","agrippa","robert harris","mondadori","einaudi","feltrinelli","biblioteca","scrittore","scrittrice","poesia","saggio","under 40","visonà"];
   for(let b of blacklist){ if(t.includes(b)) return false; }
-  return true;
+  // WHITELIST MUSICA - deve contenere almeno una di queste
+  const whitelist=["musica","canzone","canzoni","singolo","album","concerto","tour","sanremo","cantante","artista","band","disco","hit","festival","dopofestival","controfestival","gialappa","joe dassin","dassin"];
+  for(let w of whitelist){ if(t.includes(w)) return true; }
+  return false; // se non ha parole musicali, scarta
 }
 async function fetchRSS_Ultra(url){
   const ts=Date.now(); const clean=url+(url.includes('?')?'&':'?')+'t='+ts;
@@ -167,10 +172,11 @@ async function caricaMusica(){
       box.innerHTML=prime4.map(n=>`<div class="news-item musica"><a href="${n.link}" target="_blank" rel="noopener"><span class="live-dot"></span>${n.title}</a><div style="font-size:0.70rem;color:#d8b4fe;margin-top:3px">Leggi su ${safeHost(n.link)} →</div></div>`).join(''); 
       if(t) t.textContent=new Date().toLocaleTimeString();
     } else {
-      box.innerHTML=`<div class="news-item musica"><a href="https://www.ansa.it/sito/notizie/cultura/musica/" target="_blank">• Sanremo 2026 - Tutte le novità</a><div style="font-size:0.70rem;color:#d8b4fe;margin-top:3px">Leggi su ansa.it →</div></div><div class="news-item musica"><a href="https://www.rockol.it/" target="_blank">• Nuovi album in uscita questa settimana</a><div style="font-size:0.70rem;color:#d8b4fe;margin-top:3px">Leggi su rockol.it →</div></div><div class="news-item musica"><a href="https://www.rollingstone.it/musica/" target="_blank">• Rolling Stone - Interviste esclusive</a><div style="font-size:0.70rem;color:#d8b4fe;margin-top:3px">Leggi su rollingstone.it →</div></div><div class="news-item musica"><a href="https://www.ansa.it/sito/notizie/cultura/musica/" target="_blank">• Classifiche FIMI - Top singoli</a><div style="font-size:0.70rem;color:#d8b4fe;margin-top:3px">Leggi su ansa.it →</div></div>`;
+      // Fallback SOLO musica vera, mai libri
+      box.innerHTML=`<div class="news-item musica"><a href="https://www.ansa.it/sito/notizie/cultura/musica/" target="_blank">• Sanremo 2026 - Gialappa's Controfestival</a><div style="font-size:0.70rem;color:#d8b4fe;margin-top:3px">Leggi su ansa.it →</div></div><div class="news-item musica"><a href="https://www.rockol.it/" target="_blank">• Julien Dassin canta le canzoni del padre Joe</a><div style="font-size:0.70rem;color:#d8b4fe;margin-top:3px">Leggi su rockol.it →</div></div><div class="news-item musica"><a href="https://www.rockol.it/" target="_blank">• Nuovi album in uscita questa settimana</a><div style="font-size:0.70rem;color:#d8b4fe;margin-top:3px">Leggi su rockol.it →</div></div><div class="news-item musica"><a href="https://www.rollingstone.it/musica/" target="_blank">• Rolling Stone - Interviste esclusive</a><div style="font-size:0.70rem;color:#d8b4fe;margin-top:3px">Leggi su rollingstone.it →</div></div>`;
     }
   }catch(e){
-    box.innerHTML=`<div class="news-item musica"><a href="https://www.rockol.it/" target="_blank">• Rockol - News musica</a><div style="font-size:0.70rem;color:#d8b4fe;margin-top:3px">Leggi su rockol.it →</div></div><div class="news-item musica"><a href="https://www.ansa.it/sito/notizie/cultura/musica/" target="_blank">• ANSA Musica - Ultime uscite</a><div style="font-size:0.70rem;color:#d8b4fe;margin-top:3px">Leggi su ansa.it →</div></div><div class="news-item musica"><a href="https://www.rollingstone.it/musica/" target="_blank">• Rolling Stone - Album</a><div style="font-size:0.70rem;color:#d8b4fe;margin-top:3px">Leggi su rollingstone.it →</div></div><div class="news-item musica"><a href="https://www.ansa.it/sito/notizie/cultura/musica/" target="_blank">• Tour e concerti 2026</a><div style="font-size:0.70rem;color:#d8b4fe;margin-top:3px">Leggi su ansa.it →</div></div>`;
+    box.innerHTML=`<div class="news-item musica"><a href="https://www.rockol.it/" target="_blank">• Rockol - News musica vera</a><div style="font-size:0.70rem;color:#d8b4fe;margin-top:3px">Leggi su rockol.it →</div></div>`;
   }
 }
 function pulisciTitolo(raw){let t=raw||""; t=t.replace(/Radio Sistema 3/gi,'').trim(); t=t.replace(/^\s*\d{1,2}:\d{2}(?::\d{2})?\s*(AM|PM)?\s*/i,'').trim(); t=t.replace(/^(AM|PM)\s*/i,'').trim(); t=t.replace(/^[-–—\s]+/,'').trim(); t=t.replace(/\s{2,}/g,' ').trim(); return t;}
