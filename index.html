@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v105 NOTIZIE LARGE</title>
+<title>Radio Sistema 3 - v106 BOX PICCOLI</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
@@ -21,8 +21,8 @@ body{font-family:Segoe UI,Arial,sans-serif;color:white;text-align:center;backgro
 .meteo-side{background:rgba(0,0,0,.85);border:1px solid rgba(255,217,102,.6);border-radius:14px;padding:6px 5px;position:sticky;top:6px;z-index:3;box-shadow:0 0 12px rgba(0,0,0,.8);}
 .meteo-side.left{width:150px;margin:0;grid-column:1;grid-row:1;}
 .meteo-side.center-left{width:150px;margin:0;background:rgba(0,0,0,.85);border:1px solid rgba(255,217,102,.6);border-radius:14px;padding:6px 5px;position:sticky;top:6px;z-index:3;grid-column:2;grid-row:1;}
-.meteo-side.right{width:310px;margin-left:0;transform:none;background:transparent;border:none;box-shadow:none;padding:0;position:sticky;top:6px;display:flex;flex-direction:column;gap:12px;grid-column:4;grid-row:1 / span 3;}
-.left-double-wide{grid-column:1 / span 2;grid-row:2;width:308px;display:flex;flex-direction:column;gap:12px;position:sticky;top:290px;z-index:2;}
+.meteo-side.right{width:310px;margin-left:0;background:transparent;border:none;box-shadow:none;padding:0;position:sticky;top:6px;display:flex;flex-direction:column;gap:12px;grid-column:4;grid-row:1 / span 3;}
+.left-double-wide{grid-column:1 / span 2;grid-row:2;width:308px;display:flex;flex-direction:column;gap:8px;position:sticky;top:260px;z-index:2;}
 .meteo-side-title{font-size:0.70rem;color:#ffd966;font-weight:900;letter-spacing:0.7px;margin-bottom:2px;text-align:center;}
 .meteo-side-grid{display:flex;flex-direction:column;gap:4px;}
 .meteo-mini{background:rgba(255,255,255,.10);border-radius:8px;padding:5px 7px;border:1px solid rgba(255,255,255,.14);display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:4px;min-height:28px;}
@@ -62,22 +62,24 @@ audio{width:100%;max-width:340px;height:36px;}
 .ch-soul{background:#7b1fa2;color:#fff}
 .ch-btn.active{outline:3px solid #ffe600;transform:scale(1.05)}
 .ch-btn.blocked{opacity:0.35;pointer-events:none;filter:grayscale(80%);}
-.news-box-side{background:rgba(0,0,0,.92);border:1px solid #ff0033;border-radius:12px;padding:14px;text-align:left;width:100%;min-height:220px;}
+.news-box-side{background:rgba(0,0,0,.92);border:1px solid #ff0033;border-radius:12px;padding:14px;text-align:left;width:100%;}
+.news-box-side.right-box{min-height:220px;}
 .news-title{font-size:0.85rem;color:#ff4444;font-weight:900;margin-bottom:10px;}
 .news-title.calcio{color:#00d4ff;}
 .news-box-side.calcio{border-color:#00d4ff;}
-.news-item{font-size:1.05rem !important;line-height:1.4 !important;margin-bottom:14px !important;background:rgba(255,255,255,.07);border-radius:8px;padding:10px 12px !important;border-left:4px solid #ff0033 !important;}
+/* BOX PICCOLI MUSICA - V106 FIX */
+.news-box-side.musica{border-color:#c084fc;background:linear-gradient(180deg,rgba(168,85,247,.22),rgba(0,0,0,.95));box-shadow:0 0 15px rgba(192,132,252,.25);min-height:auto !important;padding:10px 12px !important;}
+.news-box-side.concerti{border-color:#a3e635;background:linear-gradient(180deg,rgba(132,204,2,.18),rgba(0,0,0,.95));box-shadow:0 0 15px rgba(163,230,53,.20);min-height:auto !important;padding:10px 12px !important;}
+.news-title.musica{color:#e9d5ff;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px !important;font-size:0.80rem !important;}
+.news-title.concerti{color:#d9f99d;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px !important;font-size:0.80rem !important;}
+.news-item{font-size:1.05rem !important;line-height:1.4 !important;margin-bottom:12px !important;background:rgba(255,255,255,.07);border-radius:8px;padding:10px 12px !important;border-left:4px solid #ff0033 !important;}
 .news-item.calcio{border-left-color:#00d4ff !important;}
 .news-item a{color:#ffd966;text-decoration:none;display:block;font-weight:600;cursor:pointer;}
 .news-item.calcio a{color:#aee8ff;}
 .news-item a:hover{color:#fff !important;text-decoration:underline !important;}
-.news-box-side.musica{border-color:#c084fc;background:linear-gradient(180deg,rgba(168,85,247,.22),rgba(0,0,0,.95));box-shadow:0 0 15px rgba(192,132,252,.25);}
-.news-title.musica{color:#e9d5ff;display:flex;justify-content:space-between;align-items:center;}
-.news-box-side.concerti{border-color:#a3e635;background:linear-gradient(180deg,rgba(132,204,2,.18),rgba(0,0,0,.95));box-shadow:0 0 15px rgba(163,230,53,.20);}
-.news-title.concerti{color:#d9f99d;display:flex;justify-content:space-between;align-items:center;}
-.news-item.musica{border-left-color:#c084fc !important;}
+.news-item.musica{border-left-color:#c084fc !important;margin-bottom:0 !important;font-size:0.95rem !important;padding:8px 10px !important;}
 .news-item.musica a{color:#f5f3ff;}
-.news-item.concerti{border-left-color:#a3e635 !important;}
+.news-item.concerti{border-left-color:#a3e635 !important;margin-bottom:0 !important;font-size:0.95rem !important;padding:8px 10px !important;}
 .news-item.concerti a{color:#ecfccb;}
 .live-dot{width:7px;height:7px;background:#ff0033;border-radius:50%;display:inline-block;margin-right:6px;animation:dotPulse 1.2s infinite;}
 @keyframes dotPulse{0%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.5}100%{transform:scale(1);opacity:1}}
@@ -110,15 +112,15 @@ html.is-popup .container{max-width:100% !important;margin:0 !important;border-ra
     <button class="btn-novita" id="btnNovita" onclick="apriNovita()">▶ RADIO S3 PLAYLIST</button>
     <div id="novitaSection"><div id="novitaPlayerMain"></div><div id="novitaList"></div><button style="background:#333;color:#fff;margin-top:12px;padding:8px 18px;border:none;border-radius:20px;cursor:pointer" onclick="chiudiNovita()">X Chiudi</button></div>
   </div>
-  <div class="meteo-side right"><div class="news-box-side"><div class="news-title">CRONACA NAZIONALE <span id="newsTime" style="font-size:0.6rem;color:#aaa"></span></div><div id="newsListNord">Carico...</div></div><div class="news-box-side calcio"><div class="news-title calcio">SPORT CALCIO <span id="calcioTime" style="font-size:0.6rem;color:#aaa"></span></div><div id="newsListCalcio">Carico...</div></div></div>
+  <div class="meteo-side right"><div class="news-box-side right-box"><div class="news-title">CRONACA NAZIONALE <span id="newsTime" style="font-size:0.6rem;color:#aaa"></span></div><div id="newsListNord">Carico...</div></div><div class="news-box-side right-box calcio"><div class="news-title calcio">SPORT CALCIO <span id="calcioTime" style="font-size:0.6rem;color:#aaa"></span></div><div id="newsListCalcio">Carico...</div></div></div>
   <div class="left-double-wide">
+    <div class="news-box-side musica"><div class="news-title musica">🎸 CONCERTI LIVE <span style="font-size:0.55rem;opacity:.7" id="concertiTime"></span></div><div id="newsConcerti">Carico tour...</div></div>
     <div class="news-box-side musica"><div class="news-title musica">🎤 MUSICA <span style="font-size:0.55rem;opacity:.7" id="musicaTime"></span></div><div id="newsMusica">Carico hits...</div></div>
-    <div class="news-box-side concerti"><div class="news-title concerti">🎸 CONCERTI LIVE <span style="font-size:0.55rem;opacity:.7" id="concertiTime"></span></div><div id="newsConcerti">Carico tour...</div></div>
   </div>
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v105_LARGE_CLICK';
+const CACHE_VERSION='v106_BOX_PICCOLI';
 function apriNovita(){document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';tryAutoPlay();}
 function playNovita(id,el){document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -134,14 +136,11 @@ async function fetchRSS_Ultra(url){
   for(let fn of tries){try{const xmlText=await Promise.race([fn(), new Promise((_,rej)=>setTimeout(()=>rej('to'),4000))]); if(!xmlText||!xmlText.includes('<item'))continue; const xml=new DOMParser().parseFromString(xmlText,"text/xml"); const items=[...xml.querySelectorAll("item")].slice(0,6); if(items.length)return items.map(it=>({title:it.querySelector("title")?.textContent||"",link:it.querySelector("link")?.textContent||"#"}));}catch(e){continue;}} return null;
 }
 async function fetchMulti(urls){const all=[]; for(let u of urls){try{const r=await fetchRSS_Ultra(u);if(r)all.push(...r);}catch(e){}} const uniq=dedup(all); if(uniq.length>4){const prime=uniq.slice(0,2);let resto=uniq.slice(2);for(let i=resto.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[resto[i],resto[j]]=[resto[j],resto[i]];}return [...prime,...resto.slice(0,2)];} return uniq.slice(0,4);}
-
 function safeHost(link){try{return new URL(link).hostname.replace('www.','');}catch(e){return 'sito originale';}}
-
 async function caricaCronaca(){const box=document.getElementById('newsListNord'); const t=document.getElementById('newsTime'); try{const notizie=await fetchMulti(['https://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml','https://www.ansa.it/sito/notizie/topnews/topnews_rss.xml']); if(notizie.length){box.innerHTML=notizie.map(n=>`<div class="news-item"><a href="${n.link}" target="_blank" rel="noopener">${n.title}</a><div style="font-size:0.75rem;color:#aaa;margin-top:4px">Leggi su ${safeHost(n.link)} →</div></div>`).join(''); if(t) t.textContent=new Date().toLocaleTimeString();}}catch(e){}}
 async function caricaCalcio(){const box=document.getElementById('newsListCalcio'); const t=document.getElementById('calcioTime'); try{const notizie=await fetchMulti(['https://www.tuttomercatoweb.com/rss/','https://www.ansa.it/sito/notizie/sport/calcio/calcio_rss.xml']); if(notizie.length){box.innerHTML=notizie.map(n=>`<div class="news-item calcio"><a href="${n.link}" target="_blank" rel="noopener">${n.title}</a><div style="font-size:0.75rem;color:#88ccee;margin-top:4px">Leggi su ${safeHost(n.link)} →</div></div>`).join(''); if(t) t.textContent=new Date().toLocaleTimeString();}}catch(e){}}
-async function caricaMusica(){const box=document.getElementById('newsMusica'); const t=document.getElementById('musicaTime'); try{const notizie=await fetchMulti(['https://www.ansa.it/sito/notizie/cultura/musica/musica_rss.xml','https://www.ansa.it/sito/notizie/cultura/cultura_rss.xml']); if(notizie.length && notizie[0].link!="#"){box.innerHTML=notizie.map(n=>`<div class="news-item musica"><a href="${n.link}" target="_blank" rel="noopener"><span class="live-dot"></span>${n.title}</a><div style="font-size:0.75rem;color:#d8b4fe;margin-top:4px">Leggi su ${safeHost(n.link)} →</div></div>`).join(''); if(t) t.textContent=new Date().toLocaleTimeString();} else {box.innerHTML=`<div class="news-item musica"><a href="https://www.ansa.it/sito/notizie/cultura/musica/" target="_blank" rel="noopener">• Vai a ANSA Musica - Ultime notizie</a><div style="font-size:0.75rem;color:#d8b4fe;margin-top:4px">Leggi su ansa.it →</div></div>`;}}catch(e){box.innerHTML=`<div class="news-item musica"><a href="https://www.ansa.it/sito/notizie/cultura/musica/" target="_blank" rel="noopener">• ANSA Musica</a></div>`;}}
-async function caricaConcerti(){const box=document.getElementById('newsConcerti'); const t=document.getElementById('concertiTime'); try{const notizie=await fetchMulti(['https://www.ansa.it/sito/notizie/cultura/musica/musica_rss.xml']); if(notizie.length){box.innerHTML=notizie.map(n=>`<div class="news-item concerti"><a href="${n.link}" target="_blank" rel="noopener">• ${n.title}</a><div style="font-size:0.75rem;color:#a3e635;margin-top:4px">Leggi su ${safeHost(n.link)} →</div></div>`).join(''); if(t) t.textContent=new Date().toLocaleTimeString();} else {box.innerHTML=`<div class="news-item concerti"><a href="https://www.rockol.it/" target="_blank" rel="noopener">• Tutti i concerti su Rockol</a><div style="font-size:0.75rem;color:#a3e635;margin-top:4px">Leggi su rockol.it →</div></div>`;}}catch(e){box.innerHTML=`<div class="news-item concerti"><a href="https://www.rockol.it/" target="_blank" rel="noopener">• Concerti Live</a></div>`;}}
-
+async function caricaMusica(){const box=document.getElementById('newsMusica'); const t=document.getElementById('musicaTime'); try{const notizie=await fetchMulti(['https://www.ansa.it/sito/notizie/cultura/musica/musica_rss.xml']); if(notizie.length && notizie[0].link!="#"){box.innerHTML=notizie.map(n=>`<div class="news-item musica"><a href="${n.link}" target="_blank" rel="noopener"><span class="live-dot"></span>${n.title}</a><div style="font-size:0.70rem;color:#d8b4fe;margin-top:3px">Leggi su ${safeHost(n.link)} →</div></div>`).join(''); if(t) t.textContent=new Date().toLocaleTimeString();} else {box.innerHTML=`<div class="news-item musica"><a href="https://www.ansa.it/sito/notizie/cultura/musica/" target="_blank" rel="noopener">• ANSA Musica</a><div style="font-size:0.70rem;color:#d8b4fe;margin-top:3px">Leggi su ansa.it →</div></div>`;}}catch(e){box.innerHTML=`<div class="news-item musica"><a href="https://www.ansa.it/sito/notizie/cultura/musica/" target="_blank" rel="noopener">• ANSA Musica</a></div>`;}}
+async function caricaConcerti(){const box=document.getElementById('newsConcerti'); const t=document.getElementById('concertiTime'); try{const notizie=await fetchMulti(['https://www.ansa.it/sito/notizie/cultura/musica/musica_rss.xml']); if(notizie.length){box.innerHTML=notizie.map(n=>`<div class="news-item musica"><a href="${n.link}" target="_blank" rel="noopener">• ${n.title}</a><div style="font-size:0.70rem;color:#a3e635;margin-top:3px">Leggi su ${safeHost(n.link)} →</div></div>`).join(''); if(t) t.textContent=new Date().toLocaleTimeString();} else {box.innerHTML=`<div class="news-item musica"><a href="https://www.rockol.it/" target="_blank" rel="noopener">• Tutti i concerti su Rockol</a><div style="font-size:0.70rem;color:#a3e635;margin-top:3px">Leggi su rockol.it →</div></div>`;}}catch(e){box.innerHTML=`<div class="news-item musica"><a href="https://www.rockol.it/" target="_blank" rel="noopener">• Concerti Live</a></div>`;}}
 function pulisciTitolo(raw){let t=raw||""; t=t.replace(/Radio Sistema 3/gi,'').trim(); t=t.replace(/^\s*\d{1,2}:\d{2}(?::\d{2})?\s*(AM|PM)?\s*/i,'').trim(); t=t.replace(/^(AM|PM)\s*/i,'').trim(); t=t.replace(/^[-–—\s]+/,'').trim(); t=t.replace(/\s{2,}/g,' ').trim(); return t;}
 function updateMediaSession(artista,titolo){if(!('mediaSession' in navigator)) return; try{const logo=getLogoAssoluto(); navigator.mediaSession.metadata=new MediaMetadata({title:titolo||'Radio Sistema 3',artist:artista||'Live',album:'Radio Sistema 3',artwork:[{src:logo,sizes:'512x512',type:'image/jpeg'},{src:logo,sizes:'256x256',type:'image/jpeg'}]}); navigator.mediaSession.setActionHandler('play',()=>{tryAutoPlay();}); navigator.mediaSession.setActionHandler('pause',()=>{document.getElementById('radioAudio').pause();});}catch(e){}}
 let _isRebuilding=false; let _lastRaw=""; let _lastValidTrack="Lucio Dalla - Cara";
