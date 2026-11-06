@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v117 FINAL</title>
+<title>Radio Sistema 3 - v118 POPUP PERFETTO</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
@@ -129,7 +129,7 @@ h1{font-size:2.2rem !important;margin-top:10px !important;}
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v117_FINAL';
+const CACHE_VERSION='v118_POPUP_PERFETTO';
 function apriNovita(){document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';tryAutoPlay();}
 function playNovita(id,el){document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -280,14 +280,19 @@ document.addEventListener('visibilitychange',()=>{
   if(!document.hidden && wasPlayingBeforeHide && radioEl.paused && !userPaused){setTimeout(()=>{tryAutoPlay();}, 500);}}); 
 window.addEventListener('pagehide',()=>{wasPlayingBeforeHide=!radioEl.paused;}); 
 window.addEventListener('pageshow',()=>{if(wasPlayingBeforeHide && radioEl.paused) tryAutoPlay();});
-// Quando chiudi popup, sblocca main
+// Quando chiudi popup, sblocca e riattacca grande
 setInterval(function(){
   try{
     if(window._rs3Popup && window._rs3Popup.closed){
       localStorage.removeItem('RS3_POPUP');
+      window._rs3Popup = null;
+      var a = document.getElementById('radioAudio');
+      if(a && a.paused && !document.documentElement.classList.contains('is-popup')){
+        a.play().catch(()=>{});
+      }
     }
   }catch(e){}
-}, 1000);
+}, 800);
 const CITIES_COORDS = {
   "Torino": {lat:45.07, lon:7.68}, "Milano": {lat:45.46, lon:9.19}, "Venezia": {lat:45.44, lon:12.33},
   "Bologna": {lat:44.49, lon:11.34}, "Firenze": {lat:43.77, lon:11.25},
