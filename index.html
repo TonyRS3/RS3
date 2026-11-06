@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v90 MOBILE SENZA POPUP</title>
+<title>Radio Sistema 3 - v91 POPUP PERFETTO</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
@@ -11,7 +11,8 @@ function getLogoAssoluto(){try{const base=window.location.href.substring(0,windo
 const BRANI_NOVITA=[{id:"ofywN3NgGqY",artista:"Sombr",titolo:"My body isn't ready"},{id:"PshqcQwshdU",artista:"Sfera Ebbasta",titolo:"Lontano"},{id:"2r1njyfmREA",artista:"SOFI TUKKER & OneRepublic",titolo:"TSUNAMI"},{id:"0xuFBG6o6EU",artista:"Gaia",titolo:"Senz'Allegria"},{id:"pzvhHsEqMzo",artista:"Marco Mengoni",titolo:"Giornate Perse"},{id:"fRIhCiUVaKs",artista:"Karol G",titolo:"Bby Wow"},{id:"z5qAtdZh5Uo",artista:"Giorgia",titolo:"SIAMO L'ECCEZIONE"},{id:"rSiBJ4JRTv4",artista:"Alfa & Gigi D'Alessio",titolo:"Genova E Napoli"},{id:"D3zkX-Am4o4",artista:"Madonna",titolo:"Danceteria"}];
 function normalizzaBrano(b){if(typeof b==='string')return{id:b,artista:'',titolo:b};return b;}
 const PLACEHOLDER_HTML=`<div style="text-align:center"><div style="color:#fff;font-weight:bold">Scegli un brano</div><div style="font-size:2rem">👇</div></div>`;
-function apriPopup(){window.open(window.location.href,'RadioSistema3Popup','width=420,height=620,resizable=yes,scrollbars=no');}
+function apriPopup(){window.open(window.location.pathname + '?popup=1','RadioSistema3Popup','width=380,height=620,resizable=yes,scrollbars=no');}
+if(window.location.search.includes('popup=1')){document.documentElement.classList.add('is-popup');}
 </script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -66,6 +67,14 @@ audio{width:100%;max-width:340px;height:36px;}
 .news-item a{color:#ffd966;text-decoration:none;display:block;}
 .news-item.calcio a{color:#aee8ff;}
 .footer-copy{margin-top:20px;padding:16px 10px;text-align:center;font-size:0.85rem;color:#ddd;background:rgba(0,0,0,0.85);border-top:1px solid rgba(255,255,255,0.15);letter-spacing:0.3px;}
+/* POPUP PERFETTO */
+html.is-popup body{background:#000 !important;}
+html.is-popup .page-layout{display:block !important;max-width:100% !important;padding:0 !important;}
+html.is-popup .meteo-side, html.is-popup .meteo-side.right, html.is-popup .news-box-side, html.is-popup .btn-novita, html.is-popup #novitaSection, html.is-popup .footer-copy, html.is-popup .btn-popup{display:none !important;}
+html.is-popup .container{max-width:100% !important;margin:0 !important;border-radius:0 !important;padding:14px 10px !important;background:rgba(0,0,0,0.95) !important;}
+html.is-popup .logo{width:150px !important;height:150px !important;}
+html.is-popup h1{font-size:1.5rem !important;margin-top:10px !important;}
+html.is-popup .player-box{width:100% !important;max-width:100% !important;}
 @media (max-width:1200px){
   .page-layout{display:flex !important;flex-direction:column !important;gap:6px !important;max-width:100% !important;width:100% !important;padding:2px !important;overflow-x:hidden !important;}
   .meteo-side{width:100% !important;max-width:100% !important;position:static !important;transform:none !important;margin:0 !important;padding:4px 2px !important;}
@@ -80,6 +89,7 @@ audio{width:100%;max-width:340px;height:36px;}
   .page-layout{display:block !important;padding:0 !important;max-width:100% !important;}
   .container{max-width:100% !important;margin:0 !important;border-radius:0 !important;padding:16px 12px !important;}
   .footer-copy{font-size:0.75rem !important;padding:12px 8px !important;}
+  html.is-popup .btn-popup{display:none !important;}
 }
 </style>
 </head>
@@ -120,7 +130,7 @@ audio{width:100%;max-width:340px;height:36px;}
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v90_MOBILE_SENZA_POPUP';
+const CACHE_VERSION='v91_POPUP_PERFETTO';
 function apriNovita(){document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';document.getElementById('radioAudio').play().catch(()=>{});}
 function playNovita(id,el){document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -247,7 +257,7 @@ const METEO_API_KEY="cf67ed7472bdfb3087a25f37627f5d74";
 const LEFT=[{q:"Torino,IT",label:"Torino"},{q:"Milano,IT",label:"Milano"},{q:"Venezia,IT",label:"Venezia"},{q:"Bologna,IT",label:"Bologna"},{q:"Firenze,IT",label:"Firenze"}];
 const RIGHT=[{q:"Roma,IT",label:"Roma"},{q:"Ancona,IT",label:"Ancona"},{q:"Napoli,IT",label:"Napoli"},{q:"Palermo,IT",label:"Palermo"},{q:"Brindisi,IT",label:"Brindisi"}];
 async function renderMeteo(cities,id){const grid=document.getElementById(id); let h=""; for(let c of cities){try{const r=await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${c.q}&appid=${METEO_API_KEY}&units=metric&lang=it&bust=${Date.now()}`,{cache:'no-store'});const d=await r.json();const temp=Math.round(d.main.temp);const icon=d.weather[0].icon;h+=`<div class="meteo-mini"><b>${c.label}</b><img src="https://openweathermap.org/img/wn/${icon}.png"><div class="temp">${temp}°C</div></div>`;}catch(e){h+=`<div class="meteo-mini"><b>${c.label}</b><div class="temp">--°</div></div>`;}}grid.innerHTML=h;}
-function caricaMeteo(){renderMeteo(LEFT,'meteo-left'); renderMeteo(RIGHT,'meteo-right');}
+function caricaMeteo(){if(document.documentElement.classList.contains('is-popup'))return;renderMeteo(LEFT,'meteo-left'); renderMeteo(RIGHT,'meteo-right');}
 const vuCanvas=document.getElementById('vuCanvas'); const vuCtx=vuCanvas.getContext('2d'); const radioEl=document.getElementById('radioAudio'); const vuPeakEl=document.getElementById('vuPeak');
 let isPlaying=false,lL=0,lR=0;
 function draw(){const W=vuCanvas.width,H=vuCanvas.height;vuCtx.clearRect(0,0,W,H);vuCtx.fillStyle='#0a0a0a';vuCtx.fillRect(0,0,W,H);let bars=36,barW=W/bars,gap=1.5,rowH=H/2-2;let aL=Math.floor((lL/100)*bars);for(let i=0;i<bars;i++){let x=i*barW;let lit=i<aL;vuCtx.fillStyle=lit?(i<21?'#00ff2a':i<30?'#ffea00':'#ff1a1a'):'#1a1a1a';vuCtx.fillRect(x+gap,1+(rowH-(lit?rowH-1:rowH*0.4))/2,barW-gap*2,lit?rowH-1:rowH*0.4);}vuCtx.fillStyle='#333';vuCtx.fillRect(0,H/2-0.5,W,1);let aR=Math.floor((lR/100)*bars);for(let i=0;i<bars;i++){let x=i*barW;let lit=i<aR;vuCtx.fillStyle=lit?(i<21?'#00d4ff':i<30?'#ffea00':'#ff1a1a'):'#1a1a1a';vuCtx.fillRect(x+gap,H/2+1+(rowH-(lit?rowH-1:rowH*0.4))/2,barW-gap*2,lit?rowH-1:rowH*0.4);}requestAnimationFrame(draw);}
@@ -255,8 +265,8 @@ function upd(){if(!isPlaying){lL+=(0-lL)*0.08;lR+=(0-lR)*0.08;return;}let base=4
 radioEl.addEventListener('play',()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";});
 radioEl.addEventListener('pause',()=>{isPlaying=false;vuPeakEl.textContent="STOP";vuPeakEl.style.color="#ff4444";});
 document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;
-document.addEventListener('DOMContentLoaded',()=>{setTimeout(rebuildTrackBox,800);caricaMeteo();caricaCronaca();caricaCalcio();setInterval(caricaMeteo,3600000);setInterval(caricaCronaca,90000);setInterval(caricaCalcio,60000);});
-if(document.readyState!=='loading'){caricaMeteo();caricaCronaca();caricaCalcio();}
+document.addEventListener('DOMContentLoaded',()=>{setTimeout(rebuildTrackBox,800);caricaMeteo();if(!document.documentElement.classList.contains('is-popup')){caricaCronaca();caricaCalcio();setInterval(caricaCronaca,90000);setInterval(caricaCalcio,60000);}setInterval(caricaMeteo,3600000);});
+if(document.readyState!=='loading'){caricaMeteo();if(!document.documentElement.classList.contains('is-popup')){caricaCronaca();caricaCalcio();}}
 </script>
 </body>
 </html>
