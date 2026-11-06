@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v84 MOBILE PULITO + BRANO FIX</title>
+<title>Radio Sistema 3 - v85 FIX TREMA PC</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
@@ -112,7 +112,7 @@ audio{width:100%;max-width:340px;height:36px;}
   </div>
 </div>
 <script>
-const CACHE_VERSION='v84_MOBILE_PULITO_BRANO_FIX';
+const CACHE_VERSION='v85_FIX_TREMA';
 function apriNovita(){document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';document.getElementById('radioAudio').play().catch(()=>{});}
 function playNovita(id,el){document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -166,23 +166,29 @@ function pulisciTitolo(raw){
   t = t.replace(/\s{2,}/g,' ').trim();
   if(!t.includes(' - ')){
     const m = t.match(/^(.+?)\s+([A-ZÀ-ÿ][a-zà-ÿ]+\s+[A-ZÀ-ÿ][a-zà-ÿ]+)$/);
-    if(m){
-      t = m[2] + ' - ' + m[1];
-    }
+    if(m){ t = m[2] + ' - ' + m[1]; }
   }
   return t;
 }
+let _isRebuilding=false;
+let _lastRaw="";
 function rebuildTrackBox(){
+  if(_isRebuilding) return;
   const wrap=document.querySelector('.cc_recenttracks_list'); if(!wrap)return;
+  const rawHtml = wrap.innerHTML;
+  if(rawHtml.includes('rs3-trackbox') && rawHtml.length < 350) return;
   let existingBox=wrap.querySelector('.rs3-trackbox'); 
   let rawText="Radio Sistema 3 - Live"; 
   let rawImg=getLogoAssoluto();
   let temp=document.createElement('div'); 
   temp.innerHTML=wrap.innerHTML; 
-  temp.querySelectorAll('img,a').forEach(el=>el.remove()); 
+  temp.querySelectorAll('img,a,.rs3-trackbox').forEach(el=>el.remove()); 
   let txt=temp.innerText.trim(); 
   if(txt.length>2) rawText=pulisciTitolo(txt);
-  if(rawText.length<2) rawText="Radio Sistema 3 - Live";
+  if(!rawText || rawText.length<2) return;
+  if(rawText === _lastRaw && existingBox) return;
+  _lastRaw = rawText;
+  _isRebuilding = true;
   let artista="", titolo="";
   if(rawText.includes(' - ')){
     const p=rawText.split(' - ');
@@ -201,6 +207,7 @@ function rebuildTrackBox(){
     } else {
       info.textContent=titolo;
     }
+    info.dataset.lastText=rawText;
     b.appendChild(img);b.appendChild(info);wrap.appendChild(b);
   } else {
     const info=existingBox.querySelector('.rs3-info');
@@ -212,11 +219,22 @@ function rebuildTrackBox(){
       }
       info.dataset.lastText=rawText;
     }
-    const imgEl=existingBox.querySelector('.rs3-cover');
-    if(imgEl && imgEl.src!==rawImg) imgEl.src=rawImg;
   }
+  setTimeout(()=>{_isRebuilding=false;}, 400);
 }
-const list=document.querySelector('.cc_recenttracks_list'); if(list){new MutationObserver(()=>setTimeout(rebuildTrackBox,50)).observe(list,{childList:true,subtree:true}); setInterval(rebuildTrackBox,1500);}
+const list=document.querySelector('.cc_recenttracks_list'); 
+if(list){
+  const obs = new MutationObserver((muts)=>{
+    if(_isRebuilding) return;
+    for(let m of muts){
+      if(m.target && m.target.closest && m.target.closest('.rs3-trackbox')) return;
+      if(m.target && m.target.classList && m.target.classList.contains('rs3-trackbox')) return;
+    }
+    setTimeout(rebuildTrackBox,150);
+  });
+  obs.observe(list,{childList:true,subtree:true});
+}
+setInterval(rebuildTrackBox,2000);
 const METEO_API_KEY="cf67ed7472bdfb3087a25f37627f5d74";
 const LEFT=[{q:"Torino,IT",label:"Torino"},{q:"Milano,IT",label:"Milano"},{q:"Venezia,IT",label:"Venezia"},{q:"Bologna,IT",label:"Bologna"},{q:"Firenze,IT",label:"Firenze"}];
 const RIGHT=[{q:"Roma,IT",label:"Roma"},{q:"Ancona,IT",label:"Ancona"},{q:"Napoli,IT",label:"Napoli"},{q:"Palermo,IT",label:"Palermo"},{q:"Brindisi,IT",label:"Brindisi"}];
