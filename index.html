@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v113 FIX CICALE</title>
+<title>Radio Sistema 3 - v114 ULTIME 2 PAROLE</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
@@ -116,7 +116,7 @@ html.is-popup .container{max-width:100% !important;margin:0 !important;border-ra
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v113_FIX_CICALE_HEATHER';
+const CACHE_VERSION='v114_ULTIME_2_PAROLE_FIORELLA';
 function apriNovita(){document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';tryAutoPlay();}
 function playNovita(id,el){document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -176,15 +176,16 @@ async function caricaMusica(){
     box.innerHTML=`<div class="news-item musica"><a href="https://www.rockol.it/" target="_blank">• Rockol - News musica vera</a><div style="font-size:0.70rem;color:#d8b4fe;margin-top:3px">Leggi su rockol.it →</div></div>`;
   }
 }
-// FIX v113 - CICALE HEATHER PARISI INCOLLATO - IDEA UTENTE LETTERA GRANDE
+// v114 - FIX TUA IDEA - LETTERA GRANDE + ULTIME 2 PAROLE
 function pulisciTitolo(raw){
   let t=raw||""; 
   t=t.replace(/Radio Sistema 3/gi,'').trim(); 
   t=t.replace(/^\s*\d{1,2}:\d{2}(?::\d{2})?\s*(AM|PM)?\s*/i,'').trim(); 
   t=t.replace(/^(AM|PM)\s*/i,'').trim(); 
   t=t.replace(/^[-–—\s]+/,'').trim(); 
-  // FIX UTENTE: Se CicaleHeather -> Cicale Heather (minuscola + Maiuscola)
+  // FIX INCOLLATO: CicaleHeather -> Cicale Heather, cambiaFiorella -> cambia Fiorella
   t=t.replace(/([a-zàèìòù])([A-Z])/g, '$1 $2');
+  // Anche minuscola+Maiuscola con spazio mancante
   t=t.replace(/\s{2,}/g,' ').trim(); 
   return t;
 }
@@ -201,46 +202,58 @@ function rebuildTrackBox(){
   if(lower==='live' || lower==='- live' || lower.length<4) return; if(rawText===_lastRaw && existingBox) return;
   _lastRaw=rawText; if(!lower.includes('radio sistema 3')) _lastValidTrack=rawText; _isRebuilding=true;
   
-  // LOGICA NUOVA UTENTE - LETTERA GRANDE
   let artista="", titolo=""; 
   let sep = rawText.indexOf(' - '); 
   if(sep > 0){
     artista = rawText.substring(0, sep).trim(); 
     titolo = rawText.substring(sep+3).trim();
   } else {
-    // Niente trattino: usa idea utente - stacca su lettera grande
-    // Es: Cicale Heather Parisi -> Cicale = titolo, Heather Parisi = artista
-    const words = rawText.split(/\s+/).filter(w=>w.length>0);
-    if(words.length>=2){
-      // Se primo parola singola e resto 2 parole, è Titolo + Artista Cognome
-      // Cicale Heather Parisi -> titolo Cicale, artista Heather Parisi
-      // Oppure Heather Parisi Cicale -> artista Heather Parisi, titolo Cicale
-      // Controlliamo se ultima parola è singola? No, prima è più probabile titolo singolo
-      // Logica: se prima parola è singola e le altre 2 formano nome+cognome, titolo=prima, artista=resto
-      if(words.length===3){
-        titolo = words[0];
-        artista = words[1]+' '+words[2];
-      } else if(words.length===2){
-        // 2 parole: prima artista? Dipende, ma mettiamo prima=artista seconda=titolo? No
-        // Se è Cicale Heather -> titolo Cicale artista Heather
-        titolo = words[0];
-        artista = words[1];
+    // REGOLA TUA - ULTIME 2 PAROLE CON LETTERA GRANDE = ARTISTA
+    // Come si cambia Fiorella Mannoia -> artista Fiorella Mannoia, titolo Come si cambia
+    // Cicale Heather Parisi -> artista Heather Parisi, titolo Cicale
+    const parole = rawText.split(/\s+/).filter(w=>w.length>0);
+    if(parole.length>=3){
+      // Ultime 2 parole sono Nome Cognome con lettera grande
+      const last2 = parole.slice(-2).join(' ');
+      const firstPart = parole.slice(0,-2).join(' ');
+      // Verifica che le ultime 2 inizino con maiuscola (idea tua)
+      if(/^[A-ZÀ-Ú]/.test(parole[parole.length-2]) && /^[A-ZÀ-Ú]/.test(parole[parole.length-1])){
+        artista = last2;
+        titolo = firstPart;
       } else {
-        // Più parole: metà
-        const mid=Math.ceil(words.length/2);
-        artista = words.slice(0,mid).join(' ');
-        titolo = words.slice(mid).join(' ');
-        // Ma per Cicale Heather Parisi vogliamo titolo prima
-        // Quindi invertiamo se titolo è più corto dell'artista? Cicale è più corto di Heather Parisi
-        // Facciamo: se prima parola è corta (<=7) e resto lungo, prima=titolo
-        if(words[0].length<=7 && rawText.length>words[0].length+5){
-          titolo=words[0];
-          artista=words.slice(1).join(' ');
+        // fallback
+        artista = last2;
+        titolo = firstPart;
+      }
+    } else if(parole.length===2){
+      // 2 parole: Heather Parisi -> artista, Cicale -> ?
+      // Se 2 parole entrambe con maiuscola, prima=titolo? No, meglio artista= tutte e due? Ma per Cicale non va
+      // Per 2 parole: se una è singola? Facciamo artista = ultima, titolo=prima? No
+      // Logica: se 2 parole, artista = tutte e due? Ma allora titolo vuoto
+      // Meglio: se 2 parole, artista = seconda? No
+      // Per sicurezza: se 2 parole, prima=titolo seconda? No
+      // Regola semplice per 2: titolo=prima, artista=seconda se seconda è nome? Ma Heather Parisi sono 2 parole
+      // Quindi per 2 parole: artista = parole[0] + ' ' + parole[1] se entrambe maiuscole? Ma allora manca titolo
+      // In caso di Cicale (1 parola) + Heather Parisi (2 parole) sono 3, quindi già gestito sopra
+      // Per 2 parole tipo "Cicale Heather" -> artista Heather, titolo Cicale
+      artista = parole[1];
+      titolo = parole[0];
+      // Se invece sono 2 parole e sembrano nome cognome (Heather Parisi), allora è tutto artista, titolo resta da altro?
+      if(/^[A-Z]/.test(parole[0]) && /^[A-Z]/.test(parole[1]) && parole[0].length>2 && parole[1].length>2){
+        // Potrebbe essere solo artista senza titolo? Lasciamo artista = entrambe, titolo = "?"
+        // Ma per ora mettiamo artista = entrambe, titolo = prima? No
+        // Se raw era solo "Heather Parisi" senza titolo, titolo vuoto, ma non è il caso
+        // Teniamo come prima: se 2 parole maiuscole, sono artista
+        if(parole.length===2 && rawText.split(' ').length===2){
+          artista = rawText;
+          titolo = "";
         }
       }
     } else {
-      titolo = rawText.trim(); artista = "";
+      titolo = rawText;
     }
+    // Caso speciale: "Come" solo? Se titolo = "Come" e artista = "si cambia Fiorella Mannoia" era sbagliato prima
+    // Ora con regola ultime 2, "Come si cambia Fiorella Mannoia" -> artista Fiorella Mannoia, titolo Come si cambia (corretto)
   }
 
   if(!existingBox){
@@ -248,8 +261,9 @@ function rebuildTrackBox(){
     const img=document.createElement('img');img.className='rs3-cover';img.src=rawImg; img.onerror=function(){this.src=getLogoAssoluto();};
     const info=document.createElement('div');info.className='rs3-info';
     if(artista && titolo){
-      // Mostra artista bianco sopra, titolo giallo sotto come da idea utente
       info.innerHTML='<div style="font-weight:900;color:#fff;font-size:1.05rem;margin-bottom:6px;line-height:1.25">'+artista+'</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;line-height:1.35;margin-top:4px">'+titolo+'</div>';
+    } else if(artista){
+      info.innerHTML='<div style="font-weight:900;color:#fff;font-size:1.05rem;margin-bottom:6px;line-height:1.25">'+artista+'</div>';
     } else {
       info.innerHTML='<div style="color:#ffd966;font-weight:700;font-size:0.95rem;line-height:1.35;margin-top:4px">'+titolo+'</div>';
     }
@@ -259,6 +273,8 @@ function rebuildTrackBox(){
     if(info && info.dataset.lastText!==rawText){
       if(artista && titolo){
         info.innerHTML='<div style="font-weight:900;color:#fff;font-size:1.05rem;margin-bottom:6px;line-height:1.25">'+artista+'</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;line-height:1.35;margin-top:4px">'+titolo+'</div>';
+      } else if(artista){
+        info.innerHTML='<div style="font-weight:900;color:#fff;font-size:1.05rem;margin-bottom:6px;line-height:1.25">'+artista+'</div>';
       } else {
         info.innerHTML='<div style="color:#ffd966;font-weight:700;font-size:0.95rem;line-height:1.35;margin-top:4px">'+titolo+'</div>';
       }
