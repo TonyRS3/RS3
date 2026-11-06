@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v93 POPUP CORTO</title>
+<title>Radio Sistema 3 - v94 ANTI-FLASH</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
@@ -39,7 +39,8 @@ h1{margin-top:20px;font-size:3rem;}
 audio{width:100%;max-width:340px;height:36px;}
 .btn-popup{margin-top:10px;background:#222;color:#ffd966;border:1px solid #ffd966;padding:8px 16px;border-radius:20px;font-weight:900;font-size:0.85rem;cursor:pointer;}
 .btn-popup:hover{background:#ffd966;color:#000;}
-.cc_recenttracks_list{margin-top:8px !important;max-width:400px !important;margin-left:auto !important;margin-right:auto !important;background:rgba(0,0,0,0.85) !important;padding:0 !important;border-radius:14px !important;min-height:106px !important;overflow:hidden !important;}
+.cc_recenttracks_list{margin-top:8px !important;max-width:400px !important;margin-left:auto !important;margin-right:auto !important;background:rgba(0,0,0,0.85) !important;padding:0 !important;border-radius:14px !important;min-height:106px !important;overflow:hidden !important;opacity:0 !important;transition:opacity 0.25s ease !important;}
+.cc_recenttracks_list.rs3-ready{opacity:1 !important;}
 .rs3-trackbox{display:flex !important;flex-direction:row !important;flex-wrap:nowrap !important;align-items:center !important;gap:12px !important;padding:12px !important;width:100% !important;min-height:106px !important;}
 .rs3-cover{width:82px !important;height:82px !important;min-width:82px !important;max-width:82px !important;min-height:82px !important;max-height:82px !important;object-fit:cover !important;border-radius:8px !important;background:#000 !important;display:block !important;flex:0 0 82px !important;}
 .rs3-info{flex:1 !important;min-width:0 !important;display:flex !important;flex-direction:column !important;justify-content:center !important;text-align:left !important;color:white !important;font-size:0.92rem !important;line-height:1.3 !important;white-space:normal !important;overflow-wrap:anywhere !important;}
@@ -67,7 +68,7 @@ audio{width:100%;max-width:340px;height:36px;}
 .news-item a{color:#ffd966;text-decoration:none;display:block;}
 .news-item.calcio a{color:#aee8ff;}
 .footer-copy{margin-top:20px;padding:16px 10px;text-align:center;font-size:0.85rem;color:#ddd;background:rgba(0,0,0,0.85);border-top:1px solid rgba(255,255,255,0.15);letter-spacing:0.3px;}
-/* POPUP v93 - CORTO BLU SENZA STEMMA - FINISCE SOTTO BRANO */
+/* POPUP v94 - CORTO BLU SENZA STEMMA - FINISCE SOTTO BRANO */
 html.is-popup body{background:#0a1931 !important;overflow:hidden !important;}
 html.is-popup .page-layout{display:block !important;max-width:100% !important;padding:0 !important;}
 html.is-popup .meteo-side, html.is-popup .meteo-side.right, html.is-popup .news-box-side, html.is-popup .btn-novita, html.is-popup #novitaSection, html.is-popup .footer-copy, html.is-popup .btn-popup, html.is-popup .logo-wrap{display:none !important;}
@@ -99,9 +100,9 @@ html.is-popup .rs3-trackbox{min-height:90px !important;padding:8px !important;}
 <div class="page-layout">
   <div class="meteo-side left">
     <div class="meteo-side-title">NORD</div>
-    <div id="meteo-left" class="meteo-side-grid">...</div>
+    <div id="meteo-left" class="meteo-side-grid"></div>
     <div class="meteo-side-title">CENTRO SUD</div>
-    <div id="meteo-right" class="meteo-side-grid">...</div>
+    <div id="meteo-right" class="meteo-side-grid"></div>
   </div>
   <div class="container">
     <div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo"></div>
@@ -132,7 +133,7 @@ html.is-popup .rs3-trackbox{min-height:90px !important;padding:8px !important;}
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v93_POPUP_CORTO';
+const CACHE_VERSION='v94_ANTI_FLASH';
 function apriNovita(){document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';document.getElementById('radioAudio').play().catch(()=>{});}
 function playNovita(id,el){document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -240,6 +241,7 @@ function rebuildTrackBox(){
       info.dataset.lastText=rawText;
     }
   }
+  wrap.classList.add('rs3-ready');
   setTimeout(()=>{_isRebuilding=false;}, 400);
 }
 const list=document.querySelector('.cc_recenttracks_list'); 
