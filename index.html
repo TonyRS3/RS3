@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v91 POPUP PERFETTO</title>
+<title>Radio Sistema 3 - v92 POPUP BLU SENZA STEMMA</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
@@ -67,13 +67,12 @@ audio{width:100%;max-width:340px;height:36px;}
 .news-item a{color:#ffd966;text-decoration:none;display:block;}
 .news-item.calcio a{color:#aee8ff;}
 .footer-copy{margin-top:20px;padding:16px 10px;text-align:center;font-size:0.85rem;color:#ddd;background:rgba(0,0,0,0.85);border-top:1px solid rgba(255,255,255,0.15);letter-spacing:0.3px;}
-/* POPUP PERFETTO */
-html.is-popup body{background:#000 !important;}
+/* POPUP PERFETTO v92 - BLU SCURO SENZA STEMMA */
+html.is-popup body{background:#0a1931 !important;}
 html.is-popup .page-layout{display:block !important;max-width:100% !important;padding:0 !important;}
-html.is-popup .meteo-side, html.is-popup .meteo-side.right, html.is-popup .news-box-side, html.is-popup .btn-novita, html.is-popup #novitaSection, html.is-popup .footer-copy, html.is-popup .btn-popup{display:none !important;}
-html.is-popup .container{max-width:100% !important;margin:0 !important;border-radius:0 !important;padding:14px 10px !important;background:rgba(0,0,0,0.95) !important;}
-html.is-popup .logo{width:150px !important;height:150px !important;}
-html.is-popup h1{font-size:1.5rem !important;margin-top:10px !important;}
+html.is-popup .meteo-side, html.is-popup .meteo-side.right, html.is-popup .news-box-side, html.is-popup .btn-novita, html.is-popup #novitaSection, html.is-popup .footer-copy, html.is-popup .btn-popup, html.is-popup .logo-wrap{display:none !important;}
+html.is-popup .container{max-width:100% !important;margin:0 !important;border-radius:0 !important;padding:14px 10px !important;background:rgba(10,25,49,0.98) !important;}
+html.is-popup h1{font-size:1.5rem !important;margin-top:5px !important;}
 html.is-popup .player-box{width:100% !important;max-width:100% !important;}
 @media (max-width:1200px){
   .page-layout{display:flex !important;flex-direction:column !important;gap:6px !important;max-width:100% !important;width:100% !important;padding:2px !important;overflow-x:hidden !important;}
@@ -89,7 +88,6 @@ html.is-popup .player-box{width:100% !important;max-width:100% !important;}
   .page-layout{display:block !important;padding:0 !important;max-width:100% !important;}
   .container{max-width:100% !important;margin:0 !important;border-radius:0 !important;padding:16px 12px !important;}
   .footer-copy{font-size:0.75rem !important;padding:12px 8px !important;}
-  html.is-popup .btn-popup{display:none !important;}
 }
 </style>
 </head>
@@ -130,7 +128,7 @@ html.is-popup .player-box{width:100% !important;max-width:100% !important;}
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v91_POPUP_PERFETTO';
+const CACHE_VERSION='v92_POPUP_BLU_SENZA_STEMMA';
 function apriNovita(){document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';document.getElementById('radioAudio').play().catch(()=>{});}
 function playNovita(id,el){document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
