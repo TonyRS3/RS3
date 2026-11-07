@@ -24,17 +24,20 @@ const PLACEHOLDER_HTML=`<div style="text-align:center"><div style="color:#fff;fo
 let popupWin=null;
 function apriPopup(){
   if(window.innerWidth<=768) return;
-  var aud=document.getElementById('radioAudio');
-  if(aud){ try{ aud.pause(); }catch(e){} }
+  // FIX SYNC: apri subito il popup, pausa il PC dopo pochissimo
   window._pausedForPopup=true;
-  popupWin=window.open(window.location.pathname + '?popup=1','RadioSistema3Popup','width=380,height=460,resizable=yes,scrollbars=no');
+  popupWin=window.open(window.location.pathname + '?popup=1&_t='+Date.now(),'RadioSistema3Popup','width=380,height=460,resizable=yes,scrollbars=no');
+  setTimeout(()=>{
+    var aud=document.getElementById('radioAudio');
+    if(aud){ try{ aud.pause(); }catch(e){} }
+  },350);
   let checkChiuso=setInterval(()=>{
     if(popupWin && popupWin.closed){
       clearInterval(checkChiuso);
       popupWin=null;
       window._pausedForPopup=false;
       var a2=document.getElementById('radioAudio');
-      if(a2){ a2.play().catch(()=>{}); }
+      if(a2){ userPaused=false; wasPlayingBeforeHide=true; a2.play().catch(()=>{}); }
     }
   },800);
 }
@@ -42,7 +45,11 @@ if(window.location.search.includes('popup=1')){
   document.documentElement.classList.add('is-popup');
   document.addEventListener('DOMContentLoaded',()=>{
     var a=document.getElementById('radioAudio');
-    if(a){ a.autoplay=true; setTimeout(()=>{a.play().catch(()=>{});},600); }
+    if(a){ 
+      a.autoplay=true; 
+      // FIX SYNC: parte subito, non dopo 600ms
+      setTimeout(()=>{a.play().catch(()=>{});},100); 
+    }
   });
 }
 </script>
@@ -79,7 +86,6 @@ audio{width:100%;max-width:340px;height:36px;}
 .rs3-trackbox{display:flex !important;flex-direction:row !important;align-items:flex-start !important;gap:14px !important;padding:14px 12px 8px 12px !important;width:100% !important;min-height:125px !important;flex-wrap:wrap !important;}
 .rs3-cover{width:82px !important;height:82px !important;min-width:82px !important;object-fit:cover !important;border-radius:8px !important;background:#000 !important;display:block !important;flex:0 0 82px !important;margin-top:2px !important;}
 .rs3-info{flex:1 !important;display:flex !important;flex-direction:column !important;text-align:left !important;color:white !important;font-size:0.92rem !important;line-height:1.5 !important;gap:8px !important;padding-bottom:8px !important;overflow:visible !important;min-width:180px !important;}
-/* NASCONDE BUY THIS ALBUM - PC + MOBILE */
 .rs3-buyband, .rs3-trackbox [class*="buy"]{display:none !important;}
 .btn-novita{margin-top:20px;background:#ff0033;color:#fff;font-weight:900;padding:14px 26px;border:none;border-radius:50px;font-size:1.1rem;cursor:pointer;}
 #novitaSection{display:none;margin-top:20px;background:rgba(0,0,0,.6);padding:15px;border-radius:20px;}
@@ -162,7 +168,7 @@ h1{font-size:2.2rem !important;margin-top:10px !important;}
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v137_FINAL_FIX_POSSEDUTO';
+const CACHE_VERSION='v138_POPUP_SYNC_FIX';
 function apriNovita(){
   var a=document.getElementById('radioAudio'); 
   if(a){ try{a.pause();}catch(e){} window._pausedForPlaylist=true; } 
@@ -361,7 +367,6 @@ const list=document.querySelector('.cc_recenttracks_list');
 if(list){const obs=new MutationObserver((muts)=>{if(_isRebuilding) return; for(let m of muts){if(m.target && m.target.closest && m.target.closest('.rs3-trackbox')) return; if(m.target && m.target.classList && m.target.classList.contains('rs3-trackbox')) return;} rebuildTrackBox();}); obs.observe(list,{childList:true,subtree:true});}
 let _fastInterval=setInterval(rebuildTrackBox,300);
 setTimeout(()=>{clearInterval(_fastInterval); _fastInterval=setInterval(rebuildTrackBox,2000);},5000);
-/* ESORCIZZATO - FIX POSSEDUTO - POPUP INTATTO */
 const radioEl=document.getElementById('radioAudio'); 
 let userPaused=true; 
 let wasPlayingBeforeHide=false; 
