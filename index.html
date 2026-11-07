@@ -126,12 +126,10 @@ html.is-popup .container{max-width:100% !important;margin:0 !important;border-ra
 .container{max-width:100% !important;margin:0 !important;border-radius:0 !important;padding:16px 12px !important;grid-column:auto !important;}
 .logo-wrap{display:none !important;}
 h1{font-size:2.2rem !important;margin-top:10px !important;}
-/* FIX MOBILE - BRANO AUTORE COME PC SENZA BUY */
 .cc_recenttracks_list{max-width:96% !important;width:96% !important;margin:8px auto !important;}
 .rs3-trackbox{padding:12px 10px !important;gap:10px !important;min-height:95px !important;align-items:center !important;}
 .rs3-cover{width:68px !important;height:68px !important;min-width:68px !important;flex:0 0 68px !important;}
 .rs3-info{font-size:0.95rem !important;line-height:1.3 !important;gap:4px !important;min-width:0 !important;}
-/* NASCONDE BUY SU MOBILE */
 .rs3-buyband, .rs3-trackbox [class*="buy"]{display:none !important;}
 }
 </style>
@@ -164,7 +162,7 @@ h1{font-size:2.2rem !important;margin-top:10px !important;}
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v136_MOBILE_FIX_NO_BUY';
+const CACHE_VERSION='v137_FINAL_FIX_POSSEDUTO';
 function apriNovita(){
   var a=document.getElementById('radioAudio'); 
   if(a){ try{a.pause();}catch(e){} window._pausedForPlaylist=true; } 
@@ -363,7 +361,33 @@ const list=document.querySelector('.cc_recenttracks_list');
 if(list){const obs=new MutationObserver((muts)=>{if(_isRebuilding) return; for(let m of muts){if(m.target && m.target.closest && m.target.closest('.rs3-trackbox')) return; if(m.target && m.target.classList && m.target.classList.contains('rs3-trackbox')) return;} rebuildTrackBox();}); obs.observe(list,{childList:true,subtree:true});}
 let _fastInterval=setInterval(rebuildTrackBox,300);
 setTimeout(()=>{clearInterval(_fastInterval); _fastInterval=setInterval(rebuildTrackBox,2000);},5000);
-const radioEl=document.getElementById('radioAudio'); let userPaused=false; let wasPlayingBeforeHide=false; function tryAutoPlay(){const a=document.getElementById('radioAudio'); a.play().then(()=>{isPlaying=true; vuPeakEl.textContent="LIVE"; vuPeakEl.style.color="#00ff2a";}).catch(()=>{});} radioEl.addEventListener('play',()=>{userPaused=false; wasPlayingBeforeHide=true;}); radioEl.addEventListener('pause',()=>{if(window._pausedForPopup || window._pausedForPlaylist){return;} if(document.hidden){wasPlayingBeforeHide=true; return;} if(!userPaused && wasPlayingBeforeHide){setTimeout(()=>{tryAutoPlay();}, 800);}}); document.addEventListener('visibilitychange',()=>{if(!document.hidden && wasPlayingBeforeHide && radioEl.paused && !userPaused && !window._pausedForPopup && !window._pausedForPlaylist){setTimeout(()=>{tryAutoPlay();}, 500);}}); window.addEventListener('pagehide',()=>{wasPlayingBeforeHide=!radioEl.paused;}); window.addEventListener('pageshow',()=>{if(wasPlayingBeforeHide && radioEl.paused) tryAutoPlay();});
+/* ESORCIZZATO - FIX POSSEDUTO - POPUP INTATTO */
+const radioEl=document.getElementById('radioAudio'); 
+let userPaused=true; 
+let wasPlayingBeforeHide=false; 
+function tryAutoPlay(){
+  const a=document.getElementById('radioAudio'); 
+  if(userPaused && !wasPlayingBeforeHide) return a.play().then(()=>{isPlaying=true; vuPeakEl.textContent="LIVE"; vuPeakEl.style.color="#00ff2a"; userPaused=false; wasPlayingBeforeHide=true;}).catch(()=>{});
+  if(wasPlayingBeforeHide) userPaused=false;
+  return a.play().then(()=>{isPlaying=true; vuPeakEl.textContent="LIVE"; vuPeakEl.style.color="#00ff2a"; userPaused=false; wasPlayingBeforeHide=true;}).catch(()=>{});
+} 
+radioEl.addEventListener('play',()=>{userPaused=false; wasPlayingBeforeHide=true;}); 
+radioEl.addEventListener('pause',()=>{
+  if(window._pausedForPopup || window._pausedForPlaylist){return;} 
+  if(document.hidden){wasPlayingBeforeHide=!userPaused; return;} 
+  userPaused=true; 
+  wasPlayingBeforeHide=false; 
+  isPlaying=false; 
+  vuPeakEl.textContent="STOP"; 
+  vuPeakEl.style.color="#ff4444";
+}); 
+document.addEventListener('visibilitychange',()=>{
+  if(!document.hidden && wasPlayingBeforeHide && radioEl.paused && !userPaused && !window._pausedForPopup && !window._pausedForPlaylist){
+    tryAutoPlay();
+  }
+}); 
+window.addEventListener('pagehide',()=>{if(!radioEl.paused && !userPaused) wasPlayingBeforeHide=true;}); 
+window.addEventListener('pageshow',()=>{if(wasPlayingBeforeHide && radioEl.paused && !userPaused) tryAutoPlay();});
 const CITIES_COORDS = {
   "Torino": {lat:45.07, lon:7.68}, "Milano": {lat:45.46, lon:9.19}, "Venezia": {lat:45.44, lon:12.33},
   "Bologna": {lat:44.49, lon:11.34}, "Firenze": {lat:43.77, lon:11.25},
