@@ -79,7 +79,7 @@ audio{width:100%;max-width:340px;height:36px;}
 .rs3-trackbox{display:flex !important;flex-direction:row !important;align-items:flex-start !important;gap:14px !important;padding:14px 12px 8px 12px !important;width:100% !important;min-height:125px !important;flex-wrap:wrap !important;}
 .rs3-cover{width:82px !important;height:82px !important;min-width:82px !important;object-fit:cover !important;border-radius:8px !important;background:#000 !important;display:block !important;flex:0 0 82px !important;margin-top:2px !important;}
 .rs3-info{flex:1 !important;display:flex !important;flex-direction:column !important;text-align:left !important;color:white !important;font-size:0.92rem !important;line-height:1.5 !important;gap:8px !important;padding-bottom:8px !important;overflow:visible !important;min-width:180px !important;}
-/* NASCONDE BUY THIS ALBUM */
+/* NASCONDE BUY THIS ALBUM - PC + MOBILE */
 .rs3-buyband, .rs3-trackbox [class*="buy"]{display:none !important;}
 .btn-novita{margin-top:20px;background:#ff0033;color:#fff;font-weight:900;padding:14px 26px;border:none;border-radius:50px;font-size:1.1rem;cursor:pointer;}
 #novitaSection{display:none;margin-top:20px;background:rgba(0,0,0,.6);padding:15px;border-radius:20px;}
@@ -126,6 +126,13 @@ html.is-popup .container{max-width:100% !important;margin:0 !important;border-ra
 .container{max-width:100% !important;margin:0 !important;border-radius:0 !important;padding:16px 12px !important;grid-column:auto !important;}
 .logo-wrap{display:none !important;}
 h1{font-size:2.2rem !important;margin-top:10px !important;}
+/* FIX MOBILE - BRANO AUTORE COME PC SENZA BUY */
+.cc_recenttracks_list{max-width:96% !important;width:96% !important;margin:8px auto !important;}
+.rs3-trackbox{padding:12px 10px !important;gap:10px !important;min-height:95px !important;align-items:center !important;}
+.rs3-cover{width:68px !important;height:68px !important;min-width:68px !important;flex:0 0 68px !important;}
+.rs3-info{font-size:0.95rem !important;line-height:1.3 !important;gap:4px !important;min-width:0 !important;}
+/* NASCONDE BUY SU MOBILE */
+.rs3-buyband, .rs3-trackbox [class*="buy"]{display:none !important;}
 }
 </style>
 </head>
@@ -157,7 +164,7 @@ h1{font-size:2.2rem !important;margin-top:10px !important;}
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v135_PLAYLIST_PAUSA_RADIO';
+const CACHE_VERSION='v136_MOBILE_FIX_NO_BUY';
 function apriNovita(){
   var a=document.getElementById('radioAudio'); 
   if(a){ try{a.pause();}catch(e){} window._pausedForPlaylist=true; } 
