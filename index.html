@@ -3,15 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v133 POPUP FIX + BUY</title>
+<title>Radio Sistema 3 - v134 PLAYLIST FACILE</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
 function getLogoAssoluto(){try{const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(RADIO_LOGO_FISSO_NOME);}catch(e){return RADIO_LOGO_FISSO_NOME;}}
-const BRANI_NOVITA=[{id:"ofywN3NgGqY",artista:"Sombr",titolo:"My body isn't ready"},{id:"PshqcQwshdU",artista:"Sfera Ebbasta",titolo:"Lontano"},{id:"2r1njyfmREA",artista:"SOFI TUKKER & OneRepublic",titolo:"TSUNAMI"},{id:"0xuFBG6o6EU",artista:"Gaia",titolo:"Senz'Allegria"},{id:"pzvhHsEqMzo",artista:"Marco Mengoni",titolo:"Giornate Perse"},{id:"fRIhCiUVaKs",artista:"Karol G",titolo:"Bby Wow"},{id:"z5qAtdZh5Uo",artista:"Giorgia",titolo:"SIAMO L'ECCEZIONE"},{id:"rSiBJ4JRTv4",artista:"Alfa & Gigi D'Alessio",titolo:"Genova E Napoli"},{id:"D3zkX-Am4o4",artista:"Madonna",titolo:"Danceteria"}];
+const BRANI_NOVITA = [
+  { id: "ofywN3NgGqY", artista: "Sombr", titolo: "My body isn't ready" },
+  { id: "PshqcQwshdU", artista: "Sfera Ebbasta", titolo: "Lontano" },
+  { id: "2r1njyfmREA", artista: "SOFI TUKKER & OneRepublic", titolo: "TSUNAMI" },
+  { id: "0xuFBG6o6EU", artista: "Gaia", titolo: "Senz'Allegria" },
+  { id: "pzvhHsEqMzo", artista: "Marco Mengoni", titolo: "Giornate Perse" },
+  { id: "fRIhCiUVaKs", artista: "Karol G", titolo: "Bby Wow" }, 
+  { id: "z5qAtdZh5Uo", artista: "Giorgia", titolo: "SIAMO L'ECCEZIONE" },
+  { id: "rSiBJ4JRTv4", artista: "Alfa & Gigi D'Alessio", titolo: "Genova E Napoli" },
+  { id: "D3zkX-Am4o4", artista: "Madonna", titolo: "Danceteria" },
+];
 function normalizzaBrano(b){if(typeof b==='string')return{id:b,artista:'',titolo:b};return b;}
 const PLACEHOLDER_HTML=`<div style="text-align:center"><div style="color:#fff;font-weight:bold">Scegli un brano</div><div style="font-size:2rem">👇</div></div>`;
-// POPUP FIX v73 - NON CANTA DOPPIO
 let popupWin=null;
 function apriPopup(){
   if(window.innerWidth<=768) return;
@@ -147,7 +156,7 @@ h1{font-size:2.2rem !important;margin-top:10px !important;}
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v133_POPUP_FIX_BUY';
+const CACHE_VERSION='v134_PLAYLIST_FACILE';
 function apriNovita(){document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';tryAutoPlay();}
 function playNovita(id,el){document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -246,7 +255,6 @@ function rebuildTrackBox(){
   _lastRaw=rawText; 
   if(!lower.includes('radio sistema 3')) _lastValidTrack=rawText; 
   _isRebuilding=true;
-  
   let artista="", titolo=""; 
   let sep = rawText.indexOf(' - '); 
   if(sep > 0){
@@ -270,7 +278,6 @@ function rebuildTrackBox(){
       titolo = rawText;
     }
   }
-
   if(!existingBox){
     wrap.innerHTML=''; 
     const b=document.createElement('div');
