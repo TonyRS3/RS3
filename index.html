@@ -24,7 +24,6 @@ const PLACEHOLDER_HTML=`<div style="text-align:center"><div style="color:#fff;fo
 let popupWin=null;
 function apriPopup(){
   if(window.innerWidth<=768) return;
-  // FIX SYNC: apri subito il popup, pausa il PC dopo pochissimo
   window._pausedForPopup=true;
   popupWin=window.open(window.location.pathname + '?popup=1&_t='+Date.now(),'RadioSistema3Popup','width=380,height=460,resizable=yes,scrollbars=no');
   setTimeout(()=>{
@@ -47,7 +46,6 @@ if(window.location.search.includes('popup=1')){
     var a=document.getElementById('radioAudio');
     if(a){ 
       a.autoplay=true; 
-      // FIX SYNC: parte subito, non dopo 600ms
       setTimeout(()=>{a.play().catch(()=>{});},100); 
     }
   });
@@ -138,6 +136,20 @@ h1{font-size:2.2rem !important;margin-top:10px !important;}
 .rs3-info{font-size:0.95rem !important;line-height:1.3 !important;gap:4px !important;min-width:0 !important;}
 .rs3-buyband, .rs3-trackbox [class*="buy"]{display:none !important;}
 }
+
+/* --- AGGIUNTA SOUL MODE VIOLA - NUOVO --- */
+body.soul-mode{
+  background:linear-gradient(rgba(90,0,160,.72),rgba(0,0,0,.88)),url("studio-radio.jpeg") !important;
+  background-size:cover !important;
+  background-position:center !important;
+  background-attachment:fixed !important;
+}
+body.soul-mode h1{color:#d8b4fe !important}
+body.soul-mode .live{color:#c084fc !important}
+body.soul-mode .section-title{color:#d8b4fe !important}
+body.soul-mode .ch-soul{opacity:1 !important;filter:none !important;pointer-events:auto !important;outline:3px solid #a855f7 !important;transform:scale(1.05)}
+body.soul-mode .ch-main{opacity:.55 !important}
+body.soul-mode .logo-wrap{background:linear-gradient(135deg,#7b1fa2,#d8b4fe,#a855f7,#7b1fa2) !important}
 </style>
 </head>
 <body>
@@ -432,5 +444,32 @@ document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;
 document.addEventListener('DOMContentLoaded',()=>{rebuildTrackBox();caricaMeteo();if(!document.documentElement.classList.contains('is-popup')){caricaCronaca();caricaCalcio();caricaMusica();caricaConcerti();setInterval(caricaCronaca,90000);setInterval(caricaCalcio,60000);setInterval(caricaMusica,120000);setInterval(caricaConcerti,120000);}setInterval(caricaMeteo,3600000); updateMediaSession("Radio Sistema 3","Live");});
 if(document.readyState!=='loading'){caricaMeteo();if(!document.documentElement.classList.contains('is-popup')){caricaCronaca();caricaCalcio();caricaMusica();caricaConcerti();}}
 </script>
+
+<!-- SOUL MODE - CONTROLLA FILE soul.json SU GITHUB -->
+<script>
+async function checkSoulMode(){
+  try{
+    const r = await fetch('soul.json?t='+Date.now(),{cache:'no-store'});
+    const j = await r.json();
+    const liveEl = document.querySelector('.live');
+    const btnSoul = document.querySelector('.ch-soul');
+    const btnMain = document.querySelector('.ch-main');
+    if(j.soul){
+      document.body.classList.add('soul-mode');
+      if(liveEl) liveEl.textContent = 'ON AIR SOUL FUNK 💜';
+      if(btnSoul){ btnSoul.classList.remove('blocked'); btnSoul.classList.add('active'); btnSoul.textContent='SOUL FUNK 💜'; }
+      if(btnMain) btnMain.classList.remove('active');
+    }else{
+      document.body.classList.remove('soul-mode');
+      if(liveEl) liveEl.textContent = 'ON AIR 24/7';
+      if(btnSoul){ btnSoul.classList.add('blocked'); btnSoul.classList.remove('active'); btnSoul.textContent='SOUL FUNK 🔒'; }
+      if(btnMain) btnMain.classList.add('active');
+    }
+  }catch(e){}
+}
+setInterval(checkSoulMode, 10000);
+checkSoulMode();
+</script>
+
 </body>
 </html>
