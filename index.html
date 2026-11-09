@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Radio Sistema 3</title>
+<!-- PWA RS3 - INIZIO - NON TOCCA NULLA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a1931">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="RS3">
+<link rel="apple-touch-icon" href="RADIO SISTEMA 3.jpeg">
+<!-- PWA RS3 - FINE -->
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
@@ -24,7 +32,6 @@ const PLACEHOLDER_HTML=`<div style="text-align:center"><div style="color:#fff;fo
 let popupWin=null;
 function apriPopup(){
   if(window.innerWidth<=768) return;
-  // FIX SYNC: apri subito il popup, pausa il PC dopo pochissimo
   window._pausedForPopup=true;
   popupWin=window.open(window.location.pathname + '?popup=1&_t='+Date.now(),'RadioSistema3Popup','width=380,height=460,resizable=yes,scrollbars=no');
   setTimeout(()=>{
@@ -47,7 +54,6 @@ if(window.location.search.includes('popup=1')){
     var a=document.getElementById('radioAudio');
     if(a){ 
       a.autoplay=true; 
-      // FIX SYNC: parte subito, non dopo 600ms
       setTimeout(()=>{a.play().catch(()=>{});},100); 
     }
   });
@@ -431,6 +437,12 @@ const vuCanvas=document.getElementById('vuCanvas'); const vuCtx=vuCanvas.getCont
 document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;
 document.addEventListener('DOMContentLoaded',()=>{rebuildTrackBox();caricaMeteo();if(!document.documentElement.classList.contains('is-popup')){caricaCronaca();caricaCalcio();caricaMusica();caricaConcerti();setInterval(caricaCronaca,90000);setInterval(caricaCalcio,60000);setInterval(caricaMusica,120000);setInterval(caricaConcerti,120000);}setInterval(caricaMeteo,3600000); updateMediaSession("Radio Sistema 3","Live");});
 if(document.readyState!=='loading'){caricaMeteo();if(!document.documentElement.classList.contains('is-popup')){caricaCronaca();caricaCalcio();caricaMusica();caricaConcerti();}}
+</script>
+<!-- PWA RS3 - REGISTRAZIONE -->
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{ navigator.serviceWorker.register('./sw.js').catch(()=>{}); });
+}
 </script>
 </body>
 </html>
