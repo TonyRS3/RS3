@@ -1,1 +1,16 @@
-
+{
+  "name": "Radio Sistema 3",
+  "short_name": "RS3",
+  "description": "Radio Sistema 3 - On Air 24/7",
+  "start_url": "./?utm_source=pwa",
+  "display": "standalone",
+  "background_color": "#0a1931",
+  "theme_color": "#ffd966",
+  "icons": [
+    {
+      "src": "RADIO SISTEMA 3.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
