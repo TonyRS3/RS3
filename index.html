@@ -4,14 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Radio Sistema 3</title>
-<!-- PWA RS3 - INIZIO - NON TOCCA NULLA -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a1931">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="RS3">
 <link rel="apple-touch-icon" href="RADIO SISTEMA 3.jpeg">
-<!-- PWA RS3 - FINE -->
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
@@ -34,29 +32,12 @@ function apriPopup(){
   if(window.innerWidth<=768) return;
   window._pausedForPopup=true;
   popupWin=window.open(window.location.pathname + '?popup=1&_t='+Date.now(),'RadioSistema3Popup','width=380,height=460,resizable=yes,scrollbars=no');
-  setTimeout(()=>{
-    var aud=document.getElementById('radioAudio');
-    if(aud){ try{ aud.pause(); }catch(e){} }
-  },350);
-  let checkChiuso=setInterval(()=>{
-    if(popupWin && popupWin.closed){
-      clearInterval(checkChiuso);
-      popupWin=null;
-      window._pausedForPopup=false;
-      var a2=document.getElementById('radioAudio');
-      if(a2){ userPaused=false; wasPlayingBeforeHide=true; a2.play().catch(()=>{}); }
-    }
-  },800);
+  setTimeout(()=>{var aud=document.getElementById('radioAudio');if(aud){try{aud.pause();}catch(e){}}},350);
+  let checkChiuso=setInterval(()=>{if(popupWin&&popupWin.closed){clearInterval(checkChiuso);popupWin=null;window._pausedForPopup=false;var a2=document.getElementById('radioAudio');if(a2){userPaused=false;wasPlayingBeforeHide=true;a2.play().catch(()=>{});}}},800);
 }
 if(window.location.search.includes('popup=1')){
   document.documentElement.classList.add('is-popup');
-  document.addEventListener('DOMContentLoaded',()=>{
-    var a=document.getElementById('radioAudio');
-    if(a){ 
-      a.autoplay=true; 
-      setTimeout(()=>{a.play().catch(()=>{});},100); 
-    }
-  });
+  document.addEventListener('DOMContentLoaded',()=>{var a=document.getElementById('radioAudio');if(a){a.autoplay=true;setTimeout(()=>{a.play().catch(()=>{});},100);}});
 }
 </script>
 <style>
@@ -144,6 +125,13 @@ h1{font-size:2.2rem !important;margin-top:10px !important;}
 .rs3-info{font-size:0.95rem !important;line-height:1.3 !important;gap:4px !important;min-width:0 !important;}
 .rs3-buyband, .rs3-trackbox [class*="buy"]{display:none !important;}
 }
+.store-badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.store-badge{display:flex;align-items:center;background:#000;border:1px solid #444;border-radius:8px;padding:7px 16px 7px 12px;cursor:pointer;transition:transform .15s;min-width:155px}
+.store-badge:hover{transform:scale(1.04);border-color:#fff}
+.store-badge svg{width:28px;height:28px;margin-right:10px;flex:0 0 28px}
+.store-badge-text{text-align:left;line-height:1.1;color:#fff}
+.store-badge-text small{display:block;font-size:0.55rem;font-weight:400;letter-spacing:0.5px;text-transform:uppercase;color:#fff}
+.store-badge-text b{display:block;font-size:1.02rem;font-weight:700;margin-top:2px}
 </style>
 </head>
 <body>
@@ -160,6 +148,22 @@ h1{font-size:2.2rem !important;margin-top:10px !important;}
       <audio id="radioAudio" controls preload="none" playsinline webkit-playsinline><source src="https://listentomystream.com:8046/stream" type="audio/mpeg"></audio>
       <div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L R STEREO</span><span id="vuPeak" style="color:#ff4444">STOP</span></div></div>
       <button class="btn-popup" onclick="apriPopup()">⧉ POPUP</button>
+      <div class="store-badges">
+        <div id="btnAppStore" class="store-badge">
+          <svg viewBox="0 0 384 512" fill="white"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.6 84.1-108.7 96.1-145.5-29.6-13.4-44.3-41.1-47.2-65.7zM256.1 93.5c18.8-22.9 31.1-53.5 27.2-85.5-26.1 1.1-57.9 17.4-76.8 39.3-17.2 19.6-32.3 50.5-28.2 81.1 30.1 2.3 60.8-15.2 77.8-34.9z"/></svg>
+          <div class="store-badge-text"><small>Scarica su</small><b>App Store</b></div>
+        </div>
+        <div id="btnGooglePlay" class="store-badge">
+          <svg viewBox="0 0 512 512"><path fill="#00d4ff" d="M48 32 L 330 256 L 48 480 Z"/><path fill="#3a86ff" d="M48 32 L 48 480 L 330 256 Z"/><path fill="#00ff88" d="M48 32 L 200 32 L 330 256 Z"/><path fill="#ffbe0b" d="M200 32 L 330 256 L 430 180 Z"/><path fill="#fb5607" d="M200 480 L 430 380 L 330 256 Z"/><path fill="#ff006e" d="M48 480 L 200 480 L 330 256 Z"/></svg>
+          <div class="store-badge-text"><small>DISPONIBILE SU</small><b>Google Play</b></div>
+        </div>
+      </div>
+      <div id="iosIstruzioni" style="display:none;background:rgba(0,0,0,.92);border:2px solid #ffd966;padding:15px;border-radius:15px;margin-top:12px;text-align:left;font-size:0.9rem;line-height:1.4">
+        <b>Per installare Radio Sistema 3:</b><br><br>
+        Su <b>iPhone</b>: Clicca <b>Condividi ⬆️</b> in basso > <b>Aggiungi a Home</b><br>
+        Su <b>Android/Edge</b>: Menu <b>⋮</b> > <b>Installa app</b><br><br>
+        <button onclick="this.parentElement.style.display='none'" style="background:#333;color:#fff;padding:6px 14px;border-radius:10px;border:none;cursor:pointer">Chiudi</button>
+      </div>
     </div>
     <div class="section-title" style="margin-top:8px;font-size:1.3rem">♪ Brano in onda</div>
     <div class="cc_recenttracks_list" data-username="bomyydij"></div>
@@ -438,11 +442,33 @@ document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;
 document.addEventListener('DOMContentLoaded',()=>{rebuildTrackBox();caricaMeteo();if(!document.documentElement.classList.contains('is-popup')){caricaCronaca();caricaCalcio();caricaMusica();caricaConcerti();setInterval(caricaCronaca,90000);setInterval(caricaCalcio,60000);setInterval(caricaMusica,120000);setInterval(caricaConcerti,120000);}setInterval(caricaMeteo,3600000); updateMediaSession("Radio Sistema 3","Live");});
 if(document.readyState!=='loading'){caricaMeteo();if(!document.documentElement.classList.contains('is-popup')){caricaCronaca();caricaCalcio();caricaMusica();caricaConcerti();}}
 </script>
-<!-- PWA RS3 - REGISTRAZIONE -->
 <script>
 if('serviceWorker' in navigator){
   window.addEventListener('load', ()=>{ navigator.serviceWorker.register('./sw.js').catch(()=>{}); });
 }
+</script>
+<script>
+let deferredPrompt;
+const btnAppStore = document.getElementById('btnAppStore');
+const btnGooglePlay = document.getElementById('btnGooglePlay');
+const iosBox = document.getElementById('iosIstruzioni');
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+});
+function triggerInstall(){
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  if(isIOS){ iosBox.style.display='block'; return; }
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(()=>{ deferredPrompt=null; });
+  } else {
+    iosBox.style.display='block';
+  }
+}
+if(btnAppStore) btnAppStore.addEventListener('click', triggerInstall);
+if(btnGooglePlay) btnGooglePlay.addEventListener('click', triggerInstall);
+window.addEventListener('appinstalled', ()=>{ if(iosBox){ iosBox.innerHTML='✅ App RS3 installata!'; iosBox.style.display='block'; }});
 </script>
 </body>
 </html>
