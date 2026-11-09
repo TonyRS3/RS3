@@ -135,7 +135,7 @@ body.soul-mode .logo-wrap{ background:linear-gradient(135deg,#7b1fa2,#b388ff,#d1
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v139_AUTODJ_SOUL';
+const CACHE_VERSION='v140_STREAM_UNICO';
 function apriNovita(){ var a=document.getElementById('radioAudio'); if(a){ try{a.pause();}catch(e){} window._pausedForPlaylist=true; } document.getElementById('novitaSection').style.display='block'; document.getElementById('btnNovita').style.display='none'; document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML; renderNovita(); }
 function chiudiNovita(){ document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML; document.getElementById('novitaList').innerHTML=""; document.getElementById('novitaList').dataset.done="0"; document.getElementById('novitaSection').style.display='none'; document.getElementById('btnNovita').style.display='inline-block'; if(window._pausedForPlaylist){ window._pausedForPlaylist=false; tryAutoPlay(); } }
 function playNovita(id,el){ var a=document.getElementById('radioAudio'); if(a){ try{a.pause();}catch(e){} window._pausedForPlaylist=true; } document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active')); el.classList.add('active'); document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>'; }
@@ -174,26 +174,17 @@ if(document.readyState!=='loading'){caricaMeteo();if(!document.documentElement.c
 </script>
 
 <script>
-// ===== SOUL SWITCH - AUTODJ DOPPIO =====
+// ===== FIX FINALE: SOLO COLORE, SEMPRE /stream =====
 const NPOINT_URL = "https://api.npoint.io/9ed90a2b1c3d903bfac6";
-const SOUL_STREAM = "https://listentomystream.com:8046/soul";
-const MAIN_STREAM = "https://listentomystream.com:8046/stream";
 const SOUL_COVER_FILE = "./RS3_SOUL_viola_scuro.jpg";
 const MAIN_COVER_FILE = "RADIO%20SISTEMA%203.jpeg";
 let soulActive = false;
-let userHasInteracted = false;
-document.addEventListener('click', ()=>{ userHasInteracted = true; }, {once:true});
-document.getElementById('radioAudio').addEventListener('play', ()=>{ userHasInteracted = true; });
-
 function applySoulMode(isSoul){
   if(isSoul === soulActive) return;
   soulActive = isSoul;
-  const audio = document.getElementById('radioAudio');
-  const source = audio.querySelector('source');
   const logoImg = document.getElementById('mainLogo');
   const liveText = document.getElementById('liveText');
   const mainTitle = document.getElementById('mainTitle');
-
   if(isSoul){
     document.body.classList.add('soul-mode');
     if(logoImg) logoImg.src = SOUL_COVER_FILE;
@@ -205,20 +196,7 @@ function applySoulMode(isSoul){
     if(liveText) liveText.innerHTML = "ON AIR 24/7";
     if(mainTitle) mainTitle.textContent = "RADIO SISTEMA 3";
   }
-
-  let newSrc = isSoul ? SOUL_STREAM : MAIN_STREAM;
-  if(source.src !== newSrc){
-    let shouldPlay = !audio.paused || userHasInteracted || isSoul;
-    source.src = newSrc;
-    audio.load();
-    setTimeout(()=>{
-      if(shouldPlay){
-        audio.play().then(()=>{}).catch(e=>{
-          if(liveText) liveText.innerHTML += " - CLICCA PLAY";
-        });
-      }
-    }, 500);
-  }
+  // VOLUTAMENTE NON CAMBIAMO AUDIO - RESTA SEMPRE /stream
 }
 async function checkSoulMode(){
   try{
@@ -228,7 +206,7 @@ async function checkSoulMode(){
     applySoulMode(data.soul === true);
   }catch(e){}
 }
-setInterval(checkSoulMode, 8000);
+setInterval(checkSoulMode, 5000);
 checkSoulMode();
 </script>
 </body>
