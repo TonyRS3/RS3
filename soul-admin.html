@@ -1,65 +1,49 @@
-
 <!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Soul Admin - Solo tu</title>
-<style>body{background:#111;color:#fff;font-family:Arial;text-align:center;padding:20px}
-button{padding:20px 40px;font-size:1.5rem;border:none;border-radius:30px;margin:15px;font-weight:900;cursor:pointer}
-.on{background:#a855f7;color:#fff} .off{background:#fff;color:#111}
-#status{margin-top:20px;font-size:1.2rem;color:#ffd966}
-input{padding:10px;width:90%;max-width:400px;border-radius:10px;margin:10px}
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soul Admin</title>
+<style>
+body{background:#0a0a0a;color:#fff;font-family:Arial;text-align:center;padding:30px 15px}
+h1{color:#d8b4fe}
+button{width:90%;max-width:360px;padding:22px;border:none;border-radius:30px;font-size:1.6rem;font-weight:900;margin:15px;cursor:pointer}
+.on{background:linear-gradient(135deg,#7b1fa2,#d8b4fe);color:#fff;box-shadow:0 0 20px #a855f7}
+.off{background:#fff;color:#111}
+#status{margin-top:25px;background:#111;padding:15px;border-radius:15px;color:#ffd966;font-weight:900;min-height:20px}
+small{color:#888}
 </style>
 </head>
 <body>
-<h1>💜 SOUL ADMIN - RADIO SISTEMA 3</h1>
-<div id="setup">
-<p>Incolla 1 volta sola il tuo Token GitHub (lo creo io per te):</p>
-<input id="token" placeholder="github_pat_...">
-<br><button onclick="saveToken()" style="background:#ffd966;color:#111;padding:10px 20px;font-size:1rem">SALVA TOKEN</button>
-<p style="font-size:.8rem;color:#aaa">Il token resta solo sul tuo telefono, non va su GitHub</p>
-</div>
+<h1>💜 SOUL ADMIN</h1>
+<p><small>Controllo per rsistema3.eu - 1 click</small></p>
 
-<div id="panel" style="display:none">
-<button class="on" onclick="setSoul(true)">💜 ATTIVA SOUL</button><br>
-<button class="off" onclick="setSoul(false)">⬛ TORNA MAIN</button>
-<div id="status">Pronto</div>
-</div>
+<button class="on" onclick="setSoul(true)">💜 ATTIVA VIOLA</button><br>
+<button class="off" onclick="setSoul(false)">⬛ TORNA NORMALE</button>
+
+<div id="status">Pronto capo</div>
 
 <script>
-const REPO_USER = "TUO_USERNAME_GITHUB";
-const REPO_NAME = "TUO_NOME_REPO";
-const FILE_PATH = "soul.json";
-
-function saveToken(){
-  localStorage.setItem('gh_token', document.getElementById('token').value.trim());
-  check();
-}
-function check(){
-  const t=localStorage.getItem('gh_token');
-  if(t){ document.getElementById('setup').style.display='none'; document.getElementById('panel').style.display='block'; }
-}
-check();
+const BIN_ID = "9ed90a2b1c3d903bfac6";
+const URL_API = "https://api.npoint.io/"+BIN_ID;
 
 async function setSoul(on){
-  const token=localStorage.getItem('gh_token');
-  const status=document.getElementById('status');
-  status.textContent = "Sto cambiando...";
+  const st=document.getElementById('status');
+  st.textContent="Sto cambiando... attendi 2 sec";
   try{
-    // prendi SHA del file
-    const r1 = await fetch(`https://api.github.com/repos/${REPO_USER}/${REPO_NAME}/contents/${FILE_PATH}`,{
-      headers:{Authorization:`Bearer ${token}`}
+    const r = await fetch(URL_API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({soul:on})
     });
-    const j1 = await r1.json();
-    const sha = j1.sha;
-    const content = btoa(JSON.stringify({soul:on}));
-    const r2 = await fetch(`https://api.github.com/repos/${REPO_USER}/${REPO_NAME}/contents/${FILE_PATH}`,{
-      method:'PUT',
-      headers:{Authorization:`Bearer ${token}`, 'Content-Type':'application/json'},
-      body: JSON.stringify({message:(on?'Attiva Soul':'Main')+ ' da admin', content:content, sha:sha})
-    });
-    if(r2.ok){ status.textContent = on ? "💜 SOUL ATTIVO - tra 10 sec tutti viola!" : "⬛ TORNATO MAIN"; }
-    else { status.textContent = "Errore: "+ (await r2.text()).slice(0,100); }
-  }catch(e){ status.textContent = "Errore "+e; }
+    if(r.ok){
+      st.textContent = on ? "💜 FATTO! Ora è VIOLA per tutti! Tra 10 sec si aggiorna da solo" : "⬛ FATTO! Tornato MAIN normale";
+    }else{
+      st.textContent="Errore: "+r.status;
+    }
+  }catch(e){
+    st.textContent="Errore rete: "+e;
+  }
 }
 </script>
 </body>
