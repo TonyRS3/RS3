@@ -109,9 +109,19 @@ html.is-popup .meteo-side, html.is-popup .news-box-side, html.is-popup .left-dou
 html.is-popup .container{max-width:100% !important;margin:0 !important;border-radius:0 !important;padding:8px 10px !important;background:rgba(10,25,49,0.98) !important;}
 @media (max-width:1350px){.page-layout{grid-template-columns:150px 150px 1fr;gap:6px;} .meteo-side.right{grid-column:1 / span 3;width:100% !important;display:grid !important;grid-template-columns:1fr 1fr;gap:8px;position:relative !important;} .left-double-wide{grid-column:1 / span 3;width:100% !important;display:grid !important;grid-template-columns:1fr 1fr;gap:8px;position:relative !important;top:0 !important;}}
 @media (max-width:768px){ .meteo-side,.news-box-side,.left-double-wide{display:none !important;} .btn-novita,#novitaSection,.btn-popup{display:none !important;} .page-layout{display:block !important;padding:0 !important;} .container{max-width:100% !important;margin:0 !important;border-radius:0 !important;padding:16px 12px !important;grid-column:auto !important;} .logo-wrap{display:none !important;} h1{font-size:2.2rem !important;margin-top:10px !important;} .cc_recenttracks_list{max-width:96% !important;width:96% !important;margin:8px auto !important;} .rs3-trackbox{padding:12px 10px !important;gap:10px !important;min-height:95px !important;align-items:center !important;} .rs3-cover{width:68px !important;height:68px !important;min-width:68px !important;flex:0 0 68px !important;} .rs3-info{font-size:0.95rem !important;line-height:1.3 !important;gap:4px !important;min-width:0 !important;} .rs3-buyband, .rs3-trackbox [class*="buy"]{display:none !important;} }
-/* ===== SOLO CARD VIOLA - FONDO NORMALE ===== */
-body.soul-mode{ background: linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),url("studio-radio.jpeg") !important; background-size:cover !important; background-position:center !important; background-attachment:fixed !important; }
-body.soul-mode .container{ border:2px solid #b388ff !important; box-shadow:0 0 35px #7b1fa2aa, 0 0 15px #b388ff55 !important; background:rgba(25,0,45,.60) !important; backdrop-filter:blur(10px) !important; }
+/* ===== FIX DEFINITIVO v143: SOLO CARD VIOLA, FONDO SEMPRE NORMALE ===== */
+body.soul-mode{
+  background: linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),url("studio-radio.jpeg") !important;
+  background-size:cover !important;
+  background-position:center !important;
+  background-attachment:fixed !important;
+  filter:none !important;
+}
+body.soul-mode .container{
+  background: rgba(35, 0, 65, 0.72) !important;
+  border: 2px solid #b388ff !important;
+  box-shadow: none !important;
+}
 body.soul-mode h1{ color:#d1a3ff !important; }
 body.soul-mode .live{ color:#d1a3ff !important; }
 body.soul-mode .logo-wrap{ background:linear-gradient(135deg,#7b1fa2,#b388ff,#d1a3ff,#7b1fa2) !important; background-size:300% 300% !important; }
@@ -145,7 +155,7 @@ body.soul-mode .rs3-cover{ content:url("./RS3_SOUL_viola_scuro.jpg") !important;
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v142_SOLO_CARD_VIOLA';
+const CACHE_VERSION='v143_SOLO_CARD';
 function apriNovita(){ var a=document.getElementById('radioAudio'); if(a){ try{a.pause();}catch(e){} window._pausedForPlaylist=true; } document.getElementById('novitaSection').style.display='block'; document.getElementById('btnNovita').style.display='none'; document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML; renderNovita(); }
 function chiudiNovita(){ document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML; document.getElementById('novitaList').innerHTML=""; document.getElementById('novitaList').dataset.done="0"; document.getElementById('novitaSection').style.display='none'; document.getElementById('btnNovita').style.display='inline-block'; if(window._pausedForPlaylist){ window._pausedForPlaylist=false; tryAutoPlay(); } }
 function playNovita(id,el){ var a=document.getElementById('radioAudio'); if(a){ try{a.pause();}catch(e){} window._pausedForPlaylist=true; } document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active')); el.classList.add('active'); document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>'; }
@@ -184,7 +194,7 @@ if(document.readyState!=='loading'){caricaMeteo();if(!document.documentElement.c
 </script>
 
 <script>
-// ===== SOUL MODE - SOLO CARD VIOLA v142 =====
+// v143 - SOLO CARD VIOLA
 const NPOINT_URL = "https://api.npoint.io/9ed90a2b1c3d903bfac6";
 const SOUL_COVER_FILE = "./RS3_SOUL_viola_scuro.jpg";
 const MAIN_COVER_FILE = "./RADIO SISTEMA 3.jpeg";
