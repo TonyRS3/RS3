@@ -3,50 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOUL ADMIN - Radio Sistema 3</title>
+<title>SOUL ADMIN</title>
 <style>
-body{background:#0d0620;color:white;font-family:Arial;text-align:center;padding:20px}
-h1{color:#ffe600}
-.btn{width:90%;max-width:400px;padding:30px;margin:15px auto;display:block;border:none;border-radius:25px;font-size:1.8rem;font-weight:900;cursor:pointer}
-#btnViola{background:#7b1fa2;color:white;box-shadow:0 0 25px #7b1fa2}
-#btnNormale{background:#222;color:#aaa;border:2px solid #444}
-#status{margin-top:20px;font-size:1.2rem;color:#b388ff;min-height:30px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:white;font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center}
+.box{width:90%;max-width:420px}
+h1{color:#d8a4ff;font-size:2rem;letter-spacing:1px}
+.sub{color:#aaa;margin:12px 0 28px;font-size:0.95rem}
+.btn{width:100%;padding:22px;border-radius:30px;border:none;font-weight:900;font-size:1.3rem;cursor:pointer;transition:all 0.3s;display:block;margin-bottom:18px}
+#btnViola{background:linear-gradient(90deg,#7b1fa2,#d1a3ff);color:white;box-shadow:0 0 25px #7b1fa2aa}
+#btnNormale{background:white;color:#111}
+.btn:active{transform:scale(0.96)}
+#status{margin-top:20px;padding:12px;background:#111;border-radius:10px;font-weight:900;color:#ffd966;min-height:48px;display:flex;align-items:center;justify-content:center}
 </style>
 </head>
 <body>
-<h1>👑 SOUL CONTROL</h1>
-<p>rsistema3.eu - Controllo Remoto</p>
+<div class="box">
+<h1>💜 SOUL ADMIN</h1>
+<div class="sub">Controllo per rsistema3.eu - 1 click</div>
 <button id="btnViola" class="btn" onclick="setSoul(true)">💜 ATTIVA VIOLA</button>
 <button id="btnNormale" class="btn" onclick="setSoul(false)">⬛ TORNA NORMALE</button>
 <div id="status">Pronto...</div>
+</div>
 <script>
 const NPOINT_URL = "https://api.npoint.io/9ed90a2b1c3d903bfac6";
-async function setSoul(active){
+async function setSoul(isSoul){
   const status = document.getElementById('status');
-  status.textContent = active ? "Attivo viola... 💜" : "Torno normale... ⬛";
+  status.innerHTML = "⏳ Invio...";
   try{
-    let r = await fetch(NPOINT_URL, {
+    let res = await fetch(NPOINT_URL, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({soul: active})
+      body: JSON.stringify({soul: isSoul})
     });
-    if(r.ok){
-      status.textContent = active ? "✅ ORA TUTTI VEDONO VIOLA! + copertina viola + audio soul" : "✅ ORA TUTTI TORNANO NORMALI!";
+    if(res.ok){
+      if(isSoul){
+        status.innerHTML = "💜 FATTO! Ora è VIOLA per tutti! Tra 10 sec si aggiorna da solo";
+        document.body.style.background = "#1a0a2a";
+      } else {
+        status.innerHTML = "⬛ FATTO! Tornato NORMALE giallo! Tra 10 sec si aggiorna";
+        document.body.style.background = "#0a0a0a";
+      }
     } else {
-      status.textContent = "❌ Errore: " + r.status + " - vai su npoint.io e verifica";
+      status.innerHTML = "❌ Errore: " + res.status;
     }
   }catch(e){
-    status.textContent = "❌ Errore connessione: " + e;
+    status.innerHTML = "❌ Errore connessione: " + e.message + "<br>Prova a mano su npoint.io";
   }
 }
-async function checkCurrent(){
-  try{
-    let r = await fetch(NPOINT_URL+"?t="+Date.now(), {cache:'no-store'});
-    let d = await r.json();
-    document.getElementById('status').textContent = d.soul ? "Stato attuale: 💜 VIOLA ATTIVO" : "Stato attuale: ⬛ NORMALE";
-  }catch(e){}
-}
-checkCurrent();
 </script>
 </body>
 </html>
