@@ -77,12 +77,6 @@ audio{width:100%;max-width:340px;height:36px;}
 .vu-wrap{margin-top:8px;background:rgba(0,0,0,.75);padding:4px 6px;border-radius:8px;border:1px solid rgba(255,255,255,.2);max-width:320px;margin:auto;}
 #vuCanvas{width:100%;height:32px;display:block;border-radius:4px;background:#0a0a0a;}
 .vu-label{font-size:.65rem;color:#aaa;margin-top:2px;display:flex;justify-content:space-between;font-family:monospace;}
-.ch-chooser{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
-.ch-btn{flex:1;padding:10px 0;border-radius:30px;border:none;font-weight:900;font-size:0.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.ch-main{background:#fff;color:#222}
-.ch-soul{background:#7b1fa2;color:#fff}
-.ch-btn.active{outline:3px solid #ffe600;transform:scale(1.05)}
-.ch-btn.blocked{opacity:0.35;pointer-events:none;filter:grayscale(80%);}
 .news-box-side{background:rgba(0,0,0,.92);border:1px solid #ff0033;border-radius:12px;padding:14px;text-align:left;width:100%;}
 .news-box-side.right-box{min-height:auto;padding:10px 12px !important;}
 .news-title{font-size:0.80rem;color:#ff4444;font-weight:900;margin-bottom:6px;}
@@ -112,8 +106,6 @@ body.soul-mode .container{ border:1.5px solid #b388ff !important; box-shadow:0 0
 body.soul-mode h1{ color:#d1a3ff !important; }
 body.soul-mode .live{ color:#d1a3ff !important; }
 body.soul-mode .logo-wrap{ background:linear-gradient(135deg,#7b1fa2,#b388ff,#d1a3ff,#7b1fa2) !important; background-size:300% 300% !important; }
-body.soul-mode .ch-main{ background:transparent !important; color:#b388ff !important; border:2px solid #7b1fa2 !important; }
-body.soul-mode .ch-soul{ background:#7b1fa2 !important; color:#fff !important; box-shadow:0 0 12px #7b1fa2 !important; }
 </style>
 </head>
 <body>
@@ -125,7 +117,6 @@ body.soul-mode .ch-soul{ background:#7b1fa2 !important; color:#fff !important; b
     <h1 id="mainTitle">RADIO SISTEMA 3</h1>
     <div class="live" id="liveText">ON AIR 24/7</div>
     <div class="player-box">
-      <div class="ch-chooser"><a id="btnMain" class="ch-btn ch-main active">MAIN</a><a id="btnSoul" class="ch-btn ch-soul blocked">SOUL FUNK 🔒</a></div>
       <div class="section-title">♪ Ascolta in diretta</div>
       <audio id="radioAudio" controls preload="none" playsinline webkit-playsinline><source src="https://listentomystream.com:8046/stream" type="audio/mpeg"></audio>
       <div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L R STEREO</span><span id="vuPeak" style="color:#ff4444">STOP</span></div></div>
@@ -144,7 +135,7 @@ body.soul-mode .ch-soul{ background:#7b1fa2 !important; color:#fff !important; b
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v138_POPUP_SYNC_FIX';
+const CACHE_VERSION='v139_AUTODJ_SOUL';
 function apriNovita(){ var a=document.getElementById('radioAudio'); if(a){ try{a.pause();}catch(e){} window._pausedForPlaylist=true; } document.getElementById('novitaSection').style.display='block'; document.getElementById('btnNovita').style.display='none'; document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML; renderNovita(); }
 function chiudiNovita(){ document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML; document.getElementById('novitaList').innerHTML=""; document.getElementById('novitaList').dataset.done="0"; document.getElementById('novitaSection').style.display='none'; document.getElementById('btnNovita').style.display='inline-block'; if(window._pausedForPlaylist){ window._pausedForPlaylist=false; tryAutoPlay(); } }
 function playNovita(id,el){ var a=document.getElementById('radioAudio'); if(a){ try{a.pause();}catch(e){} window._pausedForPlaylist=true; } document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active')); el.classList.add('active'); document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>'; }
@@ -183,7 +174,7 @@ if(document.readyState!=='loading'){caricaMeteo();if(!document.documentElement.c
 </script>
 
 <script>
-// ===== SOUL SWITCH FIX AUDIO =====
+// ===== SOUL SWITCH - AUTODJ DOPPIO =====
 const NPOINT_URL = "https://api.npoint.io/9ed90a2b1c3d903bfac6";
 const SOUL_STREAM = "https://listentomystream.com:8046/soul";
 const MAIN_STREAM = "https://listentomystream.com:8046/stream";
@@ -202,23 +193,19 @@ function applySoulMode(isSoul){
   const logoImg = document.getElementById('mainLogo');
   const liveText = document.getElementById('liveText');
   const mainTitle = document.getElementById('mainTitle');
-  const btnMain = document.getElementById('btnMain');
-  const btnSoul = document.getElementById('btnSoul');
+
   if(isSoul){
     document.body.classList.add('soul-mode');
     if(logoImg) logoImg.src = SOUL_COVER_FILE;
-    if(liveText) liveText.innerHTML = "💜 SOUL ON AIR";
+    if(liveText) liveText.innerHTML = "💜 SOUL FUNK ON AIR";
     if(mainTitle) mainTitle.textContent = "SOUL FUNK";
-    if(btnMain) btnMain.classList.remove('active');
-    if(btnSoul){ btnSoul.classList.add('active'); btnSoul.classList.remove('blocked'); btnSoul.textContent="SOUL ● LIVE"; }
   } else {
     document.body.classList.remove('soul-mode');
     if(logoImg) logoImg.src = MAIN_COVER_FILE;
     if(liveText) liveText.innerHTML = "ON AIR 24/7";
     if(mainTitle) mainTitle.textContent = "RADIO SISTEMA 3";
-    if(btnMain) btnMain.classList.add('active');
-    if(btnSoul){ btnSoul.classList.remove('active'); btnSoul.classList.add('blocked'); btnSoul.textContent="SOUL FUNK 🔒"; }
   }
+
   let newSrc = isSoul ? SOUL_STREAM : MAIN_STREAM;
   if(source.src !== newSrc){
     let shouldPlay = !audio.paused || userHasInteracted || isSoul;
@@ -230,7 +217,7 @@ function applySoulMode(isSoul){
           if(liveText) liveText.innerHTML += " - CLICCA PLAY";
         });
       }
-    }, 450);
+    }, 500);
   }
 }
 async function checkSoulMode(){
