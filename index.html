@@ -114,7 +114,7 @@ body.soul-mode h1{ color:#d1a3ff !important; }body.soul-mode .live{ color:#d1a3f
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v152_TUTTE_LE_CANZONI';
+const CACHE_VERSION='v154_CENTOVA_CLONE';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay();}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -136,7 +136,6 @@ function pulisciTitolo(raw){
   t=t.replace(/^\s*\d{1,2}:\d{2}(?::\d{2})?\s*(AM|PM)?\s*/i,'').trim();
   t=t.replace(/^(AM|PM)\s*/i,'').trim();
   t=t.replace(/^[-–—\s]+/,'').trim();
-  // FIX CRITICO: [Explicit]Mark -> [Explicit] Mark e Vacanze RomaneMatia -> Vacanze Romane Matia
   t=t.replace(/\]([A-Za-z])/g, '] $1');
   t=t.replace(/\)([A-Z])/g, ') $1');
   t=t.replace(/perchéEros/gi,'perché Eros');
@@ -148,138 +147,87 @@ function pulisciTitolo(raw){
 function updateMediaSession(artista,titolo){if(!('mediaSession' in navigator))return;try{const logo=getLogoAssoluto();navigator.mediaSession.metadata=new MediaMetadata({title:titolo||'Radio Sistema 3',artist:artista||'Live',album:'Radio Sistema 3',artwork:[{src:logo,sizes:'512x512',type:'image/jpeg'},{src:logo,sizes:'256x256',type:'image/jpeg'}]});navigator.mediaSession.setActionHandler('play',()=>{tryAutoPlay();});navigator.mediaSession.setActionHandler('pause',()=>{document.getElementById('radioAudio').pause();});}catch(e){}}
 let _isRebuilding=false;let _lastRaw="";let _lastValidTrack="Lucio Dalla - Cara";
 
-let _directArtist="", _directTitle="";
-async function fetchDirectFromServer(){
-  try{
-    const urls = [
-      "https://api.allorigins.win/get?url="+encodeURIComponent("https://listentomystream.com:8046/7.html?sid=1&t="+Date.now()),
-      "https://corsproxy.io/?"+encodeURIComponent("https://listentomystream.com:8046/7.html?sid=1&t="+Date.now())
-    ];
-    for(let u of urls){
-      try{
-        let r = await fetch(u,{cache:'no-store'});
-        let text = "";
-        if(u.includes("allorigins")){
-          let j = await r.json();
-          text = j.contents||"";
-        } else {
-          text = await r.text();
-        }
-        if(!text || text.length<5) continue;
-        let parts = text.split(',');
-        if(parts.length<7) continue;
-        let raw = parts.slice(6).join(',').trim();
-        raw = raw.replace(/<[^>]*>/g,'').trim();
-        if(raw.length>3){
-          if(raw.includes(" - ")){
-            let sp = raw.indexOf(" - ");
-            _directArtist = pulisciTitolo(raw.substring(0,sp).trim());
-            _directTitle = pulisciTitolo(raw.substring(sp+3).trim());
-            if(_directArtist && _directTitle) return {artista:_directArtist, titolo:_directTitle};
-          } else {
-            // Senza trattino: usa logica universale
-            let parole = raw.split(/\s+/).filter(w=>w.length>0);
-            if(parole.length>=3){
-              let penultima = parole[parole.length-2];
-              let isMinuscola = penultima[0] === penultima[0].toLowerCase();
-              if(isMinuscola && parole.length>=3){
-                _directArtist = parole[parole.length-1];
-                _directTitle = parole.slice(0,-1).join(' ');
-              } else {
-                _directArtist = parole.slice(-2).join(' ');
-                _directTitle = parole.slice(0,-2).join(' ');
-              }
-              _directArtist = pulisciTitolo(_directArtist);
-              _directTitle = pulisciTitolo(_directTitle);
-              return {artista:_directArtist, titolo:_directTitle};
-            }
-          }
-        }
-      }catch(e){continue;}
-    }
-  }catch(e){}
-  return null;
-}
-
 function splitUniversale(txt){
   txt = pulisciTitolo(txt);
   if(txt.includes(" - ")){
     let sp = txt.indexOf(" - ");
-    let a = txt.substring(0,sp).trim();
-    let t = txt.substring(sp+3).trim();
-    // Se sembra Artista - Titolo (caso server) invertiamo per display Titolo bianco / Artista giallo
-    // Ma se a è corto e t lungo, probabilmente è già Artista - Titolo
-    return {artista:a, titolo:t};
+    return {artista:txt.substring(0,sp).trim(), titolo:txt.substring(sp+3).trim()};
   }
   let parole = txt.split(/\s+/).filter(w=>w.length>0);
+  const ARTICOLI = ["a","la","le","il","lo","gli","de","del","della","di","da","al","alla","e","en","el","las","los","the","to","in","on","at","of","y","o"];
+  function titoloValido(t){ let ult = t.split(/\s+/).pop().toLowerCase(); return !ARTICOLI.includes(ult); }
   if(parole.length>=4){
+    let titolo1 = parole.slice(0,-1).join(' '); let artista1 = parole[parole.length-1];
+    let titolo2 = parole.slice(0,-2).join(' '); let artista2 = parole.slice(-2).join(' ');
+    if(!titoloValido(titolo2) && titoloValido(titolo1)) return {artista:artista1, titolo:titolo1};
+    if(!titoloValido(titolo1) && titoloValido(titolo2)) return {artista:artista2, titolo:titolo2};
     let penultima = parole[parole.length-2];
-    let isPenultimaMinuscola = penultima[0] === penultima[0].toLowerCase();
-    if(isPenultimaMinuscola){
-      return {artista:parole[parole.length-1], titolo:parole.slice(0,-1).join(' ')};
-    } else {
-      return {artista:parole.slice(-2).join(' '), titolo:parole.slice(0,-2).join(' ')};
-    }
+    if(penultima[0] === penultima[0].toLowerCase()) return {artista:artista1, titolo:titolo1};
+    if(!titoloValido(titolo2)) return {artista:artista1, titolo:titolo1};
+    return {artista:artista2, titolo:titolo2};
   } else if(parole.length===3){
     let penultima = parole[1];
-    if(penultima[0] === penultima[0].toLowerCase()){
-      return {artista:parole[2], titolo:parole.slice(0,2).join(' ')};
-    } else {
-      return {artista:parole.slice(-2).join(' '), titolo:parole[0]};
-    }
+    if(penultima[0] === penultima[0].toLowerCase()) return {artista:parole[2], titolo:parole.slice(0,2).join(' ')};
+    else return {artista:parole.slice(-2).join(' '), titolo:parole[0]};
   } else if(parole.length===2){
     return {titolo:parole[0], artista:parole[1]};
   }
   return {titolo:txt, artista:""};
 }
 
-async function rebuildTrackBox(){
+// v154 COPIA ESATTA CENTOVA - LEGGE 2 RIGHE SEPARATE
+function rebuildTrackBox(){
   if(_isRebuilding) return;
   const wrap=document.querySelector('.cc_recenttracks_list');
   if(!wrap) return;
   let existingBox=wrap.querySelector('.rs3-trackbox');
   let rawImg=getLogoAssoluto();
-  
-  let direct = await fetchDirectFromServer();
-  let titolo="", artista="", txt="";
 
-  if(direct && direct.titolo && direct.artista){
-    titolo = direct.titolo;
-    artista = direct.artista;
-    txt = artista + " - " + titolo;
-  } else {
-    let temp=document.createElement('div');
-    temp.innerHTML=wrap.innerHTML;
-    temp.querySelectorAll('img,a,.rs3-trackbox,script,style').forEach(el=>el.remove());
-    let righeRaw = temp.innerText.trim().split('\n').map(s=>s.trim()).filter(s=>s.length>1);
-    let righe = [];
-    righeRaw.forEach(r=>{
-      let p = pulisciTitolo(r);
-      if(p.length>2 && !p.toLowerCase().includes('radio sistema 3') && !p.toLowerCase().includes('buy') && p.toLowerCase()!=='live' && p.toLowerCase()!=='- live'){
-        righe.push(p);
-      }
-    });
-    if(righe.length===0) return;
-    if(righe.length >= 2){
-      // Caso Shoutcast foto: riga0 titolo, riga1 artista
-      titolo = righe[0];
-      artista = righe[1];
-      if(artista.split(' ').length===1 && titolo.split(' ').length>=2){
-        let paroleTitolo = titolo.split(' ');
-        let ultimo = paroleTitolo[paroleTitolo.length-1];
-        if(/^[A-Z][a-z]+$/.test(ultimo)){
-          artista = ultimo + " " + artista;
-          titolo = paroleTitolo.slice(0,-1).join(' ');
+  // 1. METODO CENTOVA: cerca elementi separati titolo/artista nel widget
+  let titolo="", artista="", txt="";
+  let foundCentova = false;
+  
+  try{
+    // Il widget di myshoutcast crea div con titolo e artista separati
+    // Cerchiamo tutti i div/span con testo
+    let tempScan = document.createElement('div');
+    tempScan.innerHTML = wrap.innerHTML;
+    // Rimuovi img e box nostri
+    tempScan.querySelectorAll('img,.rs3-trackbox,script,style').forEach(el=>el.remove());
+    
+    let righePulite = [];
+    // Prendi tutti i testi, div per div
+    let allDivs = tempScan.querySelectorAll('div, span, p, b');
+    if(allDivs.length>0){
+      allDivs.forEach(d=>{
+        let t = pulisciTitolo(d.innerText||d.textContent||"");
+        if(t.length>2 && !t.toLowerCase().includes('radio sistema 3') && !t.toLowerCase().includes('buy') && t.toLowerCase()!=='live' && t.toLowerCase()!=='- live' && t.length<100){
+          // Evita duplicati
+          if(!righePulite.includes(t)) righePulite.push(t);
         }
-      }
+      });
+    }
+    // Fallback a innerText split
+    if(righePulite.length<2){
+      let righeRaw = tempScan.innerText.trim().split('\n').map(s=>pulisciTitolo(s)).filter(s=>s.length>2 && !s.toLowerCase().includes('radio sistema 3') && !s.toLowerCase().includes('buy') && s.toLowerCase()!=='live');
+      righePulite = righeRaw;
+    }
+
+    if(righePulite.length>=2){
+      // CENTOVA: prima riga titolo, seconda artista - ESATTO COME FOTO TUA
+      // Vattene amore / Mietta
+      // Vamos a la Playa / Righeira
+      titolo = righePulite[0];
+      artista = righePulite[1];
       txt = titolo + " - " + artista;
-    } else {
-      let split = splitUniversale(righe[0]);
+      foundCentova = true;
+    } else if(righePulite.length===1){
+      let split = splitUniversale(righePulite[0]);
       titolo = split.titolo;
       artista = split.artista;
-      txt = righe[0];
+      txt = righePulite[0];
     }
-  }
+  }catch(e){}
 
   if(!txt || txt.length<3) return;
   if(txt===_lastRaw && existingBox){ const cov=existingBox.querySelector('.rs3-cover'); if(cov) cov.src=rawImg; return; }
@@ -318,7 +266,7 @@ async function rebuildTrackBox(){
 }
 
 const list=document.querySelector('.cc_recenttracks_list');if(list){const obs=new MutationObserver((muts)=>{if(_isRebuilding)return;for(let m of muts){if(m.target&&m.target.closest&&m.target.closest('.rs3-trackbox'))return;if(m.target&&m.target.classList&&m.target.classList.contains('rs3-trackbox'))return;}rebuildTrackBox();});obs.observe(list,{childList:true,subtree:true});}
-let _fastInterval=setInterval(rebuildTrackBox,800);setTimeout(()=>{clearInterval(_fastInterval);_fastInterval=setInterval(rebuildTrackBox,3000);},10000);
+let _fastInterval=setInterval(rebuildTrackBox,300);setTimeout(()=>{clearInterval(_fastInterval);_fastInterval=setInterval(rebuildTrackBox,2000);},5000);
 const radioEl=document.getElementById('radioAudio');let userPaused=true;let wasPlayingBeforeHide=false;
 function tryAutoPlay(){const a=document.getElementById('radioAudio');if(userPaused&&!wasPlayingBeforeHide)return a.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;}).catch(()=>{});if(wasPlayingBeforeHide)userPaused=false;return a.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;}).catch(()=>{});}
 radioEl.addEventListener('play',()=>{userPaused=false;wasPlayingBeforeHide=true;});
