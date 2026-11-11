@@ -126,7 +126,7 @@ body.soul-mode h1{ color:#d1a3ff !important; }body.soul-mode .live{ color:#d1a3f
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v162_BUGGLES_FIX';
+const CACHE_VERSION='v163_TRATTINO_FIX';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay();}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -161,14 +161,33 @@ let _isRebuilding=false;let _lastRaw="";let _lastValidTrack="Lucio Dalla - Cara"
 function pulisciArtistaDaAlbum(artista){
   if(!artista) return artista;
   let a=artista.trim();
-  if(/^The\s+\w+/i.test(a)){
+  let dup = a.match(/^(.*\s+&\s*\w+)\s+(\w+:\s*.+)$/i);
+  if(dup){
+    let prima = dup[1].trim();
+    let dopo = dup[2].trim();
+    let ultimaPrima = prima.split(/\s+/).pop().replace(/[^A-Za-z]/g,'').toLowerCase();
+    let primaDopo = dopo.split(/[:\s]+/)[0].replace(/[^A-Za-z]/g,'').toLowerCase();
+    if(ultimaPrima && primaDopo && ultimaPrima === primaDopo){
+      return prima + " - " + dopo;
+    }
+  }
+  let dup2 = a.match(/^(.*?)\s+(\w+)\s+\2:\s*(.+)$/);
+  if(dup2){
+    let prima = (dup2[1] + " " + dup2[2]).trim();
+    let dopo = dup2[2] + ": " + dup2[3];
+    return prima + " - " + dopo;
+  }
+  if(a.includes(" - ") && a.includes(":")){
+    return a;
+  }
+  if(/^The\s+\w+/i.test(a) && !a.includes(" - ") && !a.includes(":")){
     let parts=a.split(/\s+/);
     if(parts.length>=3 && /^(Music|For|Le|La|Il|Tutti|Tutto|The|Seventies|Canzoni|Qui)/i.test(parts[2])){
       return parts.slice(0,2).join(' ');
     }
   }
   let m=a.match(/^(.+?)\s+(Music|For|Seventies|Le|La|Il|I|Gli|Lo|Tutti|Tutto|Una|Un|De|Del|Delle|Della|Degli)\s+.+$/i);
-  if(m){
+  if(m && !a.includes("&") && !a.includes(":")){
     let prima=m[1].trim();
     let parole=prima.split(/\s+/);
     if(parole.length>=1 && parole.length<=3){
@@ -176,13 +195,13 @@ function pulisciArtistaDaAlbum(artista){
     }
   }
   let words=a.split(/\s+/);
-  if(words.length>=4){
+  if(words.length>=4 && !a.includes(":")){
     let terza=words[2].toLowerCase();
     if(["music","for","seventies","le","la","il","i","gli","lo","tutti","tutto","una","un","del"].includes(terza)){
       return words.slice(0,2).join(' ');
     }
   }
-  if(words.length==3){
+  if(words.length==3 && !a.includes(":")){
     if(/^(Canzoni|Qui|Music|For|Seventies|Collection|Hits|Best|Vol)/i.test(words[2])){
       return words.slice(0,2).join(' ');
     }
@@ -194,7 +213,7 @@ function splitUniversale(txt){
   if(txt.includes(" - ")){
     let parti = txt.split(" - ").map(s=>s.trim()).filter(s=>s.length>0);
     if(parti.length>=3){
-      return {titolo:parti[0], artista:pulisciArtistaDaAlbum(parti[1])};
+      return {titolo:parti[0], artista:pulisciArtistaDaAlbum(parti[1] + " - " + parti[2])};
     }
     if(parti.length==2){
       return {titolo:parti[0], artista:pulisciArtistaDaAlbum(parti[1])};
@@ -240,7 +259,7 @@ function rebuildTrackBox(){
     if(allDivs.length>0){
       allDivs.forEach(d=>{
         let t=pulisciTitolo(d.innerText||d.textContent||"");
-        if(t.length>2 && !t.toLowerCase().includes('radio sistema 3') && !t.toLowerCase().includes('buy') && t.toLowerCase()!=='live' && t.toLowerCase()!=='- live' && t.length<160){
+        if(t.length>2 && !t.toLowerCase().includes('radio sistema 3') && !t.toLowerCase().includes('buy') && t.toLowerCase()!=='live' && t.toLowerCase()!=='- live' && t.length<200){
           if(!righePulite.includes(t)) righePulite.push(t);
         }
       });
@@ -254,16 +273,24 @@ function rebuildTrackBox(){
       if(a.length > b.length + 5 && a.toLowerCase().startsWith(b.toLowerCase())){
         titolo=b;
         let resto=a.substring(b.length).trim().replace(/^[-–—\s]+/,'').trim();
-        if(resto.includes(" - ")){ resto=resto.split(" - ")[0].trim(); }
-        artista=pulisciArtistaDaAlbum(resto);
+        if(resto.includes(":") && (resto.includes("&") || resto.match(/\w+\s+\w+:/))){
+          artista=pulisciArtistaDaAlbum(resto);
+        }else{
+          if(resto.includes(" - ") && !resto.includes(":")){ resto=resto.split(" - ")[0].trim(); }
+          artista=pulisciArtistaDaAlbum(resto);
+        }
       }else if(b.length > a.length + 5 && b.toLowerCase().startsWith(a.toLowerCase())){
         titolo=a;
         let resto=b.substring(a.length).trim().replace(/^[-–—\s]+/,'').trim();
-        if(resto.includes(" - ")){ resto=resto.split(" - ")[0].trim(); }
-        artista=pulisciArtistaDaAlbum(resto);
+        if(resto.includes(":") && (resto.includes("&") || resto.match(/\w+\s+\w+:/))){
+          artista=pulisciArtistaDaAlbum(resto);
+        }else{
+          if(resto.includes(" - ") && !resto.includes(":")){ resto=resto.split(" - ")[0].trim(); }
+          artista=pulisciArtistaDaAlbum(resto);
+        }
       }else{
         titolo=a; artista=b;
-        if(artista.includes(" - ")){ artista=artista.split(" - ")[0].trim(); }
+        if(artista.includes(" - ") && !artista.includes(":")){ artista=artista.split(" - ")[0].trim(); }
         artista=pulisciArtistaDaAlbum(artista);
       }
       txt=titolo+" - "+artista;
