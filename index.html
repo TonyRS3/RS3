@@ -126,7 +126,7 @@ body.soul-mode h1{ color:#d1a3ff !important; }body.soul-mode .live{ color:#d1a3f
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v165_THE_CURE_FIX';
+const CACHE_VERSION='v166_STREAM_PULITO';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay();}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -157,122 +157,139 @@ function pulisciTitolo(raw){
   return t;
 }
 function updateMediaSession(artista,titolo){if(!('mediaSession' in navigator))return;try{const logo=getLogoAssoluto();navigator.mediaSession.metadata=new MediaMetadata({title:titolo||'Radio Sistema 3',artist:artista||'Live',album:'Radio Sistema 3',artwork:[{src:logo,sizes:'512x512',type:'image/jpeg'},{src:logo,sizes:'256x256',type:'image/jpeg'}]});navigator.mediaSession.setActionHandler('play',()=>{tryAutoPlay();});navigator.mediaSession.setActionHandler('pause',()=>{document.getElementById('radioAudio').pause();});}catch(e){}}
-let _isRebuilding=false;let _lastRaw="";let _lastValidTrack="Lucio Dalla - Cara";
-function separaArtistaAlbum(str){
-  if(!str) return {artista:str, album:""};
-  let a=str.trim();
-  if(a.startsWith("The ") && a.split(/\s+/).length>=3){
-    let words=a.split(/\s+/);
-    let artista=words.slice(0,2).join(' ');
-    let album=words.slice(2).join(' ');
-    if(album.includes("(") || /Deluxe|Edition|Disintegration|Singles|Best|Platinum/i.test(album)){
-      return {artista:artista, album:album};
+let _isRebuilding=false;let _lastRaw="";let _lastValidTrack="";
+async function fetchTitoloPulitoDaStream(){
+  const endpoints = [
+    "https://listentomystream.com:8046/stats?sid=1&json=1",
+    "https://listentomystream.com:8046/currentsong?sid=1",
+    "https://manage.myshoutca.st/api/stations/bomyydij/nowplaying"
+  ];
+  for(let base of endpoints){
+    const proxies = [
+      "https://api.allorigins.win/get?url=" + encodeURIComponent(base + (base.includes("?") ? "&" : "?") + "_t=" + Date.now()),
+      "https://corsproxy.io/?" + encodeURIComponent(base + (base.includes("?") ? "&" : "?") + "_t=" + Date.now())
+    ];
+    for(let proxyUrl of proxies){
+      try{
+        let r = await fetch(proxyUrl, {cache:'no-store'});
+        if(!r.ok) continue;
+        let txt = await r.text();
+        let inner = txt;
+        try{
+          let j = JSON.parse(txt);
+          inner = j.contents || j.result || j.data || txt;
+          if(typeof inner !== 'string') inner = JSON.stringify(inner);
+        }catch(e){}
+        let m = inner.match(/"songtitle"\s*:\s*"([^"]+)"/i) || inner.match(/"title"\s*:\s*"([^"]+)"\s*,\s*"artist"/i) || inner.match(/songtitle["']?\s*[:=]\s*["']([^"']+)["']/i);
+        let song = m ? m[1] : "";
+        if(!song){
+          if(inner.length < 200 && inner.length > 3 && !inner.includes("<html") && !inner.includes("<!DOCTYPE")){
+            song = inner.replace(/^["']|["']$/g,'').trim();
+            let bodyMatch = inner.match(/<body[^>]*>([^<]+)<\/body>/i);
+            if(bodyMatch) song = bodyMatch[1].trim();
+          }
+        }
+        song = song.replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#039;/g,"'").trim();
+        if(song && song.length>3 && song.length<200 && !song.toLowerCase().includes("radio sistema 3") && !song.toLowerCase().includes("404") && !song.toLowerCase().includes("not found")){
+          return song;
+        }
+      }catch(e){ continue; }
     }
   }
-  if(a.includes(" - ") && a.includes(":")){
-    let parts=a.split(" - ");
-    return {artista:parts[0].trim(), album:parts.slice(1).join(" - ").trim()};
-  }
-  let dup = a.match(/^(.*\s+&\s*\w+)\s+(\w+:\s*.+)$/i);
-  if(dup){
-    return {artista:dup[1].trim(), album:dup[2].trim()};
-  }
-  let dup2 = a.match(/^(.*?)\s+(\w+)\s+\2:\s*(.+)$/);
-  if(dup2){
-    return {artista:(dup2[1]+" "+dup2[2]).trim(), album:dup2[2]+": "+dup2[3]};
-  }
-  if(a.includes(" The ") && (/\d{4}/.test(a) || /Singles|Best|Platinum/i.test(a))){
-    let idx=a.indexOf(" The ");
-    let prima=a.substring(0,idx).trim();
-    let dopo=a.substring(idx+1).trim();
-    if(prima.split(/\s+/).length<=3){
-      return {artista:prima, album:dopo};
-    }
-  }
-  let words=a.split(/\s+/);
-  if(words.length>=4 && words[2].toLowerCase()==="the" && (/\d{4}/.test(a) || /Singles|Best/i.test(a))){
-    return {artista:words.slice(0,2).join(' '), album:words.slice(2).join(' ')};
-  }
-  if(!a.includes(":") && !a.includes("(") && !/\d{4}/.test(a)){
-    let m2=a.match(/^(.+?)\s+(Le|La|Il|Tutti|Music|For|Seventies)\s+.+$/i);
-    if(m2 && m2[1].split(/\s+/).length<=3){
-      return {artista:m2[1].trim(), album:""};
-    }
-  }
-  return {artista:a, album:""};
+  return null;
 }
-function splitUniversale(txt){
-  txt = pulisciTitolo(txt);
-  if(txt.includes(" - ")){
-    let parti = txt.split(" - ").map(s=>s.trim()).filter(s=>s.length>0);
-    if(parti.length>=3){
-      let artistaConAlbum = parti[1] + (parti[2].includes(":") || /\d{4}/.test(parti[2]) || parti[2].includes("(") ? " - " + parti[2] : "");
-      return {titolo:parti[0], artista:artistaConAlbum};
-    }
-    if(parti.length==2){
-      return {titolo:parti[0], artista:parti[1]};
+function separaTitoloArtistaPulito(full){
+  full = pulisciTitolo(full);
+  if(full.includes(" - ")){
+    let parts = full.split(" - ");
+    if(parts.length>=2){
+      let artista = parts[0].trim();
+      let titolo = parts.slice(1).join(" - ").trim();
+      return {titolo:titolo, artista:artista};
     }
   }
-  return {titolo:txt, artista:""};
+  return {titolo:full, artista:""};
 }
-function rebuildTrackBox(){
+async function rebuildTrackBox(){
   if(_isRebuilding) return;
   const wrap=document.querySelector('.cc_recenttracks_list');
   if(!wrap) return;
   let existingBox=wrap.querySelector('.rs3-trackbox');
   let rawImg=getLogoAssoluto();
-  let titolo="", artista="", album="", txt="";
+  let titolo="", artista="", txt="";
   try{
-    let tempScan=document.createElement('div');
-    tempScan.innerHTML=wrap.innerHTML;
-    tempScan.querySelectorAll('img,.rs3-trackbox,script,style').forEach(el=>el.remove());
-    let righePulite=[];
-    let allDivs=tempScan.querySelectorAll('div, span, p, b');
-    if(allDivs.length>0){
-      allDivs.forEach(d=>{
-        let t=pulisciTitolo(d.innerText||d.textContent||"");
-        if(t.length>2 && !t.toLowerCase().includes('radio sistema 3') && !t.toLowerCase().includes('buy') && t.toLowerCase()!=='live' && t.toLowerCase()!=='- live' && t.length<300){
-          if(!righePulite.includes(t)) righePulite.push(t);
-        }
-      });
-    }
-    if(righePulite.length<2){
-      let righeRaw=tempScan.innerText.trim().split('\n').map(s=>pulisciTitolo(s)).filter(s=>s.length>2 && !s.toLowerCase().includes('radio sistema 3') && !s.toLowerCase().includes('buy') && s.toLowerCase()!=='live');
-      righePulite=righeRaw;
-    }
-    if(righePulite.length>=2){
-      let a=righePulite[0], b=righePulite[1];
-      if(a.length > b.length + 5 && a.toLowerCase().startsWith(b.toLowerCase())){
-        titolo=b;
-        let resto=a.substring(b.length).trim().replace(/^[-–—\s]+/,'').trim();
-        let sep=separaArtistaAlbum(resto);
-        artista=sep.artista; album=sep.album;
-      }else if(b.length > a.length + 5 && b.toLowerCase().startsWith(a.toLowerCase())){
-        titolo=a;
-        let resto=b.substring(a.length).trim().replace(/^[-–—\s]+/,'').trim();
-        let sep=separaArtistaAlbum(resto);
-        artista=sep.artista; album=sep.album;
-      }else{
-        titolo=a;
-        let sep=separaArtistaAlbum(b);
-        artista=sep.artista; album=sep.album;
-      }
-      txt=titolo+" - "+artista+(album?" - "+album:"");
-    }else if(righePulite.length===1){
-      let split=splitUniversale(righePulite[0]);
-      titolo=split.titolo;
-      let sep=separaArtistaAlbum(split.artista);
-      artista=sep.artista; album=sep.album;
-      txt=titolo+" - "+artista+(album?" - "+album:"");
+    let pulito = await fetchTitoloPulitoDaStream();
+    if(pulito){
+      let sep = separaTitoloArtistaPulito(pulito);
+      titolo = sep.titolo;
+      artista = sep.artista;
+      txt = titolo + " - " + artista;
     }
   }catch(e){}
+  if(!titolo){
+    try{
+      let tempScan=document.createElement('div');
+      tempScan.innerHTML=wrap.innerHTML;
+      tempScan.querySelectorAll('img,.rs3-trackbox,script,style').forEach(el=>el.remove());
+      let righePulite=[];
+      let allDivs=tempScan.querySelectorAll('div, span, p, b');
+      if(allDivs.length>0){
+        allDivs.forEach(d=>{
+          let t=pulisciTitolo(d.innerText||d.textContent||"");
+          if(t.length>2 && !t.toLowerCase().includes('radio sistema 3') && !t.toLowerCase().includes('buy') && t.toLowerCase()!=='live' && t.toLowerCase()!=='- live' && t.length<300){
+            if(!righePulite.includes(t)) righePulite.push(t);
+          }
+        });
+      }
+      if(righePulite.length>=2){
+        let a=righePulite[0], b=righePulite[1];
+        let bWords = b.split(/\s+/);
+        if(bWords.length>=4){
+          if(/\(Deluxe|Edition|Nur das Beste|The Singles|Singles|Disintegration|Best|Platinum\)/i.test(b) || b.includes("(")){
+            if(b.startsWith("The ") && bWords.length>=3){
+              artista = bWords.slice(0,2).join(' ');
+            }else if(bWords[2] && bWords[2].toLowerCase()==="the"){
+              artista = bWords.slice(0,2).join(' ');
+            }else{
+              artista = bWords.slice(0,3).join(' ');
+              if(bWords[1].toLowerCase()==="e" && bWords.length>=3){
+                artista = bWords.slice(0,3).join(' ');
+              }
+            }
+            titolo = a;
+          }else{
+            titolo = a; artista = b;
+          }
+        }else{
+          titolo = a; artista = b;
+        }
+        if(artista.includes(" Music") || artista.includes(" For ") || artista.includes(" Seventies") || artista.includes(" Le ") || artista.includes(" La ") || artista.includes(" Tutti")){
+          let parts = artista.split(/\s+/);
+          if(parts.length>=3){
+            artista = parts.slice(0,2).join(' ');
+            if(parts[1].toLowerCase()==="e") artista = parts.slice(0,3).join(' ');
+          }
+        }
+        txt = titolo + " - " + artista;
+      }else if(righePulite.length===1){
+        let txt1 = righePulite[0];
+        if(txt1.includes(" - ")){
+          let p = txt1.split(" - ");
+          titolo = p[0].trim();
+          artista = p[1].trim().split(/\s+/).slice(0,3).join(' ');
+        }else{
+          titolo = txt1;
+        }
+        txt = titolo + " - " + artista;
+      }
+    }catch(e){}
+  }
   if(!titolo || titolo.length<2) return;
   if(txt===_lastRaw && existingBox){ const cov=existingBox.querySelector('.rs3-cover'); if(cov) cov.src=rawImg; return; }
   _lastRaw=txt;
   if(!txt.toLowerCase().includes('radio sistema 3')) _lastValidTrack=txt;
   _isRebuilding=true;
-  let htmlAlbum = album ? `<div style="color:#aaa;font-size:0.80rem;font-style:italic;margin-top:2px;line-height:1.2">${album}</div>` : "";
-  let displayHtml = `<div style="font-weight:900;color:#fff;font-size:1.10rem;margin-bottom:2px;line-height:1.25">${titolo}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;line-height:1.35;margin-top:4px">${artista}</div>${htmlAlbum}`;
+  let displayHtml = `<div style="font-weight:900;color:#fff;font-size:1.10rem;margin-bottom:2px;line-height:1.25">${titolo}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;line-height:1.35;margin-top:4px">${artista}</div>`;
   if(!existingBox){
     wrap.innerHTML='';
     const b=document.createElement('div'); b.className='rs3-trackbox';
@@ -295,7 +312,7 @@ function rebuildTrackBox(){
   setTimeout(()=>{_isRebuilding=false;}, 400);
 }
 const list=document.querySelector('.cc_recenttracks_list');if(list){const obs=new MutationObserver((muts)=>{if(_isRebuilding)return;for(let m of muts){if(m.target&&m.target.closest&&m.target.closest('.rs3-trackbox'))return;if(m.target&&m.target.classList&&m.target.classList.contains('rs3-trackbox'))return;}rebuildTrackBox();});obs.observe(list,{childList:true,subtree:true});}
-let _fastInterval=setInterval(rebuildTrackBox,50);setTimeout(()=>{clearInterval(_fastInterval);_fastInterval=setInterval(rebuildTrackBox,2000);},5000);
+let _fastInterval=setInterval(rebuildTrackBox,150);setTimeout(()=>{clearInterval(_fastInterval);_fastInterval=setInterval(rebuildTrackBox,3000);},8000);
 rebuildTrackBox();
 const radioEl=document.getElementById('radioAudio');let userPaused=true;let wasPlayingBeforeHide=false;
 function tryAutoPlay(){const a=document.getElementById('radioAudio');if(userPaused&&!wasPlayingBeforeHide)return a.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;}).catch(()=>{});if(wasPlayingBeforeHide)userPaused=false;return a.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;}).catch(()=>{});}
