@@ -9,8 +9,6 @@
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
 const RS3_SOUL_LOGO_NOME="RS3_SOUL_viola_scuro.jpg";
 function getLogoAssoluto(){try{const isSoul=(typeof soulActive!=='undefined'&&soulActive)||(document.body&&document.body.classList.contains('soul-mode'));const nome=isSoul?RS3_SOUL_LOGO_NOME:RADIO_LOGO_FISSO_NOME;const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(nome);}catch(e){return (typeof soulActive!=='undefined'&&soulActive)?RS3_SOUL_LOGO_NOME:RADIO_LOGO_FISSO_NOME;}}
-// ===== AGGIUNGI QUI I BRANI - FACILE - BASTA UNA RIGA =====
-// Copia una riga e incolla sotto: { id: "ID_YOUTUBE", artista: "NOME", titolo: "TITOLO" },
 const BRANI_NOVITA = [
   { id: "ofywN3NgGqY", artista: "Sombr", titolo: "My body isn't ready" },
   { id: "PshqcQwshdU", artista: "Sfera Ebbasta", titolo: "Lontano" },
@@ -128,7 +126,7 @@ body.soul-mode h1{ color:#d1a3ff !important; }body.soul-mode .live{ color:#d1a3f
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v159_PLAYLIST_FACILE';
+const CACHE_VERSION='v160_ALBUM_FIX_TUTTI_QUI';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay();}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -163,8 +161,13 @@ let _isRebuilding=false;let _lastRaw="";let _lastValidTrack="Lucio Dalla - Cara"
 function splitUniversale(txt){
   txt = pulisciTitolo(txt);
   if(txt.includes(" - ")){
-    let sp = txt.indexOf(" - ");
-    return {titolo:txt.substring(0,sp).trim(), artista:txt.substring(sp+3).trim()};
+    let parti = txt.split(" - ").map(s=>s.trim()).filter(s=>s.length>0);
+    if(parti.length>=3){
+      return {titolo:parti[0], artista:parti[1]};
+    }
+    if(parti.length==2){
+      return {titolo:parti[0], artista:parti[1]};
+    }
   }
   let parole = txt.split(/\s+/).filter(w=>w.length>0);
   const ARTICOLI = ["a","la","le","il","lo","gli","de","del","della","di","da","al","alla","e","en","el","las","los","the","to","in","on","at","of","y","o"];
@@ -218,17 +221,22 @@ function rebuildTrackBox(){
     if(righePulite.length>=2){
       titolo = righePulite[0];
       artista = righePulite[1];
+      if(artista.includes(" - ")){
+        artista = artista.split(" - ")[0].trim();
+      }
       if(titolo.toLowerCase().startsWith(artista.toLowerCase()+" ")){
         let resto = titolo.substring(artista.length).trim();
         if(resto.length>=1){
           titolo = artista;
           artista = resto;
+          if(artista.includes(" - ")){ artista = artista.split(" - ")[0].trim(); }
         }
       }
       if(artista.toLowerCase().startsWith(titolo.toLowerCase()+" ") && titolo.length<=12){
         let resto = artista.substring(titolo.length).trim();
         if(resto.length>=2){
           artista = resto;
+          if(artista.includes(" - ")){ artista = artista.split(" - ")[0].trim(); }
         }
       }
       txt = titolo + " - " + artista;
@@ -236,7 +244,7 @@ function rebuildTrackBox(){
       let split = splitUniversale(righePulite[0]);
       titolo = split.titolo;
       artista = split.artista;
-      txt = righePulite[0];
+      txt = titolo + " - " + artista;
     }
   }catch(e){}
   if(!txt || txt.length<3) return;
