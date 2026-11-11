@@ -126,7 +126,7 @@ body.soul-mode h1{ color:#d1a3ff !important; }body.soul-mode .live{ color:#d1a3f
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v164_ALBUM_SOTTO';
+const CACHE_VERSION='v165_THE_CURE_FIX';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay();}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -161,11 +161,17 @@ let _isRebuilding=false;let _lastRaw="";let _lastValidTrack="Lucio Dalla - Cara"
 function separaArtistaAlbum(str){
   if(!str) return {artista:str, album:""};
   let a=str.trim();
+  if(a.startsWith("The ") && a.split(/\s+/).length>=3){
+    let words=a.split(/\s+/);
+    let artista=words.slice(0,2).join(' ');
+    let album=words.slice(2).join(' ');
+    if(album.includes("(") || /Deluxe|Edition|Disintegration|Singles|Best|Platinum/i.test(album)){
+      return {artista:artista, album:album};
+    }
+  }
   if(a.includes(" - ") && a.includes(":")){
     let parts=a.split(" - ");
-    if(parts.length>=2){
-      return {artista:parts[0].trim(), album:parts.slice(1).join(" - ").trim()};
-    }
+    return {artista:parts[0].trim(), album:parts.slice(1).join(" - ").trim()};
   }
   let dup = a.match(/^(.*\s+&\s*\w+)\s+(\w+:\s*.+)$/i);
   if(dup){
@@ -175,76 +181,37 @@ function separaArtistaAlbum(str){
   if(dup2){
     return {artista:(dup2[1]+" "+dup2[2]).trim(), album:dup2[2]+": "+dup2[3]};
   }
-  let m = a.match(/^(Duran Duran|[^\s]+(?:\s+[^\s]+){0,3})\s+(The\s+.+\d{4}.*)$/i);
-  if(m){
-    let prima=m[1].trim();
-    let dopo=m[2].trim();
-    if(/The Singles|The Best|Singles|Best|Platinum/i.test(dopo)){
-      if(prima.split(/\s+/).length<=4){
-        return {artista:prima, album:dopo};
-      }
+  if(a.includes(" The ") && (/\d{4}/.test(a) || /Singles|Best|Platinum/i.test(a))){
+    let idx=a.indexOf(" The ");
+    let prima=a.substring(0,idx).trim();
+    let dopo=a.substring(idx+1).trim();
+    if(prima.split(/\s+/).length<=3){
+      return {artista:prima, album:dopo};
     }
   }
   let words=a.split(/\s+/);
-  if(words.length>=4 && words[2].toLowerCase()==="the"){
-    let possibleArtista=words.slice(0,2).join(' ');
-    let possibleAlbum=words.slice(2).join(' ');
-    if(/\d{4}/.test(possibleAlbum) || /Singles|Best|Collection|Hits|Platinum/i.test(possibleAlbum)){
-      return {artista:possibleArtista, album:possibleAlbum};
-    }
+  if(words.length>=4 && words[2].toLowerCase()==="the" && (/\d{4}/.test(a) || /Singles|Best/i.test(a))){
+    return {artista:words.slice(0,2).join(' '), album:words.slice(2).join(' ')};
   }
-  if(!a.includes(":") && !/\d{4}/.test(a)){
-    let m2=a.match(/^(.+?)\s+(Le|La|Il|Tutti|Tutto|Music|For|Seventies)\s+.+$/i);
-    if(m2){
-      let prima=m2[1].trim();
-      if(prima.split(/\s+/).length<=3){
-        return {artista:prima, album:""};
-      }
+  if(!a.includes(":") && !a.includes("(") && !/\d{4}/.test(a)){
+    let m2=a.match(/^(.+?)\s+(Le|La|Il|Tutti|Music|For|Seventies)\s+.+$/i);
+    if(m2 && m2[1].split(/\s+/).length<=3){
+      return {artista:m2[1].trim(), album:""};
     }
   }
   return {artista:a, album:""};
-}
-function pulisciArtistaDaAlbum(artista){
-  if(!artista) return artista;
-  let sep=separaArtistaAlbum(artista);
-  if(sep.album && (sep.album.includes(":") || /\d{4}/.test(sep.album))){
-    return sep.artista + " - " + sep.album;
-  }
-  return sep.artista;
 }
 function splitUniversale(txt){
   txt = pulisciTitolo(txt);
   if(txt.includes(" - ")){
     let parti = txt.split(" - ").map(s=>s.trim()).filter(s=>s.length>0);
     if(parti.length>=3){
-      let artistaConAlbum = parti[1] + (parti[2].includes(":") || /\d{4}/.test(parti[2]) ? " - " + parti[2] : "");
+      let artistaConAlbum = parti[1] + (parti[2].includes(":") || /\d{4}/.test(parti[2]) || parti[2].includes("(") ? " - " + parti[2] : "");
       return {titolo:parti[0], artista:artistaConAlbum};
     }
     if(parti.length==2){
       return {titolo:parti[0], artista:parti[1]};
     }
-  }
-  let parole = txt.split(/\s+/).filter(w=>w.length>0);
-  const ARTICOLI = ["a","la","le","il","lo","gli","de","del","della","di","da","al","alla","e","en","el","las","los","the","to","in","on","at","of","y","o"];
-  function titoloValido(t){ let ult = t.split(/\s+/).pop().toLowerCase(); return !ARTICOLI.includes(ult); }
-  if(parole.length>=4){
-    let titolo1 = parole.slice(0,-1).join(' '); let artista1 = parole[parole.length-1];
-    let titolo2 = parole.slice(0,-2).join(' '); let artista2 = parole.slice(-2).join(' ');
-    if(!titoloValido(titolo2) && titoloValido(titolo1)) return {titolo:titolo1, artista:artista1};
-    if(!titoloValido(titolo1) && titoloValido(titolo2)) return {titolo:titolo2, artista:artista2};
-    let penultima = parole[parole.length-2];
-    if(penultima[0] === penultima[0].toLowerCase()) return {titolo:titolo1, artista:artista1};
-    if(!titoloValido(titolo2)) return {titolo:titolo1, artista:artista1};
-    return {titolo:titolo2, artista:artista2};
-  } else if(parole.length===3){
-    if(parole[0].toLowerCase()==="via" || parole[0].length<=3){
-      return {titolo:parole[0], artista:parole.slice(1).join(' ')};
-    }
-    let penultima = parole[1];
-    if(penultima[0] === penultima[0].toLowerCase()) return {titolo:parole.slice(0,2).join(' '), artista:parole[2]};
-    else return {titolo:parole[0], artista:parole.slice(-2).join(' ')};
-  } else if(parole.length===2){
-    return {titolo:parole[0], artista:parole[1]};
   }
   return {titolo:txt, artista:""};
 }
@@ -264,7 +231,7 @@ function rebuildTrackBox(){
     if(allDivs.length>0){
       allDivs.forEach(d=>{
         let t=pulisciTitolo(d.innerText||d.textContent||"");
-        if(t.length>2 && !t.toLowerCase().includes('radio sistema 3') && !t.toLowerCase().includes('buy') && t.toLowerCase()!=='live' && t.toLowerCase()!=='- live' && t.length<250){
+        if(t.length>2 && !t.toLowerCase().includes('radio sistema 3') && !t.toLowerCase().includes('buy') && t.toLowerCase()!=='live' && t.toLowerCase()!=='- live' && t.length<300){
           if(!righePulite.includes(t)) righePulite.push(t);
         }
       });
@@ -279,27 +246,23 @@ function rebuildTrackBox(){
         titolo=b;
         let resto=a.substring(b.length).trim().replace(/^[-–—\s]+/,'').trim();
         let sep=separaArtistaAlbum(resto);
-        artista=sep.artista;
-        album=sep.album;
+        artista=sep.artista; album=sep.album;
       }else if(b.length > a.length + 5 && b.toLowerCase().startsWith(a.toLowerCase())){
         titolo=a;
         let resto=b.substring(a.length).trim().replace(/^[-–—\s]+/,'').trim();
         let sep=separaArtistaAlbum(resto);
-        artista=sep.artista;
-        album=sep.album;
+        artista=sep.artista; album=sep.album;
       }else{
         titolo=a;
         let sep=separaArtistaAlbum(b);
-        artista=sep.artista;
-        album=sep.album;
+        artista=sep.artista; album=sep.album;
       }
       txt=titolo+" - "+artista+(album?" - "+album:"");
     }else if(righePulite.length===1){
       let split=splitUniversale(righePulite[0]);
       titolo=split.titolo;
       let sep=separaArtistaAlbum(split.artista);
-      artista=sep.artista;
-      album=sep.album;
+      artista=sep.artista; album=sep.album;
       txt=titolo+" - "+artista+(album?" - "+album:"");
     }
   }catch(e){}
