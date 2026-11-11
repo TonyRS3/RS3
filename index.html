@@ -114,7 +114,7 @@ body.soul-mode h1{ color:#d1a3ff !important; }body.soul-mode .live{ color:#d1a3f
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v151_CENTOVA_DEFINITIVO';
+const CACHE_VERSION='v152_TUTTE_LE_CANZONI';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay();}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -136,6 +136,9 @@ function pulisciTitolo(raw){
   t=t.replace(/^\s*\d{1,2}:\d{2}(?::\d{2})?\s*(AM|PM)?\s*/i,'').trim();
   t=t.replace(/^(AM|PM)\s*/i,'').trim();
   t=t.replace(/^[-–—\s]+/,'').trim();
+  // FIX CRITICO: [Explicit]Mark -> [Explicit] Mark e Vacanze RomaneMatia -> Vacanze Romane Matia
+  t=t.replace(/\]([A-Za-z])/g, '] $1');
+  t=t.replace(/\)([A-Z])/g, ') $1');
   t=t.replace(/perchéEros/gi,'perché Eros');
   t=t.replace(/percheEros/gi,'perche Eros');
   t=t.replace(/([a-zàèéìòù'’])([A-Z])/g,'$1 $2');
@@ -145,7 +148,6 @@ function pulisciTitolo(raw){
 function updateMediaSession(artista,titolo){if(!('mediaSession' in navigator))return;try{const logo=getLogoAssoluto();navigator.mediaSession.metadata=new MediaMetadata({title:titolo||'Radio Sistema 3',artist:artista||'Live',album:'Radio Sistema 3',artwork:[{src:logo,sizes:'512x512',type:'image/jpeg'},{src:logo,sizes:'256x256',type:'image/jpeg'}]});navigator.mediaSession.setActionHandler('play',()=>{tryAutoPlay();});navigator.mediaSession.setActionHandler('pause',()=>{document.getElementById('radioAudio').pause();});}catch(e){}}
 let _isRebuilding=false;let _lastRaw="";let _lastValidTrack="Lucio Dalla - Cara";
 
-// v151 CENTOVA MODE - DATI DIRETTI DAL SERVER
 let _directArtist="", _directTitle="";
 async function fetchDirectFromServer(){
   try{
@@ -164,24 +166,71 @@ async function fetchDirectFromServer(){
           text = await r.text();
         }
         if(!text || text.length<5) continue;
-        // 7.html: 5,1,19,100,5,128,Artist - Title
         let parts = text.split(',');
         if(parts.length<7) continue;
         let raw = parts.slice(6).join(',').trim();
         raw = raw.replace(/<[^>]*>/g,'').trim();
-        if(raw.length>3 && raw.includes(" - ")){
-          let sp = raw.indexOf(" - ");
-          _directArtist = raw.substring(0,sp).trim();
-          _directTitle = raw.substring(sp+3).trim();
-          // Pulisci eventuali codici strani
-          _directArtist = pulisciTitolo(_directArtist);
-          _directTitle = pulisciTitolo(_directTitle);
-          if(_directArtist && _directTitle) return {artista:_directArtist, titolo:_directTitle, raw:raw};
+        if(raw.length>3){
+          if(raw.includes(" - ")){
+            let sp = raw.indexOf(" - ");
+            _directArtist = pulisciTitolo(raw.substring(0,sp).trim());
+            _directTitle = pulisciTitolo(raw.substring(sp+3).trim());
+            if(_directArtist && _directTitle) return {artista:_directArtist, titolo:_directTitle};
+          } else {
+            // Senza trattino: usa logica universale
+            let parole = raw.split(/\s+/).filter(w=>w.length>0);
+            if(parole.length>=3){
+              let penultima = parole[parole.length-2];
+              let isMinuscola = penultima[0] === penultima[0].toLowerCase();
+              if(isMinuscola && parole.length>=3){
+                _directArtist = parole[parole.length-1];
+                _directTitle = parole.slice(0,-1).join(' ');
+              } else {
+                _directArtist = parole.slice(-2).join(' ');
+                _directTitle = parole.slice(0,-2).join(' ');
+              }
+              _directArtist = pulisciTitolo(_directArtist);
+              _directTitle = pulisciTitolo(_directTitle);
+              return {artista:_directArtist, titolo:_directTitle};
+            }
+          }
         }
       }catch(e){continue;}
     }
   }catch(e){}
   return null;
+}
+
+function splitUniversale(txt){
+  txt = pulisciTitolo(txt);
+  if(txt.includes(" - ")){
+    let sp = txt.indexOf(" - ");
+    let a = txt.substring(0,sp).trim();
+    let t = txt.substring(sp+3).trim();
+    // Se sembra Artista - Titolo (caso server) invertiamo per display Titolo bianco / Artista giallo
+    // Ma se a è corto e t lungo, probabilmente è già Artista - Titolo
+    return {artista:a, titolo:t};
+  }
+  let parole = txt.split(/\s+/).filter(w=>w.length>0);
+  if(parole.length>=4){
+    let penultima = parole[parole.length-2];
+    let isPenultimaMinuscola = penultima[0] === penultima[0].toLowerCase();
+    if(isPenultimaMinuscola){
+      return {artista:parole[parole.length-1], titolo:parole.slice(0,-1).join(' ')};
+    } else {
+      return {artista:parole.slice(-2).join(' '), titolo:parole.slice(0,-2).join(' ')};
+    }
+  } else if(parole.length===3){
+    let penultima = parole[1];
+    if(penultima[0] === penultima[0].toLowerCase()){
+      return {artista:parole[2], titolo:parole.slice(0,2).join(' ')};
+    } else {
+      return {artista:parole.slice(-2).join(' '), titolo:parole[0]};
+    }
+  } else if(parole.length===2){
+    return {titolo:parole[0], artista:parole[1]};
+  }
+  return {titolo:txt, artista:""};
 }
 
 async function rebuildTrackBox(){
@@ -199,7 +248,6 @@ async function rebuildTrackBox(){
     artista = direct.artista;
     txt = artista + " - " + titolo;
   } else {
-    // FALLBACK se il server non risponde
     let temp=document.createElement('div');
     temp.innerHTML=wrap.innerHTML;
     temp.querySelectorAll('img,a,.rs3-trackbox,script,style').forEach(el=>el.remove());
@@ -213,18 +261,23 @@ async function rebuildTrackBox(){
     });
     if(righe.length===0) return;
     if(righe.length >= 2){
+      // Caso Shoutcast foto: riga0 titolo, riga1 artista
       titolo = righe[0];
       artista = righe[1];
+      if(artista.split(' ').length===1 && titolo.split(' ').length>=2){
+        let paroleTitolo = titolo.split(' ');
+        let ultimo = paroleTitolo[paroleTitolo.length-1];
+        if(/^[A-Z][a-z]+$/.test(ultimo)){
+          artista = ultimo + " " + artista;
+          titolo = paroleTitolo.slice(0,-1).join(' ');
+        }
+      }
       txt = titolo + " - " + artista;
     } else {
+      let split = splitUniversale(righe[0]);
+      titolo = split.titolo;
+      artista = split.artista;
       txt = righe[0];
-      if(txt.includes(" - ")){
-        let sp = txt.indexOf(" - ");
-        artista = txt.substring(0,sp).trim();
-        titolo = txt.substring(sp+3).trim();
-      } else {
-        titolo = txt;
-      }
     }
   }
 
