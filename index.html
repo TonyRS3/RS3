@@ -116,7 +116,7 @@ body.soul-mode h1{ color:#d1a3ff !important; }body.soul-mode .live{ color:#d1a3f
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v156_VIA_FIX';
+const CACHE_VERSION='v158_WHAM_FIX';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay();}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -150,14 +150,9 @@ function updateMediaSession(artista,titolo){if(!('mediaSession' in navigator))re
 let _isRebuilding=false;let _lastRaw="";let _lastValidTrack="Lucio Dalla - Cara";
 function splitUniversale(txt){
   txt = pulisciTitolo(txt);
-  // FIX: Titolo - Artista (non Artista - Titolo)
   if(txt.includes(" - ")){
     let sp = txt.indexOf(" - ");
-    let prima = txt.substring(0,sp).trim();
-    let dopo = txt.substring(sp+3).trim();
-    // Se prima è corta tipo "Via" è titolo, dopo è artista
-    // Quindi Titolo = prima, Artista = dopo (come Centova)
-    return {titolo:prima, artista:dopo};
+    return {titolo:txt.substring(0,sp).trim(), artista:txt.substring(sp+3).trim()};
   }
   let parole = txt.split(/\s+/).filter(w=>w.length>0);
   const ARTICOLI = ["a","la","le","il","lo","gli","de","del","della","di","da","al","alla","e","en","el","las","los","the","to","in","on","at","of","y","o"];
@@ -172,7 +167,6 @@ function splitUniversale(txt){
     if(!titoloValido(titolo2)) return {titolo:titolo1, artista:artista1};
     return {titolo:titolo2, artista:artista2};
   } else if(parole.length===3){
-    // FIX VIA: Via = titolo, Claudio Baglioni = artista
     if(parole[0].toLowerCase()==="via" || parole[0].length<=3){
       return {titolo:parole[0], artista:parole.slice(1).join(' ')};
     }
@@ -200,7 +194,7 @@ function rebuildTrackBox(){
     if(allDivs.length>0){
       allDivs.forEach(d=>{
         let t = pulisciTitolo(d.innerText||d.textContent||"");
-        if(t.length>2 && !t.toLowerCase().includes('radio sistema 3') && !t.toLowerCase().includes('buy') && t.toLowerCase()!=='live' && t.toLowerCase()!=='- live' && t.length<100){
+        if(t.length>2 && !t.toLowerCase().includes('radio sistema 3') && !t.toLowerCase().includes('buy') && t.toLowerCase()!=='live' && t.toLowerCase()!=='- live' && t.length<120){
           if(!righePulite.includes(t)) righePulite.push(t);
         }
       });
@@ -210,26 +204,21 @@ function rebuildTrackBox(){
       righePulite = righeRaw;
     }
     if(righePulite.length>=2){
-      // CENTOVA: riga 0 = Titolo, riga 1 = Artista
       titolo = righePulite[0];
       artista = righePulite[1];
-      // FIX se titolo contiene artista (es Via Claudio Baglioni / Via)
-      if(titolo.toLowerCase().startsWith(artista.toLowerCase()+" ") && artista.length<=4){
+      // FIX WHAM! + VIDEO KILLED: titolo contiene artista come prefisso
+      if(titolo.toLowerCase().startsWith(artista.toLowerCase()+" ")){
         let resto = titolo.substring(artista.length).trim();
-        if(resto.length>2){
+        if(resto.length>=1){
+          titolo = artista;
           artista = resto;
-          titolo = righePulite[1];
         }
       }
-      // FIX inverso: se artista contiene titolo
-      if(artista.toLowerCase().startsWith(titolo.toLowerCase()+" ") && titolo.length<=4){
+      // FIX VIA
+      if(artista.toLowerCase().startsWith(titolo.toLowerCase()+" ") && titolo.length<=12){
         let resto = artista.substring(titolo.length).trim();
-        if(resto.length>2){
-          // titolo Via, artista Via Claudio Baglioni -> inverti
-          let newTitolo = titolo;
-          let newArtista = resto;
-          titolo = newTitolo;
-          artista = newArtista;
+        if(resto.length>=2){
+          artista = resto;
         }
       }
       txt = titolo + " - " + artista;
@@ -250,22 +239,14 @@ function rebuildTrackBox(){
     const b=document.createElement('div'); b.className='rs3-trackbox';
     const img=document.createElement('img'); img.className='rs3-cover'; img.src=rawImg; img.onerror=function(){this.src=getLogoAssoluto();};
     const info=document.createElement('div'); info.className='rs3-info';
-    if(titolo && artista){
-      info.innerHTML='<div style="font-weight:900;color:#fff;font-size:1.10rem;margin-bottom:2px;line-height:1.25">'+titolo+'</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;line-height:1.35;margin-top:4px">'+artista+'</div><div style="color:#aaa;font-size:0.75rem;margin-top:6px">Radio Sistema 3</div>';
-    } else {
-      info.innerHTML='<div style="font-weight:900;color:#fff;font-size:1.10rem;line-height:1.25">'+titolo+'</div>';
-    }
+    info.innerHTML='<div style="font-weight:900;color:#fff;font-size:1.10rem;margin-bottom:2px;line-height:1.25">'+titolo+'</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;line-height:1.35;margin-top:4px">'+artista+'</div><div style="color:#aaa;font-size:0.75rem;margin-top:6px">Radio Sistema 3</div>';
     info.dataset.lastText=txt;
     b.appendChild(img); b.appendChild(info);
     wrap.appendChild(b);
   } else {
     const info=existingBox.querySelector('.rs3-info');
     if(info && info.dataset.lastText!==txt){
-      if(titolo && artista){
-        info.innerHTML='<div style="font-weight:900;color:#fff;font-size:1.10rem;margin-bottom:2px;line-height:1.25">'+titolo+'</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;line-height:1.35;margin-top:4px">'+artista+'</div><div style="color:#aaa;font-size:0.75rem;margin-top:6px">Radio Sistema 3</div>';
-      } else {
-        info.innerHTML='<div style="font-weight:900;color:#fff;font-size:1.10rem;line-height:1.25">'+titolo+'</div>';
-      }
+      info.innerHTML='<div style="font-weight:900;color:#fff;font-size:1.10rem;margin-bottom:2px;line-height:1.25">'+titolo+'</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;line-height:1.35;margin-top:4px">'+artista+'</div><div style="color:#aaa;font-size:0.75rem;margin-top:6px">Radio Sistema 3</div>';
       info.dataset.lastText=txt;
     }
     const cover=existingBox.querySelector('.rs3-cover'); if(cover) cover.src=rawImg;
