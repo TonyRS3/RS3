@@ -41,9 +41,11 @@ h1{margin-top:20px;font-size:3rem;transition:all 0.6s ease}
 .section-title{font-size:1.4rem;margin-bottom:8px;color:#ffd966;}
 audio{width:100%;max-width:340px;height:36px;}
 .btn-popup{margin-top:10px;background:#222;color:#ffd966;border:1px solid #ffd966;padding:8px 16px;border-radius:20px;font-weight:900;font-size:0.85rem;cursor:pointer;}
-.cc_recenttracks_list{margin-top:8px !important;max-width:400px !important;margin-left:auto !important;margin-right:auto !important;background:rgba(0,0,0,0.85) !important;padding:0 !important;border-radius:14px !important;min-height:125px !important;overflow:visible !important;}
-.cc_recenttracks_list:not(.rs3-ready){background:rgba(0,0,0,0.85) !important;min-height:125px !important;}
+.cc_recenttracks_list{margin-top:8px !important;max-width:400px !important;margin-left:auto !important;margin-right:auto !important;background:rgba(0,0,0,0.85) !important;padding:0 !important;border-radius:14px !important;min-height:125px !important;overflow:hidden !important;opacity:0;transition:opacity 0.2s;}
+.cc_recenttracks_list.rs3-ready{opacity:1 !important;overflow:visible !important;}
 .cc_recenttracks_list:not(.rs3-ready) *{display:none !important;}
+.cc_recenttracks_list > *:not(.rs3-trackbox){display:none !important;}
+.cc_recenttracks_list.rs3-ready > *:not(.rs3-trackbox){display:none !important;}
 .cc_recenttracks_list.rs3-ready .rs3-trackbox{display:flex !important;}
 .rs3-trackbox{display:flex !important;flex-direction:row !important;align-items:flex-start !important;gap:14px !important;padding:14px 12px 8px 12px !important;width:100% !important;min-height:125px !important;flex-wrap:wrap !important;}
 .rs3-cover{width:82px !important;height:82px !important;min-width:82px !important;object-fit:cover !important;border-radius:8px !important;background:#000 !important;display:block !important;flex:0 0 82px !important;margin-top:2px !important;}
@@ -114,7 +116,7 @@ body.soul-mode h1{ color:#d1a3ff !important; }body.soul-mode .live{ color:#d1a3f
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v154_CENTOVA_CLONE';
+const CACHE_VERSION='v155_NO_FLASH';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay();}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -146,7 +148,6 @@ function pulisciTitolo(raw){
 }
 function updateMediaSession(artista,titolo){if(!('mediaSession' in navigator))return;try{const logo=getLogoAssoluto();navigator.mediaSession.metadata=new MediaMetadata({title:titolo||'Radio Sistema 3',artist:artista||'Live',album:'Radio Sistema 3',artwork:[{src:logo,sizes:'512x512',type:'image/jpeg'},{src:logo,sizes:'256x256',type:'image/jpeg'}]});navigator.mediaSession.setActionHandler('play',()=>{tryAutoPlay();});navigator.mediaSession.setActionHandler('pause',()=>{document.getElementById('radioAudio').pause();});}catch(e){}}
 let _isRebuilding=false;let _lastRaw="";let _lastValidTrack="Lucio Dalla - Cara";
-
 function splitUniversale(txt){
   txt = pulisciTitolo(txt);
   if(txt.includes(" - ")){
@@ -174,53 +175,35 @@ function splitUniversale(txt){
   }
   return {titolo:txt, artista:""};
 }
-
-// v154 COPIA ESATTA CENTOVA - LEGGE 2 RIGHE SEPARATE
 function rebuildTrackBox(){
   if(_isRebuilding) return;
   const wrap=document.querySelector('.cc_recenttracks_list');
   if(!wrap) return;
   let existingBox=wrap.querySelector('.rs3-trackbox');
   let rawImg=getLogoAssoluto();
-
-  // 1. METODO CENTOVA: cerca elementi separati titolo/artista nel widget
   let titolo="", artista="", txt="";
-  let foundCentova = false;
-  
   try{
-    // Il widget di myshoutcast crea div con titolo e artista separati
-    // Cerchiamo tutti i div/span con testo
     let tempScan = document.createElement('div');
     tempScan.innerHTML = wrap.innerHTML;
-    // Rimuovi img e box nostri
     tempScan.querySelectorAll('img,.rs3-trackbox,script,style').forEach(el=>el.remove());
-    
     let righePulite = [];
-    // Prendi tutti i testi, div per div
     let allDivs = tempScan.querySelectorAll('div, span, p, b');
     if(allDivs.length>0){
       allDivs.forEach(d=>{
         let t = pulisciTitolo(d.innerText||d.textContent||"");
         if(t.length>2 && !t.toLowerCase().includes('radio sistema 3') && !t.toLowerCase().includes('buy') && t.toLowerCase()!=='live' && t.toLowerCase()!=='- live' && t.length<100){
-          // Evita duplicati
           if(!righePulite.includes(t)) righePulite.push(t);
         }
       });
     }
-    // Fallback a innerText split
     if(righePulite.length<2){
       let righeRaw = tempScan.innerText.trim().split('\n').map(s=>pulisciTitolo(s)).filter(s=>s.length>2 && !s.toLowerCase().includes('radio sistema 3') && !s.toLowerCase().includes('buy') && s.toLowerCase()!=='live');
       righePulite = righeRaw;
     }
-
     if(righePulite.length>=2){
-      // CENTOVA: prima riga titolo, seconda artista - ESATTO COME FOTO TUA
-      // Vattene amore / Mietta
-      // Vamos a la Playa / Righeira
       titolo = righePulite[0];
       artista = righePulite[1];
       txt = titolo + " - " + artista;
-      foundCentova = true;
     } else if(righePulite.length===1){
       let split = splitUniversale(righePulite[0]);
       titolo = split.titolo;
@@ -228,13 +211,11 @@ function rebuildTrackBox(){
       txt = righePulite[0];
     }
   }catch(e){}
-
   if(!txt || txt.length<3) return;
   if(txt===_lastRaw && existingBox){ const cov=existingBox.querySelector('.rs3-cover'); if(cov) cov.src=rawImg; return; }
   _lastRaw=txt;
   if(!txt.toLowerCase().includes('radio sistema 3')) _lastValidTrack=txt;
   _isRebuilding=true;
-
   if(!existingBox){
     wrap.innerHTML='';
     const b=document.createElement('div'); b.className='rs3-trackbox';
@@ -264,9 +245,9 @@ function rebuildTrackBox(){
   updateMediaSession(artista,titolo);
   setTimeout(()=>{_isRebuilding=false;}, 400);
 }
-
 const list=document.querySelector('.cc_recenttracks_list');if(list){const obs=new MutationObserver((muts)=>{if(_isRebuilding)return;for(let m of muts){if(m.target&&m.target.closest&&m.target.closest('.rs3-trackbox'))return;if(m.target&&m.target.classList&&m.target.classList.contains('rs3-trackbox'))return;}rebuildTrackBox();});obs.observe(list,{childList:true,subtree:true});}
-let _fastInterval=setInterval(rebuildTrackBox,300);setTimeout(()=>{clearInterval(_fastInterval);_fastInterval=setInterval(rebuildTrackBox,2000);},5000);
+let _fastInterval=setInterval(rebuildTrackBox,50);setTimeout(()=>{clearInterval(_fastInterval);_fastInterval=setInterval(rebuildTrackBox,2000);},5000);
+rebuildTrackBox();
 const radioEl=document.getElementById('radioAudio');let userPaused=true;let wasPlayingBeforeHide=false;
 function tryAutoPlay(){const a=document.getElementById('radioAudio');if(userPaused&&!wasPlayingBeforeHide)return a.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;}).catch(()=>{});if(wasPlayingBeforeHide)userPaused=false;return a.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;}).catch(()=>{});}
 radioEl.addEventListener('play',()=>{userPaused=false;wasPlayingBeforeHide=true;});
