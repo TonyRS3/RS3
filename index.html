@@ -126,7 +126,7 @@ body.soul-mode h1{ color:#d1a3ff !important; }body.soul-mode .live{ color:#d1a3f
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v161_ALBUM_ELIMINATO';
+const CACHE_VERSION='v162_BUGGLES_FIX';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay();}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -161,7 +161,13 @@ let _isRebuilding=false;let _lastRaw="";let _lastValidTrack="Lucio Dalla - Cara"
 function pulisciArtistaDaAlbum(artista){
   if(!artista) return artista;
   let a=artista.trim();
-  let m=a.match(/^(.+?)\s+(Le|La|Il|I|Gli|Lo|Tutti|Tutto|Una|Un|De|Del|Delle|Della|Degli)\s+.+$/i);
+  if(/^The\s+\w+/i.test(a)){
+    let parts=a.split(/\s+/);
+    if(parts.length>=3 && /^(Music|For|Le|La|Il|Tutti|Tutto|The|Seventies|Canzoni|Qui)/i.test(parts[2])){
+      return parts.slice(0,2).join(' ');
+    }
+  }
+  let m=a.match(/^(.+?)\s+(Music|For|Seventies|Le|La|Il|I|Gli|Lo|Tutti|Tutto|Una|Un|De|Del|Delle|Della|Degli)\s+.+$/i);
   if(m){
     let prima=m[1].trim();
     let parole=prima.split(/\s+/);
@@ -172,12 +178,12 @@ function pulisciArtistaDaAlbum(artista){
   let words=a.split(/\s+/);
   if(words.length>=4){
     let terza=words[2].toLowerCase();
-    if(["le","la","il","i","gli","lo","tutti","tutto","una","un","del","della","delle","degli"].includes(terza)){
+    if(["music","for","seventies","le","la","il","i","gli","lo","tutti","tutto","una","un","del"].includes(terza)){
       return words.slice(0,2).join(' ');
     }
   }
   if(words.length==3){
-    if(/^(Canzoni|Qui|Collection|Hits|Best|Vol|Volume|Live|Deluxe|Remaster)/i.test(words[2])){
+    if(/^(Canzoni|Qui|Music|For|Seventies|Collection|Hits|Best|Vol)/i.test(words[2])){
       return words.slice(0,2).join(' ');
     }
   }
@@ -226,36 +232,45 @@ function rebuildTrackBox(){
   let rawImg=getLogoAssoluto();
   let titolo="", artista="", txt="";
   try{
-    let tempScan = document.createElement('div');
-    tempScan.innerHTML = wrap.innerHTML;
+    let tempScan=document.createElement('div');
+    tempScan.innerHTML=wrap.innerHTML;
     tempScan.querySelectorAll('img,.rs3-trackbox,script,style').forEach(el=>el.remove());
-    let righePulite = [];
-    let allDivs = tempScan.querySelectorAll('div, span, p, b');
+    let righePulite=[];
+    let allDivs=tempScan.querySelectorAll('div, span, p, b');
     if(allDivs.length>0){
       allDivs.forEach(d=>{
-        let t = pulisciTitolo(d.innerText||d.textContent||"");
-        if(t.length>2 && !t.toLowerCase().includes('radio sistema 3') && !t.toLowerCase().includes('buy') && t.toLowerCase()!=='live' && t.toLowerCase()!=='- live' && t.length<120){
+        let t=pulisciTitolo(d.innerText||d.textContent||"");
+        if(t.length>2 && !t.toLowerCase().includes('radio sistema 3') && !t.toLowerCase().includes('buy') && t.toLowerCase()!=='live' && t.toLowerCase()!=='- live' && t.length<160){
           if(!righePulite.includes(t)) righePulite.push(t);
         }
       });
     }
     if(righePulite.length<2){
-      let righeRaw = tempScan.innerText.trim().split('\n').map(s=>pulisciTitolo(s)).filter(s=>s.length>2 && !s.toLowerCase().includes('radio sistema 3') && !s.toLowerCase().includes('buy') && s.toLowerCase()!=='live');
-      righePulite = righeRaw;
+      let righeRaw=tempScan.innerText.trim().split('\n').map(s=>pulisciTitolo(s)).filter(s=>s.length>2 && !s.toLowerCase().includes('radio sistema 3') && !s.toLowerCase().includes('buy') && s.toLowerCase()!=='live');
+      righePulite=righeRaw;
     }
     if(righePulite.length>=2){
-      titolo = righePulite[0];
-      artista = righePulite[1];
-      if(artista.includes(" - ")){
-        artista = artista.split(" - ")[0].trim();
+      let a=righePulite[0], b=righePulite[1];
+      if(a.length > b.length + 5 && a.toLowerCase().startsWith(b.toLowerCase())){
+        titolo=b;
+        let resto=a.substring(b.length).trim().replace(/^[-–—\s]+/,'').trim();
+        if(resto.includes(" - ")){ resto=resto.split(" - ")[0].trim(); }
+        artista=pulisciArtistaDaAlbum(resto);
+      }else if(b.length > a.length + 5 && b.toLowerCase().startsWith(a.toLowerCase())){
+        titolo=a;
+        let resto=b.substring(a.length).trim().replace(/^[-–—\s]+/,'').trim();
+        if(resto.includes(" - ")){ resto=resto.split(" - ")[0].trim(); }
+        artista=pulisciArtistaDaAlbum(resto);
+      }else{
+        titolo=a; artista=b;
+        if(artista.includes(" - ")){ artista=artista.split(" - ")[0].trim(); }
+        artista=pulisciArtistaDaAlbum(artista);
       }
-      artista = pulisciArtistaDaAlbum(artista);
-      txt = titolo + " - " + artista;
-    } else if(righePulite.length===1){
-      let split = splitUniversale(righePulite[0]);
-      titolo = split.titolo;
-      artista = split.artista;
-      txt = titolo + " - " + artista;
+      txt=titolo+" - "+artista;
+    }else if(righePulite.length===1){
+      let split=splitUniversale(righePulite[0]);
+      titolo=split.titolo; artista=split.artista;
+      txt=titolo+" - "+artista;
     }
   }catch(e){}
   if(!txt || txt.length<3) return;
@@ -272,7 +287,7 @@ function rebuildTrackBox(){
     info.dataset.lastText=txt;
     b.appendChild(img); b.appendChild(info);
     wrap.appendChild(b);
-  } else {
+  }else{
     const info=existingBox.querySelector('.rs3-info');
     if(info && info.dataset.lastText!==txt){
       info.innerHTML='<div style="font-weight:900;color:#fff;font-size:1.10rem;margin-bottom:2px;line-height:1.25">'+titolo+'</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;line-height:1.35;margin-top:4px">'+artista+'</div><div style="color:#aaa;font-size:0.75rem;margin-top:6px">Radio Sistema 3</div>';
