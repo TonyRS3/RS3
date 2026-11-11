@@ -11,6 +11,7 @@ const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
 const RS3_SOUL_LOGO_NOME="RS3_SOUL_viola_scuro.jpg";
 function getLogoAssoluto(){try{const isSoul=(typeof soulActive!=='undefined'&&soulActive)||(document.body&&document.body.classList.contains('soul-mode'));const nome=isSoul?RS3_SOUL_LOGO_NOME:RADIO_LOGO_FISSO_NOME;const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(nome);}catch(e){return (typeof soulActive!=='undefined'&&soulActive)?RS3_SOUL_LOGO_NOME:RADIO_LOGO_FISSO_NOME;}}
 const BRANI_NOVITA = [
+  { id: "0xuFBG6o6EU", artista: "Gaia", titolo: "Senz'allegria" },
   { id: "ofywN3NgGqY", artista: "Sombr", titolo: "My body isn't ready" },
   { id: "PshqcQwshdU", artista: "Sfera Ebbasta", titolo: "Lontano" },
   { id: "2r1njyfmREA", artista: "SOFI TUKKER & OneRepublic", titolo: "TSUNAMI" },
