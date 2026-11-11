@@ -1,4 +1,5 @@
 <!-- v176 - FIX SWAP AUTORE SOPRA/SOTTO + REMASTER -->
+<!-- v177 - FIX VU + PLAYLIST + ANTI-OSCILLAZIONE -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -47,7 +48,7 @@ if(window.location.search.includes('popup=1')){document.documentElement.classLis
 h1{margin-top:20px;font-size:3rem}
 .live{margin-top:15px;color:#ff4444;font-size:1.6rem;font-weight:bold;animation:pulse 1.4s infinite}
 @keyframes pulse{0%{opacity:1}50%{opacity:.4}100%{opacity:1}}
-.player-box{margin-top:8px;margin-bottom:2px !important;background:rgba(255,255,255,.10);padding:10px 12px 8px 12px;border-radius:20px;width:400px;max-width:92%;margin-left:auto;margin-right:auto}
+.player-box{margin-top:8px;margin-bottom:2px !important;background:rgba(255,255,255,.10);padding:10px 12px 8px 12px;border-radius:20px;width:400px;max-width:92%;margin-left:auto;margin-right:auto;overflow:hidden !important}
 .section-title{font-size:1.4rem;margin-bottom:8px;color:#ffd966}
 audio{width:100%;max-width:340px;height:36px}
 .btn-popup{margin-top:6px;background:#222;color:#ffd966;border:1px solid #ffd966;padding:6px 14px;border-radius:20px;font-weight:900;font-size:0.80rem;cursor:pointer}
@@ -56,6 +57,15 @@ audio{width:100%;max-width:340px;height:36px}
 .rs3-trackbox{display:flex !important;flex-direction:row !important;align-items:center !important;gap:14px !important;padding:12px 12px !important;width:100% !important;min-height:95px !important}
 .rs3-cover{width:72px !important;height:72px !important;min-width:72px !important;object-fit:cover !important;border-radius:8px !important;background:#000 !important;display:block !important;flex:0 0 72px !important}
 .rs3-info{flex:1 !important;display:flex !important;flex-direction:column !important;text-align:left !important;color:white !important;font-size:0.92rem !important;line-height:1.4 !important;gap:4px !important;overflow:hidden !important}
+.btn-novita{margin-top:8px !important;background:#ff0033 !important;color:#fff !important;font-weight:900 !important;padding:12px 26px !important;border:none !important;border-radius:50px !important;font-size:1.1rem !important;cursor:pointer !important;display:inline-block !important}
+#novitaSection{display:none;margin-top:10px;background:rgba(0,0,0,.6);padding:15px;border-radius:20px}
+#novitaPlayerMain{width:65%;max-width:340px;aspect-ratio:16/9;background:#1a1a1a;border-radius:12px;margin:0 auto 12px auto;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border:2px dashed #555}
+#novitaPlayerMain iframe{width:100%;height:100%;border:0;position:absolute;top:0;left:0}
+#novitaList{max-height:350px;overflow-y:auto;text-align:left}
+.novita-row{display:flex;align-items:center;gap:10px;padding:7px 9px;background:#151515;cursor:pointer;border-radius:8px;margin-bottom:5px}
+.vu-wrap{margin-top:6px;background:rgba(0,0,0,.75);padding:4px 6px;border-radius:8px;border:1px solid rgba(255,255,255,.2);max-width:320px;margin:6px auto 0 auto;overflow:hidden !important;box-sizing:border-box !important}
+#vuCanvas{width:100% !important;max-width:100% !important;height:32px;display:block;border-radius:4px;background:#0a0a0a;box-sizing:border-box !important}
+.vu-label{font-size:.65rem;color:#aaa;margin-top:2px;display:flex;justify-content:space-between;font-family:monospace}
 .news-box-side{background:rgba(0,0,0,.92);border:1px solid #ff0033;border-radius:12px;padding:14px;text-align:left;width:100%}
 .news-box-side.right-box{min-height:auto;padding:10px 12px !important}
 .news-title{font-size:0.80rem;color:#ff4444;font-weight:900;margin-bottom:6px}
@@ -108,7 +118,7 @@ body.soul-mode h1{ color:#d1a3ff !important }body.soul-mode .live{ color:#d1a3ff
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v176_FIX_SWAP_AUTORE';
+const CACHE_VERSION='v177_FIX_VU_PLAYLIST';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay();}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -166,7 +176,6 @@ async function rebuildTrackBox(){
     let artistEl=tempScan.querySelector('[class*="artist"], .cc_artist');
     let righe=[];
     if(titleEl && artistEl){
-      // v176: mantengo sempre artista - titolo ma in ordine fisso artista -> titolo
       let art = artistEl.innerText.trim();
       let tit = titleEl.innerText.trim();
       righe=[art+" - "+tit];
@@ -186,45 +195,24 @@ async function rebuildTrackBox(){
       let parsed=parseArtistTitleSmart(rawCombined);
       let titolo=parsed.titolo;
       let artista=parsed.artista;
-      
       if(!titolo || titolo.length<2) return;
-      
-      // FIX ANTI-OSCILLAZIONE: se il nuovo titolo è l'inverso del vecchio, ignoro
       if(_lastTitolo && _lastArtist){
         if(titolo.toLowerCase()===_lastArtist.toLowerCase() && artista.toLowerCase()===_lastTitolo.toLowerCase()){
-          return; // era swap, non fare nulla
+          return;
         }
       }
-      
       let txt=titolo+" - "+artista;
-      if(txt===_lastRaw) return; // già mostrato
-      
+      if(txt===_lastRaw) return;
       _lastRaw=txt;
       _lastTitolo=titolo;
       if(artista){_lastArtist=artista; _lastValidArtistaTitolo=txt; _lastValidTime=Date.now();}
-      
       let info=mioBox.querySelector('.rs3-info');
       if(info){
-        // SEMPRE titolo sopra, artista sotto - mai invertiti
         info.innerHTML=`<div style="font-weight:900;color:#fff;font-size:1.10rem;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${titolo}">${titolo}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${artista}">${artista || 'Radio Sistema 3'}</div>`;
       }
       const cov=mioBox.querySelector('.rs3-cover');
       if(cov && cov.src!==rawImg) cov.src=rawImg;
       updateMediaSession(artista,titolo);
-    }
-  }catch(e){}
-  try{
-    let pulito=await fetchTitoloPulitoDaStream();
-    if(pulito && pulito.includes(" - ")){
-      let parts=pulito.split(" - ");let a=parts[0].trim(), t=parts.slice(1).join(" - ").trim();t=pulisciTitoloFinale(t);
-      if(t && a && t!==_lastTitolo){
-        // anti-swap anche qui
-        if(_lastTitolo && t.toLowerCase()===_lastArtist.toLowerCase() && a.toLowerCase()===_lastTitolo.toLowerCase()) return;
-        _lastRaw=t+" - "+a; _lastTitolo=t; _lastArtist=a;
-        let info2=mioBox.querySelector('.rs3-info');
-        if(info2){info2.innerHTML=`<div style="font-weight:900;color:#fff;font-size:1.10rem;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a}</div>`;}
-        updateMediaSession(a,t);
-      }
     }
   }catch(e){}
 }
@@ -257,4 +245,4 @@ setInterval(checkSoulMode,3000);checkSoulMode();
 setInterval(()=>{if(document.body.classList.contains('soul-mode')){const v=getLogoAssoluto();document.querySelectorAll('.rs3-cover').forEach(img=>{if(!img.src.includes('viola')&&!img.src.includes('RS3_SOUL')){img.src=v;}});}},800);
 </script>
 </body>
-</html><!-- v176 - fix oscillazione + clean remastered - 13/05/2026 -->
+</html>
