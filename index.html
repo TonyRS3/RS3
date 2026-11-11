@@ -1,4 +1,4 @@
-<!-- v175 - fix oscillazione + clean remastered - 13/05/2026 -->
+<!-- v176 - FIX SWAP AUTORE SOPRA/SOTTO + REMASTER -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -56,6 +56,20 @@ audio{width:100%;max-width:340px;height:36px}
 .rs3-trackbox{display:flex !important;flex-direction:row !important;align-items:center !important;gap:14px !important;padding:12px 12px !important;width:100% !important;min-height:95px !important}
 .rs3-cover{width:72px !important;height:72px !important;min-width:72px !important;object-fit:cover !important;border-radius:8px !important;background:#000 !important;display:block !important;flex:0 0 72px !important}
 .rs3-info{flex:1 !important;display:flex !important;flex-direction:column !important;text-align:left !important;color:white !important;font-size:0.92rem !important;line-height:1.4 !important;gap:4px !important;overflow:hidden !important}
+.news-box-side{background:rgba(0,0,0,.92);border:1px solid #ff0033;border-radius:12px;padding:14px;text-align:left;width:100%}
+.news-box-side.right-box{min-height:auto;padding:10px 12px !important}
+.news-title{font-size:0.80rem;color:#ff4444;font-weight:900;margin-bottom:6px}
+.news-title.calcio{color:#00d4ff}.news-box-side.calcio{border-color:#00d4ff}
+.news-box-side.musica{border-color:#c084fc;background:linear-gradient(180deg,rgba(168,85,247,.22),rgba(0,0,0,.95));box-shadow:0 0 15px rgba(192,132,252,.25);min-height:auto !important;padding:10px 12px !important}
+.news-box-side.concerti{border-color:#a3e635;background:linear-gradient(180deg,rgba(132,204,2,.18),rgba(0,0,0,.95));box-shadow:0 0 15px rgba(163,230,53,.20);min-height:auto !important;padding:10px 12px !important}
+.news-title.musica{color:#e9d5ff;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px !important;font-size:0.80rem !important}
+.news-title.concerti{color:#d9f99d;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px !important;font-size:0.80rem !important}
+.news-item, .news-item.calcio, .news-item.musica, .news-item.concerti{font-size:0.90rem !important;line-height:1.35 !important;padding:8px 10px !important;margin-bottom:8px !important;background:rgba(255,255,255,.06) !important;border-radius:8px !important}
+.news-item a{color:#ffd966;text-decoration:none;display:block;font-weight:600;cursor:pointer}
+.news-item.calcio a{color:#aee8ff}.news-item.musica a{color:#f5f3ff}.news-item.concerti a{color:#ecfccb}
+.news-item a:hover{color:#fff !important;text-decoration:underline !important}
+.live-dot{width:7px;height:7px;background:#ff0033;border-radius:50%;display:inline-block;margin-right:6px;animation:dotPulse 1.2s infinite}
+@keyframes dotPulse{0%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.5}100%{transform:scale(1);opacity:1}}
 .footer-copy{margin-top:20px;padding:16px 10px;text-align:center;font-size:0.85rem;color:#ddd;background:rgba(0,0,0,0.85);border-top:1px solid rgba(255,255,255,0.15)}
 html.is-popup body{background:#0a1931 !important;overflow:hidden !important}
 html.is-popup .page-layout{display:block !important}
@@ -94,7 +108,7 @@ body.soul-mode h1{ color:#d1a3ff !important }body.soul-mode .live{ color:#d1a3ff
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v175_FIX_OSCILLAZIONE_REMASTER';
+const CACHE_VERSION='v176_FIX_SWAP_AUTORE';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay();}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -114,13 +128,11 @@ function pulisciTitolo(raw){
 }
 function pulisciTitoloFinale(t){
   if(!t) return t;
-  // --- v175 FIX REMASTER ---
   t=t.replace(/\s*[\(\[][^\)\]]*remaster[^\)\]]*[\)\]]/gi,'').trim();
   t=t.replace(/\s*-\s*\d{4}\s*-\s*remaster.*$/gi,'').trim();
   t=t.replace(/\s*-\s*.*remaster.*$/gi,'').trim();
   t=t.replace(/\s+\d{4}\s+Remaster(ed)?/gi,'').trim();
   t=t.replace(/\s+Remaster(ed)?(\s+\d{4})?/gi,'').trim();
-  // --- fine fix ---
   t=t.replace(/\s*\[ga R\]\s*/gi,'').trim();
   t=t.replace(/\s*\[.*?R\]\s*$/gi,'').trim();
   t=t.replace(/\s*\[.*?\]\s*$/,'').trim();
@@ -130,6 +142,7 @@ function rimuoviTitoloDuplicato(s){if(!s) return s;let w=s.trim().split(/\s+/);i
 function parseArtistTitleSmart(s){
   if(!s) return {titolo:"", artista:""};
   s=s.replace(/\s+/g,' ').trim();
+  s=pulisciTitoloFinale(s);
   let sep = s.includes(' - ') ? ' - ' : (s.includes(' – ') ? ' – ' : (s.includes(' — ') ? ' — ' : null));
   if(sep){
     let parts=s.split(sep);
@@ -141,7 +154,7 @@ function parseArtistTitleSmart(s){
   return {titolo: pulisciTitoloFinale(s), artista:""};
 }
 function updateMediaSession(artista,titolo){if(!('mediaSession' in navigator))return;try{const logo=getLogoAssoluto();navigator.mediaSession.metadata=new MediaMetadata({title:titolo||'Radio Sistema 3',artist:artista||'Live',album:'Radio Sistema 3',artwork:[{src:logo,sizes:'512x512',type:'image/jpeg'},{src:logo,sizes:'256x256',type:'image/jpeg'}]});navigator.mediaSession.setActionHandler('play',()=>{tryAutoPlay();});navigator.mediaSession.setActionHandler('pause',()=>{document.getElementById('radioAudio').pause();});}catch(e){}}
-let _lastRaw="";let _lastValidTime=0;let _lastValidArtistaTitolo="";let _lastArtist="";
+let _lastRaw="";let _lastValidTime=0;let _lastValidArtistaTitolo="";let _lastArtist="";let _lastTitolo="";
 function creaMioBox(){if(document.getElementById('rs3-mio-box')) return document.getElementById('rs3-mio-box');const original=document.querySelector('.cc_recenttracks_list');if(!original) return null;original.style.display='none';original.style.opacity='0';original.style.height='0';original.style.minHeight='0';original.style.maxHeight='0';original.style.margin='0';original.style.padding='0';original.style.overflow='hidden';original.style.pointerEvents='none';if(document.getElementById('rs3-mio-box')) return document.getElementById('rs3-mio-box');const mio=document.createElement('div');mio.id='rs3-mio-box';mio.className='rs3-ready';mio.style.display='block';mio.style.opacity='1';mio.style.minHeight='95px';mio.style.maxWidth='400px';mio.style.margin='2px auto 0 auto';mio.style.background='rgba(0,0,0,0.85)';mio.style.borderRadius='14px';mio.style.padding='0';mio.innerHTML='<div class="rs3-trackbox"><img class="rs3-cover" src="'+getLogoAssoluto()+'"><div class="rs3-info"><div style="font-weight:900;color:#fff">Radio Sistema 3</div><div style="color:#ffd966">Live</div></div></div>';original.parentNode.insertBefore(mio, original.nextSibling);return mio;}
 async function fetchTitoloPulitoDaStream(){const endpoints=["https://listentomystream.com:8046/stats?sid=1&json=1","https://listentomystream.com:8046/currentsong?sid=1"];for(let base of endpoints){const proxies=["https://api.allorigins.win/get?url="+encodeURIComponent(base+"?_t="+Date.now()),"https://corsproxy.io/?"+encodeURIComponent(base+"?_t="+Date.now())];for(let proxyUrl of proxies){try{let r=await fetch(proxyUrl,{cache:'no-store'});if(!r.ok) continue;let txt=await r.text();let inner=txt;try{let j=JSON.parse(txt);inner=j.contents||txt;if(typeof inner!=='string')inner=JSON.stringify(inner);}catch(e){}let m=inner.match(/"songtitle"\s*:\s*"([^"]+)"/i);let song=m?m[1]:"";if(!song && inner.length<200 && !inner.includes("<html")){song=inner.replace(/<[^>]+>/g,'').replace(/^["']|["']$/g,'').trim();}song=song.replace(/&amp;/g,'&').trim();if(song && song.length>3 && song.length<200 && !song.toLowerCase().includes("radio sistema 3") && !song.toLowerCase().includes("404")){return song;}}catch(e){continue;}}}return null;}
 async function rebuildTrackBox(){
@@ -153,7 +166,10 @@ async function rebuildTrackBox(){
     let artistEl=tempScan.querySelector('[class*="artist"], .cc_artist');
     let righe=[];
     if(titleEl && artistEl){
-      righe=[titleEl.innerText.trim()+" - "+artistEl.innerText.trim()];
+      // v176: mantengo sempre artista - titolo ma in ordine fisso artista -> titolo
+      let art = artistEl.innerText.trim();
+      let tit = titleEl.innerText.trim();
+      righe=[art+" - "+tit];
     } else {
       tempScan.querySelectorAll('img,script,style').forEach(el=>el.remove());
       tempScan.querySelectorAll('div, span, p, b').forEach(d=>{
@@ -164,77 +180,57 @@ async function rebuildTrackBox(){
         }
       });
     }
-    let rawCombined="";
     if(righe.length>=1){
-      if(righe.length>=2 && righe[1].length>0 && righe[1][0]===righe[1][0].toLowerCase() && !righe.join(' ').includes(' - ')){
-        rawCombined=righe.slice(0,2).join(' ');
-        if(righe.length>2) rawCombined+=" - "+righe.slice(2).join(' ');
-      } else {
-        rawCombined=righe.join(' ');
-      }
+      let rawCombined=righe.join(' ');
       rawCombined=rimuoviTitoloDuplicato(rawCombined);
       let parsed=parseArtistTitleSmart(rawCombined);
       let titolo=parsed.titolo;
       let artista=parsed.artista;
-      if(!artista && righe.length>=2){
-        let second=righe[1];
-        if(second[0]!==second[0].toLowerCase() && second.split(' ').length<=4 && !rawCombined.toLowerCase().includes(second.toLowerCase().split(' ')[0]) || righe.length>2){
-          if(righe.length==2 && !titolo.toLowerCase().includes(second.toLowerCase())){
-            if(second[0]===second[0].toUpperCase()){
-              artista=second;
-            }
-          }
+      
+      if(!titolo || titolo.length<2) return;
+      
+      // FIX ANTI-OSCILLAZIONE: se il nuovo titolo è l'inverso del vecchio, ignoro
+      if(_lastTitolo && _lastArtist){
+        if(titolo.toLowerCase()===_lastArtist.toLowerCase() && artista.toLowerCase()===_lastTitolo.toLowerCase()){
+          return; // era swap, non fare nulla
         }
       }
-      if(!artista && _lastArtist && titolo.toLowerCase().includes(_lastArtist.toLowerCase())===false){
-        artista=_lastArtist;
+      
+      let txt=titolo+" - "+artista;
+      if(txt===_lastRaw) return; // già mostrato
+      
+      _lastRaw=txt;
+      _lastTitolo=titolo;
+      if(artista){_lastArtist=artista; _lastValidArtistaTitolo=txt; _lastValidTime=Date.now();}
+      
+      let info=mioBox.querySelector('.rs3-info');
+      if(info){
+        // SEMPRE titolo sopra, artista sotto - mai invertiti
+        info.innerHTML=`<div style="font-weight:900;color:#fff;font-size:1.10rem;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${titolo}">${titolo}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${artista}">${artista || 'Radio Sistema 3'}</div>`;
       }
-      if(titolo && titolo.length>1){
-        let txt=titolo+" - "+artista;
-        if(txt!==_lastRaw){
-          _lastRaw=txt;
-          if(artista) {_lastArtist=artista; _lastValidArtistaTitolo=txt; _lastValidTime=Date.now();}
-          // v175 FIX: non riscrivere tutto il box, solo il testo
-          let box=mioBox.querySelector('.rs3-trackbox');
-          if(!box){
-            mioBox.innerHTML='';
-            const b=document.createElement('div');b.className='rs3-trackbox';
-            const img=document.createElement('img');img.className='rs3-cover';img.src=rawImg;
-            const info=document.createElement('div');info.className='rs3-info';
-            info.innerHTML=`<div style="font-weight:900;color:#fff;font-size:1.10rem;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${titolo}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${artista}</div>`;
-            b.appendChild(img);b.appendChild(info);mioBox.appendChild(b);
-          } else {
-            const info=box.querySelector('.rs3-info');
-            if(info){
-              info.innerHTML=`<div style="font-weight:900;color:#fff;font-size:1.10rem;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${titolo}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${artista}</div>`;
-            }
-            const cov=box.querySelector('.rs3-cover');
-            if(cov && cov.src!==rawImg) cov.src=rawImg;
-          }
-          updateMediaSession(artista,titolo);
-        }
-      }
+      const cov=mioBox.querySelector('.rs3-cover');
+      if(cov && cov.src!==rawImg) cov.src=rawImg;
+      updateMediaSession(artista,titolo);
     }
   }catch(e){}
   try{
     let pulito=await fetchTitoloPulitoDaStream();
     if(pulito && pulito.includes(" - ")){
       let parts=pulito.split(" - ");let a=parts[0].trim(), t=parts.slice(1).join(" - ").trim();t=pulisciTitoloFinale(t);
-      if(t && a){
-        let txt2=t+" - "+a;
-        if(txt2!==_lastRaw){
-          _lastRaw=txt2; _lastArtist=a; _lastValidArtistaTitolo=txt2; _lastValidTime=Date.now();
-          let info2=mioBox.querySelector('.rs3-info');
-          if(info2){info2.innerHTML=`<div style="font-weight:900;color:#fff;font-size:1.10rem;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a}</div>`;}
-          updateMediaSession(a,t);
-        }
+      if(t && a && t!==_lastTitolo){
+        // anti-swap anche qui
+        if(_lastTitolo && t.toLowerCase()===_lastArtist.toLowerCase() && a.toLowerCase()===_lastTitolo.toLowerCase()) return;
+        _lastRaw=t+" - "+a; _lastTitolo=t; _lastArtist=a;
+        let info2=mioBox.querySelector('.rs3-info');
+        if(info2){info2.innerHTML=`<div style="font-weight:900;color:#fff;font-size:1.10rem;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a}</div>`;}
+        updateMediaSession(a,t);
       }
     }
   }catch(e){}
 }
 const list=document.querySelector('.cc_recenttracks_list');if(list){const obs=new MutationObserver(()=>{rebuildTrackBox();});obs.observe(list,{childList:true,subtree:true,characterData:true});}
-let _fastInterval=setInterval(()=>{creaMioBox(); rebuildTrackBox();},1500);
-setTimeout(()=>{clearInterval(_fastInterval);_fastInterval=setInterval(rebuildTrackBox,4000);},12000);
+let _fastInterval=setInterval(()=>{creaMioBox(); rebuildTrackBox();},2000);
+setTimeout(()=>{clearInterval(_fastInterval);_fastInterval=setInterval(rebuildTrackBox,5000);},15000);
 document.addEventListener('DOMContentLoaded',()=>{creaMioBox(); rebuildTrackBox();});creaMioBox(); rebuildTrackBox();
 const radioEl=document.getElementById('radioAudio');let userPaused=true;let wasPlayingBeforeHide=false;
 function tryAutoPlay(){const a=document.getElementById('radioAudio');if(userPaused&&!wasPlayingBeforeHide)return a.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;}).catch(()=>{});if(wasPlayingBeforeHide)userPaused=false;return a.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;}).catch(()=>{});}
@@ -261,4 +257,4 @@ setInterval(checkSoulMode,3000);checkSoulMode();
 setInterval(()=>{if(document.body.classList.contains('soul-mode')){const v=getLogoAssoluto();document.querySelectorAll('.rs3-cover').forEach(img=>{if(!img.src.includes('viola')&&!img.src.includes('RS3_SOUL')){img.src=v;}});}},800);
 </script>
 </body>
-</html>
+</html><!-- v176 - fix oscillazione + clean remastered - 13/05/2026 -->
