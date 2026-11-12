@@ -217,24 +217,44 @@ document.addEventListener('DOMContentLoaded',()=>{creaMioBox(); rebuildTrackBox(
 if(document.readyState!=='loading'){caricaMeteo();if(!document.documentElement.classList.contains('is-popup')){caricaCronaca();caricaCalcio();caricaMusica();caricaConcerti();}}
 </script>
 <script>
-
-<script>
-// v300 FIX FINALE NPOINT 3 MODI
+// v300 FIX FINALE NPOINT 3 MODI - CORRETTO UNICO
 const NPOINT_URL="https://api.npoint.io/9ed90a2b1c3d903bfac6";
 const SOUL_COVER_FILE="./RS3_SOUL_viola_scuro.jpg";
 const MAIN_COVER_FILE="./RADIO SISTEMA 3.jpeg";
 let soulActive=false;let goldActive=false;
 function applyMode(mode){
-  const logoImg=document.getElementById('mainLogo');const liveText=document.getElementById('liveText');const mainTitle=document.getElementById('mainTitle');
+  const logoImg=document.getElementById('mainLogo');
+  const liveText=document.getElementById('liveText');
+  const mainTitle=document.getElementById('mainTitle');
   soulActive=false; goldActive=false;
   document.body.classList.remove('soul-mode','retro-mode','classic-mode');
-  if(mode==='soul'){ soulActive=true; document.body.classList.add('soul-mode'); if(logoImg)logoImg.src=SOUL_COVER_FILE; if(liveText)liveText.innerHTML="💜 SOUL FUNK ON AIR"; if(mainTitle)mainTitle.textContent="SOUL FUNK"; }
-  else if(mode==='gold'){ goldActive=true; document.body.classList.add('retro-mode'); if(logoImg)logoImg.src=MAIN_COVER_FILE; if(liveText)liveText.innerHTML="📀 VINYL ON AIR"; if(mainTitle)mainTitle.textContent="RADIO GOLD 60-70"; }
-  else { document.body.classList.add('classic-mode'); if(logoImg)logoImg.src=MAIN_COVER_FILE; if(liveText)liveText.innerHTML="ON AIR 24/7"; if(mainTitle)mainTitle.textContent="RADIO SISTEMA 3"; }
+  if(mode==='soul'){
+    soulActive=true;
+    document.body.classList.add('soul-mode');
+    if(logoImg)logoImg.src=SOUL_COVER_FILE;
+    if(liveText)liveText.innerHTML="💜 SOUL FUNK ON AIR";
+    if(mainTitle)mainTitle.textContent="SOUL FUNK";
+  } else if(mode==='gold'){
+    goldActive=true;
+    document.body.classList.add('retro-mode');
+    if(logoImg)logoImg.src=MAIN_COVER_FILE;
+    if(liveText)liveText.innerHTML="📀 VINYL ON AIR";
+    if(mainTitle)mainTitle.textContent="RADIO GOLD 60-70";
+  } else {
+    document.body.classList.add('classic-mode');
+    if(logoImg)logoImg.src=MAIN_COVER_FILE;
+    if(liveText)liveText.innerHTML="ON AIR 24/7";
+    if(mainTitle)mainTitle.textContent="RADIO SISTEMA 3";
+  }
   try{rebuildTrackBox();}catch(e){}
-  try{document.querySelectorAll('.rs3-cover, .logo').forEach(img=>{img.src=getLogoAssoluto();});}catch(e){}
 }
-function normalizeMode(m){ if(!m) return 'classic'; m=String(m).toLowerCase(); if(m.includes('soul')) return 'soul'; if(m.includes('gold')||m.includes('retro')) return 'gold'; return 'classic'; }
+function normalizeMode(m){
+  if(!m) return 'classic';
+  m=String(m).toLowerCase();
+  if(m.includes('soul')) return 'soul';
+  if(m.includes('gold')||m.includes('retro')) return 'gold';
+  return 'classic';
+}
 async function checkSoulMode(){
   try{
     let r=await fetch(NPOINT_URL+"?t="+Date.now(),{cache:'no-store'});
@@ -242,12 +262,11 @@ async function checkSoulMode(){
     let data=await r.json();
     let mode=normalizeMode(data.mode || (data.soul===true?'soul':(data.gold===true?'gold':'classic')));
     applyMode(mode);
-    localStorage.setItem('rs3_mode',mode);
   }catch(e){}
 }
 setInterval(checkSoulMode,2000);
 checkSoulMode();
 </script>
-
 </body>
 </html>
+ 
