@@ -1,4 +1,4 @@
-<!-- v197 - FIX LIVE RICREAZIONE AUDIO - 12-11-2026 -->
+<!-- v198 - FIX LIVE PLAY INTERCETTATO - 12-11-2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -155,7 +155,7 @@ body.soul-mode h1{ color:#d1a3ff !important }body.soul-mode .live{ color:#d1a3ff
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v197_LIVE_RECREATE';
+const CACHE_VERSION='v198_LIVE_PLAY_BLOCK';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay(true);}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -264,7 +264,7 @@ async function renderMeteo(cities,id){const grid=document.getElementById(id);if(
 function caricaMeteo(){if(document.documentElement.classList.contains('is-popup'))return;renderMeteo(LEFT,'meteo-left');renderMeteo(RIGHT,'meteo-right');}
 </script>
 <script>
-// v197 - MOTORE AUDIO LIVE UNICO - NON TOCCARE ALTRO
+// v198 - MOTORE AUDIO LIVE UNICO
 const vuCanvas=document.getElementById('vuCanvas');const vuCtx=vuCanvas.getContext('2d');const vuPeakEl=document.getElementById('vuPeak');
 let isPlaying=false,lL=0,lR=0;
 let audioCtx=null,analyser=null,dataArray=null,sourceNode=null,realMode=false;
@@ -294,8 +294,13 @@ function attachAudioListeners(){
     if(document.hidden){wasPlayingBeforeHide=!userPaused;return;}
     userPaused=true;wasPlayingBeforeHide=false;
   });
-  radioEl.addEventListener('play',()=>{
+  radioEl.addEventListener('play', (e)=>{
     if(_isRecreating) return;
+    if(userPaused && (Date.now() - _lastPauseTs) > 300){
+      try{ e.preventDefault(); radioEl.pause(); }catch(er){}
+      createFreshAudioAndPlay();
+      return;
+    }
     isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";
     userPaused=false;wasPlayingBeforeHide=true;
     try{if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();}catch(e){}
