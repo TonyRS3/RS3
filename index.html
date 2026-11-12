@@ -1,4 +1,4 @@
-<!-- v184 - MOBILE FIX CORS - VU BILANCIATO + IDLE VISIBILE -->
+<!-- v185 - POPUP FIX - BRANO AGGIORNATO DOPO POPUP -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -25,7 +25,28 @@ const BRANI_NOVITA = [
 function normalizzaBrano(b){if(typeof b==='string')return{id:b,artista:'',titolo:b};return b;}
 const PLACEHOLDER_HTML=`<div style="text-align:center"><div style="color:#fff;font-weight:bold">Scegli un brano</div><div style="font-size:2rem">👇</div></div>`;
 let popupWin=null;
-function apriPopup(){if(window.innerWidth<=768)return;window._pausedForPopup=true;popupWin=window.open(window.location.pathname+'?popup=1&_t='+Date.now(),'RadioSistema3Popup','width=380,height=460,resizable=yes,scrollbars=no');setTimeout(()=>{var aud=document.getElementById('radioAudio');if(aud){try{aud.pause();}catch(e){}}},350);let checkChiuso=setInterval(()=>{if(popupWin&&popupWin.closed){clearInterval(checkChiuso);popupWin=null;window._pausedForPopup=false;var a2=document.getElementById('radioAudio');if(a2){userPaused=false;wasPlayingBeforeHide=true;a2.play().catch(()=>{});}}},800);}
+function apriPopup(){
+  if(window.innerWidth<=768)return;
+  window._pausedForPopup=true;
+  popupWin=window.open(window.location.pathname+'?popup=1&_t='+Date.now(),'RadioSistema3Popup','width=380,height=460,resizable=yes,scrollbars=no');
+  setTimeout(()=>{var aud=document.getElementById('radioAudio');if(aud){try{aud.pause();}catch(e){}}},350);
+  let checkChiuso=setInterval(()=>{
+    if(popupWin&&popupWin.closed){
+      clearInterval(checkChiuso);
+      popupWin=null;
+      window._pausedForPopup=false;
+      _lastRaw="";_lastTitolo="";_lastArtist="";
+      try{ creaMioBox(); rebuildTrackBox(); }catch(e){}
+      var a2=document.getElementById('radioAudio');
+      if(a2){
+        userPaused=false;wasPlayingBeforeHide=true;
+        a2.play().then(()=>{
+          setTimeout(()=>{ _lastRaw=""; try{rebuildTrackBox();}catch(e){} },1500);
+        }).catch(()=>{});
+      }
+    }
+  },800);
+}
 if(window.location.search.includes('popup=1')){document.documentElement.classList.add('is-popup');document.addEventListener('DOMContentLoaded',()=>{var a=document.getElementById('radioAudio');if(a){a.autoplay=true;setTimeout(()=>{a.play().catch(()=>{});},100);}});}
 </script>
 <style>
@@ -119,7 +140,7 @@ body.soul-mode h1{ color:#d1a3ff !important }body.soul-mode .live{ color:#d1a3ff
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v184_MOBILE_FIX_CORS';
+const CACHE_VERSION='v185_POPUP_FIX';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay();}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -238,7 +259,7 @@ function caricaMeteo(){if(document.documentElement.classList.contains('is-popup'
 const vuCanvas=document.getElementById('vuCanvas');const vuCtx=vuCanvas.getContext('2d');const vuPeakEl=document.getElementById('vuPeak');
 let isPlaying=false,lL=0,lR=0;
 let audioCtx=null,analyser=null,dataArray=null,sourceNode=null,realMode=false;
-let realFailed=false; // se CORS blocca, non riprova più
+let realFailed=false;
 function initRealVU(){
   try{
     if(realFailed) return false;
@@ -281,7 +302,7 @@ function upd(){
     try{
       analyser.getByteFrequencyData(dataArray);
       let sum=0; for(let i=0;i<dataArray.length;i++) sum+=dataArray[i];
-      if(sum < 10){ // CORS blocca, dati a zero
+      if(sum < 10){
         throw 'cors';
       }
       let vol=Math.min(100,(sum/dataArray.length/255)*100*1.9);
@@ -290,10 +311,9 @@ function upd(){
       if(vol>72 && Math.random()<0.3){tL=Math.min(100,tL+8);tR=Math.min(100,tR+8);}
       lL+=(tL-lL)*0.52; lR+=(tR-lR)*0.52; return;
     }catch(e){ 
-      realMode=false; realFailed=true; // non riprovare, passa al finto
+      realMode=false; realFailed=true;
     }
   }
-  // FINTO - quello che ti piaceva in v179
   let base=40+Math.random()*45;let peak=Math.random()<0.18;
   let tL=peak?88+Math.random()*12:base+Math.random()*18;
   let tR=peak?85+Math.random()*15:base*0.9+Math.random()*20;
