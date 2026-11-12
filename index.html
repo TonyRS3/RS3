@@ -217,73 +217,37 @@ document.addEventListener('DOMContentLoaded',()=>{creaMioBox(); rebuildTrackBox(
 if(document.readyState!=='loading'){caricaMeteo();if(!document.documentElement.classList.contains('is-popup')){caricaCronaca();caricaCalcio();caricaMusica();caricaConcerti();}}
 </script>
 <script>
-// v200 FIX RICEVITORE 3 MODI - UNICA MODIFICA
-const NPOINT_URL="https://api.npoint.io/9ed90a2b1c3d903bfac6";const SOUL_COVER_FILE="./RS3_SOUL_viola_scuro.jpg";const MAIN_COVER_FILE="./RADIO SISTEMA 3.jpeg";let soulActive=false;let goldActive=false;
+
+<script>
+// v300 FIX FINALE NPOINT 3 MODI
+const NPOINT_URL="https://api.npoint.io/9ed90a2b1c3d903bfac6";
+const SOUL_COVER_FILE="./RS3_SOUL_viola_scuro.jpg";
+const MAIN_COVER_FILE="./RADIO SISTEMA 3.jpeg";
+let soulActive=false;let goldActive=false;
 function applyMode(mode){
   const logoImg=document.getElementById('mainLogo');const liveText=document.getElementById('liveText');const mainTitle=document.getElementById('mainTitle');
   soulActive=false; goldActive=false;
   document.body.classList.remove('soul-mode','retro-mode','classic-mode');
-  if(mode==='soul'){
-    soulActive=true; document.body.classList.add('soul-mode');
-    if(logoImg)logoImg.src=SOUL_COVER_FILE;
-    if(liveText)liveText.innerHTML="💜 SOUL FUNK ON AIR";
-    if(mainTitle)mainTitle.textContent="SOUL FUNK";
-  } else if(mode==='gold'){
-    goldActive=true; document.body.classList.add('retro-mode');
-    if(logoImg)logoImg.src=MAIN_COVER_FILE;
-    if(liveText)liveText.innerHTML="📀 VINYL ON AIR";
-    if(mainTitle)mainTitle.textContent="RADIO GOLD 60-70";
-  } else {
-    document.body.classList.add('classic-mode');
-    if(logoImg)logoImg.src=MAIN_COVER_FILE;
-    if(liveText)liveText.innerHTML="ON AIR 24/7";
-    if(mainTitle)mainTitle.textContent="RADIO SISTEMA 3";
-  }
+  if(mode==='soul'){ soulActive=true; document.body.classList.add('soul-mode'); if(logoImg)logoImg.src=SOUL_COVER_FILE; if(liveText)liveText.innerHTML="💜 SOUL FUNK ON AIR"; if(mainTitle)mainTitle.textContent="SOUL FUNK"; }
+  else if(mode==='gold'){ goldActive=true; document.body.classList.add('retro-mode'); if(logoImg)logoImg.src=MAIN_COVER_FILE; if(liveText)liveText.innerHTML="📀 VINYL ON AIR"; if(mainTitle)mainTitle.textContent="RADIO GOLD 60-70"; }
+  else { document.body.classList.add('classic-mode'); if(logoImg)logoImg.src=MAIN_COVER_FILE; if(liveText)liveText.innerHTML="ON AIR 24/7"; if(mainTitle)mainTitle.textContent="RADIO SISTEMA 3"; }
   try{rebuildTrackBox();}catch(e){}
   try{document.querySelectorAll('.rs3-cover, .logo').forEach(img=>{img.src=getLogoAssoluto();});}catch(e){}
 }
-function normalizeMode(m){
-  if(!m) return 'classic';
-  m=String(m).toLowerCase();
-  if(m.includes('soul')) return 'soul';
-  if(m.includes('gold') || m.includes('retro')) return 'gold';
-  return 'classic';
-}
-let _lastLocalMode = localStorage.getItem('rs3_mode') || 'classic';
-function getLocalMode(){ return normalizeMode(localStorage.getItem('rs3_mode')); }
+function normalizeMode(m){ if(!m) return 'classic'; m=String(m).toLowerCase(); if(m.includes('soul')) return 'soul'; if(m.includes('gold')||m.includes('retro')) return 'gold'; return 'classic'; }
 async function checkSoulMode(){
   try{
-    let localMode = getLocalMode();
-    if(localMode !== normalizeMode(_lastLocalMode)){
-      _lastLocalMode = localMode;
-      applyMode(localMode);
-      return;
-    }
-    if(localStorage.getItem('rs3_mode')) return;
     let r=await fetch(NPOINT_URL+"?t="+Date.now(),{cache:'no-store'});
     if(!r.ok) return;
     let data=await r.json();
-    let mode = normalizeMode(data.mode || (data.soul===true ? 'soul' : (data.gold===true ? 'gold' : 'classic')));
-    if(mode!==getLocalMode()) applyMode(mode);
+    let mode=normalizeMode(data.mode || (data.soul===true?'soul':(data.gold===true?'gold':'classic')));
+    applyMode(mode);
+    localStorage.setItem('rs3_mode',mode);
   }catch(e){}
 }
-window.addEventListener('storage', (e)=>{
-  if(e.key==='rs3_mode'){
-    let m = normalizeMode(e.newValue);
-    _lastLocalMode = m;
-    applyMode(m);
-  }
-});
-setInterval(()=>{
-  let cur = getLocalMode();
-  if(cur !== normalizeMode(_lastLocalMode)){
-    _lastLocalMode = cur;
-    applyMode(cur);
-  }
-},800);
-setInterval(checkSoulMode,3000);
+setInterval(checkSoulMode,2000);
 checkSoulMode();
-applyMode(getLocalMode());
 </script>
+
 </body>
 </html>
