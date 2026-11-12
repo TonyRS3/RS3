@@ -1,68 +1,78 @@
-<!-- gold-admin.html v2 - 3 modi stessa scheda -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RS3 Admin - 3 Modi</title>
+<title>GOLD ADMIN - Radio Sistema 3</title>
 <style>
-body{font-family:Segoe UI,Arial;background:#111;color:#fff;text-align:center;padding:20px}
-.box{max-width:400px;margin:0 auto;background:#222;padding:20px;border-radius:15px;border:1px solid #444}
+body{font-family:Arial,sans-serif;background:#111;color:#fff;text-align:center;padding:20px}
 h1{color:#ffd966}
-input{width:90%;padding:10px;border-radius:8px;border:none;margin:10px 0}
-button{width:90%;padding:14px;margin:8px 0;border:none;border-radius:30px;font-weight:900;font-size:1rem;cursor:pointer}
+.btn{padding:18px 28px;margin:12px;font-size:1.3rem;font-weight:900;border:none;border-radius:12px;cursor:pointer;display:block;width:90%;max-width:400px;margin-left:auto;margin-right:auto}
 .btn-classic{background:#fff;color:#000}
 .btn-soul{background:#b388ff;color:#fff}
-.btn-gold{background:linear-gradient(90deg,#8B6914,#ffd700);color:#000}
-.status{margin-top:15px;padding:10px;background:#000;border-radius:8px;font-size:0.9rem;color:#0f0}
+.btn-gold{background:#d4af37;color:#000;border:2px solid #ffd700}
+.status{margin-top:20px;font-size:1.2rem;color:#00ff2a;font-weight:900;min-height:30px}
+.preview{margin-top:15px;padding:15px;background:#222;border-radius:12px}
 </style>
 </head>
 <body>
-<div class="box">
-<h1>RS3 - 3 MODI</h1>
-<div id="loginBox">
-<input type="password" id="pwd" placeholder="Password">
-<button onclick="login()" style="background:#ffd966">ENTRA</button>
-</div>
+<h1>🎛️ PANNELLO RADIO SISTEMA 3</h1>
+<p>Seleziona modalità:</p>
 
-<div id="menuBox" style="display:none">
-<p>Scegli modalità - cambia al volo sulla pagina già aperta:</p>
-<button class="btn-classic" onclick="setMode('classic')">⬜ CLASSICA - Radio Sistema 3</button>
-<button class="btn-soul" onclick="setMode('soul')">🟪 SOUL FUNK</button>
-<button class="btn-gold" onclick="setMode('gold')">🟨 GOLD 60-70 VINTAGE</button>
-<div class="status" id="status">In attesa...</div>
-<p style="font-size:0.75rem;color:#aaa;margin-top:10px">Non apre schede. Aggiorna https://www.rsistema3.eu in 3 secondi su tutte le schede aperte. Puoi ricliccare se sbagli.</p>
-</div>
-</div>
+<button class="btn btn-classic" onclick="setMode('classic')">⚪ RADIO SISTEMA 3 CLASSIC</button>
+<button class="btn btn-soul" onclick="setMode('soul')">💜 SOUL FUNK</button>
+<button class="btn btn-gold" onclick="setMode('gold')">📀 RADIO GOLD 60-70 VINYL</button>
+
+<div class="status" id="status">Carico stato attuale...</div>
+<div class="preview" id="preview"></div>
 
 <script>
 const NPOINT_URL="https://api.npoint.io/9ed90a2b1c3d903bfac6";
-const PASS="at186dsa";
 
-function login(){
-  if(document.getElementById('pwd').value===PASS){
-    document.getElementById('loginBox').style.display='none';
-    document.getElementById('menuBox').style.display='block';
-    document.getElementById('status').textContent="Pronto - modo attuale: "+(localStorage.getItem('rs3_mode')||'classic');
-  } else alert("Password errata");
+function normalizeMode(m){
+  if(!m) return 'classic';
+  m=String(m).toLowerCase();
+  if(m.includes('soul')) return 'soul';
+  if(m.includes('gold')||m.includes('retro')) return 'gold';
+  return 'classic';
 }
 
-async function setMode(mode){
-  // 1 - salva locale così vedi subito su questo browser
-  localStorage.setItem('rs3_mode', mode);
-  // 2 - salva su npoint così cambia su TUTTI i dispositivi / schede aperte
-  document.getElementById('status').textContent="Imposto "+mode.toUpperCase()+"...";
+async function setMode(m){
+  const status=document.getElementById('status');
+  status.textContent="⏳ Invio "+m.toUpperCase()+"...";
+  status.style.color="#ffd966";
+  localStorage.setItem('rs3_mode',m);
   try{
-    await fetch(NPOINT_URL,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({mode:mode, soul: mode==='soul', gold: mode==='gold'})
+    let r=await fetch(NPOINT_URL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({mode:m})
     });
-    document.getElementById('status').textContent="✅ "+mode.toUpperCase()+" attivo! Il sito si aggiorna in 3 sec. Puoi cambiare ancora se vuoi.";
+    if(r.ok){
+      status.textContent="✅ "+m.toUpperCase()+" ATTIVO!";
+      status.style.color="#00ff2a";
+      document.getElementById('preview').innerHTML="<b>Modalità attuale:</b><br><span style='font-size:2rem'>"+(m==='soul'?'💜 SOUL':m==='gold'?'📀 GOLD':'⚪ CLASSIC')+"</span><br><br>Apri www.rsistema3.eu e vedrai cambiare in 2 secondi.";
+    }else{
+      throw "errore server";
+    }
   }catch(e){
-    document.getElementById('status').textContent="⚠️ Salvato locale ("+mode+") ma npoint non risponde - su altre schede non cambia. Riprova.";
+    status.textContent="❌ Errore npoint, ma salvato locale: "+m;
+    status.style.color="#ff4444";
   }
 }
+
+async function loadCurrent(){
+  try{
+    let r=await fetch(NPOINT_URL+"?t="+Date.now(),{cache:'no-store'});
+    let data=await r.json();
+    let mode=normalizeMode(data.mode || (data.soul===true?'soul':(data.gold===true?'gold':'classic')));
+    document.getElementById('status').textContent="Stato attuale su internet: "+mode.toUpperCase();
+    document.getElementById('preview').innerHTML="Attuale: <b>"+mode+"</b>";
+  }catch(e){
+    document.getElementById('status').textContent="Non riesco a leggere npoint, uso locale: "+(localStorage.getItem('rs3_mode')||'classic');
+  }
+}
+loadCurrent();
 </script>
 </body>
 </html>
