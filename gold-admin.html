@@ -1,29 +1,60 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOLD ADMIN</title>
+<style>
+body{font-family:Arial;background:#111;color:#fff;text-align:center;padding:20px}
+button{padding:18px 30px;margin:10px;font-size:1.3rem;font-weight:900;border:none;border-radius:12px;cursor:pointer;width:90%;max-width:400px}
+#classic{background:#fff;color:#000}
+#soul{background:#b388ff;color:#fff}
+#gold{background:gold;color:#000}
+#status{margin-top:20px;padding:15px;background:#222;border-radius:10px;font-family:monospace;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<h1>RS3 ADMIN - 3 MODI</h1>
+<button id="classic" onclick="setMode('classic')">CLASSIC - RADIO SISTEMA 3</button>
+<button id="soul" onclick="setMode('soul')">SOUL - SOUL FUNK</button>
+<button id="gold" onclick="setMode('gold')">GOLD - RADIO GOLD 60-70</button>
+<div id="status">Carico stato...</div>
+
 <script>
-const NPOINT_URL="https://api.npoint.io/9ed90a2b1c3d903bfac6";
-const SOUL_COVER_FILE="./RS3_SOUL_viola_scuro.jpg";
-const MAIN_COVER_FILE="./RADIO SISTEMA 3.jpeg";
-let soulActive=false;let goldActive=false;
-function applyMode(mode){
-  const logoImg=document.getElementById('mainLogo');const liveText=document.getElementById('liveText');const mainTitle=document.getElementById('mainTitle');
-  soulActive=false; goldActive=false;
-  document.body.classList.remove('soul-mode','retro-mode','classic-mode');
-  if(mode==='soul'){ soulActive=true; document.body.classList.add('soul-mode'); if(logoImg)logoImg.src=SOUL_COVER_FILE; if(liveText)liveText.innerHTML="💜 SOUL FUNK ON AIR"; if(mainTitle)mainTitle.textContent="SOUL FUNK"; }
-  else if(mode==='gold'){ goldActive=true; document.body.classList.add('retro-mode'); if(logoImg)logoImg.src=MAIN_COVER_FILE; if(liveText)liveText.innerHTML="📀 VINYL ON AIR"; if(mainTitle)mainTitle.textContent="RADIO GOLD 60-70"; }
-  else { document.body.classList.add('classic-mode'); if(logoImg)logoImg.src=MAIN_COVER_FILE; if(liveText)liveText.innerHTML="ON AIR 24/7"; if(mainTitle)mainTitle.textContent="RADIO SISTEMA 3"; }
-  try{rebuildTrackBox();}catch(e){}
-  try{document.querySelectorAll('.rs3-cover, .logo').forEach(img=>{img.src=getLogoAssoluto();});}catch(e){}
-}
-function normalizeMode(m){ if(!m) return 'classic'; m=String(m).toLowerCase(); if(m.includes('soul')) return 'soul'; if(m.includes('gold')||m.includes('retro')) return 'gold'; return 'classic'; }
-async function checkSoulMode(){
+const NPOINT="https://api.npoint.io/9ed90a2b1c3d903bfac6";
+
+async function getStatus(){
   try{
-    let r=await fetch(NPOINT_URL+"?t="+Date.now(),{cache:'no-store'});
-    if(!r.ok) return;
-    let data=await r.json();
-    let mode=normalizeMode(data.mode || (data.soul===true?'soul':(data.gold===true?'gold':'classic')));
-    applyMode(mode);
-    localStorage.setItem('rs3_mode',mode);
-  }catch(e){}
+    let r=await fetch(NPOINT+"?t="+Date.now(),{cache:'no-store'});
+    let d=await r.json();
+    document.getElementById('status').textContent="STATO ATTUALE NPOINT:\n"+JSON.stringify(d,null,2);
+  }catch(e){
+    document.getElementById('status').textContent="Errore lettura: "+e;
+  }
 }
-setInterval(checkSoulMode,2000);
-checkSoulMode();
+
+async function setMode(mode){
+  document.getElementById('status').textContent="Invio "+mode.toUpperCase()+"...";
+  try{
+    let body={mode:mode};
+    if(mode==='soul') body={mode:'soul',soul:true};
+    if(mode==='gold') body={mode:'gold',gold:true};
+    if(mode==='classic') body={mode:'classic'};
+    
+    let r=await fetch(NPOINT,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    });
+    if(!r.ok) throw "HTTP "+r.status;
+    document.getElementById('status').textContent="OK! Inviato "+mode.toUpperCase()+"\nAttendi 2 sec...";
+    setTimeout(getStatus,1500);
+  }catch(e){
+    document.getElementById('status').textContent="ERRORE INVIO: "+e+"\nRiprova, a volte npoint è lento.";
+  }
+}
+getStatus();
+setInterval(getStatus,5000);
 </script>
+</body>
+</html>
