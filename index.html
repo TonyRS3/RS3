@@ -1,4 +1,4 @@
-<!-- v192 - LEVEL PC ORIGINALI BILANCIATI - 12-11-2026 -->
+<!-- v193 - PC = MOBILE FIX GIALLO - 12-11-2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -155,7 +155,7 @@ body.soul-mode h1{ color:#d1a3ff !important }body.soul-mode .live{ color:#d1a3ff
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v192_PC_ORIGINAL';
+const CACHE_VERSION='v193_PC_EQ_MOBILE';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay();}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -279,6 +279,7 @@ let isPlaying=false,lL=0,lR=0;
 let audioCtx=null,analyser=null,dataArray=null,sourceNode=null,realMode=false;
 function initRealVU(){
   try{
+    if(/Mobi|Android|iPhone/i.test(navigator.userAgent)) { realMode=false; return false; }
     if(audioCtx){ if(audioCtx.state==='suspended') audioCtx.resume(); return realMode; }
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     analyser = audioCtx.createAnalyser();
@@ -302,12 +303,12 @@ function draw(){
   for(let i=0;i<bars;i++){let x=i*barW;let lit=i<aR;vuCtx.fillStyle=lit?(i<21?'#00d4ff':i<30?'#ffea00':'#ff1a1a'):'#1a1a1a';vuCtx.fillRect(x+gap,H/2+1+(rowH-(lit?rowH-1:rowH*0.4))/2,barW-gap*2,lit?rowH-1:rowH*0.4);}
   requestAnimationFrame(draw);
 }
-/* v192 - PC ORIGINALE - VELOCE COME PRIMA */
+/* v193 - PC = MOBILE - FIX GIALLO */
 function upd(){
   if(!isPlaying){
-    let idle = 10 + Math.random()*14;
-    let tL = idle + Math.random()*6;
-    let tR = idle + Math.random()*6;
+    let idle = 8 + Math.random()*10;
+    let tL = idle + Math.random()*4;
+    let tR = idle + Math.random()*4;
     lL+=(tL-lL)*0.08; lR+=(tR-lR)*0.08; return;
   }
   if(realMode && analyser && dataArray){
@@ -322,10 +323,10 @@ function upd(){
       lL+=(tL-lL)*0.52; lR+=(tR-lR)*0.52; return;
     }catch(e){}
   }
-  let base=40+Math.random()*45;
-  let peak=Math.random()<0.18;
-  let tL=peak?88+Math.random()*12:base+Math.random()*6;
-  let tR=peak?86+Math.random()*12:base+Math.random()*6;
+  let base = 18 + Math.random()*38;
+  let isPeak = Math.random()<0.16;
+  let tL = isPeak ? 74 + Math.random()*22 : base + Math.random()*10;
+  let tR = isPeak ? 72 + Math.random()*22 : base + Math.random()*10;
   lL+=(tL-lL)*0.38;
   lR+=(tR-lR)*0.38;
 }
