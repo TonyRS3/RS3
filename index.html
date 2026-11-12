@@ -1,4 +1,4 @@
-<!-- v196 - FIX ASINCRONO PLAY INTERCETTATO - 12-11-2026 -->
+<!-- v197 - FIX LIVE RICREAZIONE AUDIO - 12-11-2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -138,7 +138,7 @@ body.soul-mode h1{ color:#d1a3ff !important }body.soul-mode .live{ color:#d1a3ff
     <div class="live" id="liveText">ON AIR 24/7</div>
     <div class="player-box">
       <div class="section-title">♪ Ascolta in diretta</div>
-      <audio id="radioAudio" controls preload="none" playsinline webkit-playsinline crossorigin="anonymous"><source src="https://listentomystream.com:8046/stream" type="audio/mpeg"></audio>
+      <audio id="radioAudio" controls preload="none" playsinline webkit-playsinline crossorigin="anonymous" src="https://listentomystream.com:8046/stream"></audio>
       <div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L R STEREO</span><span id="vuPeak" style="color:#ff4444">STOP</span></div></div>
       <button class="btn-popup" onclick="apriPopup()">⧉ POPUP</button>
     </div>
@@ -155,7 +155,7 @@ body.soul-mode h1{ color:#d1a3ff !important }body.soul-mode .live{ color:#d1a3ff
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v196_LIVE_INTERCEPT';
+const CACHE_VERSION='v197_LIVE_RECREATE';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay(true);}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -257,60 +257,19 @@ const list=document.querySelector('.cc_recenttracks_list');if(list){const obs=ne
 let _fastInterval=setInterval(()=>{creaMioBox(); rebuildTrackBox();},2000);
 setTimeout(()=>{clearInterval(_fastInterval);_fastInterval=setInterval(rebuildTrackBox,5000);},15000);
 document.addEventListener('DOMContentLoaded',()=>{creaMioBox(); rebuildTrackBox();});creaMioBox(); rebuildTrackBox();
-const radioEl=document.getElementById('radioAudio');
-let userPaused=true;let wasPlayingBeforeHide=false;let _lastPauseTs=0;let _forceLiveNextPlay=false;let _isForcingLive=false;
-function forceLiveReloadAndPlay(){
-  const a=radioEl;
-  _isForcingLive=true;
-  try{ a.pause(); a.src="https://listentomystream.com:8046/stream?_t="+Date.now(); a.load(); }catch(e){}
-  return a.play().then(()=>{
-    isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";
-    userPaused=false;wasPlayingBeforeHide=true;
-    _forceLiveNextPlay=false;
-    setTimeout(()=>{ _isForcingLive=false; },500);
-  }).catch(()=>{ _isForcingLive=false; });
-}
-function tryAutoPlay(isManual=false){
-  if(isManual || _forceLiveNextPlay || (Date.now() - _lastPauseTs) > 500){
-    return forceLiveReloadAndPlay();
-  }
-  return radioEl.play().then(()=>{
-    isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";
-    userPaused=false;wasPlayingBeforeHide=true;
-  }).catch(()=>{});
-}
-radioEl.addEventListener('pause',()=>{
-  if(_isForcingLive) return;
-  isPlaying=false;vuPeakEl.textContent="STOP";vuPeakEl.style.color="#ff4444";
-  _lastPauseTs=Date.now();
-  _forceLiveNextPlay=true;
-  if(window._pausedForPopup||window._pausedForPlaylist){return;}
-  if(document.hidden){wasPlayingBeforeHide=!userPaused;return;}
-  userPaused=true;wasPlayingBeforeHide=false;
-});
-radioEl.addEventListener('play',()=>{
-  if(_isForcingLive) return;
-  if(_forceLiveNextPlay){
-    try{ radioEl.pause(); }catch(e){}
-    forceLiveReloadAndPlay();
-    return;
-  }
-  isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";
-  userPaused=false;wasPlayingBeforeHide=true;
-  try{if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();}catch(e){}
-  try{initRealVU();}catch(e){}
-});
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&wasPlayingBeforeHide&&radioEl.paused&&!userPaused&&!window._pausedForPopup&&!window._pausedForPlaylist){tryAutoPlay();}});
-window.addEventListener('pagehide',()=>{if(!radioEl.paused&&!userPaused)wasPlayingBeforeHide=true;});
-window.addEventListener('pageshow',()=>{if(wasPlayingBeforeHide&&radioEl.paused&&!userPaused)tryAutoPlay();});
 const CITIES_COORDS={"Torino":{lat:45.07,lon:7.68},"Milano":{lat:45.46,lon:9.19},"Venezia":{lat:45.44,lon:12.33},"Bologna":{lat:44.49,lon:11.34},"Firenze":{lat:43.77,lon:11.25},"Roma":{lat:41.90,lon:12.49},"Ancona":{lat:43.61,lon:13.51},"Napoli":{lat:40.85,lon:14.26},"Palermo":{lat:38.11,lon:13.36},"Brindisi":{lat:40.63,lon:17.94}};
 const LEFT=[{label:"Torino"},{label:"Milano"},{label:"Venezia"},{label:"Bologna"},{label:"Firenze"}];
 const RIGHT=[{label:"Roma"},{label:"Ancona"},{label:"Napoli"},{label:"Palermo"},{label:"Brindisi"}];
 async function renderMeteo(cities,id){const grid=document.getElementById(id);if(!grid)return;let h="";for(let c of cities){try{const coord=CITIES_COORDS[c.label];const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coord.lat}&longitude=${coord.lon}&current=temperature_2m,weather_code&timezone=Europe%2FRome&_t=${Date.now()}`,{cache:'no-store'});const d=await r.json();const temp=Math.round(d.current.temperature_2m);const code=d.current.weather_code;let icon="01d";if(code===1||code===2)icon="02d";if(code===3)icon="03d";if(code===45||code===48)icon="50d";if(code>=51&&code<=67)icon="09d";if(code>=71&&code<=77)icon="13d";if(code>=80&&code<=82)icon="09d";if(code>=95)icon="11d";h+=`<div class="meteo-mini"><b>${c.label}</b><img src="https://openweathermap.org/img/wn/${icon}.png"><div class="temp">${temp}°C</div></div>`;}catch(e){h+=`<div class="meteo-mini"><b>${c.label}</b><div class="temp">--°</div></div>`;}}grid.innerHTML=h;}
 function caricaMeteo(){if(document.documentElement.classList.contains('is-popup'))return;renderMeteo(LEFT,'meteo-left');renderMeteo(RIGHT,'meteo-right');}
+</script>
+<script>
+// v197 - MOTORE AUDIO LIVE UNICO - NON TOCCARE ALTRO
 const vuCanvas=document.getElementById('vuCanvas');const vuCtx=vuCanvas.getContext('2d');const vuPeakEl=document.getElementById('vuPeak');
 let isPlaying=false,lL=0,lR=0;
 let audioCtx=null,analyser=null,dataArray=null,sourceNode=null,realMode=false;
+let radioEl=document.getElementById('radioAudio');
+let userPaused=true;let wasPlayingBeforeHide=false;let _lastPauseTs=0;let _isRecreating=false;
 function initRealVU(){
   try{
     if(/Mobi|Android|iPhone/i.test(navigator.userAgent)) { realMode=false; return false; }
@@ -326,6 +285,52 @@ function initRealVU(){
     realMode=true; return true;
   }catch(e){ realMode=false; return false; }
 }
+function attachAudioListeners(){
+  radioEl.addEventListener('pause',()=>{
+    if(_isRecreating) return;
+    isPlaying=false;vuPeakEl.textContent="STOP";vuPeakEl.style.color="#ff4444";
+    _lastPauseTs=Date.now();
+    if(window._pausedForPopup||window._pausedForPlaylist){return;}
+    if(document.hidden){wasPlayingBeforeHide=!userPaused;return;}
+    userPaused=true;wasPlayingBeforeHide=false;
+  });
+  radioEl.addEventListener('play',()=>{
+    if(_isRecreating) return;
+    isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";
+    userPaused=false;wasPlayingBeforeHide=true;
+    try{if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();}catch(e){}
+    try{initRealVU();}catch(e){}
+  });
+}
+function createFreshAudioAndPlay(){
+  _isRecreating=true;
+  const old = document.getElementById('radioAudio');
+  try{ old.pause(); old.src=''; old.load(); }catch(e){}
+  const fresh = document.createElement('audio');
+  fresh.id='radioAudio';
+  fresh.controls=true;
+  fresh.preload='none';
+  fresh.playsInline=true;
+  fresh.crossOrigin='anonymous';
+  fresh.setAttribute('webkit-playsinline','');
+  fresh.src="https://listentomystream.com:8046/stream?_t="+Date.now();
+  try{ old.parentNode.replaceChild(fresh, old); }catch(e){ document.querySelector('.player-box').prepend(fresh); }
+  radioEl=fresh;
+  attachAudioListeners();
+  try{ audioCtx=null; analyser=null; dataArray=null; sourceNode=null; realMode=false; }catch(e){}
+  return fresh.play().then(()=>{
+    isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";
+    userPaused=false;wasPlayingBeforeHide=true;
+    setTimeout(()=>{ _isRecreating=false; },600);
+  }).catch(()=>{ _isRecreating=false; });
+}
+function tryAutoPlay(isManual){
+  return createFreshAudioAndPlay();
+}
+attachAudioListeners();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&wasPlayingBeforeHide&&radioEl.paused&&!userPaused&&!window._pausedForPopup&&!window._pausedForPlaylist){tryAutoPlay();}});
+window.addEventListener('pagehide',()=>{if(!radioEl.paused&&!userPaused)wasPlayingBeforeHide=true;});
+window.addEventListener('pageshow',()=>{if(wasPlayingBeforeHide&&radioEl.paused&&!userPaused)tryAutoPlay();});
 function draw(){
   const W=vuCanvas.width,H=vuCanvas.height;
   vuCtx.clearRect(0,0,W,H); vuCtx.fillStyle='#0a0a0a'; vuCtx.fillRect(0,0,W,H);
@@ -337,7 +342,6 @@ function draw(){
   for(let i=0;i<bars;i++){let x=i*barW;let lit=i<aR;vuCtx.fillStyle=lit?(i<21?'#00d4ff':i<30?'#ffea00':'#ff1a1a'):'#1a1a1a';vuCtx.fillRect(x+gap,H/2+1+(rowH-(lit?rowH-1:rowH*0.4))/2,barW-gap*2,lit?rowH-1:rowH*0.4);}
   requestAnimationFrame(draw);
 }
-/* v196 - PC = MOBILE */
 function upd(){
   if(!isPlaying){
     let idle = 8 + Math.random()*10;
