@@ -1,4 +1,4 @@
-<!-- v193 - PC = MOBILE FIX GIALLO - 12-11-2026 -->
+<!-- v194 - FIX RESUME LIVE - 12-11-2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -155,7 +155,7 @@ body.soul-mode h1{ color:#d1a3ff !important }body.soul-mode .live{ color:#d1a3ff
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v193_PC_EQ_MOBILE';
+const CACHE_VERSION='v194_LIVE_RESUME';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay();}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -257,11 +257,27 @@ const list=document.querySelector('.cc_recenttracks_list');if(list){const obs=ne
 let _fastInterval=setInterval(()=>{creaMioBox(); rebuildTrackBox();},2000);
 setTimeout(()=>{clearInterval(_fastInterval);_fastInterval=setInterval(rebuildTrackBox,5000);},15000);
 document.addEventListener('DOMContentLoaded',()=>{creaMioBox(); rebuildTrackBox();});creaMioBox(); rebuildTrackBox();
-const radioEl=document.getElementById('radioAudio');let userPaused=true;let wasPlayingBeforeHide=false;
-function tryAutoPlay(){const a=document.getElementById('radioAudio');if(userPaused&&!wasPlayingBeforeHide)return a.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;}).catch(()=>{});if(wasPlayingBeforeHide)userPaused=false;return a.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;}).catch(()=>{});}
+const radioEl=document.getElementById('radioAudio');let userPaused=true;let wasPlayingBeforeHide=false;let _lastPauseTs=0;
+function tryAutoPlay(){
+  const a=document.getElementById('radioAudio');
+  let needLiveReload = (Date.now() - _lastPauseTs) > 1500;
+  if(needLiveReload){
+    try{
+      a.pause();
+      a.src="https://listentomystream.com:8046/stream?_t="+Date.now();
+      a.load();
+    }catch(e){}
+  }
+  if(userPaused&&!wasPlayingBeforeHide){
+    return a.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;}).catch(()=>{});
+  }
+  if(wasPlayingBeforeHide)userPaused=false;
+  return a.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;}).catch(()=>{});
+}
 radioEl.addEventListener('play',()=>{userPaused=false;wasPlayingBeforeHide=true;});
 radioEl.addEventListener('pause',()=>{
   isPlaying=false;vuPeakEl.textContent="STOP";vuPeakEl.style.color="#ff4444";
+  _lastPauseTs = Date.now();
   if(window._pausedForPopup||window._pausedForPlaylist){return;}
   if(document.hidden){wasPlayingBeforeHide=!userPaused;return;}
   userPaused=true;wasPlayingBeforeHide=false;
@@ -303,7 +319,7 @@ function draw(){
   for(let i=0;i<bars;i++){let x=i*barW;let lit=i<aR;vuCtx.fillStyle=lit?(i<21?'#00d4ff':i<30?'#ffea00':'#ff1a1a'):'#1a1a1a';vuCtx.fillRect(x+gap,H/2+1+(rowH-(lit?rowH-1:rowH*0.4))/2,barW-gap*2,lit?rowH-1:rowH*0.4);}
   requestAnimationFrame(draw);
 }
-/* v193 - PC = MOBILE - FIX GIALLO */
+/* v194 - PC = MOBILE - FIX GIALLO */
 function upd(){
   if(!isPlaying){
     let idle = 8 + Math.random()*10;
