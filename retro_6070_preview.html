@@ -1,17 +1,16 @@
-<!-- v199 - ANTEPRIMA RETRO 60-70 SOLO CORNICE FORZATA - 12-11-2026 -->
+<!-- v199 - FIX BRANO IN ONDA + SOLO CORNICE - 12-11-2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - Anteprima Gold 60-70</title>
+<title>Radio Sistema 3 - Gold Preview</title>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
 const RS3_SOUL_LOGO_NOME="RS3_SOUL_viola_scuro.jpg";
-const RS3_RETRO_LOGO_NOME="RS3_60_70.jpg";
 let soulActive=false; let retroActive=true;
-function getLogoAssoluto(){try{const isSoul=soulActive||(document.body&&document.body.classList.contains('soul-mode'));const isRetro=retroActive||(document.body&&document.body.classList.contains('retro-mode'));let nome=RADIO_LOGO_FISSO_NOME; if(isSoul) nome=RS3_SOUL_LOGO_NOME; else if(isRetro) nome=RS3_RETRO_LOGO_NOME; const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1); return base+encodeURI(nome);}catch(e){return RADIO_LOGO_FISSO_NOME;}}
+function getLogoAssoluto(){try{const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(RADIO_LOGO_FISSO_NOME);}catch(e){return RADIO_LOGO_FISSO_NOME;}}
 const BRANI_NOVITA = [
   { id: "0xuFBG6o6EU", artista: "Gaia", titolo: "Senz'allegria" },
   { id: "ofywN3NgGqY", artista: "Sombr", titolo: "My body isn't ready" },
@@ -101,29 +100,17 @@ html.is-popup .meteo-side, html.is-popup .news-box-side, html.is-popup .left-dou
 html.is-popup .container{max-width:100% !important;margin:0 !important;border-radius:0 !important;padding:8px 10px !important;background:rgba(10,25,49,0.98) !important}
 @media (max-width:1024px){ .meteo-side,.news-box-side,.left-double-wide{display:none !important} .btn-novita,#novitaSection,.btn-popup{display:none !important} body{min-height:100dvh !important;display:flex !important;flex-direction:column !important} .page-layout{display:flex !important;flex-direction:column !important;justify-content:center !important;align-items:center !important;flex:1 !important;width:100% !important;grid-template-columns:1fr !important} .container{max-width:96% !important;width:96% !important;margin:auto !important;border-radius:18px !important;padding:20px 14px !important} .logo-wrap{display:none !important} h1{font-size:2.2rem !important;margin-top:10px !important} .cc_recenttracks_list, #rs3-mio-box{max-width:96% !important;width:96% !important;margin:2px auto !important} .rs3-trackbox{padding:10px 10px !important;gap:10px !important;min-height:85px !important} .rs3-cover{width:62px !important;height:62px !important;min-width:62px !important;flex:0 0 62px !important} .footer-copy{margin-top:auto !important}}
 @media (max-width:1024px) and (orientation:landscape){ .container{max-width:70% !important;padding:12px 14px !important} h1{font-size:1.6rem !important;margin-top:5px !important} .live{font-size:1rem !important;margin-top:5px !important} .player-box{margin-top:4px !important;padding:8px !important} }
-body.soul-mode{background: linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),url("studio-radio.jpeg") !important;background-size:cover !important;background-position:center !important;background-attachment:fixed !important}
-body.soul-mode .container{background: rgba(255,255,255,.08) !important;border: 1px solid #b388ff !important}
-body.soul-mode h1{ color:#d1a3ff !important }body.soul-mode .live{ color:#d1a3ff !important }body.soul-mode .logo-wrap{ background:linear-gradient(135deg,#7b1fa2,#b388ff,#d1a3ff,#7b1fa2) !important; background-size:300% 300% !important }body.soul-mode .rs3-cover{ border:2px solid #b388ff !important }
 
-/* RETRO 60-70 - SOLO CORNICE DAVANTI - SFONDO INVARIATO */
-body.retro-mode{
-  background: linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),url("studio-radio.jpeg") !important;
-  background-size:cover !important;
-  background-position:center !important;
-  background-attachment:fixed !important;
-}
+/* v199 - RETRO SOLO CORNICE DAVANTI */
 body.retro-mode .container{
   background: rgba(255,255,255,.08) !important;
-  border: 2px solid #ff8c00 !important;
-  box-shadow: 0 0 35px rgba(255,140,0,.45) !important;
+  border: 2.5px solid #ff8c00 !important;
+  box-shadow: 0 0 35px rgba(255,140,0,.50) !important;
 }
-body.retro-mode h1{ color:#ffb347 !important; }
-body.retro-mode .live{ color:#ff8c00 !important; }
 body.retro-mode .logo-wrap{ background:linear-gradient(135deg,#8B4513,#ff8c00,#ffd700,#ff8c00,#8B4513) !important; background-size:300% 300% !important }
+body.retro-mode #rs3-mio-box{ border:1.5px solid #ff8c00 !important; box-shadow: 0 0 15px rgba(255,140,0,.35) !important; }
 body.retro-mode .rs3-cover{ border:2px solid #ff8c00 !important; }
 body.retro-mode .section-title{ color:#ffb347 !important; }
-body.retro-mode #rs3-mio-box{ border:1px solid rgba(255,140,0,.7) !important; }
-body.retro-mode .vu-wrap{ border-color: rgba(255,140,0,.7) !important; }
 body.retro-mode::before{ content:"ANTEPRIMA GOLD 60-70 - SOLO CORNICE - PRIVATA"; position:fixed; top:0; left:0; right:0; background:#ff8c00; color:#000; font-weight:900; font-size:0.65rem; padding:3px; z-index:9999; text-align:center; letter-spacing:1px; }
 </style>
 </head>
@@ -132,7 +119,7 @@ body.retro-mode::before{ content:"ANTEPRIMA GOLD 60-70 - SOLO CORNICE - PRIVATA"
   <div class="meteo-side left"><div class="meteo-side-title">NORD</div><div id="meteo-left" class="meteo-side-grid"></div></div>
   <div class="meteo-side center-left"><div class="meteo-side-title">CENTRO SUD</div><div id="meteo-right" class="meteo-side-grid"></div></div>
   <div class="container">
-    <div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo" id="mainLogo" onerror="this.onerror=null; this.src='RADIO SISTEMA 3.jpeg'"></div>
+    <div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo" id="mainLogo"></div>
     <h1 id="mainTitle">RADIO GOLD 60-70</h1>
     <div class="live" id="liveText">📀 VINYL ON AIR</div>
     <div class="player-box">
@@ -154,7 +141,7 @@ body.retro-mode::before{ content:"ANTEPRIMA GOLD 60-70 - SOLO CORNICE - PRIVATA"
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389 - ANTEPRIMA RETRO PRIVATA</div>
 <script>
-const CACHE_VERSION='v199_RETRO_ONLY_FRAME_FORCED';
+const CACHE_VERSION='v199_FIX_TRACKBOX_RETRO_FRAME';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay(true);}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -173,14 +160,14 @@ function pulisciTitoloFinale(t){if(!t) return t;t=t.replace(/\s*[\(\[][^\)\]]*re
 function rimuoviTitoloDuplicato(s){if(!s) return s;let w=s.trim().split(/\s+/);if(w.length<5) return s;for(let len=3; len>=2; len--){if(w.length>len*2){let first=w.slice(0,len).join(' ').toLowerCase();let last=w.slice(-len).join(' ').toLowerCase();if(first===last){return w.slice(0,-len).join(' ').trim();}}}return s;}
 function parseArtistTitleSmart(s){if(!s) return {titolo:"", artista:""};s=s.replace(/\s+/g,' ').trim();s=pulisciTitoloFinale(s);let sep = s.includes(' - ') ? ' - ' : (s.includes(' – ') ? ' – ' : (s.includes(' — ') ? ' — ' : null));if(sep){let parts=s.split(sep);let artista=parts[0].trim();let titolo=parts.slice(1).join(sep).trim();titolo=pulisciTitoloFinale(titolo);return {titolo, artista};}return {titolo: pulisciTitoloFinale(s), artista:""};}
 function updateMediaSession(artista,titolo){if(!('mediaSession' in navigator))return;try{const logo=getLogoAssoluto();navigator.mediaSession.metadata=new MediaMetadata({title:titolo||'Radio Sistema 3',artist:artista||'Live',album:'Radio Sistema 3',artwork:[{src:logo,sizes:'512x512',type:'image/jpeg'},{src:logo,sizes:'256x256',type:'image/jpeg'}]});navigator.mediaSession.setActionHandler('play',()=>{tryAutoPlay(true);});navigator.mediaSession.setActionHandler('pause',()=>{document.getElementById('radioAudio').pause();});}catch(e){}}
-let _lastRaw="";let _lastValidTime=0;let _lastValidArtistaTitolo="";let _lastArtist="";let _lastTitolo="";
+let _lastRaw="";let _lastArtist="";let _lastTitolo="";
 function creaMioBox(){if(document.getElementById('rs3-mio-box')) return document.getElementById('rs3-mio-box');const original=document.querySelector('.cc_recenttracks_list');if(!original) return null;original.style.display='none';original.style.opacity='0';original.style.height='0';original.style.minHeight='0';original.style.maxHeight='0';original.style.margin='0';original.style.padding='0';original.style.overflow='hidden';original.style.pointerEvents='none';if(document.getElementById('rs3-mio-box')) return document.getElementById('rs3-mio-box');const mio=document.createElement('div');mio.id='rs3-mio-box';mio.className='rs3-ready';mio.style.display='block';mio.style.opacity='1';mio.style.minHeight='95px';mio.style.maxWidth='400px';mio.style.margin='2px auto 0 auto';mio.style.background='rgba(0,0,0,0.85)';mio.style.borderRadius='14px';mio.style.padding='0';mio.innerHTML='<div class="rs3-trackbox"><img class="rs3-cover" src="'+getLogoAssoluto()+'"><div class="rs3-info"><div style="font-weight:900;color:#fff">Radio Sistema 3</div><div style="color:#ffd966">Live</div></div></div>';original.parentNode.insertBefore(mio, original.nextSibling);return mio;}
 async function fetchTitoloPulitoDaStream(){const endpoints=["https://listentomystream.com:8046/stats?sid=1&json=1","https://listentomystream.com:8046/currentsong?sid=1"];for(let base of endpoints){const proxies=["https://api.allorigins.win/get?url="+encodeURIComponent(base+"?_t="+Date.now()),"https://corsproxy.io/?"+encodeURIComponent(base+"?_t="+Date.now())];for(let proxyUrl of proxies){try{let r=await fetch(proxyUrl,{cache:'no-store'});if(!r.ok) continue;let txt=await r.text();let inner=txt;try{let j=JSON.parse(txt);inner=j.contents||txt;if(typeof inner!=='string')inner=JSON.stringify(inner);}catch(e){}let m=inner.match(/"songtitle"\s*:\s*"([^"]+)"/i);let song=m?m[1]:"";if(!song && inner.length<200 && !inner.includes("<html")){song=inner.replace(/<[^>]+>/g,'').replace(/^["']|["']$/g,'').trim();}song=song.replace(/&amp;/g,'&').trim();if(song && song.length>3 && song.length<200 && !song.toLowerCase().includes("radio sistema 3") && !song.toLowerCase().includes("404")){return song;}}catch(e){continue;}}}return null;}
 async function rebuildTrackBox(){
   const mioBox=creaMioBox();const hidden=document.querySelector('.cc_recenttracks_list');if(!mioBox) return;let rawImg=getLogoAssoluto();
   try{
     let sourceHTML=hidden?hidden.innerHTML:"";let tempScan=document.createElement('div');tempScan.innerHTML=sourceHTML;let titleEl=tempScan.querySelector('[class*="title"], .cc_title, [class*="song"]');let artistEl=tempScan.querySelector('[class*="artist"], .cc_artist');let righe=[];if(titleEl && artistEl){let art = artistEl.innerText.trim();let tit = titleEl.innerText.trim();righe=[art+" - "+tit];}else{tempScan.querySelectorAll('img,script,style').forEach(el=>el.remove());tempScan.querySelectorAll('div, span, p, b').forEach(d=>{let t=pulisciTitolo(d.innerText||"");if(t.length>2 && !t.toLowerCase().includes('radio sistema 3') && t.toLowerCase()!=='live' && t.length<300){if(t.toLowerCase().includes('buy this')) return;if(!righe.includes(t)) righe.push(t);}});}
-    if(righe.length>=1){let rawCombined=righe.join(' ');rawCombined=rimuoviTitoloDuplicato(rawCombined);let parsed=parseArtistTitleSmart(rawCombined);let titolo=parsed.titolo;let artista=parsed.artista;if(!titolo || titolo.length<2) return;if(_lastTitolo && _lastArtist){if(titolo.toLowerCase()===_lastArtist.toLowerCase() && artista.toLowerCase()===_lastTitolo.toLowerCase()){return;}}let txt=titolo+" - "+artista;if(txt===_lastRaw) return;_lastRaw=txt;_lastTitolo=titolo;if(artista){_lastArtist=artista; _lastValidArtistaTitolo=txt; _lastValidTime=Date.now();}let info=mioBox.querySelector('.rs3-info');if(info){info.innerHTML=`<div style="font-weight:900;color:#fff;font-size:1.10rem;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${titolo}">${titolo}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${artista}">${artista || 'Radio Sistema 3'}</div>`;}const cov=mioBox.querySelector('.rs3-cover');if(cov && cov.src!==rawImg) cov.src=rawImg;updateMediaSession(artista,titolo);}
+    if(righe.length>=1){let rawCombined=righe.join(' ');rawCombined=rimuoviTitoloDuplicato(rawCombined);let parsed=parseArtistTitleSmart(rawCombined);let titolo=parsed.titolo;let artista=parsed.artista;if(!titolo || titolo.length<2) return;if(_lastTitolo && _lastArtist){if(titolo.toLowerCase()===_lastArtist.toLowerCase() && artista.toLowerCase()===_lastTitolo.toLowerCase()){return;}}let txt=titolo+" - "+artista;if(txt===_lastRaw) return;_lastRaw=txt;_lastTitolo=titolo;if(artista){_lastArtist=artista;}let info=mioBox.querySelector('.rs3-info');if(info){info.innerHTML=`<div style="font-weight:900;color:#fff;font-size:1.10rem;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${titolo}">${titolo}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${artista}">${artista || 'Radio Sistema 3'}</div>`;}const cov=mioBox.querySelector('.rs3-cover');if(cov){cov.src=rawImg; cov.onerror=function(){this.src=rawImg;};}updateMediaSession(artista,titolo);}
   }catch(e){}
 }
 const list=document.querySelector('.cc_recenttracks_list');if(list){const obs=new MutationObserver(()=>{rebuildTrackBox();});obs.observe(list,{childList:true,subtree:true,characterData:true});}
@@ -215,17 +202,6 @@ document.addEventListener('touchstart', ()=>{ try{ if(audioCtx && audioCtx.state
 document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;
 document.addEventListener('DOMContentLoaded',()=>{creaMioBox(); rebuildTrackBox();caricaMeteo();if(!document.documentElement.classList.contains('is-popup')){caricaCronaca();caricaCalcio();caricaMusica();caricaConcerti();setInterval(caricaCronaca,90000);setInterval(caricaCalcio,60000);setInterval(caricaMusica,120000);setInterval(caricaConcerti,120000);}setInterval(caricaMeteo,3600000);updateMediaSession("Radio Sistema 3","Live");});
 if(document.readyState!=='loading'){caricaMeteo();if(!document.documentElement.classList.contains('is-popup')){caricaCronaca();caricaCalcio();caricaMusica();caricaConcerti();}}
-</script>
-<script>
-// SOUL MODE rimane per index normale, qui disattivato perché retro forzato
-const NPOINT_URL="https://api.npoint.io/9ed90a2b1c3d903bfac6";const SOUL_COVER_FILE="./RS3_SOUL_viola_scuro.jpg";const MAIN_COVER_FILE="./RADIO SISTEMA 3.jpeg";
-function applySoulMode(isSoul){soulActive=isSoul; if(isSoul){ document.body.classList.add('soul-mode'); } }
-async function checkSoulMode(){/* disattivato in preview retro */}
-// Forza retro
-function applyRetroMode(){ document.body.classList.add('retro-mode'); retroActive=true; try{rebuildTrackBox();}catch(e){} }
-document.addEventListener('DOMContentLoaded',()=>{ applyRetroMode(); });
-setTimeout(()=>applyRetroMode(), 300);
-setTimeout(()=>applyRetroMode(), 1000);
 </script>
 </body>
 </html>
