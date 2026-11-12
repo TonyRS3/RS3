@@ -1,4 +1,4 @@
-<!-- v180 - VU REALE SYNC + v179 STABILE -->
+<!-- v181 - VU BILANCIATO REALE + v179 STABILE -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -85,7 +85,6 @@ html.is-popup body{background:#0a1931 !important;overflow:hidden !important}
 html.is-popup .page-layout{display:block !important}
 html.is-popup .meteo-side, html.is-popup .news-box-side, html.is-popup .left-double-wide, html.is-popup .btn-novita, html.is-popup #novitaSection, html.is-popup .footer-copy, html.is-popup .btn-popup, html.is-popup .logo-wrap{display:none !important}
 html.is-popup .container{max-width:100% !important;margin:0 !important;border-radius:0 !important;padding:8px 10px !important;background:rgba(10,25,49,0.98) !important}
-/* FIX MOBILE VERTICALE + ORIZZONTALE - v179 */
 @media (max-width:1024px){ .meteo-side,.news-box-side,.left-double-wide{display:none !important} .btn-novita,#novitaSection,.btn-popup{display:none !important} body{min-height:100dvh !important;display:flex !important;flex-direction:column !important} .page-layout{display:flex !important;flex-direction:column !important;justify-content:center !important;align-items:center !important;flex:1 !important;width:100% !important;grid-template-columns:1fr !important} .container{max-width:96% !important;width:96% !important;margin:auto !important;border-radius:18px !important;padding:20px 14px !important} .logo-wrap{display:none !important} h1{font-size:2.2rem !important;margin-top:10px !important} .cc_recenttracks_list, #rs3-mio-box{max-width:96% !important;width:96% !important;margin:2px auto !important} .rs3-trackbox{padding:10px 10px !important;gap:10px !important;min-height:85px !important} .rs3-cover{width:62px !important;height:62px !important;min-width:62px !important;flex:0 0 62px !important} .footer-copy{margin-top:auto !important}}
 @media (max-width:1024px) and (orientation:landscape){ .container{max-width:70% !important;padding:12px 14px !important} h1{font-size:1.6rem !important;margin-top:5px !important} .live{font-size:1rem !important;margin-top:5px !important} .player-box{margin-top:4px !important;padding:8px !important} }
 body.soul-mode{background: linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),url("studio-radio.jpeg") !important;background-size:cover !important;background-position:center !important;background-attachment:fixed !important}
@@ -120,7 +119,7 @@ body.soul-mode h1{ color:#d1a3ff !important }body.soul-mode .live{ color:#d1a3ff
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v180_VU_REALE';
+const CACHE_VERSION='v181_VU_BILANCIATO_REALE';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay();}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -235,36 +234,27 @@ const RIGHT=[{label:"Roma"},{label:"Ancona"},{label:"Napoli"},{label:"Palermo"},
 async function renderMeteo(cities,id){const grid=document.getElementById(id);if(!grid)return;let h="";for(let c of cities){try{const coord=CITIES_COORDS[c.label];const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coord.lat}&longitude=${coord.lon}&current=temperature_2m,weather_code&timezone=Europe%2FRome&_t=${Date.now()}`,{cache:'no-store'});const d=await r.json();const temp=Math.round(d.current.temperature_2m);const code=d.current.weather_code;let icon="01d";if(code===1||code===2)icon="02d";if(code===3)icon="03d";if(code===45||code===48)icon="50d";if(code>=51&&code<=67)icon="09d";if(code>=71&&code<=77)icon="13d";if(code>=80&&code<=82)icon="09d";if(code>=95)icon="11d";h+=`<div class="meteo-mini"><b>${c.label}</b><img src="https://openweathermap.org/img/wn/${icon}.png"><div class="temp">${temp}°C</div></div>`;}catch(e){h+=`<div class="meteo-mini"><b>${c.label}</b><div class="temp">--°</div></div>`;}}grid.innerHTML=h;}
 function caricaMeteo(){if(document.documentElement.classList.contains('is-popup'))return;renderMeteo(LEFT,'meteo-left');renderMeteo(RIGHT,'meteo-right');}
 
-/* VU REALE - SOLO QUESTO BLOCCO TOCCATO */
+/* VU BILANCIATO REALE - UNICO BLOCCO MODIFICATO */
 const vuCanvas=document.getElementById('vuCanvas');const vuCtx=vuCanvas.getContext('2d');const vuPeakEl=document.getElementById('vuPeak');
 let isPlaying=false,lL=0,lR=0;
-let audioCtx=null, analyser=null, dataArray=null, sourceNode=null, realMode=false;
-
+let audioCtx=null,analyser=null,dataArray=null,sourceNode=null,realMode=false;
 function initRealVU(){
   try{
     if(audioCtx) return true;
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 256;
-    analyser.smoothingTimeConstant = 0.8;
+    analyser.fftSize = 512;
+    analyser.smoothingTimeConstant = 0.75;
     dataArray = new Uint8Array(analyser.frequencyBinCount);
     sourceNode = audioCtx.createMediaElementSource(radioEl);
     sourceNode.connect(analyser);
     analyser.connect(audioCtx.destination);
-    realMode = true;
-    console.log('VU REAL MODE ON');
-    return true;
-  }catch(e){
-    console.log('VU fallback fake - CORS bloccato:', e.message);
-    realMode = false;
-    return false;
-  }
+    realMode=true; return true;
+  }catch(e){ realMode=false; return false; }
 }
-
 function draw(){
   const W=vuCanvas.width,H=vuCanvas.height;
-  vuCtx.clearRect(0,0,W,H);
-  vuCtx.fillStyle='#0a0a0a';vuCtx.fillRect(0,0,W,H);
+  vuCtx.clearRect(0,0,W,H); vuCtx.fillStyle='#0a0a0a'; vuCtx.fillRect(0,0,W,H);
   let bars=36,barW=W/bars,gap=1.5,rowH=H/2-2;
   let aL=Math.floor((lL/100)*bars);
   for(let i=0;i<bars;i++){let x=i*barW;let lit=i<aL;vuCtx.fillStyle=lit?(i<21?'#00ff2a':i<30?'#ffea00':'#ff1a1a'):'#1a1a1a';vuCtx.fillRect(x+gap,1+(rowH-(lit?rowH-1:rowH*0.4))/2,barW-gap*2,lit?rowH-1:rowH*0.4);}
@@ -273,40 +263,29 @@ function draw(){
   for(let i=0;i<bars;i++){let x=i*barW;let lit=i<aR;vuCtx.fillStyle=lit?(i<21?'#00d4ff':i<30?'#ffea00':'#ff1a1a'):'#1a1a1a';vuCtx.fillRect(x+gap,H/2+1+(rowH-(lit?rowH-1:rowH*0.4))/2,barW-gap*2,lit?rowH-1:rowH*0.4);}
   requestAnimationFrame(draw);
 }
-
 function upd(){
-  if(!isPlaying){lL+=(0-lL)*0.12;lR+=(0-lR)*0.12;return;}
+  if(!isPlaying){lL+=(0-lL)*0.15;lR+=(0-lR)*0.15;return;}
   if(realMode && analyser && dataArray){
     try{
       analyser.getByteFrequencyData(dataArray);
-      let sumLow=0,sumHigh=0;
-      let half=dataArray.length/2;
-      for(let i=0;i<half;i++) sumLow+=dataArray[i];
-      for(let i=half;i<dataArray.length;i++) sumHigh+=dataArray[i];
-      let avgLow=(sumLow/half)/255*100;
-      let avgHigh=(sumHigh/half)/255*100;
-      let targetL = Math.min(100, avgLow*1.8 + Math.random()*5);
-      let targetR = Math.min(100, avgHigh*1.8 + Math.random()*5);
-      lL+=(targetL-lL)*0.45;
-      lR+=(targetR-lR)*0.45;
-      return;
+      let sum=0; for(let i=0;i<dataArray.length;i++) sum+=dataArray[i];
+      let avg=sum/dataArray.length;
+      let vol=Math.min(100,(avg/255)*100*1.9);
+      let tL=vol*(0.97+Math.random()*0.06);
+      let tR=vol*(0.97+Math.random()*0.06);
+      if(vol>72 && Math.random()<0.3){tL=Math.min(100,tL+8);tR=Math.min(100,tR+8);}
+      lL+=(tL-lL)*0.52; lR+=(tR-lR)*0.52; return;
     }catch(e){ realMode=false; }
   }
-  // fallback fake se CORS blocca
   let base=40+Math.random()*45;let peak=Math.random()<0.18;
   let tL=peak?88+Math.random()*12:base+Math.random()*18;
   let tR=peak?85+Math.random()*15:base*0.9+Math.random()*20;
   lL+=(tL-lL)*0.38;lR+=(tR-lR)*0.34;
 }
-draw();setInterval(upd,60);
-
-radioEl.addEventListener('play',()=>{
-  isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";
-  try{ if(audioCtx && audioCtx.state==='suspended') audioCtx.resume(); }catch(e){}
-  try{ initRealVU(); }catch(e){}
-});
+draw();setInterval(upd,45);
+radioEl.addEventListener('play',()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";try{if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();}catch(e){} try{initRealVU();}catch(e){}});
 radioEl.addEventListener('pause',()=>{if(window._pausedForPopup||window._pausedForPlaylist)return;isPlaying=false;vuPeakEl.textContent="STOP";vuPeakEl.style.color="#ff4444";});
-/* FINE BLOCCO VU */
+/* FINE VU */
 
 document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;
 document.addEventListener('DOMContentLoaded',()=>{creaMioBox(); rebuildTrackBox();caricaMeteo();if(!document.documentElement.classList.contains('is-popup')){caricaCronaca();caricaCalcio();caricaMusica();caricaConcerti();setInterval(caricaCronaca,90000);setInterval(caricaCalcio,60000);setInterval(caricaMusica,120000);setInterval(caricaConcerti,120000);}setInterval(caricaMeteo,3600000);updateMediaSession("Radio Sistema 3","Live");});
