@@ -1,4 +1,4 @@
-<!-- v189 - FINTO MIGLIORATO MOBILE = PC - 12-11-2026 -->
+<!-- v190 - LEVEL BILANCIATI L=R - 12-11-2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -155,7 +155,7 @@ body.soul-mode h1{ color:#d1a3ff !important }body.soul-mode .live{ color:#d1a3ff
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v189_FINTO_MUSICALE';
+const CACHE_VERSION='v190_BALANCED';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay();}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -302,7 +302,7 @@ function draw(){
   for(let i=0;i<bars;i++){let x=i*barW;let lit=i<aR;vuCtx.fillStyle=lit?(i<21?'#00d4ff':i<30?'#ffea00':'#ff1a1a'):'#1a1a1a';vuCtx.fillRect(x+gap,H/2+1+(rowH-(lit?rowH-1:rowH*0.4))/2,barW-gap*2,lit?rowH-1:rowH*0.4);}
   requestAnimationFrame(draw);
 }
-/* v189 FINTO MIGLIORATO - BATTE A TEMPO */
+/* v190 - BILANCIATO L=R */
 function upd(){
   if(!isPlaying){
     let idle = 10 + Math.random()*14;
@@ -322,20 +322,21 @@ function upd(){
       lL+=(tL-lL)*0.52; lR+=(tR-lR)*0.52; return;
     }catch(e){}
   }
-  // FINTO MUSICALE - uguale su PC e MOBILE
   let now = Date.now()/100;
-  let beat = Math.sin(now*0.18); // battito lento
-  let fast = Math.sin(now*0.55); // variazione veloce
-  let kick = (Math.sin(now*0.22)>0.85)? 22 : 0; // colpo ogni tanto
-  let base = 42 + beat*18 + fast*10 + Math.random()*8;
-  base = Math.max(22, Math.min(92, base + kick));
-  let stereo = Math.sin(now*0.31)*9; // L/R sfasati
-  let tL = base + stereo + Math.random()*6;
-  let tR = base - stereo + Math.random()*6;
-  // picchi improvvisi tipo cassa
-  if(Math.random()<0.12){ tL = 78 + Math.random()*18; tR = 75 + Math.random()*18; }
+  let beat = Math.sin(now*0.18);
+  let fast = Math.sin(now*0.55);
+  let kick = (Math.sin(now*0.22)>0.85)? 20 : 0;
+  let base = 44 + beat*16 + fast*8 + Math.random()*6 + kick;
+  base = Math.max(24, Math.min(90, base));
+  let tL = base + (Math.random()*3 - 1.5);
+  let tR = base + (Math.random()*3 - 1.5);
+  if(Math.random()<0.10){ 
+    let peak = 80 + Math.random()*16;
+    tL = peak + Math.random()*2; 
+    tR = peak + Math.random()*2; 
+  }
   lL+=(tL-lL)*0.42;
-  lR+=(tR-lR)*0.40;
+  lR+=(tR-lR)*0.42;
 }
 draw();setInterval(upd,40);
 document.addEventListener('touchstart', ()=>{ try{ if(audioCtx && audioCtx.state==='suspended') audioCtx.resume(); }catch(e){} }, {passive:true});
