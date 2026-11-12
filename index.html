@@ -1,4 +1,4 @@
-<!-- v195 - SYNC LIVE FIX - 12-11-2026 -->
+<!-- v196 - FIX ASINCRONO PLAY INTERCETTATO - 12-11-2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -155,7 +155,7 @@ body.soul-mode h1{ color:#d1a3ff !important }body.soul-mode .live{ color:#d1a3ff
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v195_LIVE_SYNC_FINAL';
+const CACHE_VERSION='v196_LIVE_INTERCEPT';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay(true);}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -258,21 +258,29 @@ let _fastInterval=setInterval(()=>{creaMioBox(); rebuildTrackBox();},2000);
 setTimeout(()=>{clearInterval(_fastInterval);_fastInterval=setInterval(rebuildTrackBox,5000);},15000);
 document.addEventListener('DOMContentLoaded',()=>{creaMioBox(); rebuildTrackBox();});creaMioBox(); rebuildTrackBox();
 const radioEl=document.getElementById('radioAudio');
-let userPaused=true;let wasPlayingBeforeHide=false;let _lastPauseTs=0;let _forceLiveNextPlay=false;
+let userPaused=true;let wasPlayingBeforeHide=false;let _lastPauseTs=0;let _forceLiveNextPlay=false;let _isForcingLive=false;
 function forceLiveReloadAndPlay(){
-  const a=document.getElementById('radioAudio');
+  const a=radioEl;
+  _isForcingLive=true;
   try{ a.pause(); a.src="https://listentomystream.com:8046/stream?_t="+Date.now(); a.load(); }catch(e){}
-  return a.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;_forceLiveNextPlay=false;}).catch(()=>{});
+  return a.play().then(()=>{
+    isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";
+    userPaused=false;wasPlayingBeforeHide=true;
+    _forceLiveNextPlay=false;
+    setTimeout(()=>{ _isForcingLive=false; },500);
+  }).catch(()=>{ _isForcingLive=false; });
 }
 function tryAutoPlay(isManual=false){
-  const a=document.getElementById('radioAudio');
-  if(isManual || _forceLiveNextPlay || (Date.now() - _lastPauseTs) > 800){
-    try{ a.pause(); a.src="https://listentomystream.com:8046/stream?_t="+Date.now(); a.load(); }catch(e){}
+  if(isManual || _forceLiveNextPlay || (Date.now() - _lastPauseTs) > 500){
+    return forceLiveReloadAndPlay();
   }
-  if(wasPlayingBeforeHide) userPaused=false;
-  return a.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;_forceLiveNextPlay=false;}).catch(()=>{});
+  return radioEl.play().then(()=>{
+    isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";
+    userPaused=false;wasPlayingBeforeHide=true;
+  }).catch(()=>{});
 }
 radioEl.addEventListener('pause',()=>{
+  if(_isForcingLive) return;
   isPlaying=false;vuPeakEl.textContent="STOP";vuPeakEl.style.color="#ff4444";
   _lastPauseTs=Date.now();
   _forceLiveNextPlay=true;
@@ -281,6 +289,12 @@ radioEl.addEventListener('pause',()=>{
   userPaused=true;wasPlayingBeforeHide=false;
 });
 radioEl.addEventListener('play',()=>{
+  if(_isForcingLive) return;
+  if(_forceLiveNextPlay){
+    try{ radioEl.pause(); }catch(e){}
+    forceLiveReloadAndPlay();
+    return;
+  }
   isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";
   userPaused=false;wasPlayingBeforeHide=true;
   try{if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();}catch(e){}
@@ -323,7 +337,7 @@ function draw(){
   for(let i=0;i<bars;i++){let x=i*barW;let lit=i<aR;vuCtx.fillStyle=lit?(i<21?'#00d4ff':i<30?'#ffea00':'#ff1a1a'):'#1a1a1a';vuCtx.fillRect(x+gap,H/2+1+(rowH-(lit?rowH-1:rowH*0.4))/2,barW-gap*2,lit?rowH-1:rowH*0.4);}
   requestAnimationFrame(draw);
 }
-/* v195 - PC = MOBILE */
+/* v196 - PC = MOBILE */
 function upd(){
   if(!isPlaying){
     let idle = 8 + Math.random()*10;
