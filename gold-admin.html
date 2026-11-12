@@ -1,78 +1,29 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOLD ADMIN - Radio Sistema 3</title>
-<style>
-body{font-family:Arial,sans-serif;background:#111;color:#fff;text-align:center;padding:20px}
-h1{color:#ffd966}
-.btn{padding:18px 28px;margin:12px;font-size:1.3rem;font-weight:900;border:none;border-radius:12px;cursor:pointer;display:block;width:90%;max-width:400px;margin-left:auto;margin-right:auto}
-.btn-classic{background:#fff;color:#000}
-.btn-soul{background:#b388ff;color:#fff}
-.btn-gold{background:#d4af37;color:#000;border:2px solid #ffd700}
-.status{margin-top:20px;font-size:1.2rem;color:#00ff2a;font-weight:900;min-height:30px}
-.preview{margin-top:15px;padding:15px;background:#222;border-radius:12px}
-</style>
-</head>
-<body>
-<h1>🎛️ PANNELLO RADIO SISTEMA 3</h1>
-<p>Seleziona modalità:</p>
-
-<button class="btn btn-classic" onclick="setMode('classic')">⚪ RADIO SISTEMA 3 CLASSIC</button>
-<button class="btn btn-soul" onclick="setMode('soul')">💜 SOUL FUNK</button>
-<button class="btn btn-gold" onclick="setMode('gold')">📀 RADIO GOLD 60-70 VINYL</button>
-
-<div class="status" id="status">Carico stato attuale...</div>
-<div class="preview" id="preview"></div>
-
 <script>
 const NPOINT_URL="https://api.npoint.io/9ed90a2b1c3d903bfac6";
-
-function normalizeMode(m){
-  if(!m) return 'classic';
-  m=String(m).toLowerCase();
-  if(m.includes('soul')) return 'soul';
-  if(m.includes('gold')||m.includes('retro')) return 'gold';
-  return 'classic';
+const SOUL_COVER_FILE="./RS3_SOUL_viola_scuro.jpg";
+const MAIN_COVER_FILE="./RADIO SISTEMA 3.jpeg";
+let soulActive=false;let goldActive=false;
+function applyMode(mode){
+  const logoImg=document.getElementById('mainLogo');const liveText=document.getElementById('liveText');const mainTitle=document.getElementById('mainTitle');
+  soulActive=false; goldActive=false;
+  document.body.classList.remove('soul-mode','retro-mode','classic-mode');
+  if(mode==='soul'){ soulActive=true; document.body.classList.add('soul-mode'); if(logoImg)logoImg.src=SOUL_COVER_FILE; if(liveText)liveText.innerHTML="💜 SOUL FUNK ON AIR"; if(mainTitle)mainTitle.textContent="SOUL FUNK"; }
+  else if(mode==='gold'){ goldActive=true; document.body.classList.add('retro-mode'); if(logoImg)logoImg.src=MAIN_COVER_FILE; if(liveText)liveText.innerHTML="📀 VINYL ON AIR"; if(mainTitle)mainTitle.textContent="RADIO GOLD 60-70"; }
+  else { document.body.classList.add('classic-mode'); if(logoImg)logoImg.src=MAIN_COVER_FILE; if(liveText)liveText.innerHTML="ON AIR 24/7"; if(mainTitle)mainTitle.textContent="RADIO SISTEMA 3"; }
+  try{rebuildTrackBox();}catch(e){}
+  try{document.querySelectorAll('.rs3-cover, .logo').forEach(img=>{img.src=getLogoAssoluto();});}catch(e){}
 }
-
-async function setMode(m){
-  const status=document.getElementById('status');
-  status.textContent="⏳ Invio "+m.toUpperCase()+"...";
-  status.style.color="#ffd966";
-  localStorage.setItem('rs3_mode',m);
-  try{
-    let r=await fetch(NPOINT_URL,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({mode:m})
-    });
-    if(r.ok){
-      status.textContent="✅ "+m.toUpperCase()+" ATTIVO!";
-      status.style.color="#00ff2a";
-      document.getElementById('preview').innerHTML="<b>Modalità attuale:</b><br><span style='font-size:2rem'>"+(m==='soul'?'💜 SOUL':m==='gold'?'📀 GOLD':'⚪ CLASSIC')+"</span><br><br>Apri www.rsistema3.eu e vedrai cambiare in 2 secondi.";
-    }else{
-      throw "errore server";
-    }
-  }catch(e){
-    status.textContent="❌ Errore npoint, ma salvato locale: "+m;
-    status.style.color="#ff4444";
-  }
-}
-
-async function loadCurrent(){
+function normalizeMode(m){ if(!m) return 'classic'; m=String(m).toLowerCase(); if(m.includes('soul')) return 'soul'; if(m.includes('gold')||m.includes('retro')) return 'gold'; return 'classic'; }
+async function checkSoulMode(){
   try{
     let r=await fetch(NPOINT_URL+"?t="+Date.now(),{cache:'no-store'});
+    if(!r.ok) return;
     let data=await r.json();
     let mode=normalizeMode(data.mode || (data.soul===true?'soul':(data.gold===true?'gold':'classic')));
-    document.getElementById('status').textContent="Stato attuale su internet: "+mode.toUpperCase();
-    document.getElementById('preview').innerHTML="Attuale: <b>"+mode+"</b>";
-  }catch(e){
-    document.getElementById('status').textContent="Non riesco a leggere npoint, uso locale: "+(localStorage.getItem('rs3_mode')||'classic');
-  }
+    applyMode(mode);
+    localStorage.setItem('rs3_mode',mode);
+  }catch(e){}
 }
-loadCurrent();
+setInterval(checkSoulMode,2000);
+checkSoulMode();
 </script>
-</body>
-</html>
