@@ -1,4 +1,4 @@
-<!-- v198 - FIX LIVE PLAY INTERCETTATO - 12-11-2026 -->
+<!-- v199 - v198 ORIGINALE + GOLD VINTAGE 3 MODI - 12-11-2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -9,7 +9,8 @@
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
 const RS3_SOUL_LOGO_NOME="RS3_SOUL_viola_scuro.jpg";
-function getLogoAssoluto(){try{const isSoul=(typeof soulActive!=='undefined'&&soulActive)||(document.body&&document.body.classList.contains('soul-mode'));const nome=isSoul?RS3_SOUL_LOGO_NOME:RADIO_LOGO_FISSO_NOME;const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(nome);}catch(e){return (typeof soulActive!=='undefined'&&soulActive)?RS3_SOUL_LOGO_NOME:RADIO_LOGO_FISSO_NOME;}}
+const RS3_GOLD_LOGO_NOME="RADIO SISTEMA 3.jpeg";
+function getLogoAssoluto(){try{const isSoul=(typeof soulActive!=='undefined'&&soulActive)||(document.body&&document.body.classList.contains('soul-mode'));const isGold=(typeof goldActive!=='undefined'&&goldActive)||(document.body&&document.body.classList.contains('retro-mode'));let nome=RADIO_LOGO_FISSO_NOME;if(isSoul) nome=RS3_SOUL_LOGO_NOME; else if(isGold) nome=RS3_GOLD_LOGO_NOME;const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(nome);}catch(e){return RADIO_LOGO_FISSO_NOME;}}
 const BRANI_NOVITA = [
   { id: "0xuFBG6o6EU", artista: "Gaia", titolo: "Senz'allegria" },
   { id: "ofywN3NgGqY", artista: "Sombr", titolo: "My body isn't ready" },
@@ -126,6 +127,19 @@ html.is-popup .container{max-width:100% !important;margin:0 !important;border-ra
 body.soul-mode{background: linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),url("studio-radio.jpeg") !important;background-size:cover !important;background-position:center !important;background-attachment:fixed !important}
 body.soul-mode .container{background: rgba(255,255,255,.08) !important;border: 1px solid #b388ff !important}
 body.soul-mode h1{ color:#d1a3ff !important }body.soul-mode .live{ color:#d1a3ff !important }body.soul-mode .logo-wrap{ background:linear-gradient(135deg,#7b1fa2,#b388ff,#d1a3ff,#7b1fa2) !important; background-size:300% 300% !important }body.soul-mode .rs3-cover{ border:2px solid #b388ff !important }
+
+/* GOLD VINTAGE SFUMATA - EFFETTO VECCHIA - NUOVO */
+body.retro-mode .container{border:2.5px solid #d4af37 !important;box-shadow:0 0 40px rgba(212,175,55,.55) !important}
+body.retro-mode #mainTitle{
+  color:#ffd700 !important;font-weight:900 !important;letter-spacing:3px !important;opacity:0.88 !important;
+  text-shadow:0 0 8px rgba(255,215,0,.9),0 0 18px rgba(212,175,55,.6),0 0 35px rgba(212,175,55,.25),2px 2px 0px rgba(80,50,0,.5) !important;
+  filter:blur(0.35px) contrast(0.92) brightness(1.08) !important;transform:scaleY(1.05) scaleX(0.98) !important;
+  font-family:Impact,'Arial Black',sans-serif !important;-webkit-text-stroke:0.5px rgba(139,105,20,.6);
+}
+body.retro-mode .live{color:#d4af37 !important}
+body.retro-mode .logo-wrap{background:linear-gradient(135deg,#8B6914,#d4af37,#ffd700,#d4af37,#8B6914) !important;background-size:300% 300% !important;box-shadow:0 0 20px rgba(212,175,55,.5) !important}
+body.retro-mode #rs3-mio-box{border:1.5px solid #d4af37 !important}
+body.retro-mode .section-title{color:#d4af37 !important}
 </style>
 </head>
 <body>
@@ -144,6 +158,7 @@ body.soul-mode h1{ color:#d1a3ff !important }body.soul-mode .live{ color:#d1a3ff
     </div>
     <div class="section-title" style="margin-top:2px !important;margin-bottom:3px !important;font-size:1.15rem !important">♪ Brano in onda</div>
     <div class="cc_recenttracks_list" data-username="bomyydij"></div>
+    <div id="rs3-mio-box"></div>
     <button class="btn-novita" id="btnNovita" onclick="apriNovita()">▶ RADIO S3 PLAYLIST</button>
     <div id="novitaSection"><div id="novitaPlayerMain"></div><div id="novitaList"></div><button style="background:#333;color:#fff;margin-top:12px;padding:8px 18px;border:none;border-radius:20px;cursor:pointer" onclick="chiudiNovita()">X Chiudi</button></div>
   </div>
@@ -155,7 +170,7 @@ body.soul-mode h1{ color:#d1a3ff !important }body.soul-mode .live{ color:#d1a3ff
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-const CACHE_VERSION='v198_LIVE_PLAY_BLOCK';
+const CACHE_VERSION='v199_GOLD_3MODI';
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay(true);}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
@@ -379,11 +394,51 @@ document.addEventListener('DOMContentLoaded',()=>{creaMioBox(); rebuildTrackBox(
 if(document.readyState!=='loading'){caricaMeteo();if(!document.documentElement.classList.contains('is-popup')){caricaCronaca();caricaCalcio();caricaMusica();caricaConcerti();}}
 </script>
 <script>
-const NPOINT_URL="https://api.npoint.io/9ed90a2b1c3d903bfac6";const SOUL_COVER_FILE="./RS3_SOUL_viola_scuro.jpg";const MAIN_COVER_FILE="./RADIO SISTEMA 3.jpeg";let soulActive=false;
-function applySoulMode(isSoul){soulActive=isSoul;const logoImg=document.getElementById('mainLogo');const liveText=document.getElementById('liveText');const mainTitle=document.getElementById('mainTitle');if(isSoul){document.body.classList.add('soul-mode');if(logoImg)logoImg.src=SOUL_COVER_FILE;if(liveText)liveText.innerHTML="💜 SOUL FUNK ON AIR";if(mainTitle)mainTitle.textContent="SOUL FUNK";}else{document.body.classList.remove('soul-mode');if(logoImg)logoImg.src=MAIN_COVER_FILE;if(liveText)liveText.innerHTML="ON AIR 24/7";if(mainTitle)mainTitle.textContent="RADIO SISTEMA 3";}try{rebuildTrackBox();}catch(e){}document.querySelectorAll('.rs3-cover, .logo').forEach(img=>{img.src=getLogoAssoluto();});}
-async function checkSoulMode(){try{let r=await fetch(NPOINT_URL+"?t="+Date.now(),{cache:'no-store'});if(!r.ok)return;let data=await r.json();if((data.soul===true)!==soulActive){applySoulMode(data.soul===true);}else if(data.soul===true){document.querySelectorAll('.rs3-cover').forEach(img=>{if(!img.src.includes('viola'))img.src=getLogoAssoluto();});}}catch(e){}}
+const NPOINT_URL="https://api.npoint.io/9ed90a2b1c3d903bfac6";const SOUL_COVER_FILE="./RS3_SOUL_viola_scuro.jpg";const MAIN_COVER_FILE="./RADIO SISTEMA 3.jpeg";let soulActive=false;let goldActive=false;
+function applySoulMode(isSoul){ // mantenuta compatibilità
+  if(isSoul) applyMode('soul'); else applyMode('classic');
+}
+function applyMode(mode){
+  const logoImg=document.getElementById('mainLogo');const liveText=document.getElementById('liveText');const mainTitle=document.getElementById('mainTitle');
+  soulActive=false; goldActive=false;
+  document.body.classList.remove('soul-mode','retro-mode');
+  if(mode==='soul'){
+    soulActive=true;
+    document.body.classList.add('soul-mode');
+    if(logoImg)logoImg.src=SOUL_COVER_FILE;
+    if(liveText)liveText.innerHTML="💜 SOUL FUNK ON AIR";
+    if(mainTitle)mainTitle.textContent="SOUL FUNK";
+  } else if(mode==='gold'){
+    goldActive=true;
+    document.body.classList.add('retro-mode');
+    if(logoImg)logoImg.src=MAIN_COVER_FILE;
+    if(liveText)liveText.innerHTML="📀 VINYL ON AIR";
+    if(mainTitle)mainTitle.textContent="RADIO GOLD 60-70";
+  } else {
+    if(logoImg)logoImg.src=MAIN_COVER_FILE;
+    if(liveText)liveText.innerHTML="ON AIR 24/7";
+    if(mainTitle)mainTitle.textContent="RADIO SISTEMA 3";
+  }
+  try{rebuildTrackBox();}catch(e){}
+  document.querySelectorAll('.rs3-cover, .logo').forEach(img=>{img.src=getLogoAssoluto();});
+}
+async function checkSoulMode(){
+  try{
+    let r=await fetch(NPOINT_URL+"?t="+Date.now(),{cache:'no-store'});
+    if(!r.ok)return;
+    let data=await r.json();
+    // nuovo formato: data.mode = classic/soul/gold
+    let mode = data.mode || (data.soul===true ? 'soul' : (data.gold===true ? 'gold' : 'classic'));
+    // fallback localStorage per test admin senza npoint
+    const localMode = localStorage.getItem('rs3_mode');
+    if(localMode && !data.mode) mode = localMode;
+    if(mode==='soul' && !soulActive) applyMode('soul');
+    else if(mode==='gold' && !goldActive) applyMode('gold');
+    else if(mode==='classic' && (soulActive||goldActive)) applyMode('classic');
+  }catch(e){}
+}
 setInterval(checkSoulMode,3000);checkSoulMode();
-setInterval(()=>{if(document.body.classList.contains('soul-mode')){const v=getLogoAssoluto();document.querySelectorAll('.rs3-cover').forEach(img=>{if(!img.src.includes('viola')&&!img.src.includes('RS3_SOUL')){img.src=v;}});}},800);
+setInterval(()=>{if(document.body.classList.contains('soul-mode')||document.body.classList.contains('retro-mode')){const v=getLogoAssoluto();document.querySelectorAll('.rs3-cover').forEach(img=>{if(!img.src.includes('viola')&&!img.src.includes('RS3_SOUL')){}});}},800);
 </script>
 </body>
 </html>
