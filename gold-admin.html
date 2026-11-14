@@ -25,6 +25,7 @@ input{padding:15px;font-size:1.2rem;border-radius:10px;border:none;width:90%;max
 <input type="password" id="pwdInput" placeholder="Password">
 <button id="btnLogin" onclick="checkPwd()">ENTRA</button>
 <p id="loginMsg" style="color:#ff5555"></p>
+<p style="font-size:0.8rem;color:#777;margin-top:20px">Default: 1234<br>poi cambiala, sarà uguale su PC e telefono</p>
 </div>
 
 <h1>RS3 ADMIN - 3 MODI</h1>
@@ -32,57 +33,79 @@ input{padding:15px;font-size:1.2rem;border-radius:10px;border:none;width:90%;max
 <button id="soul" onclick="setMode('soul')">SOUL - SOUL FUNK</button>
 <button id="gold" onclick="setMode('gold')">GOLD - RADIO GOLD 60-70</button>
 <div id="status">Carico stato...</div>
-
-<button id="btnChange" onclick="changePwd()">Cambia Password</button>
+<button id="btnChange" onclick="changePwd()">Cambia Password (vale per tutti)</button>
 
 <script>
 const NPOINT="https://api.npoint.io/9ed90a2b1c3d903bfac6";
-const STORAGE_KEY="rs3_admin_pwd";
+let currentData={};
+let pwdHashRemoto=null;
 
-// Password di default se non ne hai ancora messa una: 1234
-// La puoi cambiare con il tasto sotto
-function getSavedPwd(){
-  return localStorage.getItem(STORAGE_KEY) || "1234";
+async function sha256(text){
+  const buf=await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
 
-function checkPwd(){
-  let inserita=document.getElementById('pwdInput').value;
-  let salvata=getSavedPwd();
-  if(inserita===salvata){
-    document.getElementById('loginBox').style.display='none';
-    getStatus();
-  }else{
-    document.getElementById('loginMsg').textContent="Password errata! Default: 1234";
-  }
-}
-
-function changePwd(){
-  let nuova=prompt("Inserisci nuova password:");
-  if(nuova && nuova.length>=3){
-    localStorage.setItem(STORAGE_KEY, nuova);
-    alert("Nuova password salvata: "+nuova);
-  }else{
-    alert("Password troppo corta");
-  }
-}
+// hash di "1234" = non scriviamo la password in chiaro nell'html
+const DEFAULT_HASH="03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4";
 
 async function getStatus(){
   try{
     let r=await fetch(NPOINT+"?t="+Date.now(),{cache:'no-store'});
     let d=await r.json();
-    document.getElementById('status').textContent="STATO ATTUALE NPOINT:\n"+JSON.stringify(d,null,2);
+    currentData=d;
+    pwdHashRemoto=d.pwdHash || DEFAULT_HASH;
+    document.getElementById('status').textContent="STATO ATTUALE:\n"+JSON.stringify(d,null,2);
   }catch(e){
     document.getElementById('status').textContent="Errore lettura: "+e;
+  }
+}
+
+async function checkPwd(){
+  let inserita=document.getElementById('pwdInput').value;
+  if(!pwdHashRemoto) await getStatus();
+  let hashInserita=await sha256(inserita);
+  if(hashInserita===pwdHashRemoto){
+    document.getElementById('loginBox').style.display='none';
+    getStatus();
+  }else{
+    document.getElementById('loginMsg').textContent="Password errata!";
+  }
+}
+
+async function changePwd(){
+  let nuova=prompt("Nuova password (min 3 caratteri):");
+  if(!nuova || nuova.length<3){ alert("Troppo corta"); return; }
+  let conferma=prompt("Conferma nuova password:");
+  if(nuova!==conferma){ alert("Non coincidono"); return; }
+  
+  document.getElementById('status').textContent="Salvo nuova password su npoint...";
+  let nuovoHash=await sha256(nuova);
+  let newData={...currentData, pwdHash:nuovoHash};
+  
+  try{
+    let r=await fetch(NPOINT,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(newData)
+    });
+    if(!r.ok) throw "HTTP "+r.status;
+    pwdHashRemoto=nuovoHash;
+    currentData=newData;
+    alert("Password cambiata! Ora vale su PC E telefono: "+nuova);
+    getStatus();
+  }catch(e){
+    alert("Errore salvataggio: "+e);
   }
 }
 
 async function setMode(mode){
   document.getElementById('status').textContent="Invio "+mode.toUpperCase()+"...";
   try{
-    let body={mode:mode};
-    if(mode==='soul') body={mode:'soul',soul:true};
-    if(mode==='gold') body={mode:'gold',gold:true};
-    if(mode==='classic') body={mode:'classic'};
+    let body={...currentData};
+    body.mode=mode;
+    if(mode==='soul'){ body.soul=true; delete body.gold; }
+    if(mode==='gold'){ body.gold=true; delete body.soul; }
+    if(mode==='classic'){ delete body.soul; delete body.gold; }
     
     let r=await fetch(NPOINT,{
       method:'POST',
@@ -90,21 +113,17 @@ async function setMode(mode){
       body:JSON.stringify(body)
     });
     if(!r.ok) throw "HTTP "+r.status;
-    document.getElementById('status').textContent="OK! Inviato "+mode.toUpperCase()+"\nAttendi 2 sec...";
+    currentData=body;
+    document.getElementById('status').textContent="OK! Inviato "+mode.toUpperCase();
     setTimeout(getStatus,1500);
   }catch(e){
-    document.getElementById('status').textContent="ERRORE INVIO: "+e+"\nRiprova, a volte npoint è lento.";
+    document.getElementById('status').textContent="ERRORE: "+e;
   }
 }
 
-// Enter per login
-document.getElementById('pwdInput').addEventListener('keyup', function(e){
-  if(e.key==='Enter') checkPwd();
-});
-
-setInterval(()=>{ 
-  if(document.getElementById('loginBox').style.display==='none') getStatus(); 
-},5000);
+document.getElementById('pwdInput').addEventListener('keyup', e=>{ if(e.key==='Enter') checkPwd(); });
+getStatus();
+setInterval(()=>{ if(document.getElementById('loginBox').style.display==='none') getStatus(); },5000);
 </script>
 </body>
 </html>
