@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOLD ADMIN</title>
+<title>GOLD ADMIN - PROTETTO</title>
 <style>
 body{font-family:Arial;background:#111;color:#fff;text-align:center;padding:20px}
 button{padding:18px 30px;margin:10px;font-size:1.3rem;font-weight:900;border:none;border-radius:12px;cursor:pointer;width:90%;max-width:400px}
@@ -11,17 +11,60 @@ button{padding:18px 30px;margin:10px;font-size:1.3rem;font-weight:900;border:non
 #soul{background:#b388ff;color:#fff}
 #gold{background:gold;color:#000}
 #status{margin-top:20px;padding:15px;background:#222;border-radius:10px;font-family:monospace;white-space:pre-wrap}
+#loginBox{position:fixed;top:0;left:0;width:100%;height:100%;background:#111;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+input{padding:15px;font-size:1.2rem;border-radius:10px;border:none;width:90%;max-width:300px;margin:10px;text-align:center}
+#btnLogin{background:#00ff88;color:#000}
+#btnChange{margin-top:30px;background:#333;color:#aaa;font-size:0.9rem;padding:10px 20px}
 </style>
 </head>
 <body>
+
+<div id="loginBox">
+<h1>RS3 ADMIN</h1>
+<p>Inserisci password</p>
+<input type="password" id="pwdInput" placeholder="Password">
+<button id="btnLogin" onclick="checkPwd()">ENTRA</button>
+<p id="loginMsg" style="color:#ff5555"></p>
+</div>
+
 <h1>RS3 ADMIN - 3 MODI</h1>
 <button id="classic" onclick="setMode('classic')">CLASSIC - RADIO SISTEMA 3</button>
 <button id="soul" onclick="setMode('soul')">SOUL - SOUL FUNK</button>
 <button id="gold" onclick="setMode('gold')">GOLD - RADIO GOLD 60-70</button>
 <div id="status">Carico stato...</div>
 
+<button id="btnChange" onclick="changePwd()">Cambia Password</button>
+
 <script>
 const NPOINT="https://api.npoint.io/9ed90a2b1c3d903bfac6";
+const STORAGE_KEY="rs3_admin_pwd";
+
+// Password di default se non ne hai ancora messa una: 1234
+// La puoi cambiare con il tasto sotto
+function getSavedPwd(){
+  return localStorage.getItem(STORAGE_KEY) || "1234";
+}
+
+function checkPwd(){
+  let inserita=document.getElementById('pwdInput').value;
+  let salvata=getSavedPwd();
+  if(inserita===salvata){
+    document.getElementById('loginBox').style.display='none';
+    getStatus();
+  }else{
+    document.getElementById('loginMsg').textContent="Password errata! Default: 1234";
+  }
+}
+
+function changePwd(){
+  let nuova=prompt("Inserisci nuova password:");
+  if(nuova && nuova.length>=3){
+    localStorage.setItem(STORAGE_KEY, nuova);
+    alert("Nuova password salvata: "+nuova);
+  }else{
+    alert("Password troppo corta");
+  }
+}
 
 async function getStatus(){
   try{
@@ -53,8 +96,15 @@ async function setMode(mode){
     document.getElementById('status').textContent="ERRORE INVIO: "+e+"\nRiprova, a volte npoint è lento.";
   }
 }
-getStatus();
-setInterval(getStatus,5000);
+
+// Enter per login
+document.getElementById('pwdInput').addEventListener('keyup', function(e){
+  if(e.key==='Enter') checkPwd();
+});
+
+setInterval(()=>{ 
+  if(document.getElementById('loginBox').style.display==='none') getStatus(); 
+},5000);
 </script>
 </body>
 </html>
