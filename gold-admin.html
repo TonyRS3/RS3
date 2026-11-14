@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOLD ADMIN - PROTETTO</title>
+<title>GOLD ADMIN</title>
 <style>
 body{font-family:Arial;background:#111;color:#fff;text-align:center;padding:20px}
 button{padding:18px 30px;margin:10px;font-size:1.3rem;font-weight:900;border:none;border-radius:12px;cursor:pointer;width:90%;max-width:400px}
@@ -14,7 +14,6 @@ button{padding:18px 30px;margin:10px;font-size:1.3rem;font-weight:900;border:non
 #loginBox{position:fixed;top:0;left:0;width:100%;height:100%;background:#111;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
 input{padding:15px;font-size:1.2rem;border-radius:10px;border:none;width:90%;max-width:300px;margin:10px;text-align:center}
 #btnLogin{background:#00ff88;color:#000}
-#btnChange{margin-top:30px;background:#333;color:#aaa;font-size:0.9rem;padding:10px 20px}
 </style>
 </head>
 <body>
@@ -25,7 +24,6 @@ input{padding:15px;font-size:1.2rem;border-radius:10px;border:none;width:90%;max
 <input type="password" id="pwdInput" placeholder="Password">
 <button id="btnLogin" onclick="checkPwd()">ENTRA</button>
 <p id="loginMsg" style="color:#ff5555"></p>
-<p style="font-size:0.8rem;color:#777;margin-top:20px">Default: 1234<br>poi cambiala, sarà uguale su PC e telefono</p>
 </div>
 
 <h1>RS3 ADMIN - 3 MODI</h1>
@@ -33,38 +31,16 @@ input{padding:15px;font-size:1.2rem;border-radius:10px;border:none;width:90%;max
 <button id="soul" onclick="setMode('soul')">SOUL - SOUL FUNK</button>
 <button id="gold" onclick="setMode('gold')">GOLD - RADIO GOLD 60-70</button>
 <div id="status">Carico stato...</div>
-<button id="btnChange" onclick="changePwd()">Cambia Password (vale per tutti)</button>
 
 <script>
 const NPOINT="https://api.npoint.io/9ed90a2b1c3d903bfac6";
-let currentData={};
-let pwdHashRemoto=null;
 
-async function sha256(text){
-  const buf=await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
+// *** QUI CAMBI LA PASSWORD ***
+const PASSWORD="1234";
 
-// hash di "1234" = non scriviamo la password in chiaro nell'html
-const DEFAULT_HASH="03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4";
-
-async function getStatus(){
-  try{
-    let r=await fetch(NPOINT+"?t="+Date.now(),{cache:'no-store'});
-    let d=await r.json();
-    currentData=d;
-    pwdHashRemoto=d.pwdHash || DEFAULT_HASH;
-    document.getElementById('status').textContent="STATO ATTUALE:\n"+JSON.stringify(d,null,2);
-  }catch(e){
-    document.getElementById('status').textContent="Errore lettura: "+e;
-  }
-}
-
-async function checkPwd(){
+function checkPwd(){
   let inserita=document.getElementById('pwdInput').value;
-  if(!pwdHashRemoto) await getStatus();
-  let hashInserita=await sha256(inserita);
-  if(hashInserita===pwdHashRemoto){
+  if(inserita===PASSWORD){
     document.getElementById('loginBox').style.display='none';
     getStatus();
   }else{
@@ -72,48 +48,29 @@ async function checkPwd(){
   }
 }
 
-async function changePwd(){
-  let nuova=prompt("Nuova password (min 3 caratteri):");
-  if(!nuova || nuova.length<3){ alert("Troppo corta"); return; }
-  let conferma=prompt("Conferma nuova password:");
-  if(nuova!==conferma){ alert("Non coincidono"); return; }
-  
-  document.getElementById('status').textContent="Salvo nuova password su npoint...";
-  let nuovoHash=await sha256(nuova);
-  let newData={...currentData, pwdHash:nuovoHash};
-  
+async function getStatus(){
   try{
-    let r=await fetch(NPOINT,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(newData)
-    });
-    if(!r.ok) throw "HTTP "+r.status;
-    pwdHashRemoto=nuovoHash;
-    currentData=newData;
-    alert("Password cambiata! Ora vale su PC E telefono: "+nuova);
-    getStatus();
+    let r=await fetch(NPOINT+"?t="+Date.now(),{cache:'no-store'});
+    let d=await r.json();
+    document.getElementById('status').textContent="STATO ATTUALE NPOINT:\n"+JSON.stringify(d,null,2);
   }catch(e){
-    alert("Errore salvataggio: "+e);
+    document.getElementById('status').textContent="Errore lettura: "+e;
   }
 }
 
 async function setMode(mode){
   document.getElementById('status').textContent="Invio "+mode.toUpperCase()+"...";
   try{
-    let body={...currentData};
-    body.mode=mode;
-    if(mode==='soul'){ body.soul=true; delete body.gold; }
-    if(mode==='gold'){ body.gold=true; delete body.soul; }
-    if(mode==='classic'){ delete body.soul; delete body.gold; }
-    
+    let body={mode:mode};
+    if(mode==='soul') body={mode:'soul',soul:true};
+    if(mode==='gold') body={mode:'gold',gold:true};
+    if(mode==='classic') body={mode:'classic'};
     let r=await fetch(NPOINT,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify(body)
     });
     if(!r.ok) throw "HTTP "+r.status;
-    currentData=body;
     document.getElementById('status').textContent="OK! Inviato "+mode.toUpperCase();
     setTimeout(getStatus,1500);
   }catch(e){
@@ -122,7 +79,6 @@ async function setMode(mode){
 }
 
 document.getElementById('pwdInput').addEventListener('keyup', e=>{ if(e.key==='Enter') checkPwd(); });
-getStatus();
 setInterval(()=>{ if(document.getElementById('loginBox').style.display==='none') getStatus(); },5000);
 </script>
 </body>
