@@ -1,117 +1,84 @@
-<!-- TEST_NIGHT v1 - FUORI ONDA - PROVA LOVE NIGHT -->
+<!-- TEST_NIGHT.html - SOLO TEST - NON IN ONDA - usa RS3_DI_NOTTE.jpg -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>TEST NIGHT - Radio Sistema 3</title>
-<script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
-<script>
-const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
-const RS3_SOUL_LOGO_NOME="RS3_SOUL_viola_scuro.jpg";
-const RS3_NIGHT_LOGO_NOME="RS3_LOVE_NIGHT.jpg"; // <--- TUO FILE NOTTE
-function getLogoAssoluto(){try{const isSoul=(typeof soulActive!=='undefined'&&soulActive)||(document.body&&document.body.classList.contains('soul-mode'));const isGold=(typeof goldActive!=='undefined'&&goldActive)||(document.body&&document.body.classList.contains('retro-mode'));const isNight=(typeof nightActive!=='undefined'&&nightActive)||(document.body&&document.body.classList.contains('night-mode'));let nome=RADIO_LOGO_FISSO_NOME;if(isSoul)nome=RS3_SOUL_LOGO_NOME;if(isNight)nome=RS3_NIGHT_LOGO_NOME;const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(nome);}catch(e){return RADIO_LOGO_FISSO_NOME;}}
-const BRANI_NOVITA = [{ id: "0xuFBG6o6EU", artista: "Gaia", titolo: "Senz'allegria" }];
-function normalizzaBrano(b){if(typeof b==='string')return{id:b,artista:'',titolo:b};return b;}
-const PLACEHOLDER_HTML=`<div style="text-align:center"><div style="color:#fff;font-weight:bold">Scegli un brano</div><div style="font-size:2rem">👇</div></div>`;
-</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TEST NIGHT - RS3_DI_NOTTE</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}body{font-family:Segoe UI,Arial,sans-serif;color:white;text-align:center;background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),url("studio-radio.jpeg");background-size:cover;background-position:center;background-attachment:fixed;overflow-x:hidden}
-.page-layout{display:grid;grid-template-columns:150px 150px minmax(0,900px) 310px;gap:8px;max-width:1520px;margin:0 auto;padding:0px;align-items:start;justify-content:center;}
-.container{max-width:900px;margin:0 auto;padding:28px;background:rgba(255,255,255,.08);backdrop-filter:blur(8px);border-radius:25px;border:1px solid rgba(255,255,255,.15);grid-column:3;grid-row:1 / span 3}
+body{font-family:Segoe UI,Arial,sans-serif;color:white;text-align:center;background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.75)),url("studio-radio.jpeg");background-size:cover;background-position:center;min-height:100vh;margin:0;padding:0}
+.test-bar{position:fixed;top:0;left:0;right:0;background:#111;z-index:9999;padding:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;border-bottom:2px solid #c9a86a}
+.test-bar button{padding:12px 18px;font-weight:900;border:none;border-radius:10px;cursor:pointer;font-size:1rem}
+.container{max-width:600px;margin:80px auto 20px auto;padding:28px;background:rgba(255,255,255,.08);backdrop-filter:blur(8px);border-radius:25px;border:1px solid rgba(255,255,255,.15)}
 .logo-wrap{display:inline-block;padding:5px;border-radius:26px;background:linear-gradient(135deg,#ff512f,#dd2476,#ffd966,#00d4ff,#ff512f);background-size:300% 300%;animation:gradientMove 4s ease infinite}
 @keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-.logo{width:260px;height:260px;object-fit:cover;border-radius:20px;display:block;background:#fff}
-h1{margin-top:20px;font-size:3rem}
-.live{margin-top:15px;color:#ff4444;font-size:1.6rem;font-weight:bold;animation:pulse 1.4s infinite}
-@keyframes pulse{0%{opacity:1}50%{opacity:.4}100%{opacity:1}}
-.player-box{margin-top:8px;margin-bottom:2px !important;background:rgba(255,255,255,.10);padding:10px 12px 8px 12px;border-radius:20px;width:400px;max-width:92%;margin-left:auto;margin-right:auto}
-audio{width:100%;max-width:340px;height:36px}
-#rs3-mio-box{margin-top:2px !important;max-width:400px !important;margin-left:auto !important;margin-right:auto !important;background:rgba(0,0,0,0.85) !important;padding:0 !important;border-radius:14px !important;min-height:95px !important;overflow:hidden !important;display:block !important}
-.rs3-trackbox{display:flex !important;flex-direction:row !important;align-items:center !important;gap:14px !important;padding:12px 12px !important}
-.rs3-cover{width:72px !important;height:72px !important;min-width:72px !important;object-fit:cover !important;border-radius:8px !important;background:#000 !important;display:block !important}
-.rs3-info{flex:1 !important;display:flex !important;flex-direction:column !important;text-align:left !important;color:white !important;font-size:0.92rem !important}
-body.soul-mode h1{ color:#d1a3ff !important }body.soul-mode .live{ color:#d1a3ff !important }body.soul-mode .logo-wrap{ background:linear-gradient(135deg,#7b1fa2,#b388ff,#d1a3ff,#7b1fa2) !important }
+.logo{width:280px;height:280px;object-fit:cover;border-radius:20px;display:block;background:#fff}
+h1{margin-top:20px;font-size:2.8rem;line-height:1.1}
+.live{margin-top:15px;color:#ff4444;font-size:1.5rem;font-weight:bold}
+body.soul-mode .container{border:1px solid #b388ff}
+body.soul-mode h1{color:#d1a3ff} body.soul-mode .live{color:#d1a3ff}
+body.soul-mode .logo-wrap{background:linear-gradient(135deg,#7b1fa2,#b388ff,#d1a3ff,#7b1fa2) !important}
 body.retro-mode .container{border:2.5px solid #d4af37 !important;box-shadow:0 0 40px rgba(212,175,55,.55) !important}
-body.retro-mode #mainTitle{color:#ffd700 !important;font-weight:900 !important;letter-spacing:3px !important;text-shadow:0 0 8px rgba(255,215,0,.9),0 0 18px rgba(212,175,55,.6) !important}
-
-/* --- NUOVO MODO NOTTE - LOVE NIGHT --- */
-body.night-mode{background: linear-gradient(rgba(5,10,40,.65),rgba(5,10,40,.85)),url("studio-radio.jpeg") !important;background-size:cover !important}
-body.night-mode .container{border:2px solid #00d4ff !important;box-shadow:0 0 35px rgba(0,212,255,.45), 0 0 60px rgba(255,126,184,.25) !important}
-body.night-mode .logo-wrap{background:linear-gradient(135deg,#001a4d,#00d4ff,#ff7eb8,#001a4d) !important;background-size:300% 300% !important;box-shadow:0 0 25px rgba(0,212,255,.6) !important}
-body.night-mode #mainTitle{color:#fff !important;font-weight:900 !important;text-shadow:0 0 10px rgba(0,212,255,.9),0 0 22px rgba(255,126,184,.7),0 0 35px rgba(0,212,255,.4) !important;letter-spacing:2px !important}
-body.night-mode #mainTitle span{color:#ff7eb8 !important;text-shadow:0 0 12px rgba(255,126,184,.9) !important}
-body.night-mode .live{color:#00d4ff !important;text-shadow:0 0 10px rgba(0,212,255,.8) !important}
-body.night-mode #rs3-mio-box{border:1.5px solid #00d4ff !important;box-shadow:0 0 15px rgba(0,212,255,.3) !important}
-
-.test-bar{position:fixed;top:0;left:0;right:0;background:#111;z-index:9999;padding:8px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;border-bottom:2px solid #00d4ff}
-.test-bar button{padding:10px 16px;font-weight:900;border:none;border-radius:8px;cursor:pointer}
+body.retro-mode #mainTitle{color:#ffd700 !important;font-weight:900 !important;text-shadow:0 0 8px rgba(255,215,0,.9) !important;font-family:Impact,'Arial Black',sans-serif !important}
+body.retro-mode .live{color:#d4af37 !important}
+body.retro-mode .logo-wrap{background:linear-gradient(135deg,#8B6914,#d4af37,#ffd700,#d4af37,#8B6914) !important}
+/* MODO NOTTE - STILE TUA FOTO */
+body.night-mode{background: linear-gradient(rgba(15,10,5,.7),rgba(15,10,5,.9)),url("studio-radio.jpeg") !important;background-size:cover !important}
+body.night-mode .container{border:2px solid #c9a86a !important;box-shadow:0 0 40px rgba(201,168,106,.4) !important}
+body.night-mode .logo-wrap{background:linear-gradient(135deg,#2a1e0f,#c9a86a,#e8d5a3,#2a1e0f) !important;box-shadow:0 0 25px rgba(201,168,106,.5) !important}
+body.night-mode #mainTitle{color:#e8d5a3 !important;font-family: Georgia, serif !important;font-weight:400 !important;letter-spacing:2px !important;text-shadow:0 0 12px rgba(201,168,106,.8) !important}
+body.night-mode #mainTitle span{color:#c9a86a !important;font-family:'Times New Roman',serif !important;font-style:italic !important;display:block;font-size:0.65em;margin-top:8px;letter-spacing:4px}
+body.night-mode .live{color:#c9a86a !important}
 </style>
 </head>
 <body>
 <div class="test-bar">
-  <button style="background:#fff;color:#000" onclick="applyMode('classic')">TEST CLASSIC</button>
-  <button style="background:#b388ff;color:#fff" onclick="applyMode('soul')">TEST SOUL</button>
-  <button style="background:gold;color:#000" onclick="applyMode('gold')">TEST GOLD</button>
-  <button style="background:#001a4d;color:#00d4ff;border:1px solid #00d4ff" onclick="applyMode('night')">TEST NIGHT 💙</button>
+  <button style="background:#fff;color:#000" onclick="applyMode('classic')">CLASSIC</button>
+  <button style="background:#b388ff;color:#fff" onclick="applyMode('soul')">SOUL</button>
+  <button style="background:gold;color:#000" onclick="applyMode('gold')">GOLD</button>
+  <button style="background:#2a1e0f;color:#c9a86a;border:1.5px solid #c9a86a" onclick="applyMode('night')">DI NOTTE 🌙</button>
 </div>
-<div class="page-layout" style="margin-top:60px">
-  <div class="container">
-    <div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo" id="mainLogo"></div>
-    <h1 id="mainTitle">RADIO SISTEMA 3</h1>
-    <div class="live" id="liveText">ON AIR 24/7</div>
-    <div class="player-box">
-      <audio id="radioAudio" controls src="https://listentomystream.com:8046/stream"></audio>
-    </div>
-    <div id="rs3-mio-box"><div class="rs3-trackbox"><img class="rs3-cover" src="RADIO SISTEMA 3.jpeg"><div class="rs3-info"><div style="font-weight:900">Radio Sistema 3</div><div style="color:#ffd966">Live</div></div></div></div>
-  </div>
+
+<div class="container">
+  <div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" class="logo" id="mainLogo"></div>
+  <h1 id="mainTitle">RADIO SISTEMA 3</h1>
+  <div class="live" id="liveText">ON AIR 24/7</div>
+  <p style="margin-top:20px;color:#aaa;font-size:0.9rem">TEST FUORI ONDA - Qui provi i 4 modi. Il master vero non si tocca.</p>
 </div>
+
 <script>
-const NPOINT_URL="https://api.npoint.io/9ed90a2b1c3d903bfac6";
-const SOUL_COVER_FILE="./RS3_SOUL_viola_scuro.jpg";
-const MAIN_COVER_FILE="./RADIO SISTEMA 3.jpeg";
-const NIGHT_COVER_FILE="./RS3_LOVE_NIGHT.jpg";
-let soulActive=false;let goldActive=false;let nightActive=false;
+const MAIN_COVER="./RADIO SISTEMA 3.jpeg";
+const SOUL_COVER="./RS3_SOUL_viola_scuro.jpg";
+const NIGHT_COVER="./RS3_DI_NOTTE.jpg"; // TUA FOTO
 
 function applyMode(mode){
-  const logoImg=document.getElementById('mainLogo');
-  const liveText=document.getElementById('liveText');
-  const mainTitle=document.getElementById('mainTitle');
-  soulActive=false; goldActive=false; nightActive=false;
-  document.body.classList.remove('soul-mode','retro-mode','classic-mode','night-mode');
+  const logo=document.getElementById('mainLogo');
+  const live=document.getElementById('liveText');
+  const title=document.getElementById('mainTitle');
+  document.body.classList.remove('soul-mode','retro-mode','night-mode');
   if(mode==='soul'){
-    soulActive=true; document.body.classList.add('soul-mode');
-    if(logoImg)logoImg.src=SOUL_COVER_FILE;
-    if(liveText)liveText.innerHTML="💜 SOUL FUNK ON AIR";
-    if(mainTitle)mainTitle.textContent="SOUL FUNK";
+    document.body.classList.add('soul-mode');
+    logo.src=SOUL_COVER;
+    live.innerHTML="💜 SOUL FUNK ON AIR";
+    title.textContent="SOUL FUNK";
   } else if(mode==='gold'){
-    goldActive=true; document.body.classList.add('retro-mode');
-    if(logoImg)logoImg.src=MAIN_COVER_FILE;
-    if(liveText)liveText.innerHTML="📀 VINYL ON AIR";
-    if(mainTitle)mainTitle.innerHTML='RADIO SISTEMA 3<br><span style="display:block;font-size:0.68em;margin-top:4px;letter-spacing:2px">GOLD 60-70</span>';
+    document.body.classList.add('retro-mode');
+    logo.src=MAIN_COVER;
+    live.innerHTML="📀 VINYL ON AIR";
+    title.innerHTML='RADIO SISTEMA 3<br><span style="display:block;font-size:0.68em;margin-top:4px;letter-spacing:2px">GOLD 60-70</span>';
   } else if(mode==='night'){
-    nightActive=true; document.body.classList.add('night-mode');
-    if(logoImg)logoImg.src=NIGHT_COVER_FILE;
-    if(liveText)liveText.innerHTML="💙 LOVE NIGHT ON AIR";
-    if(mainTitle)mainTitle.innerHTML='RADIO SISTEMA 3<br><span style="display:block;font-size:0.62em;margin-top:6px;letter-spacing:3px">💙 LOVE NIGHT 💙</span>';
+    document.body.classList.add('night-mode');
+    logo.src=NIGHT_COVER;
+    live.innerHTML="🌙 DI NOTTE ON AIR";
+    title.innerHTML='RADIO SISTEMA 3<br><span>Di Notte</span>';
   } else {
-    document.body.classList.add('classic-mode');
-    if(logoImg)logoImg.src=MAIN_COVER_FILE;
-    if(liveText)liveText.innerHTML="ON AIR 24/7";
-    if(mainTitle)mainTitle.textContent="RADIO SISTEMA 3";
+    logo.src=MAIN_COVER;
+    live.innerHTML="ON AIR 24/7";
+    title.textContent="RADIO SISTEMA 3";
   }
 }
-function normalizeMode(m){
-  if(!m) return 'classic';
-  m=String(m).toLowerCase();
-  if(m.includes('soul')) return 'soul';
-  if(m.includes('gold')||m.includes('retro')) return 'gold';
-  if(m.includes('night')||m.includes('love')) return 'night';
-  return 'classic';
-}
-// Se apri con ?mode=night lo vedi subito
-const qp=new URLSearchParams(location.search);
-if(qp.get('mode')){ applyMode(normalizeMode(qp.get('mode'))); } else { applyMode('night'); }
+// parti direttamente in NOTTE per provarlo
+applyMode('night');
 </script>
 </body>
 </html>
