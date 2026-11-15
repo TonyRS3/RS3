@@ -1,4 +1,4 @@
-<!-- v200 FIX - 3 MODI RICEVITORE FIX - IN GOLD CAMBATO STEMMA-->
+<!-- v200 FIX - 3 MODI RICEVITORE FIX - IN GOLD CAMBATO STEMMA + DI NOTTE -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -9,7 +9,8 @@
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
 const RS3_SOUL_LOGO_NOME="RS3_SOUL_viola_scuro.jpg";
-function getLogoAssoluto(){try{const isSoul=(typeof soulActive!=='undefined'&&soulActive)||(document.body&&document.body.classList.contains('soul-mode'));const nome=isSoul?RS3_SOUL_LOGO_NOME:RADIO_LOGO_FISSO_NOME;const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(nome);}catch(e){return (typeof soulActive!=='undefined'&&soulActive)?RS3_SOUL_LOGO_NOME:RADIO_LOGO_FISSO_NOME;}}
+const RS3_NIGHT_LOGO_NOME="RS3_DI_NOTTE.jpg";
+function getLogoAssoluto(){try{const isSoul=(typeof soulActive!=='undefined'&&soulActive)||(document.body&&document.body.classList.contains('soul-mode'));const isNight=(typeof nightActive!=='undefined'&&nightActive)||(document.body&&document.body.classList.contains('night-mode'));let nome=RADIO_LOGO_FISSO_NOME;if(isSoul)nome=RS3_SOUL_LOGO_NOME;if(isNight)nome=RS3_NIGHT_LOGO_NOME;const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(nome);}catch(e){if(typeof nightActive!=='undefined'&&nightActive)return RS3_NIGHT_LOGO_NOME;return (typeof soulActive!=='undefined'&&soulActive)?RS3_SOUL_LOGO_NOME:RADIO_LOGO_FISSO_NOME;}}
 const BRANI_NOVITA = [
   { id: "0xuFBG6o6EU", artista: "Gaia", titolo: "Senz'allegria" },
   { id: "ofywN3NgGqY", artista: "Sombr", titolo: "My body isn't ready" },
@@ -131,6 +132,12 @@ body.retro-mode #mainTitle{color:#ffd700 !important;font-weight:900 !important;l
 body.retro-mode .live{color:#d4af37 !important}
 body.retro-mode .logo-wrap{background:linear-gradient(135deg,#8B6914,#d4af37,#ffd700,#d4af37,#8B6914) !important;background-size:300% 300% !important;box-shadow:0 0 20px rgba(212,175,55,.5) !important}
 body.retro-mode #rs3-mio-box{border:1.5px solid #d4af37 !important}
+body.night-mode .container{border:2px solid #c9a86a !important;box-shadow:0 0 40px rgba(201,168,106,.35) !important}
+body.night-mode #mainTitle{color:#e8d5a3 !important;font-family:Georgia,serif !important;font-weight:400 !important;letter-spacing:2px !important}
+body.night-mode #mainTitle span{color:#c9a86a !important;font-family:'Times New Roman',serif !important;font-style:italic !important;display:block;font-size:0.62em;margin-top:8px;letter-spacing:5px;opacity:0.95}
+body.night-mode .live{color:#c9a86a !important}
+body.night-mode .logo-wrap{background:linear-gradient(135deg,#2a1e0f,#c9a86a,#e8d5a3,#c9a86a,#2a1e0f) !important;background-size:300% 300% !important;box-shadow:0 0 25px rgba(201,168,106,.45) !important}
+body.night-mode #rs3-mio-box{border:1.5px solid #c9a86a !important}
 </style>
 </head>
 <body>
@@ -217,17 +224,18 @@ document.addEventListener('DOMContentLoaded',()=>{creaMioBox(); rebuildTrackBox(
 if(document.readyState!=='loading'){caricaMeteo();if(!document.documentElement.classList.contains('is-popup')){caricaCronaca();caricaCalcio();caricaMusica();caricaConcerti();}}
 </script>
 <script>
-// v300 FIX FINALE NPOINT 3 MODI - CORRETTO UNICO
+// v300 FIX FINALE NPOINT 4 MODI - CLASSIC SOUL GOLD NIGHT
 const NPOINT_URL="https://api.npoint.io/9ed90a2b1c3d903bfac6";
 const SOUL_COVER_FILE="./RS3_SOUL_viola_scuro.jpg";
 const MAIN_COVER_FILE="./RADIO SISTEMA 3.jpeg";
-let soulActive=false;let goldActive=false;
+const NIGHT_COVER_FILE="./RS3_DI_NOTTE.jpg";
+let soulActive=false;let goldActive=false;let nightActive=false;
 function applyMode(mode){
   const logoImg=document.getElementById('mainLogo');
   const liveText=document.getElementById('liveText');
   const mainTitle=document.getElementById('mainTitle');
-  soulActive=false; goldActive=false;
-  document.body.classList.remove('soul-mode','retro-mode','classic-mode');
+  soulActive=false; goldActive=false; nightActive=false;
+  document.body.classList.remove('soul-mode','retro-mode','classic-mode','night-mode');
   if(mode==='soul'){
     soulActive=true;
     document.body.classList.add('soul-mode');
@@ -240,6 +248,12 @@ function applyMode(mode){
     if(logoImg)logoImg.src=MAIN_COVER_FILE;
     if(liveText)liveText.innerHTML="📀 VINYL ON AIR";
     if(mainTitle)mainTitle.innerHTML='RADIO SISTEMA 3<br><span style="display:block;font-size:0.68em;margin-top:4px;letter-spacing:2px">GOLD 60-70</span>';
+  } else if(mode==='night'){
+    nightActive=true;
+    document.body.classList.add('night-mode');
+    if(logoImg)logoImg.src=NIGHT_COVER_FILE;
+    if(liveText)liveText.innerHTML="🌙 DI NOTTE ON AIR";
+    if(mainTitle)mainTitle.innerHTML='RADIO SISTEMA 3<br><span>Di Notte</span>';
   } else {
     document.body.classList.add('classic-mode');
     if(logoImg)logoImg.src=MAIN_COVER_FILE;
@@ -253,6 +267,7 @@ function normalizeMode(m){
   m=String(m).toLowerCase();
   if(m.includes('soul')) return 'soul';
   if(m.includes('gold')||m.includes('retro')) return 'gold';
+  if(m.includes('night')||m.includes('notte')) return 'night';
   return 'classic';
 }
 async function checkSoulMode(){
@@ -260,7 +275,7 @@ async function checkSoulMode(){
     let r=await fetch(NPOINT_URL+"?t="+Date.now(),{cache:'no-store'});
     if(!r.ok) return;
     let data=await r.json();
-    let mode=normalizeMode(data.mode || (data.soul===true?'soul':(data.gold===true?'gold':'classic')));
+    let mode=normalizeMode(data.mode || (data.soul===true?'soul':(data.gold===true?'gold':(data.night===true?'night':'classic'))));
     applyMode(mode);
   }catch(e){}
 }
