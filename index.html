@@ -181,7 +181,6 @@ function creaMioBox(){const existing=document.getElementById('rs3-mio-box');if(e
   original.style.display='none'; const mio=document.createElement('div'); mio.id='rs3-mio-box'; mio.style.display='block'; mio.style.opacity='1'; mio.style.minHeight='95px'; mio.style.maxWidth='400px'; mio.style.margin='2px auto 0 auto'; mio.style.background='rgba(0,0,0,0.85)'; mio.style.borderRadius='14px'; mio.innerHTML='<div class="rs3-trackbox"><img class="rs3-cover" src="'+getLogoAssoluto()+'"><div class="rs3-info"><div style="font-weight:900;color:#fff">Radio Sistema 3</div><div style="color:#ffd966">Live</div></div></div>';
   if(original.parentNode) original.parentNode.insertBefore(mio, original.nextSibling); return mio;
 }
-  -------------------------------------------------------------
 function aggiornaBoxConTitolo(titolo, artista){
   const mioBox=creaMioBox(); if(!mioBox) return;
   let rawImg=getLogoAssoluto();
@@ -211,7 +210,6 @@ function aggiornaBoxConTitolo(titolo, artista){
     }
   }
 }
-  ---------------------------------------------------------
 async function rebuildTrackBox(){
   const hidden=document.querySelector('.cc_recenttracks_list'); if(!hidden) return;
   try{
