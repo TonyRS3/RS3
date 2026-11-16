@@ -233,10 +233,11 @@ function pulisciTitolo(raw){
 }
 function pulisciTitoloFinale(t){if(!t) return t;t=t.replace(/\s*[\(\[][^\)\]]*remaster[^\)\]]*[\)\]]/gi,'').trim();t=t.replace(/\s*-\s*\d{4}\s*-\s*remaster.*$/gi,'').trim();t=t.replace(/\s*-\s*.*remaster.*$/gi,'').trim();t=t.replace(/\s+\d{4}\s+Remaster(ed)?/gi,'').trim();t=t.replace(/\s+Remaster(ed)?(\s+\d{4})?/gi,'').trim();t=t.replace(/\s*\[ga R\]\s*/gi,'').trim();t=t.replace(/\s*\[.*?R\]\s*$/gi,'').trim();t=t.replace(/\s*\[.*?\]\s*$/,'').trim();return t;}
 function rimuoviTitoloDuplicato(s){if(!s) return s;let w=s.trim().split(/\s+/);if(w.length<5) return s;for(let len=3; len>=2; len--){if(w.length>len*2){let first=w.slice(0,len).join(' ').toLowerCase();let last=w.slice(-len).join(' ').toLowerCase();if(first===last){return w.slice(0,-len).join(' ').trim();}}}return s;}
-function parseArtistTitleSmart(s){
+ 
+  function parseArtistTitleSmart(s){
   if(!s) return {titolo:"", artista:""};
   s=s.replace(/\s+/g,' ').trim();
-  s=pulisciTitolo(s); // FIX ATTACCATO
+  s=pulisciTitolo(s);
   s=pulisciTitoloFinale(s);
   let sep = s.includes(' - ') ? ' - ' : (s.includes(' – ') ? ' – ' : (s.includes(' — ') ? ' — ' : null));
   if(sep){
@@ -244,8 +245,26 @@ function parseArtistTitleSmart(s){
     let artista=parts[0].trim();
     let titolo=parts.slice(1).join(sep).trim();
     titolo=pulisciTitoloFinale(titolo);
+    // FIX v214 - TOGLIE AUTORE DUPLICATO DAL TITOLO
+    if(titolo.toLowerCase().includes(artista.toLowerCase())){
+      titolo=titolo.replace(new RegExp(artista.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),'').trim();
+      titolo=titolo.replace(/\s{2,}/g,' ').replace(/^[-–—\s]+/,'').replace(/[-–—\s]+$/,'').trim();
+      titolo=titolo.replace(/ S\.\.\.$/,'').replace(/ S$/,'').trim();
+    }
     return {titolo, artista};
   }
+  // se non c'è trattino e finisce con artista, toglilo
+  let words=s.split(' ');
+  if(words.length>=4){
+    let last2=words.slice(-2).join(' ');
+    let first=words.slice(0,-2).join(' ');
+    if(/^[A-Z][a-z]+ [A-Z][a-z]+$/.test(last2)){
+      return {titolo: pulisciTitoloFinale(first), artista: last2};
+    }
+  }
+  return {titolo: pulisciTitoloFinale(s), artista:""};
+}
+  
   // FIX v213 - se non c'è trattino tipo "Un' estate al mare Giuni Russo" -> splitta
   let words=s.split(' ');
   if(words.length>=4){
