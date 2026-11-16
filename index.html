@@ -181,23 +181,37 @@ function creaMioBox(){const existing=document.getElementById('rs3-mio-box');if(e
   original.style.display='none'; const mio=document.createElement('div'); mio.id='rs3-mio-box'; mio.style.display='block'; mio.style.opacity='1'; mio.style.minHeight='95px'; mio.style.maxWidth='400px'; mio.style.margin='2px auto 0 auto'; mio.style.background='rgba(0,0,0,0.85)'; mio.style.borderRadius='14px'; mio.innerHTML='<div class="rs3-trackbox"><img class="rs3-cover" src="'+getLogoAssoluto()+'"><div class="rs3-info"><div style="font-weight:900;color:#fff">Radio Sistema 3</div><div style="color:#ffd966">Live</div></div></div>';
   if(original.parentNode) original.parentNode.insertBefore(mio, original.nextSibling); return mio;
 }
+  -------------------------------------------------------------
 function aggiornaBoxConTitolo(titolo, artista){
   const mioBox=creaMioBox(); if(!mioBox) return;
   let rawImg=getLogoAssoluto();
+  // FIX: se titolo contiene artista tipo "Got to Love Somebody Sister Sledge"
+  if(!artista || artista==="Radio Sistema 3"){
+    let m = titolo.match(/(.+?)\s+(Sister Sledge|Sister S\.|Chic|Donna Summer|Earth Wind|Bee Gees)$/i);
+    if(m){ titolo=m[1].trim(); artista=m[2].trim(); }
+  }
+  // Pulisci duplicato Sister dentro titolo
+  if(titolo.toLowerCase().includes("sister sledge")){
+    titolo=titolo.replace(/sister sledge/gi,'').trim();
+    if(!artista || artista==="Radio Sistema 3") artista="Sister Sledge";
+  }
   let txt=titolo+" - "+artista;
   if(txt===_lastRaw) return;
-  _lastRaw=txt; _lastTitolo=titolo; _lastArtist=artista;
+  _lastRaw=txt;
   let info=mioBox.querySelector('.rs3-info');
-  if(info){ info.innerHTML=`<div style="font-weight:900;color:#fff;font-size:1.10rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${titolo}">${titolo}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${artista}">${artista||'Radio Sistema 3'}</div>`; }
+  if(info){ 
+    // FIX: niente più ... troncato, va a capo se lungo
+    info.innerHTML=`<div style="font-weight:900;color:#fff;font-size:1.05rem;line-height:1.2;word-wrap:break-word;white-space:normal" title="${titolo}">${titolo}</div><div style="color:#ffd966;font-weight:700;font-size:0.90rem;margin-top:4px" title="${artista}">${artista||'Radio Sistema 3'}</div>`; 
+  }
   const cov=mioBox.querySelector('.rs3-cover');
   if(cov){
-    cov.src=rawImg; // RS3 SUBITO
+    cov.src=rawImg;
     if(artista||titolo){
-      fetchCopertinaBrano(artista,titolo).then(url=>{ if(url&&cov){ cov.src=url; try{updateMediaSession(artista,titolo);}catch(e){}} });
+      fetchCopertinaBrano(artista,titolo).then(url=>{ if(url&&cov) cov.src=url; });
     }
-    updateMediaSession(artista,titolo);
   }
 }
+  ---------------------------------------------------------
 async function rebuildTrackBox(){
   const hidden=document.querySelector('.cc_recenttracks_list'); if(!hidden) return;
   try{
