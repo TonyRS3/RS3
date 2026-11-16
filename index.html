@@ -9,18 +9,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Radio Sistema 3 - v217 VELOCE</title>
 <script>
+// PULISCE URL - lascia solo https://www.rsistema3.eu
 (function(){
-  var VERSIONE_ATTUALE = "v217_VELOCE";
-  var versioneSalvata = localStorage.getItem('rs3_version');
-  if(versioneSalvata !== VERSIONE_ATTUALE){
-    localStorage.clear();
-    sessionStorage.clear();
-    localStorage.setItem('rs3_version', VERSIONE_ATTUALE);
+  if(window.location.search.length > 0){
+    history.replaceState(null,'', window.location.pathname);
   }
-  if(!location.search.includes('v=217')){
-    var sep = location.search ? '&' : '?';
-    history.replaceState(null,'',location.pathname + location.search + sep + 'v=217&t=' + Date.now());
-  }
+  // pulisce anche cache vecchia
+  var vSalvata = localStorage.getItem('rs3_version');
+  if(vSalvata){ localStorage.clear(); sessionStorage.clear(); }
 })();
 </script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
