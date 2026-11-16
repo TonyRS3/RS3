@@ -31,6 +31,7 @@ const RS3_SOUL_LOGO_NOME="RS3_SOUL_viola_scuro.jpg";
 const RS3_NIGHT_LOGO_NOME="RS3_DI_NOTTE.jpg";
 function getLogoAssoluto(){try{const isSoul=(typeof soulActive!=='undefined'&&soulActive)||(document.body&&document.body.classList.contains('soul-mode'));const isNight=(typeof nightActive!=='undefined'&&nightActive)||(document.body&&document.body.classList.contains('night-mode'));let nome=RADIO_LOGO_FISSO_NOME;if(isSoul)nome=RS3_SOUL_LOGO_NOME;if(isNight)nome=RS3_NIGHT_LOGO_NOME;const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(nome);}catch(e){if(typeof nightActive!=='undefined'&&nightActive)return RS3_NIGHT_LOGO_NOME;return (typeof soulActive!=='undefined'&&soulActive)?RS3_SOUL_LOGO_NOME:RADIO_LOGO_FISSO_NOME;}}
 const BRANI_NOVITA = [
+  { id: "DPEodkHzH-s", artista: "Tate McRae", titolo: "Housewife" },
   { id: "FC1FW1vp8eY", artista: "Cioffi", titolo: "Superstar" },
   { id: "0xuFBG6o6EU", artista: "Gaia", titolo: "Senz'allegria" },
   { id: "ofywN3NgGqY", artista: "Sombr", titolo: "My body isn't ready" },
@@ -39,9 +40,7 @@ const BRANI_NOVITA = [
   { id: "0xuFBG6o6EU", artista: "Gaia", titolo: "Senz'Allegria" },
   { id: "pzvhHsEqMzo", artista: "Marco Mengoni", titolo: "Giornate Perse" },
   { id: "fRIhCiUVaKs", artista: "Karol G", titolo: "Bby Wow" }, 
-  { id: "z5qAtdZh5Uo", artista: "Giorgia", titolo: "SIAMO L'ECCEZIONE" },
-  { id: "rSiBJ4JRTv4", artista: "Alfa & Gigi D'Alessio", titolo: "Genova E Napoli" },
- 
+  { id: "z5qAtdZh5Uo", artista: "Giorgia", titolo: "SIAMO L'ECCEZIONE" }, 
 ];
 function normalizzaBrano(b){if(typeof b==='string')return{id:b,artista:'',titolo:b};return b;}
 const PLACEHOLDER_HTML=`<div style="text-align:center"><div style="color:#fff;font-weight:bold">Scegli un brano</div><div style="font-size:2rem">👇</div></div>`;
