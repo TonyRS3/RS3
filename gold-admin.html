@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOLD ADMIN</title>
+<title>GOLD ADMIN - v201 NUOVO NPOINT</title>
 <style>
 body{font-family:Arial;background:#111;color:#fff;text-align:center;padding:20px}
 button{padding:18px 30px;margin:10px;font-size:1.3rem;font-weight:900;border:none;border-radius:12px;cursor:pointer;width:90%;max-width:400px}
@@ -20,14 +20,15 @@ input{padding:15px;font-size:1.2rem;border-radius:10px;border:none;width:90%;max
 <body>
 
 <div id="loginBox">
-<h1>RS3 ADMIN</h1>
+<h1>RS3 ADMIN - NUOVO</h1>
+<p>NPOINT: 91901ede87030225db50</p>
 <p>Inserisci password</p>
 <input type="password" id="pwdInput" placeholder="Password">
 <button id="btnLogin" onclick="checkPwd()">ENTRA</button>
 <p id="loginMsg" style="color:#ff5555"></p>
 </div>
 
-<h1>RS3 ADMIN - 4 MODI</h1>
+<h1>RS3 ADMIN - 4 MODI - MANUALE 100%</h1>
 <button id="classic" onclick="setMode('classic')">CLASSIC - RADIO SISTEMA 3</button>
 <button id="soul" onclick="setMode('soul')">SOUL - SOUL FUNK</button>
 <button id="gold" onclick="setMode('gold')">GOLD - RADIO GOLD 60-70</button>
@@ -35,7 +36,7 @@ input{padding:15px;font-size:1.2rem;border-radius:10px;border:none;width:90%;max
 <div id="status">Carico stato...</div>
 
 <script>
-const NPOINT="https://api.npoint.io/9ed90a2b1c3d903bfac6";
+const NPOINT="https://api.npoint.io/91901ede87030225db50";
 const PASSWORD="at186dsa";
 
 function checkPwd(){
@@ -52,7 +53,7 @@ async function getStatus(){
   try{
     let r=await fetch(NPOINT+"?t="+Date.now(),{cache:'no-store'});
     let d=await r.json();
-    document.getElementById('status').textContent="STATO ATTUALE NPOINT:\n"+JSON.stringify(d,null,2);
+    document.getElementById('status').textContent="STATO ATTUALE NPOINT:\n"+JSON.stringify(d,null,2)+"\n\nURL: "+NPOINT;
   }catch(e){
     document.getElementById('status').textContent="Errore lettura: "+e;
   }
@@ -61,18 +62,18 @@ async function getStatus(){
 async function setMode(mode){
   document.getElementById('status').textContent="Invio "+mode.toUpperCase()+"...";
   try{
-    let body={mode:mode};
-    if(mode==='soul') body={mode:'soul',soul:true};
-    if(mode==='gold') body={mode:'gold',gold:true};
-    if(mode==='classic') body={mode:'classic'};
-    if(mode==='night') body={mode:'night',night:true};
+    let body={mode:mode, updated:new Date().toISOString()};
+    if(mode==='soul') body={mode:'soul', soul:true, gold:false, night:false, classic:false, retro:false, updated:new Date().toISOString()};
+    if(mode==='gold') body={mode:'gold', soul:false, gold:true, night:false, classic:false, retro:true, updated:new Date().toISOString()};
+    if(mode==='classic') body={mode:'classic', soul:false, gold:false, night:false, classic:true, retro:false, updated:new Date().toISOString()};
+    if(mode==='night') body={mode:'night', soul:false, gold:false, night:true, classic:false, retro:false, updated:new Date().toISOString()};
     let r=await fetch(NPOINT,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify(body)
     });
     if(!r.ok) throw "HTTP "+r.status;
-    document.getElementById('status').textContent="OK! Inviato "+mode.toUpperCase();
+    document.getElementById('status').textContent="OK! Inviato "+mode.toUpperCase()+" - RIMANE FINO A PROSSIMO CLICK";
     setTimeout(getStatus,1500);
   }catch(e){
     document.getElementById('status').textContent="ERRORE: "+e;
