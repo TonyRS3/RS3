@@ -19,7 +19,10 @@
   }
   if(!location.search.includes('v=201')){
     var sep = location.search ? '&' : '?';
-    history.replaceState(null,'',location.pathname + location.search + sep + 'v=201&t=' + Date.now());
+   
+  const cleanUrl = location.pathname.split('?')[0] + '?v=204';
+  history.replaceState(null,'',cleanUrl);
+  
   }
 })();
 </script>
