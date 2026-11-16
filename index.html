@@ -29,25 +29,35 @@ const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
 const RS3_SOUL_LOGO_NOME="RS3_SOUL_viola_scuro.jpg";
 const RS3_NIGHT_LOGO_NOME="RS3_DI_NOTTE.jpg";
 function getLogoAssoluto(){try{const isSoul=(typeof soulActive!=='undefined'&&soulActive)||(document.body&&document.body.classList.contains('soul-mode'));const isNight=(typeof nightActive!=='undefined'&&nightActive)||(document.body&&document.body.classList.contains('night-mode'));let nome=RADIO_LOGO_FISSO_NOME;if(isSoul)nome=RS3_SOUL_LOGO_NOME;if(isNight)nome=RS3_NIGHT_LOGO_NOME;const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(nome);}catch(e){if(typeof nightActive!=='undefined'&&nightActive)return RS3_NIGHT_LOGO_NOME;return (typeof soulActive!=='undefined'&&soulActive)?RS3_SOUL_LOGO_NOME:RADIO_LOGO_FISSO_NOME;}}
- 
 const coverCacheRS3={};
 async function fetchCopertinaBrano(artista, titolo){
   if(!titolo && !artista) return null;
   const key=(artista+"|"+titolo).toLowerCase();
   if(coverCacheRS3[key]) return coverCacheRS3[key];
+  const query = ((artista||"")+" "+(titolo||"")).trim();
+  if(!query) return null;
+  // Tentativo 1: iTunes diretto
   try{
-    const term=encodeURIComponent(((artista||"")+" "+(titolo||"")).trim());
+    const term=encodeURIComponent(query);
     const r=await fetch(`https://itunes.apple.com/search?term=${term}&media=music&entity=song&limit=1`,{cache:'no-store'});
     const j=await r.json();
     if(j.results && j.results[0] && j.results[0].artworkUrl100){
       let url=j.results[0].artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600');
-      coverCacheRS3[key]=url;
-      return url;
+      coverCacheRS3[key]=url; return url;
+    }
+  }catch(e){}
+  // Tentativo 2: Deezer (Edge lo lascia passare sempre!)
+  try{
+    const term2=encodeURIComponent(query);
+    const r2=await fetch(`https://api.deezer.com/search?q=${term2}&limit=1&output=json`,{cache:'no-store'});
+    const j2=await r2.json();
+    if(j2.data && j2.data[0] && j2.data[0].album && j2.data[0].album.cover_big){
+      let url=j2.data[0].album.cover_big;
+      coverCacheRS3[key]=url; return url;
     }
   }catch(e){}
   return null;
 }
-  
 const BRANI_NOVITA = [
   { id: "ZPV7WNHJ0g8", artista: "Chloe Qisha", titolo: "Question Of The Day" },
   { id: "DPEodkHzH-s", artista: "Tate McRae", titolo: "Housewife" },
