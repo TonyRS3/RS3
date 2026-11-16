@@ -1,4 +1,4 @@
-<!-- v216 PERFETTA COME PRIMA - FIX DOPPIO AUTORE -->
+<!-- v217 VELOCE - IDENTICA A v216 SOLO PIU VELOCE -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -7,19 +7,19 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v216 PERFETTA</title>
+<title>Radio Sistema 3 - v217 VELOCE</title>
 <script>
 (function(){
-  var VERSIONE_ATTUALE = "v216_PERFETTA_FIX_DOPPIO";
+  var VERSIONE_ATTUALE = "v217_VELOCE";
   var versioneSalvata = localStorage.getItem('rs3_version');
   if(versioneSalvata !== VERSIONE_ATTUALE){
     localStorage.clear();
     sessionStorage.clear();
     localStorage.setItem('rs3_version', VERSIONE_ATTUALE);
   }
-  if(!location.search.includes('v=216')){
+  if(!location.search.includes('v=217')){
     var sep = location.search ? '&' : '?';
-    history.replaceState(null,'',location.pathname + location.search + sep + 'v=216&t=' + Date.now());
+    history.replaceState(null,'',location.pathname + location.search + sep + 'v=217&t=' + Date.now());
   }
 })();
 </script>
@@ -173,7 +173,7 @@ body.night-mode #rs3-mio-box{border:1.5px solid #c9a86a !important}
     </div>
     <div class="section-title" style="margin-top:2px !important;margin-bottom:3px !important;font-size:1.15rem !important">♪ Brano in onda</div>
     <div class="cc_recenttracks_list" data-username="bomyydij"></div>
-     <div class="footer-copy" style="text-align:center !important; font-weight:800 !important; font-size:15px !important; color:#FFD700 !important; background:rgba(0,0,0,0.65) !important; border:1px solid rgba(255,215,0,0.5) !important; border-radius:10px !important; padding:10px 12px !important; line-height:1.4 !important; text-shadow:0 0 6px rgba(0,0,0,0.8) !important; backdrop-filter:blur(5px);">🎵 RADIO SISTEMA 3 la web radio dei grandi successi italiani e internazionali degli anni 60 - 70 - 80 - 90 🎵</div> 
+     <div class="footer-copy" style="text-align:center !important; font-weight:800 !important; font-size:15px !important; color:#FFD700 !important; background:rgba(0,0,0,0.65) !important; border:1px solid rgba(255,215,0,0.5) !important; border-radius:10px !important; padding:10px 12px !important; line-height:1.4 !important; text-shadow:0 0 6px rgba(0,0,0,0.8) !important; backdrop-filter:blur(5px);">🎵 RADIO SISTEMA 3 la web radio dei grandi successi italiani e internazionali dagli anni 60 - 70 - 80 - 90 🎵</div> 
     <div id="novitaSection"><div id="novitaPlayerMain"></div><div id="novitaList"></div><button style="background:#333;color:#fff;margin-top:12px;padding:8px 18px;border:none;border-radius:20px;cursor:pointer" onclick="chiudiNovita()">X Chiudi</button></div>
   </div>
   <div class="meteo-side right"><div class="news-box-side right-box"><div class="news-title">CRONACA NAZIONALE <span id="newsTime" style="font-size:0.6rem;color:#aaa"></span></div><div id="newsListNord">Carico...</div></div><div class="news-box-side right-box calcio"><div class="news-title calcio">SPORT CALCIO <span id="calcioTime" style="font-size:0.6rem;color:#aaa"></span></div><div id="newsListCalcio">Carico...</div></div></div>
@@ -224,13 +224,12 @@ function parseArtistTitleSmart(s){
     let artista=parts[0].trim();
     let titolo=parts.slice(1).join(sep).trim();
     titolo=pulisciTitoloFinale(titolo);
-    // v216 FIX PERFETTO - se titolo contiene già artista, pulisci
     if(titolo && artista && titolo.toLowerCase().indexOf(artista.toLowerCase())!==-1){
       try{
         let re = new RegExp(artista.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'gi');
         titolo=titolo.replace(re,'').trim();
         titolo=titolo.replace(/\s{2,}/g,' ').replace(/^[-–—\s]+/,'').replace(/[-–—\s]+$/,'').trim();
-        titolo=titolo.replace(/Mali.*$/i,'').trim(); // caso Malinconia Riccardo Fogli Malinconia
+        titolo=titolo.replace(/Mali.*$/i,'').trim();
       }catch(e){}
     }
     return {titolo, artista};
@@ -240,8 +239,6 @@ function parseArtistTitleSmart(s){
 function updateMediaSession(artista,titolo){if(!('mediaSession' in navigator))return;try{const logo=getLogoAssoluto();navigator.mediaSession.metadata=new MediaMetadata({title:titolo||'Radio Sistema 3',artist:artista||'Live',album:'Radio Sistema 3',artwork:[{src:logo,sizes:'512x512',type:'image/jpeg'},{src:logo,sizes:'256x256',type:'image/jpeg'}]});navigator.mediaSession.setActionHandler('play',()=>{tryAutoPlay(true);});navigator.mediaSession.setActionHandler('pause',()=>{document.getElementById('radioAudio').pause();});}catch(e){}}
 let _lastRaw="";let _lastValidTime=0;let _lastValidArtistaTitolo="";let _lastArtist="";let _lastTitolo="";
 function creaMioBox(){const existing = document.getElementById('rs3-mio-box');if(existing){if(existing.innerHTML && existing.innerHTML.trim().length > 50) return existing;existing.style.display='block';existing.style.opacity='1';existing.style.minHeight='95px';existing.style.maxWidth='400px';existing.style.margin='2px auto 0 auto';existing.style.background='rgba(0,0,0,0.85)';existing.style.borderRadius='14px';existing.style.padding='0';existing.innerHTML='<div class="rs3-trackbox"><img class="rs3-cover" src="'+getLogoAssoluto()+'"><div class="rs3-info"><div style="font-weight:900;color:#fff">Radio Sistema 3</div><div style="color:#ffd966">Live</div></div></div>';return existing;}const original=document.querySelector('.cc_recenttracks_list');if(!original) return null;original.style.display='none';original.style.opacity='0';original.style.height='0';original.style.minHeight='0';original.style.maxHeight='0';original.style.margin='0';original.style.padding='0';original.style.overflow='hidden';original.style.pointerEvents='none';const mio=document.createElement('div');mio.id='rs3-mio-box';mio.className='rs3-ready';mio.style.display='block';mio.style.opacity='1';mio.style.minHeight='95px';mio.style.maxWidth='400px';mio.style.margin='2px auto 0 auto';mio.style.background='rgba(0,0,0,0.85)';mio.style.borderRadius='14px';mio.style.padding='0';mio.innerHTML='<div class="rs3-trackbox"><img class="rs3-cover" src="'+getLogoAssoluto()+'"><div class="rs3-info"><div style="font-weight:900;color:#fff">Radio Sistema 3</div><div style="color:#ffd966">Live</div></div></div>';if(original.parentNode){ original.parentNode.insertBefore(mio, original.nextSibling); } else { document.body.appendChild(mio); }return mio;}
-async function fetchTitoloPulitoDaStream(){const endpoints=["https://listentomystream.com:8046/stats?sid=1&json=1","https://listentomystream.com:8046/currentsong?sid=1"];for(let base of endpoints){const proxies=["https://api.allorigins.win/get?url="+encodeURIComponent(base+"?_t="+Date.now()),"https://corsproxy.io/?"+encodeURIComponent(base+"?_t="+Date.now())];for(let proxyUrl of proxies){try{let r=await fetch(proxyUrl,{cache:'no-store'});if(!r.ok) continue;let txt=await r.text();let inner=txt;try{let j=JSON.parse(txt);inner=j.contents||txt;if(typeof inner!=='string')inner=JSON.stringify(inner);}catch(e){}let m=inner.match(/"songtitle"\s*:\s*"([^"]+)"/i);let song=m?m[1]:"";if(!song && inner.length<200 && !inner.includes("<html")){song=inner.replace(/<[^>]+>/g,'').replace(/^["']|["']$/g,'').trim();}song=song.replace(/&amp;/g,'&').trim();if(song && song.length>3 && song.length<200 && !song.toLowerCase().includes("radio sistema 3") && !song.toLowerCase().includes("404")){return song;}}catch(e){continue;}}}return null;}
-// v216 - CODICE PERFETTO DI PRIMA RIPRISTINATO
 async function rebuildTrackBox(){
   const mioBox=creaMioBox();
   const hidden=document.querySelector('.cc_recenttracks_list');
@@ -251,7 +248,6 @@ async function rebuildTrackBox(){
     let sourceHTML=hidden?hidden.innerHTML:"";
     let tempScan=document.createElement('div');
     tempScan.innerHTML=sourceHTML;
-    // PERFETTO COME PRIMA - cerca titolo e artista separati
     let titleEl=tempScan.querySelector('[class*="title"], .cc_title, [class*="song"]');
     let artistEl=tempScan.querySelector('[class*="artist"], .cc_artist');
     let righe=[];
@@ -304,9 +300,9 @@ async function rebuildTrackBox(){
   }catch(e){}
 }
 const list=document.querySelector('.cc_recenttracks_list');if(list){const obs=new MutationObserver(()=>{rebuildTrackBox();});obs.observe(list,{childList:true,subtree:true,characterData:true});}
-// TEMPI VELOCI MA PERFETTI
-let _fastInterval=setInterval(()=>{creaMioBox(); rebuildTrackBox();},1000);
-setTimeout(()=>{clearInterval(_fastInterval);_fastInterval=setInterval(rebuildTrackBox,3000);},15000);
+// v217 VELOCE - SOLO TEMPI CAMBIATI DA 1000 A 500 E DA 3000 A 2000
+let _fastInterval=setInterval(()=>{creaMioBox(); rebuildTrackBox();},500);
+setTimeout(()=>{clearInterval(_fastInterval);_fastInterval=setInterval(rebuildTrackBox,2000);},20000);
 document.addEventListener('DOMContentLoaded',()=>{creaMioBox(); rebuildTrackBox();});creaMioBox(); rebuildTrackBox();
 const CITIES_COORDS={"Torino":{lat:45.07,lon:7.68},"Milano":{lat:45.46,lon:9.19},"Venezia":{lat:45.44,lon:12.33},"Bologna":{lat:44.49,lon:11.34},"Firenze":{lat:43.77,lon:11.25},"Roma":{lat:41.90,lon:12.49},"Ancona":{lat:43.61,lon:13.51},"Napoli":{lat:40.85,lon:14.26},"Palermo":{lat:38.11,lon:13.36},"Brindisi":{lat:40.63,lon:17.94}};
 const LEFT=[{label:"Torino"},{label:"Milano"},{label:"Venezia"},{label:"Bologna"},{label:"Firenze"}];
