@@ -1,4 +1,4 @@
-<!-- v247 FINALE - 4 CRONACA + 4 SPORT - TUTTO IL RESTO MERAVIGLIA -->
+<!-- v249 ANTI-REMASTER - FIX ANNO ORIGINALE - 4+4 NOTIZIE -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3</title>
+<title>Radio Sistema 3 - v249 ANTI-REMASTER</title>
 <script>
 (function(){if(window.location.search.length>0){history.replaceState(null,'',window.location.pathname);}var vSalvata=localStorage.getItem('rs3_version');if(vSalvata){localStorage.clear();sessionStorage.clear();}})();
 </script>
@@ -16,8 +16,9 @@
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";const RS3_SOUL_LOGO_NOME="RS3_SOUL_viola_scuro.jpg";const RS3_NIGHT_LOGO_NOME="RS3_DI_NOTTE.jpg";
 function getLogoAssoluto(){try{const isSoul=(typeof soulActive!=='undefined'&&soulActive)||(document.body&&document.body.classList.contains('soul-mode'));const isNight=(typeof nightActive!=='undefined'&&nightActive)||(document.body&&document.body.classList.contains('night-mode'));let nome=RADIO_LOGO_FISSO_NOME;if(isSoul)nome=RS3_SOUL_LOGO_NOME;if(isNight)nome=RS3_NIGHT_LOGO_NOME;const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(nome);}catch(e){if(typeof nightActive!=='undefined'&&nightActive)return RS3_NIGHT_LOGO_NOME;return (typeof soulActive!=='undefined'&&soulActive)?RS3_SOUL_LOGO_NOME:RADIO_LOGO_FISSO_NOME;}}
 const coverCacheRS3={};
-async function fetchYearFromMusicBrainz(artista,titolo){try{if(!titolo)return null;let q=`recording:"${titolo}"${artista?` AND artist:"${artista}"`:""}`;let anni=[];try{let url=`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(q)}&fmt=json&limit=8`;let r=await fetch(url);let j=await r.json();if(j.recordings){for(let rec of j.recordings){if(rec['first-release-date']){let y=parseInt(rec['first-release-date'].substring(0,4));if(y>1950&&y<2027)anni.push(y);}if(rec.releases){for(let rel of rec.releases){if(rel.date){let y=parseInt(rel.date.substring(0,4));if(y>1950&&y<2027)anni.push(y);}}}}} }catch(e){}try{let url=`https://musicbrainz.org/ws/2/release/?query=${encodeURIComponent(q)}&fmt=json&limit=10`;let r=await fetch(url);let j=await r.json();if(j.releases){for(let rel of j.releases){if(rel.date){let y=parseInt(rel.date.substring(0,4));if(y>1950&&y<2027)anni.push(y);}}}}catch(e){}try{let url=`https://musicbrainz.org/ws/2/release-group/?query=${encodeURIComponent(q)}&fmt=json&limit=8`;let r=await fetch(url);let j=await r.json();if(j['release-groups']){for(let rg of j['release-groups']){if(rg['first-release-date']){let y=parseInt(rg['first-release-date'].substring(0,4));if(y>1950&&y<2027)anni.push(y);}}}}catch(e){}if(anni.length>0){anni.sort((a,b)=>a-b);return anni[0];}}catch(e){}return null;}
-async function fetchCopertinaBranoConAnno(artista,titolo){if(!titolo&&!artista)return{url:null,year:null,album:null};const key=(artista+"|"+titolo).toLowerCase();if(coverCacheRS3[key]&&coverCacheRS3[key].url)return coverCacheRS3[key];let finalYear=null;let finalUrl=null;let finalAlbum=null;try{let mbYear=await fetchYearFromMusicBrainz(artista,titolo);if(mbYear)finalYear=mbYear;}catch(e){}try{const term=encodeURIComponent(((artista||"")+" "+(titolo||"")).trim());const r=await fetch(`https://itunes.apple.com/search?term=${term}&media=music&entity=song&limit=1`,{cache:'no-store'});const j=await r.json();if(j.results&&j.results[0]){if(j.results[0].artworkUrl100){finalUrl=j.results[0].artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600');}if(j.results[0].collectionName){finalAlbum=j.results[0].collectionName;}if(!finalYear&&j.results[0].releaseDate){let y=new Date(j.results[0].releaseDate).getFullYear();if(y>1950&&y<2027)finalYear=y;}}}catch(e){}let res={url:finalUrl,year:finalYear,album:finalAlbum};coverCacheRS3[key]=res;return res;}
+function pulisciTitoloFinaleAntiRemaster(t){if(!t)return t;t=t.replace(/\s*[\(\[][^\)\]]*remaster[^\)\]]*[\)\]]/gi,'').trim();t=t.replace(/\s*-\s*\d{4}\s*-\s*remaster.*$/gi,'').trim();t=t.replace(/\s*-\s*.*remaster.*$/gi,'').trim();t=t.replace(/\s+\d{4}\s+Remaster(ed)?/gi,'').trim();t=t.replace(/\s+Remaster(ed)?(\s+\d{4})?/gi,'').trim();t=t.replace(/\s*\[ga R\]\s*/gi,'').trim();t=t.replace(/\s*\[.*?R\]\s*$/gi,'').trim();t=t.replace(/\s*\[.*?\]\s*$/,'').trim();return t;}
+async function fetchYearFromMusicBrainz(artista,titolo){try{if(!titolo)return null;let titoloPulito=pulisciTitoloFinaleAntiRemaster(titolo);let q=`recording:"${titoloPulito}"${artista?` AND artist:"${artista}"`:""}`;let anni=[];try{let url=`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(q)}&fmt=json&limit=10`;let r=await fetch(url);let j=await r.json();if(j.recordings){for(let rec of j.recordings){if(rec['first-release-date']){let y=parseInt(rec['first-release-date'].substring(0,4));if(y>1950&&y<2027)anni.push(y);}if(rec.releases){for(let rel of rec.releases){if(rel.date){let y=parseInt(rel.date.substring(0,4));if(y>1950&&y<2027)anni.push(y);}}}}} }catch(e){}try{let url=`https://musicbrainz.org/ws/2/release-group/?query=${encodeURIComponent(q)}&fmt=json&limit=10`;let r=await fetch(url);let j=await r.json();if(j['release-groups']){for(let rg of j['release-groups']){if(rg['first-release-date']){let y=parseInt(rg['first-release-date'].substring(0,4));if(y>1950&&y<2027)anni.push(y);}}}}catch(e){}try{let url2=`https://musicbrainz.org/ws/2/release/?query=${encodeURIComponent(q)}&fmt=json&limit=10`;let r2=await fetch(url2);let j2=await r2.json();if(j2.releases){for(let rel of j2.releases){if(rel.date){let y=parseInt(rel.date.substring(0,4));if(y>1950&&y<2027)anni.push(y);}}}}catch(e){}if(anni.length>0){anni.sort((a,b)=>a-b);return anni[0];}}catch(e){}return null;}
+async function fetchCopertinaBranoConAnno(artista,titolo){if(!titolo&&!artista)return{url:null,year:null,album:null};const key=(artista+"|"+titolo).toLowerCase();if(coverCacheRS3[key]&&coverCacheRS3[key].url)return coverCacheRS3[key];let finalYear=null;let finalUrl=null;let finalAlbum=null;try{let mbYear=await fetchYearFromMusicBrainz(artista,titolo);if(mbYear)finalYear=mbYear;}catch(e){}try{const term=encodeURIComponent(((artista||"")+" "+(titolo||"")).trim());const r=await fetch(`https://itunes.apple.com/search?term=${term}&media=music&entity=song&limit=1`,{cache:'no-store'});const j=await r.json();if(j.results&&j.results[0]){if(j.results[0].artworkUrl100){finalUrl=j.results[0].artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600');}if(j.results[0].collectionName){finalAlbum=j.results[0].collectionName;}}}catch(e){}let res={url:finalUrl,year:finalYear,album:finalAlbum};coverCacheRS3[key]=res;return res;}
 const BRANI_NOVITA=[{id:"ZPV7WNHJ0g8",artista:"Chloe Qisha",titolo:"Question Of The Day"},{id:"DPEodkHzH-s",artista:"Tate McRae",titolo:"Housewife"},{id:"FC1FW1vp8eY",artista:"Cioffi",titolo:"Superstar"},{id:"0xuFBG6o6EU",artista:"Gaia",titolo:"Senz'allegria"},{id:"ofywN3NgGqY",artista:"Sombr",titolo:"My body isn't ready"},{id:"PshqcQwshdU",artista:"Sfera Ebbasta",titolo:"Lontano"},{id:"2r1njyfmREA",artista:"SOFI TUKKER & OneRepublic",titolo:"TSUNAMI"},{id:"0xuFBG6o6EU",artista:"Gaia",titolo:"Senz'Allegria"},{id:"pzvhHsEqMzo",artista:"Marco Mengoni",titolo:"Giornate Perse"},{id:"fRIhCiUVaKs",artista:"Karol G",titolo:"Bby Wow"}];
 function normalizzaBrano(b){if(typeof b==='string')return{id:b,artista:'',titolo:b};return b;}
 const PLACEHOLDER_HTML=`<div style="text-align:center"><div style="color:#fff;font-weight:bold">Scegli un brano</div><div style="font-size:2rem">👇</div></div>`;
@@ -67,14 +68,10 @@ audio{width:100%;max-width:340px;height:36px}
 .news-box-side.right-box{min-height:auto;padding:10px 12px !important}
 .news-title{font-size:0.80rem;color:#ff4444;font-weight:900;margin-bottom:6px}
 .news-title.calcio{color:#00d4ff}.news-box-side.calcio{border-color:#00d4ff}
-.news-title.musica{color:#e9d5ff;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px !important;font-size:0.80rem !important}
-.news-title.concerti{color:#d9f99d;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px !important;font-size:0.80rem !important}
-.news-item, .news-item.calcio, .news-item.musica, .news-item.concerti{font-size:0.90rem !important;line-height:1.35 !important;padding:8px 10px !important;margin-bottom:8px !important;background:rgba(255,255,255,.06) !important;border-radius:8px !important}
+.news-item, .news-item.calcio{font-size:0.90rem !important;line-height:1.35 !important;padding:8px 10px !important;margin-bottom:8px !important;background:rgba(255,255,255,.06) !important;border-radius:8px !important}
 .news-item a{color:#ffd966;text-decoration:none;display:block;font-weight:600;cursor:pointer}
-.news-item.calcio a{color:#aee8ff}.news-item.musica a{color:#f5f3ff}.news-item.concerti a{color:#ecfccb}
+.news-item.calcio a{color:#aee8ff}
 .news-item a:hover{color:#fff !important;text-decoration:underline !important}
-.live-dot{width:7px;height:7px;background:#ff0033;border-radius:50%;display:inline-block;margin-right:6px;animation:dotPulse 1.2s infinite}
-@keyframes dotPulse{0%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.5}100%{transform:scale(1);opacity:1}}
 .footer-copy{margin-top:20px;padding:16px 10px;text-align:center;font-size:0.85rem;color:#ddd;background:rgba(0,0,0,0.85);border-top:1px solid rgba(255,255,255,0.15)}
 #infoBranoSottoMeteo{border-color:#ffd966 !important;background:rgba(0,0,0,0.92) !important;box-shadow:0 0 12px rgba(255,217,102,0.25) !important;min-height:380px !important}
 #infoBranoContentLeft{font-size:.82rem;line-height:1.5;color:#eee;text-align:left;min-height:300px}
@@ -130,7 +127,7 @@ body.night-mode #rs3-mio-box{border:1.5px solid #c9a86a !important}
 <div class="meteo-side center-left"><div class="meteo-side-title">CENTRO SUD</div><div id="meteo-right" class="meteo-side-grid"></div></div>
 <div class="left-double-wide">
 <div class="news-box-side" id="infoBranoSottoMeteo">
-<div class="news-title" style="color:#ffd966">💿 INFO BRANO <span style="font-size:0.55rem;color:#00ff88">HYBRID AUTO</span></div>
+<div class="news-title" style="color:#ffd966">💿 INFO BRANO <span style="font-size:0.55rem;color:#00ff88">ORIGINAL YEAR</span></div>
 <div id="infoBranoContentLeft"><div style="color:#888;text-align:center;padding:8px">🎵 In attesa brano...</div></div>
 </div>
 </div>
@@ -153,7 +150,7 @@ body.night-mode #rs3-mio-box{border:1.5px solid #c9a86a !important}
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-// v247 FINALE - SOLO 4+4 NOTIZIE
+// v249 ANTI-REMASTER - ANNO SOLO ORIGINALE
 const DB_LOCALE={
 "gli altri siamo noi|umberto tozzi":"Sanremo 1991, 4° posto. Inno contro il razzismo scritto con Giancarlo Bigazzi. Titolo ispirato a frase di Madre Teresa. Disco d'oro.",
 "ti amo|umberto tozzi":"1977, scritta con Bigazzi. N°1 per 7 mesi, 8 milioni di copie.",
