@@ -1,4 +1,4 @@
-<!-- v231 DAL MASTER v217 - FIX LUNA 1980 + 2 RIGHE + ANNO AUTOMATICO - CRONACA SPORT OK -->
+<!-- v232 FIX ALBUM ORIGINALE 1989 - AUTOMATICA -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -7,12 +7,10 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v231 FIX LUNA 1980</title>
+<title>Radio Sistema 3 - v232 ALBUM ORIGINALE</title>
 <script>
 (function(){
-  if(window.location.search.length > 0){
-    history.replaceState(null,'', window.location.pathname);
-  }
+  if(window.location.search.length > 0){ history.replaceState(null,'', window.location.pathname); }
   var vSalvata = localStorage.getItem('rs3_version');
   if(vSalvata){ localStorage.clear(); sessionStorage.clear(); }
 })();
@@ -25,34 +23,73 @@ const RS3_NIGHT_LOGO_NOME="RS3_DI_NOTTE.jpg";
 function getLogoAssoluto(){try{const isSoul=(typeof soulActive!=='undefined'&&soulActive)||(document.body&&document.body.classList.contains('soul-mode'));const isNight=(typeof nightActive!=='undefined'&&nightActive)||(document.body&&document.body.classList.contains('night-mode'));let nome=RADIO_LOGO_FISSO_NOME;if(isSoul)nome=RS3_SOUL_LOGO_NOME;if(isNight)nome=RS3_NIGHT_LOGO_NOME;const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(nome);}catch(e){if(typeof nightActive!=='undefined'&&nightActive)return RS3_NIGHT_LOGO_NOME;return (typeof soulActive!=='undefined'&&soulActive)?RS3_SOUL_LOGO_NOME:RADIO_LOGO_FISSO_NOME;}}
 const coverCacheRS3={};
 
-// V231 - ANNO AUTOMATICO CORRETTO - SOLO CON ARTISTA
+// V232 - CERCA ANNO DALL'ALBUM ORIGINALE, NON COMPILATION
 async function fetchYearFromMusicBrainz(artista, titolo){
   try{
-    if(!titolo || !artista) return null;
-    // CERCA SOLO CON ARTISTA - così non prende Luna del 1966 di altri!
-    let q=`recording:"${titolo}" AND artist:"${artista}"`;
-    let url=`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(q)}&fmt=json&limit=8`;
-    let r=await fetch(url);
-    let j=await r.json();
-    if(!j.recordings || j.recordings.length===0) return null;
+    if(!titolo) return null;
+    let q = `recording:"${titolo}"${artista ? ` AND artist:"${artista}"` : ""}`;
     let anni=[];
-    for(let rec of j.recordings){
-      if(rec['first-release-date']){
-        let y=parseInt(rec['first-release-date'].substring(0,4));
-        if(y>1950 && y<2027) anni.push(y);
+
+    // 1. RECORDING - first-release-date
+    try{
+      let url=`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(q)}&fmt=json&limit=8`;
+      let r=await fetch(url);
+      let j=await r.json();
+      if(j.recordings){
+        for(let rec of j.recordings){
+          if(rec['first-release-date']){
+            let y=parseInt(rec['first-release-date'].substring(0,4));
+            if(y>1950 && y<2027) anni.push(y);
+          }
+          if(rec.releases){
+            for(let rel of rec.releases){
+              if(rel.date){
+                let y=parseInt(rel.date.substring(0,4));
+                if(y>1950 && y<2027) anni.push(y);
+              }
+            }
+          }
+        }
       }
-      if(rec.releases){
-        for(let rel of rec.releases){
+    }catch(e){}
+
+    // 2. RELEASE - cerca l'album/singolo originale
+    try{
+      let url=`https://musicbrainz.org/ws/2/release/?query=${encodeURIComponent(q)}&fmt=json&limit=10`;
+      let r=await fetch(url);
+      let j=await r.json();
+      if(j.releases){
+        for(let rel of j.releases){
           if(rel.date){
             let y=parseInt(rel.date.substring(0,4));
             if(y>1950 && y<2027) anni.push(y);
           }
         }
       }
-    }
+    }catch(e){}
+
+    // 3. RELEASE-GROUP - album originale
+    try{
+      let url=`https://musicbrainz.org/ws/2/release-group/?query=${encodeURIComponent(q)}&fmt=json&limit=8`;
+      let r=await fetch(url);
+      let j=await r.json();
+      if(j['release-groups']){
+        for(let rg of j['release-groups']){
+          if(rg['first-release-date']){
+            let y=parseInt(rg['first-release-date'].substring(0,4));
+            if(y>1950 && y<2027) anni.push(y);
+          }
+        }
+      }
+    }catch(e){}
+
     if(anni.length>0){
       anni.sort((a,b)=>a-b);
-      return anni[0]; // Anno più vecchio dell'artista giusto
+      // Se trova 1989 e 2006, prende 1989!
+      // Filtra anni troppo recenti se c'è un vecchio
+      let minAnno=anni[0];
+      // Se minAnno è molto vecchio e c'è anche un anno recente, prendi il vecchio
+      return minAnno;
     }
   }catch(e){}
   return null;
@@ -62,17 +99,12 @@ async function fetchCopertinaBranoConAnno(artista, titolo){
   if(!titolo && !artista) return {url:null, year:null};
   const key=(artista+"|"+titolo).toLowerCase();
   if(coverCacheRS3[key] && coverCacheRS3[key].url) return coverCacheRS3[key];
-  
   let finalYear=null;
   let finalUrl=null;
-
-  // 1. Anno da MusicBrainz SOLO con artista corrispondente
   try{
     let mbYear=await fetchYearFromMusicBrainz(artista, titolo);
     if(mbYear) finalYear=mbYear;
   }catch(e){}
-
-  // 2. Copertina e anno fallback da iTunes
   try{
     const term=encodeURIComponent(((artista||"")+" "+(titolo||"")).trim());
     const r=await fetch(`https://itunes.apple.com/search?term=${term}&media=music&entity=song&limit=1`,{cache:'no-store'});
@@ -87,12 +119,10 @@ async function fetchCopertinaBranoConAnno(artista, titolo){
       }
     }
   }catch(e){}
-
   let res={url:finalUrl, year:finalYear};
   coverCacheRS3[key]=res;
   return res;
 }
-
 async function fetchCopertinaBrano(artista, titolo){
   let data=await fetchCopertinaBranoConAnno(artista, titolo);
   return data.url;
@@ -262,14 +292,11 @@ function pulisciTitolo(raw){
 }
 function pulisciTitoloFinale(t){if(!t) return t;t=t.replace(/\s*[\(\[][^\)\]]*remaster[^\)\]]*[\)\]]/gi,'').trim();t=t.replace(/\s*-\s*\d{4}\s*-\s*remaster.*$/gi,'').trim();t=t.replace(/\s*-\s*.*remaster.*$/gi,'').trim();t=t.replace(/\s+\d{4}\s+Remaster(ed)?/gi,'').trim();t=t.replace(/\s+Remaster(ed)?(\s+\d{4})?/gi,'').trim();t=t.replace(/\s*\[ga R\]\s*/gi,'').trim();t=t.replace(/\s*\[.*?R\]\s*$/gi,'').trim();t=t.replace(/\s*\[.*?\]\s*$/,'').trim();return t;}
 function rimuoviTitoloDuplicato(s){if(!s) return s;let w=s.trim().split(/\s+/);if(w.length<5) return s;for(let len=3; len>=2; len--){if(w.length>len*2){let first=w.slice(0,len).join(' ').toLowerCase();let last=w.slice(-len).join(' ').toLowerCase();if(first===last){return w.slice(0,-len).join(' ').trim();}}}return s;}
-
-// V231 - PARSER FIX GIANNI TOGNI + DRUPI - 2 RIGHE
 function parseArtistTitleSmart(s){
   if(!s) return {titolo:"", artista:""};
   s=s.replace(/\s+/g,' ').trim();
   s=pulisciTitoloFinale(s);
   s=rimuoviTitoloDuplicato(s);
-
   let sep = s.includes(' - ') ? ' - ' : (s.includes(' – ') ? ' – ' : (s.includes(' — ') ? ' — ' : null));
   if(sep){
     let parts=s.split(sep);
@@ -285,10 +312,8 @@ function parseArtistTitleSmart(s){
     }
     return {titolo, artista};
   }
-
-  // Lista artisti con Gianni Togni e Drupi
   const artistiNoti=[
-    "Gianni Togni","Riccardo Cocciante","Alan Sorrenti","Franco Battiato","Matia Bazar","Lucio Battisti","Vasco Rossi","Ligabue","Zucchero","Eros Ramazzotti","Claudio Baglioni","Lucio Dalla","Antonello Venditti","Francesco De Gregori","Umberto Tozzi","Amedeo Minghi","Mia Martini","Loredana Berte","Bryan Ferry","Drupi","Toto Cutugno","Pupo","Albano","Adriano Celentano","Mina","Patty Pravo","Gianni Morandi","Ricchi E Poveri","Fausto Leali","Iva Zanicchi","Donatella Rettore","Anna Oxa","Righeira","Gazebo","Pino Daniele","Eduardo Bennato","Domenico Modugno","Gianna Nannini","Alice","Mango","Raf","Loretta Goggi","Ivana Spagna","Fiordaliso","Marcella Bella","Gianni Bella","Orietta Berti","Little Tony","Massimo Ranieri","Rita Pavone","Nada","Al Bano"
+    "Gianni Togni","Riccardo Cocciante","Alan Sorrenti","Franco Battiato","Matia Bazar","Lucio Battisti","Vasco Rossi","Ligabue","Zucchero","Eros Ramazzotti","Claudio Baglioni","Lucio Dalla","Antonello Venditti","Francesco De Gregori","Umberto Tozzi","Amedeo Minghi","Mia Martini","Loredana Berte","Bryan Ferry","Drupi","Toto Cutugno","Pupo","Albano","Adriano Celentano","Mina","Patty Pravo","Gianni Morandi","Ricchi E Poveri","Fausto Leali","Iva Zanicchi","Donatella Rettore","Anna Oxa","Righeira","Gazebo","Pino Daniele","Eduardo Bennato","Domenico Modugno","Gianna Nannini","Alice","Mango","Raf","Loretta Goggi","Ivana Spagna","Fiordaliso","Marcella Bella","Gianni Bella","Orietta Berti","Little Tony","Massimo Ranieri","Rita Pavone","Nada","Al Bano","Depeche Mode"
   ];
   artistiNoti.sort((a,b)=>b.length-a.length);
   let low=s.toLowerCase();
@@ -305,8 +330,6 @@ function parseArtistTitleSmart(s){
       }
     }
   }
-
-  // Fallback: 3->2->1 parole come artista (2 prima di 1 per Gianni Togni)
   let w=s.split(/\s+/);
   if(w.length>=2){
     for(let n=3;n>=1;n--){
@@ -320,13 +343,11 @@ function parseArtistTitleSmart(s){
     if(w.length===2) return {titolo: w[0], artista: w[1]};
     if(w.length===3) return {titolo: w[0], artista: w.slice(1).join(' ')};
   }
-
   return {titolo: pulisciTitoloFinale(s), artista:""};
 }
 function updateMediaSession(artista,titolo){if(!('mediaSession' in navigator))return;try{const logo=getLogoAssoluto();navigator.mediaSession.metadata=new MediaMetadata({title:titolo||'Radio Sistema 3',artist:artista||'Live',album:'Radio Sistema 3',artwork:[{src:logo,sizes:'512x512',type:'image/jpeg'},{src:logo,sizes:'256x256',type:'image/jpeg'}]});navigator.mediaSession.setActionHandler('play',()=>{tryAutoPlay(true);});navigator.mediaSession.setActionHandler('pause',()=>{document.getElementById('radioAudio').pause();});}catch(e){}}
 let _lastRaw="";let _lastValidTime=0;let _lastValidArtistaTitolo="";let _lastArtist="";let _lastTitolo="";
 function creaMioBox(){const existing = document.getElementById('rs3-mio-box');if(existing){if(existing.innerHTML && existing.innerHTML.trim().length > 50) return existing;existing.style.display='block';existing.style.opacity='1';existing.style.minHeight='95px';existing.style.maxWidth='400px';existing.style.margin='2px auto 0 auto';existing.style.background='rgba(0,0,0,0.85)';existing.style.borderRadius='14px';existing.style.padding='0';existing.innerHTML='<div class="rs3-trackbox"><img class="rs3-cover" src="'+getLogoAssoluto()+'"><div class="rs3-info"><div style="font-weight:900;color:#fff">Radio Sistema 3</div><div style="color:#ffd966">Live</div></div></div>';return existing;}const original=document.querySelector('.cc_recenttracks_list');if(!original) return null;original.style.display='none';original.style.opacity='0';original.style.height='0';original.style.minHeight='0';original.style.maxHeight='0';original.style.margin='0';original.style.padding='0';original.style.overflow='hidden';original.style.pointerEvents='none';const mio=document.createElement('div');mio.id='rs3-mio-box';mio.className='rs3-ready';mio.style.display='block';mio.style.opacity='1';mio.style.minHeight='95px';mio.style.maxWidth='400px';mio.style.margin='2px auto 0 auto';mio.style.background='rgba(0,0,0,0.85)';mio.style.borderRadius='14px';mio.style.padding='0';mio.innerHTML='<div class="rs3-trackbox"><img class="rs3-cover" src="'+getLogoAssoluto()+'"><div class="rs3-info"><div style="font-weight:900;color:#fff">Radio Sistema 3</div><div style="color:#ffd966">Live</div></div></div>';if(original.parentNode){ original.parentNode.insertBefore(mio, original.nextSibling); } else { document.body.appendChild(mio); }return mio;}
-
 async function rebuildTrackBox(){
   const mioBox=creaMioBox();
   const hidden=document.querySelector('.cc_recenttracks_list');
@@ -377,7 +398,6 @@ async function rebuildTrackBox(){
         if(artista || titolo){
           let data=await fetchCopertinaBranoConAnno(artista,titolo);
           if(data.url && cov) cov.src=data.url;
-          // Aggiorna con anno
           if(info){
             let annoHtml = data.year ? `<div style="align-self:flex-start;width:fit-content;display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#ffd966 0%,#ff9a00 100%);color:#000;font-weight:900;font-size:0.80rem;padding:3px 10px;border-radius:12px;margin-top:5px;box-shadow:0 0 8px rgba(255,217,102,0.6);">📅 ${data.year}</div>` : '';
             info.innerHTML=`<div style="font-weight:900;color:#fff;font-size:1.10rem;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${titolo}">${titolo}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${artista}">${artista || 'Radio Sistema 3'}</div>${annoHtml}`;
