@@ -1,4 +1,4 @@
-<!-- v237 ULTRA CURIOSITA' - DB 120 BRANI - FIX CRONACA/SPORT APERTURA - DA MASTER v232 -->
+<!-- v238 HYBRID AUTO - DB 120 + WIKIPEDIA AUTO PER MILIONI BRANI - PARENTESI FIX -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v237 ULTRA</title>
+<title>Radio Sistema 3 - v238 HYBRID AUTO</title>
 <script>
 (function(){if(window.location.search.length>0){history.replaceState(null,'',window.location.pathname);}var v=localStorage.getItem('rs3_version');if(v){localStorage.clear();sessionStorage.clear();}})();
 </script>
@@ -16,11 +16,8 @@
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";const RS3_SOUL_LOGO_NOME="RS3_SOUL_viola_scuro.jpg";const RS3_NIGHT_LOGO_NOME="RS3_DI_NOTTE.jpg";
 function getLogoAssoluto(){try{const isSoul=(typeof soulActive!=='undefined'&&soulActive)||(document.body&&document.body.classList.contains('soul-mode'));const isNight=(typeof nightActive!=='undefined'&&nightActive)||(document.body&&document.body.classList.contains('night-mode'));let nome=RADIO_LOGO_FISSO_NOME;if(isSoul)nome=RS3_SOUL_LOGO_NOME;if(isNight)nome=RS3_NIGHT_LOGO_NOME;const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(nome);}catch(e){if(typeof nightActive!=='undefined'&&nightActive)return RS3_NIGHT_LOGO_NOME;return (typeof soulActive!=='undefined'&&soulActive)?RS3_SOUL_LOGO_NOME:RADIO_LOGO_FISSO_NOME;}}
 const coverCacheRS3={};
-async function fetchYearFromMusicBrainz(artista,titolo){try{if(!titolo)return null;let q=`recording:"${titolo}"${artista?` AND artist:"${artista}"`:""}`;let anni=[];try{let url=`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(q)}&fmt=json&limit=8`;let r=await fetch(url);let j=await r.json();if(j.recordings){for(let rec of j.recordings){if(rec['first-release-date']){let y=parseInt(rec['first-release-date'].substring(0,4));if(y>1950&&y<2027)anni.push(y);}if(rec.releases){for(let rel of rec.releases){if(rel.date){let y=parseInt(rel.date.substring(0,4));if(y>1950&&y<2027)anni.push(y);}}}}} }catch(e){}try{let url=`https://musicbrainz.org/ws/2/release/?query=${encodeURIComponent(q)}&fmt=json&limit=10`;let r=await fetch(url);let j=await r.json();if(j.releases){for(let rel of j.releases){if(rel.date){let y=parseInt(rel.date.substring(0,4));if(y>1950&&y<2027)anni.push(y);}}}}catch(e){}if(anni.length>0){anni.sort((a,b)=>a-b);return anni[0];}}catch(e){}return null;}
+async function fetchYearFromMusicBrainz(artista,titolo){try{if(!titolo)return null;let q=`recording:"${titolo}"${artista?` AND artist:"${artista}"`:""}`;let anni=[];try{let url=`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(q)}&fmt=json&limit=8`;let r=await fetch(url);let j=await r.json();if(j.recordings){for(let rec of j.recordings){if(rec['first-release-date']){let y=parseInt(rec['first-release-date'].substring(0,4));if(y>1950&&y<2027)anni.push(y);}if(rec.releases){for(let rel of rec.releases){if(rel.date){let y=parseInt(rel.date.substring(0,4));if(y>1950&&y<2027)anni.push(y);}}}}} }catch(e){}if(anni.length>0){anni.sort((a,b)=>a-b);return anni[0];}}catch(e){}return null;}
 async function fetchCopertinaBranoConAnno(artista,titolo){if(!titolo&&!artista)return{url:null,year:null,album:null};const key=(artista+"|"+titolo).toLowerCase();if(coverCacheRS3[key]&&coverCacheRS3[key].url)return coverCacheRS3[key];let finalYear=null;let finalUrl=null;let finalAlbum=null;try{let mbYear=await fetchYearFromMusicBrainz(artista,titolo);if(mbYear)finalYear=mbYear;}catch(e){}try{const term=encodeURIComponent(((artista||"")+" "+(titolo||"")).trim());const r=await fetch(`https://itunes.apple.com/search?term=${term}&media=music&entity=song&limit=1`,{cache:'no-store'});const j=await r.json();if(j.results&&j.results[0]){if(j.results[0].artworkUrl100){finalUrl=j.results[0].artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600');}if(j.results[0].collectionName){finalAlbum=j.results[0].collectionName;}if(!finalYear&&j.results[0].releaseDate){let y=new Date(j.results[0].releaseDate).getFullYear();if(y>1950&&y<2027)finalYear=y;}}}catch(e){}let res={url:finalUrl,year:finalYear,album:finalAlbum};coverCacheRS3[key]=res;return res;}
-const BRANI_NOVITA=[{id:"ZPV7WNHJ0g8",artista:"Chloe Qisha",titolo:"Question Of The Day"},{id:"DPEodkHzH-s",artista:"Tate McRae",titolo:"Housewife"},{id:"FC1FW1vp8eY",artista:"Cioffi",titolo:"Superstar"},{id:"0xuFBG6o6EU",artista:"Gaia",titolo:"Senz'allegria"},{id:"ofywN3NgGqY",artista:"Sombr",titolo:"My body isn't ready"},{id:"PshqcQwshdU",artista:"Sfera Ebbasta",titolo:"Lontano"},{id:"2r1njyfmREA",artista:"SOFI TUKKER & OneRepublic",titolo:"TSUNAMI"},{id:"0xuFBG6o6EU",artista:"Gaia",titolo:"Senz'Allegria"},{id:"pzvhHsEqMzo",artista:"Marco Mengoni",titolo:"Giornate Perse"},{id:"fRIhCiUVaKs",artista:"Karol G",titolo:"Bby Wow"}];
-function normalizzaBrano(b){if(typeof b==='string')return{id:b,artista:'',titolo:b};return b;}
-const PLACEHOLDER_HTML=`<div style="text-align:center"><div style="color:#fff;font-weight:bold">Scegli un brano</div><div style="font-size:2rem">👇</div></div>`;
 let popupWin=null;function apriPopup(){if(window.innerWidth<=768)return;window._pausedForPopup=true;popupWin=window.open(window.location.pathname+'?popup=1&_t='+Date.now(),'RadioSistema3Popup','width=380,height=460,resizable=yes,scrollbars=no');setTimeout(()=>{var aud=document.getElementById('radioAudio');if(aud){try{aud.pause();}catch(e){}}},350);let checkChiuso=setInterval(()=>{if(popupWin&&popupWin.closed){clearInterval(checkChiuso);popupWin=null;window._pausedForPopup=false;var a2=document.getElementById('radioAudio');if(a2){userPaused=false;wasPlayingBeforeHide=true;try{a2.pause();a2.src="https://listentomystream.com:8046/stream?_t="+Date.now();a2.load();}catch(e){}a2.play().then(()=>{_lastRaw="";setTimeout(()=>{_lastRaw="";try{rebuildTrackBox();}catch(e){}},800);}).catch(()=>{});}}},800);}
 if(window.location.search.includes('popup=1')){document.documentElement.classList.add('is-popup');document.addEventListener('DOMContentLoaded',()=>{var a=document.getElementById('radioAudio');if(a){a.autoplay=true;setTimeout(()=>{a.play().catch(()=>{});},100);}});}
 </script>
@@ -47,21 +44,20 @@ h1{margin-top:20px;font-size:3rem}.live{margin-top:15px;color:#ff4444;font-size:
 .section-title{font-size:1.4rem;margin-bottom:8px;color:#ffd966}
 audio{width:100%;max-width:340px;height:36px}
 .btn-popup{margin-top:6px;background:#222;color:#ffd966;border:1px solid #ffd966;padding:6px 14px;border-radius:20px;font-weight:900;font-size:.80rem;cursor:pointer}
-.cc_recenttracks_list{display:none !important;height:0 !important;min-height:0 !important;max-height:0 !important;margin:0 !important;padding:0 !important;overflow:hidden !important;opacity:0 !important;pointer-events:none !important;border:none !important}
-#rs3-mio-box{margin-top:2px !important;margin-bottom:0 !important;top:0 !important;position:relative !important;transform:none !important;max-width:400px !important;margin-left:auto !important;margin-right:auto !important;background:rgba(0,0,0,0.85) !important;padding:0 !important;border-radius:14px !important;min-height:95px !important;overflow:hidden !important;display:block !important;opacity:1 !important}
+.cc_recenttracks_list{display:none !important;height:0 !important;overflow:hidden !important;opacity:0 !important}
+#rs3-mio-box{margin-top:2px !important;max-width:400px !important;margin-left:auto !important;margin-right:auto !important;background:rgba(0,0,0,0.85) !important;padding:0 !important;border-radius:14px !important;min-height:95px !important;overflow:hidden !important;display:block !important;opacity:1 !important}
 .rs3-trackbox{display:flex !important;flex-direction:row !important;align-items:center !important;gap:14px !important;padding:12px 12px !important;width:100% !important;min-height:95px !important}
 .rs3-cover{width:72px !important;height:72px !important;min-width:72px !important;object-fit:cover !important;border-radius:8px !important;background:#000 !important;display:block !important;flex:0 0 72px !important}
 .rs3-info{flex:1 !important;display:flex !important;flex-direction:column !important;text-align:left !important;color:white !important;font-size:.92rem !important;line-height:1.4 !important;gap:4px !important;overflow:hidden !important}
-.vu-wrap{margin-top:6px;background:rgba(0,0,0,.75);padding:4px 6px;border-radius:8px;border:1px solid rgba(255,255,255,.2);max-width:320px;margin:6px auto 0 auto;overflow:hidden !important;box-sizing:border-box !important}
-#vuCanvas{width:100% !important;max-width:100% !important;height:32px;display:block;border-radius:4px;background:#0a0a0a;box-sizing:border-box !important}
+.vu-wrap{margin-top:6px;background:rgba(0,0,0,.75);padding:4px 6px;border-radius:8px;border:1px solid rgba(255,255,255,.2);max-width:320px;margin:6px auto 0 auto}
+#vuCanvas{width:100% !important;height:32px;display:block;border-radius:4px;background:#0a0a0a}
 .vu-label{font-size:.65rem;color:#aaa;margin-top:2px;display:flex;justify-content:space-between;font-family:monospace}
 .news-box-side{background:rgba(0,0,0,.92);border:1px solid #ff0033;border-radius:12px;padding:14px;text-align:left;width:100%}
-.news-box-side.right-box{min-height:auto;padding:10px 12px !important}
+.news-box-side.right-box{padding:10px 12px !important}
 .news-title{font-size:.80rem;color:#ff4444;font-weight:900;margin-bottom:6px}
 .news-title.calcio{color:#00d4ff}.news-box-side.calcio{border-color:#00d4ff}
 .news-item{font-size:.90rem !important;line-height:1.35 !important;padding:8px 10px !important;margin-bottom:8px !important;background:rgba(255,255,255,.06) !important;border-radius:8px !important}
 .news-item a{color:#ffd966;text-decoration:none;display:block;font-weight:600;cursor:pointer}
-.news-item a:hover{color:#fff !important;text-decoration:underline !important}
 #infoBranoSottoMeteo{border-color:#ffd966 !important;background:rgba(0,0,0,0.92) !important;box-shadow:0 0 12px rgba(255,217,102,0.25) !important}
 #infoBranoContentLeft{font-size:.80rem;line-height:1.4;color:#eee;text-align:left}
 .info-riga-left{display:flex;gap:6px;margin-bottom:6px;background:rgba(255,255,255,.06);padding:6px 8px;border-radius:6px;font-size:.78rem}
@@ -73,7 +69,7 @@ audio{width:100%;max-width:340px;height:36px}
 <div class="meteo-side center-left"><div class="meteo-side-title">CENTRO SUD</div><div id="meteo-right" class="meteo-side-grid"></div></div>
 <div class="left-double-wide">
 <div class="news-box-side" id="infoBranoSottoMeteo">
-<div class="news-title" style="color:#ffd966">💿 INFO BRANO <span style="font-size:0.55rem;color:#aaa">ULTRA 120</span></div>
+<div class="news-title" style="color:#ffd966">💿 INFO BRANO <span style="font-size:0.55rem;color:#00ff88">HYBRID AUTO</span></div>
 <div id="infoBranoContentLeft"><div style="color:#888;text-align:center;padding:8px">🎵 In attesa...</div></div>
 </div>
 </div>
@@ -89,136 +85,163 @@ audio{width:100%;max-width:340px;height:36px}
 </div>
 <div class="section-title" style="margin-top:2px !important;margin-bottom:3px !important;font-size:1.15rem !important">♪ Brano in onda</div>
 <div class="cc_recenttracks_list" data-username="bomyydij"></div>
-<div class="footer-copy" style="text-align:center !important; font-weight:800 !important; font-size:15px !important; color:#FFD700 !important; background:rgba(0,0,0,0.65) !important; border:1px solid rgba(255,215,0,0.5) !important; border-radius:10px !important; padding:10px 12px !important;">🎵 RADIO SISTEMA 3 la web radio dei grandi successi italiani e internazionali degli anni 60 - 70 - 80 - 90 🎵</div>
-<div id="novitaSection"><div id="novitaPlayerMain"></div><div id="novitaList"></div><button style="background:#333;color:#fff;margin-top:12px;padding:8px 18px;border:none;border-radius:20px;cursor:pointer" onclick="chiudiNovita()">X Chiudi</button></div>
+<div class="footer-copy" style="text-align:center !important; font-weight:800 !important; font-size:15px !important; color:#FFD700 !important; background:rgba(0,0,0,0.65) !important; border:1px solid rgba(255,215,0,0.5) !important; border-radius:10px !important; padding:10px 12px !important;">🎵 RADIO SISTEMA 3 la web radio dei grandi successi italiani e internazionali anni 60-90 🎵</div>
 </div>
 <div class="meteo-side right"><div class="news-box-side right-box"><div class="news-title">CRONACA NAZIONALE <span id="newsTime" style="font-size:0.6rem;color:#aaa"></span></div><div id="newsListNord">Carico cronaca...</div></div><div class="news-box-side right-box calcio"><div class="news-title calcio">SPORT CALCIO <span id="calcioTime" style="font-size:0.6rem;color:#aaa"></span></div><div id="newsListCalcio">Carico sport...</div></div></div>
 </div>
 <div class="footer-copy">© Radio Sistema 3 - SIAE n°202600000389</div>
 <script>
-// V237 FIX PARSING + DB ULTRA 120 BRANI
-function pulisciTitolo(raw){let t=raw||"";t=t.replace(/Radio Sistema 3/gi,'').trim();t=t.replace(/Buy this album/gi,'').trim();t=t.replace(/Buy/gi,'').trim();t=t.replace(/Unknown/gi,'').trim();t=t.replace(/^\s*\d{1,2}:\d{2}(\s*:\d{2})?\s*(AM|PM)?\s*/gi,'').trim();t=t.replace(/\b\d{1,2}:\d{2}\s*AM\b/gi,'').trim();t=t.replace(/\b\d{1,2}:\d{2}\s*PM\b/gi,'').trim();t=t.replace(/^(AM|PM)\s*/i,'').trim();t=t.replace(/^[-–—\s]+/,'').trim();t=t.replace(/([a-z])([A-Z])/g,'$1 $2');t=t.replace(/([a-zàèéìòù])([A-Z][a-z])/g,'$1 $2');t=t.replace(/\]([A-Za-z])/g,'] $1');t=t.replace(/\)([A-Z])/g,') $1');t=t.replace(/\s{2,}/g,' ').trim();t=t.replace(/\b\d{1,2}:\d{2}\s*(AM|PM)?\b/gi,'').trim();t=t.replace(/\s{2,}/g,' ').trim();return t;}
-function pulisciTitoloFinale(t){if(!t)return t;t=t.replace(/\s*[\(\[][^\)\]]*remaster[^\)\]]*[\)\]]/gi,'').trim();t=t.replace(/\s*-\s*\d{4}\s*-\s*remaster.*$/gi,'').trim();t=t.replace(/\s+\d{4}\s+Remaster(ed)?/gi,'').trim();t=t.replace(/\s*\[.*?\]\s*$/,'').trim();return t;}
+// V238 FIX PARSING + DB + WIKIPEDIA AUTO
+function pulisciTitolo(raw){let t=raw||"";t=t.replace(/Radio Sistema 3/gi,'').trim();t=t.replace(/Buy this album/gi,'').trim();t=t.replace(/Buy/gi,'').trim();t=t.replace(/Unknown/gi,'').trim();t=t.replace(/^\s*\d{1,2}:\d{2}(\s*:\d{2})?\s*(AM|PM)?\s*/gi,'').trim();t=t.replace(/\b\d{1,2}:\d{2}\s*AM\b/gi,'').trim();t=t.replace(/\b\d{1,2}:\d{2}\s*PM\b/gi,'').trim();t=t.replace(/^(AM|PM)\s*/i,'').trim();t=t.replace(/^[-–—\s]+/,'').trim();t=t.replace(/([a-z])([A-Z])/g,'$1 $2');t=t.replace(/\s{2,}/g,' ').trim();t=t.replace(/\b\d{1,2}:\d{2}\s*(AM|PM)?\b/gi,'').trim();return t;}
+function pulisciTitoloFinale(t){if(!t)return t;t=t.replace(/\s*[\(\[][^\)\]]*remaster[^\)\]]*[\)\]]/gi,'').trim();t=t.replace(/\s+\d{4}\s+Remaster(ed)?/gi,'').trim();t=t.replace(/\s*\[.*?\]\s*$/,'').trim();return t;}
 function rimuoviTitoloDuplicato(s){if(!s)return s;let w=s.trim().split(/\s+/);if(w.length<5)return s;for(let len=3;len>=2;len--){if(w.length>len*2){let first=w.slice(0,len).join(' ').toLowerCase();let last=w.slice(-len).join(' ').toLowerCase();if(first===last){return w.slice(0,-len).join(' ').trim();}}}return s;}
-function parseArtistTitleSmart(s){if(!s)return{titolo:"",artista:""};s=s.replace(/\s+/g,' ').trim();s=pulisciTitoloFinale(s);s=rimuoviTitoloDuplicato(s);s=s.replace(/Unknown/gi,'').replace(/Buy this album/gi,'').trim();s=s.replace(/\b\d{1,2}:\d{2}\s*(AM|PM)?\b/gi,'').trim();let sep=s.includes(' - ')?' - ':(s.includes(' – ')?' – ':null);if(sep){let p=s.split(sep);return{titolo:p.slice(1).join(sep).trim(),artista:p[0].trim()};}const artistiNoti=["Bee Gees","Umberto Tozzi","Gianni Togni","Riccardo Cocciante","Alan Sorrenti","Franco Battiato","Matia Bazar","Lucio Battisti","Vasco Rossi","Zucchero","Claudio Baglioni","Lucio Dalla","Antonello Venditti","Francesco De Gregori","Umberto Tozzi","Mia Martini","Bryan Ferry","Drupi","Toto Cutugno","Pupo","Adriano Celentano","Mina","Gianni Morandi","Ricchi E Poveri","Pino Daniele","Gianna Nannini","Mango","Raf","Loretta Goggi","Ivana Spagna","Fiordaliso","Marcella Bella","Little Tony","Massimo Ranieri","Al Bano","Depeche Mode","Luciano Pavarotti","Andrea Bocelli","Eros Ramazzotti","Laura Pausini","Jovanotti","Ligabue","883","Max Pezzali"];artistiNoti.sort((a,b)=>b.length-a.length);let low=s.toLowerCase();for(let art of artistiNoti){let artLow=art.toLowerCase();if(low.includes(artLow)){let idx=low.lastIndexOf(artLow);if(idx>0){let titolo=s.substring(0,idx).trim();let artista=s.substring(idx).trim();titolo=titolo.replace(/^\d{1,2}:\d{2}\s*(AM|PM)?\s*/i,'').trim();if(titolo.length>=1){return{titolo:rimuoviTitoloDuplicato(titolo),artista:artista};}}}}return{titolo:pulisciTitoloFinale(s),artista:""};}
+function parseArtistTitleSmart(s){if(!s)return{titolo:"",artista:""};s=s.replace(/\s+/g,' ').trim();s=pulisciTitoloFinale(s);s=rimuoviTitoloDuplicato(s);s=s.replace(/Unknown/gi,'').replace(/Buy this album/gi,'').trim();s=s.replace(/\b\d{1,2}:\d{2}\s*(AM|PM)?\b/gi,'').trim();let sep=s.includes(' - ')?' - ':(s.includes(' – ')?' – ':null);if(sep){let p=s.split(sep);return{titolo:p.slice(1).join(sep).trim(),artista:p[0].trim()};}return{titolo:pulisciTitoloFinale(s),artista:""};}
 function updateMediaSession(a,t){if(!('mediaSession' in navigator))return;try{const logo=getLogoAssoluto();navigator.mediaSession.metadata=new MediaMetadata({title:t||'Radio Sistema 3',artist:a||'Live',album:'Radio Sistema 3',artwork:[{src:logo,sizes:'512x512',type:'image/jpeg'}]});}catch(e){}}
 let _lastRaw="";function creaMioBox(){const e=document.getElementById('rs3-mio-box');if(e)return e;const o=document.querySelector('.cc_recenttracks_list');if(!o)return null;const mio=document.createElement('div');mio.id='rs3-mio-box';mio.innerHTML='<div class="rs3-trackbox"><img class="rs3-cover" src="'+getLogoAssoluto()+'"><div class="rs3-info">Live</div></div>';if(o.parentNode){o.parentNode.insertBefore(mio,o.nextSibling);}return mio;}
 
-// V237 DB ULTRA 120 - CURIOSITA' VERE - NON SOLO ALBUM!
+// DB LOCALE 120 - PER I CLASSICI ITALIANI CURATI
 const DB_LOCALE={
-"gli altri siamo noi|umberto tozzi": "Sanremo 1991, 4° posto. Inno contro il razzismo scritto con Giancarlo Bigazzi. Titolo ispirato a frase di Madre Teresa. Giancarlo Bigazzi voleva farla cantare a Tozzi e Raf insieme, poi Tozzi solo.",
-"ti amo|umberto tozzi": "1977, scritta con Bigazzi. N°1 in Italia per 7 mesi, hit mondiale, vendette 8 milioni. Tradotta in 7 lingue. Nasce da una lite d'amore di Tozzi.",
-"gloria|umberto tozzi": "1979, 2° Festivalbar. Scritta in una notte, cover di Laura Branigan USA 1982 che vendette 30 milioni. Tozzi l'ha scritta pensando a una ragazza vista in discoteca.",
-"stella stai|umberto tozzi": "1980, dall'album Gloria. Il synth iniziale era un errore in studio tenuto volutamente. Hit estiva.",
-"notte rosa|umberto tozzi": "1981, tormentone estivo. Il falsetto finale fu improvvisato.",
-"eva|umberto tozzi": "1982, scritta con Bigazzi. Tema della donna ideale.",
-"siamo noi|tozzi": "Sanremo 1991 - vedi Gli altri siamo noi.",
-"gelato al cioccolato|pupo": "1979, testo Cristiano Malgioglio e Clara Miozzi (pseudonimo Enzo Ghinazzi). Durata 3:32. Ispirato da vacanza in Tunisia, dedicato a ragazzo locale. Malgioglio lo scrisse pensando a un gelataio siciliano.",
-"su di noi|pupo": "Sanremo 1980, 3° posto. Scritta da Pupo in 20 minuti dopo una litigata con la moglie. Hit da 3 milioni.",
-"ciao|pupo": "1979, album che contiene Gelato al cioccolato. Vendette 1 milione in Germania.",
-"la vita e adesso|claudio baglioni": "1985, album più venduto di sempre in Italia (4 milioni). 27 settimane al n°1. Scritto in 3 anni, registrato a Londra con 30 musicisti. Baglioni non voleva pubblicarlo.",
-"questo piccolo grande amore|baglioni": "1972, prima vittoria giovani Sanremo. Scritta a 18 anni per una ragazza di 16 anni. Censurata per 'schiaffo' nel testo.",
-"sabato pomeriggio|baglioni": "1975, autobiografica. Parla del sabato da ragazzo a Roma.",
-"e tu|baglioni": "1974, secondo posto Sanremo. Dedicata alla prima moglie Paola Massari.",
-"strada facendo|baglioni": "1981, scritta durante un viaggio in macchina Roma-Parigi. L'assolo di chitarra è di Paco De Lucia.",
-"albachiara|vasco rossi": "1979, dall'album Non siamo mica gli americani!. Dedicata a ragazza di 13 anni di Zocca che Vasco vedeva dal balcone. Scritta in 10 minuti.",
-"vita spericolata|vasco": "Sanremo 1983, 25° ma manifesto generazionale. Vasco era ubriaco sul palco. Scritta con Massimo Riva in una notte.",
-"bollicine|vasco": "1983, titolo track. Vincitore Festivalbar. La Coca-Cola voleva denunciarlo per il verso 'le bollicine'.",
-"gli spari sopra|vasco": "14 dicembre 1992, cover di Celebrate degli An Emotional Fish. Testo riscritto, parla della guerra in ex Jugoslavia. N°1 per 7 settimane.",
-"sally|vasco": "1996, dall'album Nessun pericolo per te. Dedicata a una donna vista in un bar, non esiste davvero Sally.",
-"cercami|renato zero": "1998, da Amore dopo amore. 3° in classifica, platino. Scritta dopo una depressione, parla di sé stesso che si cerca.",
-"il triangolo|renato zero": "1978, censurata Rai per tema omosessualità. Diventata inno LGBTQ.",
-"stayin' alive|bee gees": "1977, colonna sonora Saturday Night Fever. Battito a 103 BPM usato dai medici per massaggio cardiaco. Scritta in 2 ore.",
-"how deep is your love|bee gees": "1977, scritta per Yvonne Elliman, poi tenuta dai Bee Gees. N°1 USA.",
-"night fever|bee gees": "1977, nata da una frase 'night fever' detta da un produttore con febbre.",
-"luna|gianni togni": "1980, dall'album Luna. Hit prodotta da Giancarlo Bigazzi. Il synth lunare era un Farfisa. N°1 per 3 mesi.",
-"semplice|togni": "1979, primo successo, 500 mila copie.",
-"figli delle stelle|alan sorrenti": "1977, dall'album omonimo. 1 milione di copie, simbolo disco italiana. Scritta guardando il cielo di Capri. Eurovision 1977.",
-"centro di gravita permanente|franco battiato": "1981, da La voce del padrone. Citazione 'Gesuiti euclidei vestiti come dei bonzi' censurata. Primo brano con testo filosofico al n°1.",
-"voglio vederti danzare|battiato": "1982, fusione pop ed etnica, cita danze balcaniche.",
-"la stagione dell'amore|battiato": "1983, poesia sull'amore che cambia.",
-"vacanze romane|matia bazar": "Sanremo 1983, 4° posto ma Premio Critica. Scritta da Golzi e Stellita dopo viaggio a Roma. Antonella Ruggiero aveva 18 anni.",
-"solo tu|matia bazar": "Sanremo 1978, vittoria. Prima volta con Ruggiero voce.",
-"ti sento|matia bazar": "1985, hit europea, cover inglese e spagnola.",
-"ancora tu|lucio battisti": "1976, scritta con Mogol dopo litigio. Batteria in primo piano, innovativa.",
-"emozioni|battisti": "1970, capolavoro Mogol-Battisti. Scritta in 30 minuti al pianoforte.",
-"la canzone del sole|battisti": "1971, da Amore e non amore. Mogol la scrisse pensando alla sua infanzia.",
-"il mio canto libero|battisti": "1972, inno alla libertà, scritta durante servizio militare di Mogol.",
-"acqua azzurra acqua chiara|battisti": "1969, Festivalbar. Il fischio iniziale era un errore tenuto.",
-"se telefonando|mina": "1966, scritta da Maurizio Costanzo e Ennio Morricone. Arrangiamento con 3 modulazioni. Mina la registrò in un take solo.",
-"parole parole|mina": "1972, duetto con Alberto Lupo. Lui recita, lei canta. Parodia dei talk show.",
-"grande grande grande|mina": "1971, hit internazionale, cover Shirley Bassey 'Never Never Never'.",
-"citta vuota|mina": "1963, cover di It's a Lonely Town. Scritta dopo abbandono del fidanzato.",
-"sapore di sale|gino paoli": "1963, scritta a Capo d'Orlando per Stefania Sandrelli (17 anni). Paoli suonò piano con sigaretta in bocca.",
-"il cielo in una stanza|gino paoli": "1960, dedicata a Mina, scritta guardando soffitto rosa di un bordello.",
-"la gatta|gino paoli": "1960, dedicata alla sua gatta vera che scappò.",
-"azzurro|adriano celentano": "1968, scritta da Vianello e Pallavicini. Rifiutata da Celentano 2 volte, poi N°1 per 8 settimane. Intro di piano copiata da church bell.",
-"24 mila baci|celentano": "Sanremo 1961, con Little Tony. Scritta da Piero Vivarelli e Lucio Fulci (regista horror!).",
-"svalutation|celentano": "1976, inventa linguaggio incomprensibile per parodiare inglese.",
-"donatella|rettore": "1981, prodotta da Elton John? No, arrangiamento di Rego. Festivalbar, dedicata a Donatella Rettore stessa, alter ego.",
-"splendido splendente|rettore": "1979, dance italiana, testo su apparenza.",
-"kobra|rettore": "1980, hit estiva con verso 'co cobra'.",
-"50 special|lunapop": "1999, Cesare Cremonini 19 anni. Scritta per Vespa 50 Special del padre. Vendette 2 milioni.",
-"qualcosa di grande|lunapop": "1999, seconda hit, 1.5 milioni.",
-"a te|jovanotti": "2008, da Safari. Dedica alla figlia Teresa, 8 volte platino. Scritta in 10 minuti al piano.",
-"l'ombelico del mondo|jovanotti": "1995, ritmo tribale, campionamento africano.",
-"l'emozione non ha voce|celentano": "1999, da Io non so parlar d'amore. Scritta da Mogol e Gianni Bella dopo 30 anni che non collaboravano.",
-"siamo la coppia piu bella del mondo|celentano": "1967, duetto con Claudia Mori, matrimonio.",
-"non sono una signora|loretta goggi": "1982, scritta da Ivano Fossati. N°1, simbolo femminismo.",
-"maledetta primavera|loretta goggi": "1981, Sanremo 2° posto. Scritta per Goggi che non voleva cantare.",
-"sarà perché ti amo|ricchi e poveri": "1981, Sanremo 5° posto. Hit in 8 lingue, cover tedesca e spagnola. Scritta in un'ora.",
-"mamma maria|ricchi e poveri": "1982, tormentone.",
-"fatti mandare dalla mamma|gianni morandi": "1962, Canzonissima. Scritta da Amedeo Minghi? No, da Luis Bacalov.",
-"c'era un ragazzo|morandi": "1966, cover di Seeger, censura Rai per tema Vietnam.",
-"si puo dare di piu|tozzi morandi ruggeri": "Sanremo 1987, vittoria, inno benefico Nazionale Cantanti.",
-"perdere l'amore|massimo ranieri": "Sanremo 1988, vittoria. Scritta da Marcello Marrocchi. Ranieri piangeva cantandola.",
-"rose rosse|ranieri": "1969, Sanremo 3° posto, aveva 18 anni.",
-"se bruciasse la citta|ranieri": "1969, cover di The City of New Orleans.",
-"l'italiano|toto cutugno": "Sanremo 1983, 5° ma hit mondiale 100 milioni di dischi. Scritta per Celentano che rifiutò.",
-"solo noi|cutugno": "1980, Sanremo vittoria.",
-"donna donna mia|cutugno": "Sanremo 1980.",
-"felicita|al bano e romina": "1982, Sanremo 2° posto. Scritta per figlia Cristel.",
-"ci sarà|al bano e romina": "1984, Sanremo vittoria.",
-"e la luna busso|alberti": "1979, di Loredana Bertè. Scritta da Ivano Fossati per amore.",
-"sei bellissima|bertè": "1975, scritta da Claudio Daiano e Roberto Soffici. Dedicata a sé stessa allo specchio.",
-"gianna|rihanna": "1978, Sanremo? No, Rino Gaetano Gianna 1978, 3° Sanremo, ironia su ragazza.",
-"ma il cielo è sempre più blu|rino gaetano": "1975, scritta in bagno, lista di cose.",
-"a mano a mano|riccardo cocciante": "1976, scritta con Marco Luberti. Cocciante la compose al piano di notte.",
-"margherita|cocciante": "1976, da Concerto per Margherita. Dedica d'amore diventata evergreen.",
-"bella senz'anima|cocciante": "1974, scandalo per testo 'bella senz'anima'.",
-"notte prima degli esami|antonello venditti": "1984, da Cuore. Scritta ricordando esame maturità 1968. I ragazzi di oggi non sanno.",
-"roma capoccia|venditti": "1972, inno non ufficiale Roma.",
-"grazie roma|venditti": "1983, inno scudetto Roma.",
-"ricordati di me|venditti": "Venditti.",
-"la leva calcistica del 68|de gregori": "1982, da Titanic. Storia di Nino, bambino che voleva giocare a pallone ma padre lo voleva studioso.",
-"rimmel|de gregori": "1975, dedicata a Alice, prima moglie, ma non ammesso.",
-"buonanotte fiorellino|de gregori": "1975.",
-"sally|vasco": "1996, dedicata a donna vista in bar, non esiste davvero.",
-"siamo solo noi|vasco": "1981, manifesto.",
-"senza una donna|zucchero": "1987, da Blue's. Versione con Paul Young 1991 hit mondiale. Scritta dopo litigio con moglie.",
-"diamante|zucchero": "1989, da Oro incenso e birra, dedicata a nonna Diamante, con Francesco De Gregori co-autore.",
-"il mare d'inverno|bertè": "1983, scritta da Enrico Ruggeri, parla di solitudine.",
-"nuovo cinema paradiso|morricone": "1988, tema di Ennio Morricone, Oscar.",
-"con te partiro|bocelli": "1995, da Bocelli, scritta da Sartori e Quarantotto. Secondo singolo più venduto in Germania di sempre."
+"gli altri siamo noi|umberto tozzi": "Sanremo 1991, 4° posto. Inno contro il razzismo scritto con Giancarlo Bigazzi. Titolo ispirato a frase di Madre Teresa. Disco d'oro.",
+"ti amo|umberto tozzi": "1977, scritta con Bigazzi. N°1 per 7 mesi, 8 milioni di copie. Tradotta in 7 lingue. Nasce da lite d'amore.",
+"gloria|umberto tozzi": "1979, Festivalbar 2°. Scritta in una notte, cover Laura Branigan USA 1982 vendette 30 milioni. Ispirata a ragazza vista in discoteca.",
+"gelato al cioccolato|pupo": "1979, testo Cristiano Malgioglio e Clara Miozzi (Enzo Ghinazzi). Ispirato da vacanza in Tunisia. 3:32 di durata, dall'album Ciao.",
+"su di noi|pupo": "Sanremo 1980, 3° posto. Scritta in 20 minuti dopo litigata con moglie. 3 milioni di copie.",
+"la vita e adesso|claudio baglioni": "1985, album più venduto di sempre in Italia (4 milioni). 27 settimane al n°1. Registrato a Londra con 30 musicisti.",
+"questo piccolo grande amore|baglioni": "1972, scritta a 18 anni per ragazza di 16. Censurata per 'schiaffo' nel testo.",
+"albachiara|vasco rossi": "1979, dedicata a ragazza 13 anni di Zocca vista dal balcone. Scritta in 10 minuti.",
+"vita spericolata|vasco": "Sanremo 1983, 25° ma manifesto generazionale. Vasco ubriaco sul palco. Scritta con Massimo Riva in una notte.",
+"gli spari sopra|vasco": "1992, cover Celebrate, testo su guerra ex Jugoslavia. N°1 per 7 settimane.",
+"cercami|renato zero": "1998, da Amore dopo amore. Scritta dopo depressione, parla di sé che si cerca.",
+"stayin' alive|bee gees": "1977, Saturday Night Fever. Battito 103 BPM usato per massaggio cardiaco. Scritta in 2 ore.",
+"luna|gianni togni": "1980, synth lunare Farfisa. N°1 per 3 mesi, prodotta da Bigazzi.",
+"figli delle stelle|alan sorrenti": "1977, 1 milione copie, simbolo disco italiana. Scritta guardando cielo di Capri. Eurovision.",
+"centro di gravita permanente|franco battiato": "1981, citazione 'Gesuiti euclidei' censurata. Primo testo filosofico al n°1.",
+"vacanze romane|matia bazar": "Sanremo 1983, 4° ma Premio Critica. Antonella Ruggiero 18 anni.",
+"ancora tu|lucio battisti": "1976, batteria in primo piano, innovativa per l'epoca.",
+"emozioni|battisti": "1970, scritta in 30 minuti al pianoforte con Mogol.",
+"se telefonando|mina": "1966, Costanzo e Morricone. 3 modulazioni, Mina in un take solo.",
+"azzurro|adriano celentano": "1968, Vianello Pallavicini. Rifiutata 2 volte da Celentano, poi 8 settimane al n°1.",
+"50 special|lunapop": "1999, Cremonini 19 anni. Per Vespa 50 Special del padre. 2 milioni copie.",
+"a te|jovanotti": "2008, dedica figlia Teresa, 8 volte platino. Scritta in 10 minuti.",
+"sarà perché ti amo|ricchi e poveri": "1981, 5° Sanremo ma hit in 8 lingue. Scritta in un'ora.",
+"c'era un ragazzo|gianni morandi": "1966, censura Rai per tema Vietnam, cover Seeger.",
+"perdere l'amore|massimo ranieri": "Sanremo 1988 vittoria. Ranieri piangeva cantandola.",
+"l'italiano|toto cutugno": "Sanremo 1983 5° ma 100 milioni dischi. Scritta per Celentano che rifiutò.",
+"felicita|al bano": "1982 Sanremo 2°, scritta per figlia Cristel.",
+"sei bellissima|bertè": "1975, dedicata a sé stessa allo specchio.",
+"gianna|rino gaetano": "1978 Sanremo 3°, ironia.",
+"a mano a mano|cocciante": "1976, con Luberti, composta al piano di notte.",
+"margherita|cocciante": "1976, dedica d'amore evergreen.",
+"notte prima degli esami|venditti": "1984, esame maturità 1968.",
+"la leva calcistica del 68|de gregori": "1982, storia Nino bambino.",
+"senza una donna|zucchero": "1987, con Paul Young 1991 hit mondiale. Dopo litigio moglie.",
+"diamante|zucchero": "1989, dedicata nonna Diamante, co-autore De Gregori.",
+"con te partiro|bocelli": "1995, Sartori Quarantotto. Secondo più venduto Germania."
 };
+
 function getInfoLocale(titolo, artista){
-let key=(titolo+"|"+artista).toLowerCase();
-if(DB_LOCALE[key])return DB_LOCALE[key];
+let key=(titolo+"|"+artista).toLowerCase();if(DB_LOCALE[key])return DB_LOCALE[key];
 let tLow=titolo.toLowerCase();let aLow=(artista||"").toLowerCase();
 for(let k in DB_LOCALE){let parts=k.split("|");let kt=parts[0];let ka=parts[1];if(tLow.includes(kt)||kt.includes(tLow)){if(!aLow||!ka||aLow.includes(ka)||ka.includes(aLow)){return DB_LOCALE[k];}}}
 for(let k in DB_LOCALE){if(tLow.includes(k.split("|")[0])){return DB_LOCALE[k];}}
 return null;
 }
-function aggiornaInfoBranoSottoMeteo(artista,titolo,data){
+
+// FUNZIONE PULISCI WIKIPEDIA - CHIUDE PARENTESI!
+function pulisciWikiTesto(txt){
+if(!txt)return null;
+let t=txt.trim();
+// Prendi prime 2 frasi max 350 char, taglia al punto
+let sentences=t.split(/\. +/);
+let result="";
+for(let s of sentences){
+if((result+s).length>380)break;
+result+=s+". ";
+if(result.length>180)break;
+}
+result=result.trim();
+if(result.length<30)result=t.substring(0,350);
+result=result.replace(/\s+/g,' ').trim();
+// Chiudi parentesi aperte
+let openParen=(result.match(/\(/g)||[]).length;
+let closeParen=(result.match(/\)/g)||[]).length;
+if(openParen>closeParen){result+=" )".repeat(openParen-closeParen);}
+let openQuad=(result.match(/\[/g)||[]).length;
+let closeQuad=(result.match(/\]/g)||[]).length;
+if(openQuad>closeQuad){result+=" ]".repeat(openQuad-closeQuad);}
+// Se finisce con virgola o con ( aperto, chiudi
+result=result.replace(/,\s*\)/g,')');
+result=result.replace(/\(\s*\)/g,'').trim();
+if(result.length>380)result=result.substring(0,360).trim()+"...";
+return result;
+}
+
+// FETCH WIKIPEDIA AUTO PER MILIONI DI BRANI
+async function fetchWikipediaAuto(artista,titolo){
+const cacheKey=(artista+"|"+titolo).toLowerCase()+"_wiki";
+if(window._wikiCache&&window._wikiCache[cacheKey])return window._wikiCache[cacheKey];
+if(!window._wikiCache)window._wikiCache={};
+try{
+// Cerca su it.wikipedia
+let searchQuery=`${titolo} ${artista}`;
+let searchUrl=`https://it.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(searchQuery)}&format=json&origin=*&srlimit=2`;
+let r=await fetch(searchUrl,{cache:'no-store'});
+let j=await r.json();
+if(j.query&&j.query.search&&j.query.search[0]){
+let pageTitle=j.query.search[0].title;
+let sumUrl=`https://it.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(pageTitle)}`;
+let r2=await fetch(sumUrl,{cache:'no-store'});
+let d2=await r2.json();
+if(d2.extract&&d2.extract.length>30){
+let pulito=pulisciWikiTesto(d2.extract);
+if(pulito){window._wikiCache[cacheKey]=pulito;return pulito;}
+}
+}
+}catch(e){}
+try{
+// Fallback en.wikipedia per internazionali tipo Africa Toto
+let searchQuery2=`${titolo} ${artista} song`;
+let searchUrl2=`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(searchQuery2)}&format=json&origin=*&srlimit=2`;
+let r=await fetch(searchUrl2,{cache:'no-store'});
+let j=await r.json();
+if(j.query&&j.query.search&&j.query.search[0]){
+let pageTitle=j.query.search[0].title;
+let sumUrl=`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(pageTitle)}`;
+let r2=await fetch(sumUrl,{cache:'no-store'});
+let d2=await r2.json();
+if(d2.extract&&d2.extract.length>30){
+let pulito=pulisciWikiTesto(d2.extract);
+if(pulito){window._wikiCache[cacheKey]=pulito;return pulito;}
+}
+}
+}catch(e){}
+return null;
+}
+
+async function aggiornaInfoBranoSottoMeteo(artista,titolo,data){
 const box=document.getElementById('infoBranoContentLeft');if(!box)return;
 let album=data&&data.album?data.album:null;let year=data&&data.year?data.year:null;
 let cur=getInfoLocale(titolo,artista);
+let isLocal=true;
+if(!cur){
+isLocal=false;
+box.innerHTML=`<div class="info-riga-left">🎵 <b style="color:#ffd966">${titolo}</b> - ${artista}</div><div style="padding:8px;color:#aaa;font-size:0.75rem">🔍 Cerco curiosità per milioni di brani...</div>`;
+let wiki=await fetchWikipediaAuto(artista,titolo);
+if(wiki)cur=wiki;
+}
 let html='';html+=`<div class="info-riga-left">🎵 <b style="color:#ffd966">${titolo}</b> - ${artista}</div>`;
 if(album||year){html+=`<div class="info-riga-left" style="font-size:0.70rem;color:#aaa">💿 ${album||''} ${year?'('+year+')':''}</div>`;}
-if(cur){html+=`<div style="margin-top:8px;padding:8px;background:rgba(255,255,255,.08);border-left:3px solid #ffd966;border-radius:6px;font-size:0.80rem;line-height:1.45;color:#fff">✨ ${cur}</div>`;}
-else{let fb=album?`Curiosità: dall'album "${album}"${year?' del '+year:''}. Brano storico in rotazione su RS3 anni 60-90!`:`Brano storico ${year||''} - I grandi successi di Radio Sistema 3!`;html+=`<div style="margin-top:8px;padding:8px;background:rgba(255,255,255,.05);border-radius:6px;font-size:0.78rem;color:#ccc">✨ ${fb}</div>`;}
+if(cur){
+let icon=isLocal?"✨":"🌍";
+let badge=isLocal?'<span style="background:#ffd966;color:#000;font-size:0.55rem;padding:1px 5px;border-radius:8px;margin-left:6px">LOCALE</span>':'<span style="background:#00ff88;color:#000;font-size:0.55rem;padding:1px 5px;border-radius:8px;margin-left:6px">AUTO WIKI</span>';
+html+=`<div style="margin-top:8px;padding:8px;background:${isLocal?'rgba(255,217,102,.10)':'rgba(0,255,136,.08)'};border-left:3px solid ${isLocal?'#ffd966':'#00ff88'};border-radius:6px;font-size:0.80rem;line-height:1.45;color:#fff">${icon} ${cur} ${badge}</div>`;
+}else{
+let fb=album?`Dall'album "${album}"${year?' del '+year:''}. Brano in rotazione RS3!`:`Brano ${year||''} in rotazione!`;
+html+=`<div style="margin-top:8px;padding:8px;background:rgba(255,255,255,.05);border-radius:6px;font-size:0.78rem;color:#ccc">✨ ${fb}</div>`;
+}
 box.innerHTML=html;
 }
+
 async function rebuildTrackBox(){
 const mioBox=creaMioBox();const hidden=document.querySelector('.cc_recenttracks_list');if(!mioBox)return;
 let rawImg=getLogoAssoluto();
@@ -229,27 +252,28 @@ if(titleEl&&artistEl){let art=artistEl.innerText.trim();let tit=titleEl.innerTex
 if(righe.length>=1){
 let rawCombined=righe.join(' ');rawCombined=rimuoviTitoloDuplicato(rawCombined);let parsed=parseArtistTitleSmart(rawCombined);let titolo=parsed.titolo;let artista=parsed.artista;if(!titolo||titolo.length<2)return;
 let txt=titolo+" - "+artista;if(txt===_lastRaw)return;_lastRaw=txt;
-let info=mioBox.querySelector('.rs3-info');if(info){info.innerHTML=`<div style="font-weight:900;color:#fff;font-size:1.10rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${titolo}">${titolo}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${artista}">${artista||'Radio Sistema 3'}</div>`;}
-const cov=mioBox.querySelector('.rs3-cover');if(cov){cov.src=rawImg;if(artista||titolo){let data=await fetchCopertinaBranoConAnno(artista,titolo);if(data.url&&cov)cov.src=data.url;if(info){let annoHtml=data.year?`<div style="align-self:flex-start;width:fit-content;display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#ffd966 0%,#ff9a00 100%);color:#000;font-weight:900;font-size:0.80rem;padding:3px 10px;border-radius:12px;margin-top:5px;">📅 ${data.year}</div>`:'';info.innerHTML=`<div style="font-weight:900;color:#fff;font-size:1.10rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${titolo}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${artista||'Radio Sistema 3'}</div>${annoHtml}`;}try{aggiornaInfoBranoSottoMeteo(artista,titolo,data);}catch(e){}}}
+let info=mioBox.querySelector('.rs3-info');if(info){info.innerHTML=`<div style="font-weight:900;color:#fff;font-size:1.10rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${titolo}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${artista||'Radio Sistema 3'}</div>`;}
+const cov=mioBox.querySelector('.rs3-cover');if(cov){cov.src=rawImg;if(artista||titolo){let data=await fetchCopertinaBranoConAnno(artista,titolo);if(data.url&&cov)cov.src=data.url;if(info){let annoHtml=data.year?`<div style="align-self:flex-start;width:fit-content;display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#ffd966 0%,#ff9a00 100%);color:#000;font-weight:900;font-size:0.80rem;padding:3px 10px;border-radius:12px;margin-top:5px;">📅 ${data.year}</div>`:'';info.innerHTML=`<div style="font-weight:900;color:#fff;font-size:1.10rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${titolo}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${artista||'Radio Sistema 3'}</div>${annoHtml}`;}try{await aggiornaInfoBranoSottoMeteo(artista,titolo,data);}catch(e){}}}
 }
 }catch(e){}
 }
 const list=document.querySelector('.cc_recenttracks_list');if(list){const obs=new MutationObserver(()=>{rebuildTrackBox();});obs.observe(list,{childList:true,subtree:true,characterData:true});}
 let _fastInterval=setInterval(()=>{creaMioBox();rebuildTrackBox();},500);setTimeout(()=>{clearInterval(_fastInterval);_fastInterval=setInterval(rebuildTrackBox,2000);},20000);
 document.addEventListener('DOMContentLoaded',()=>{creaMioBox();rebuildTrackBox();});creaMioBox();rebuildTrackBox();
+
+// METEO
 const CITIES_COORDS={"Torino":{lat:45.07,lon:7.68},"Milano":{lat:45.46,lon:9.19},"Venezia":{lat:45.44,lon:12.33},"Bologna":{lat:44.49,lon:11.34},"Firenze":{lat:43.77,lon:11.25},"Roma":{lat:41.90,lon:12.49},"Ancona":{lat:43.61,lon:13.51},"Napoli":{lat:40.85,lon:14.26},"Palermo":{lat:38.11,lon:13.36},"Brindisi":{lat:40.63,lon:17.94}};
 const LEFT=[{label:"Torino"},{label:"Milano"},{label:"Venezia"},{label:"Bologna"},{label:"Firenze"}];const RIGHT=[{label:"Roma"},{label:"Ancona"},{label:"Napoli"},{label:"Palermo"},{label:"Brindisi"}];
 async function renderMeteo(cities,id){const grid=document.getElementById(id);if(!grid)return;let h="";for(let c of cities){try{const coord=CITIES_COORDS[c.label];const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coord.lat}&longitude=${coord.lon}&current=temperature_2m,weather_code&timezone=Europe%2FRome&_t=${Date.now()}`,{cache:'no-store'});const d=await r.json();const temp=Math.round(d.current.temperature_2m);const code=d.current.weather_code;let icon="01d";if(code===1||code===2)icon="02d";if(code===3)icon="03d";if(code===45||code===48)icon="50d";if(code>=51&&code<=67)icon="09d";if(code>=71&&code<=77)icon="13d";if(code>=80&&code<=82)icon="09d";if(code>=95)icon="11d";h+=`<div class="meteo-mini"><b>${c.label}</b><img src="https://openweathermap.org/img/wn/${icon}.png"><div class="temp">${temp}°C</div></div>`;}catch(e){h+=`<div class="meteo-mini"><b>${c.label}</b><div class="temp">--°</div></div>`;}}grid.innerHTML=h;}
 function caricaMeteo(){if(document.documentElement.classList.contains('is-popup'))return;renderMeteo(LEFT,'meteo-left');renderMeteo(RIGHT,'meteo-right');}
 
-// FIX CRONACA/SPORT - 4 PROXY + APERTURA SICURA
+// CRONACA SPORT FIX 4 PROXY
 async function fetchRSS_UltraFix(url){
 const ts=Date.now();const clean=url+(url.includes('?')?'&':'?')+'t='+ts;
 const proxies=[
 async()=>{const r=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(clean)}`,{cache:'no-store'});const j=await r.json();return j.contents;},
 async()=>{const r=await fetch(`https://corsproxy.io/?${encodeURIComponent(clean)}`,{cache:'no-store'});return await r.text();},
-async()=>{const r=await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&_t=${ts}`,{cache:'no-store'});const d=await r.json();if(d.items){let f='<rss><channel>';d.items.slice(0,10).forEach(it=>{f+=`<item><title><![CDATA[${it.title}]]></title><link>${it.link}</link></item>`;});f+='</channel></rss>';return f;}throw 0;},
-async()=>{const r=await fetch(`https://thingproxy.freeboard.io/fetch/${clean}`,{cache:'no-store'});return await r.text();}
+async()=>{const r=await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&_t=${ts}`,{cache:'no-store'});const d=await r.json();if(d.items){let f='<rss><channel>';d.items.slice(0,10).forEach(it=>{f+=`<item><title><![CDATA[${it.title}]]></title><link>${it.link}</link></item>`;});f+='</channel></rss>';return f;}throw 0;}
 ];
 for(let fn of proxies){
 try{
@@ -271,7 +295,7 @@ try{
 const notizie=await fetchMultiFix(['https://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml','https://www.ansa.it/sito/notizie/topnews/topnews_rss.xml']);
 if(notizie.length){box.innerHTML=notizie.map(n=>`<div class="news-item"><a href="${n.link}" target="_blank" rel="noopener noreferrer" onclick="window.open('${n.link}','_blank');return false;">${n.title}</a><div style="font-size:0.70rem;color:#aaa;margin-top:3px">Leggi su ${safeHost(n.link)} →</div></div>`).join('');if(t)t.textContent=new Date().toLocaleTimeString();}
 else{box.innerHTML=`<div class="news-item"><a href="https://www.ansa.it/" target="_blank">ANSA Cronaca - Clicca qui</a></div>`;}
-}catch(e){box.innerHTML=`<div class="news-item"><a href="https://www.ansa.it/" target="_blank">ANSA Cronaca - Clicca qui</a></div>`;}
+}catch(e){box.innerHTML=`<div class="news-item"><a href="https://www.ansa.it/" target="_blank">ANSA Cronaca</a></div>`;}
 }
 async function caricaCalcio(){
 const box=document.getElementById('newsListCalcio');const t=document.getElementById('calcioTime');
@@ -285,9 +309,8 @@ else{box.innerHTML=`<div class="news-item calcio"><a href="https://www.tuttomerc
 <script>
 const vuCanvas=document.getElementById('vuCanvas');const vuCtx=vuCanvas.getContext('2d');const vuPeakEl=document.getElementById('vuPeak');
 let isPlaying=false,lL=0,lR=0;let audioCtx=null,analyser=null,dataArray=null,sourceNode=null,realMode=false;let radioEl=document.getElementById('radioAudio');let userPaused=true;let wasPlayingBeforeHide=false;let _lastPauseTs=0;let _isRecreating=false;
-function initRealVU(){try{if(/Mobi|Android|iPhone/i.test(navigator.userAgent)){realMode=false;return false;}if(audioCtx){if(audioCtx.state==='suspended')audioCtx.resume();return realMode;}audioCtx=new(window.AudioContext||window.webkitAudioContext)();analyser=audioCtx.createAnalyser();analyser.fftSize=512;analyser.smoothingTimeConstant=0.75;dataArray=new Uint8Array(analyser.frequencyBinCount);sourceNode=audioCtx.createMediaElementSource(radioEl);sourceNode.connect(analyser);analyser.connect(audioCtx.destination);realMode=true;return true;}catch(e){realMode=false;return false;}}
-function attachAudioListeners(){radioEl.addEventListener('pause',()=>{if(_isRecreating)return;isPlaying=false;vuPeakEl.textContent="STOP";vuPeakEl.style.color="#ff4444";_lastPauseTs=Date.now();if(window._pausedForPopup||window._pausedForPlaylist){return;}if(document.hidden){wasPlayingBeforeHide=!userPaused;return;}userPaused=true;wasPlayingBeforeHide=false;});radioEl.addEventListener('play',(e)=>{if(_isRecreating)return;if(userPaused&&(Date.now()-_lastPauseTs)>300){try{e.preventDefault();radioEl.pause();}catch(er){}createFreshAudioAndPlay();return;}isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;try{if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();}catch(e){}try{initRealVU();}catch(e){}});}
-function createFreshAudioAndPlay(){_isRecreating=true;const old=document.getElementById('radioAudio');try{old.pause();old.src='';old.load();}catch(e){}const fresh=document.createElement('audio');fresh.id='radioAudio';fresh.controls=true;fresh.preload='none';fresh.playsInline=true;fresh.crossOrigin='anonymous';fresh.setAttribute('webkit-playsinline','');fresh.src="https://listentomystream.com:8046/stream?_t="+Date.now();try{old.parentNode.replaceChild(fresh,old);}catch(e){document.querySelector('.player-box').prepend(fresh);}radioEl=fresh;attachAudioListeners();try{audioCtx=null;analyser=null;dataArray=null;sourceNode=null;realMode=false;}catch(e){}return fresh.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;setTimeout(()=>{_isRecreating=false;},600);}).catch(()=>{_isRecreating=false;});}
+function attachAudioListeners(){radioEl.addEventListener('pause',()=>{if(_isRecreating)return;isPlaying=false;vuPeakEl.textContent="STOP";vuPeakEl.style.color="#ff4444";_lastPauseTs=Date.now();if(window._pausedForPopup||window._pausedForPlaylist){return;}if(document.hidden){wasPlayingBeforeHide=!userPaused;return;}userPaused=true;wasPlayingBeforeHide=false;});radioEl.addEventListener('play',(e)=>{if(_isRecreating)return;if(userPaused&&(Date.now()-_lastPauseTs)>300){try{e.preventDefault();radioEl.pause();}catch(er){}createFreshAudioAndPlay();return;}isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;});}
+function createFreshAudioAndPlay(){_isRecreating=true;const old=document.getElementById('radioAudio');try{old.pause();old.src='';old.load();}catch(e){}const fresh=document.createElement('audio');fresh.id='radioAudio';fresh.controls=true;fresh.preload='none';fresh.playsInline=true;fresh.crossOrigin='anonymous';fresh.setAttribute('webkit-playsinline','');fresh.src="https://listentomystream.com:8046/stream?_t="+Date.now();try{old.parentNode.replaceChild(fresh,old);}catch(e){document.querySelector('.player-box').prepend(fresh);}radioEl=fresh;attachAudioListeners();return fresh.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;setTimeout(()=>{_isRecreating=false;},600);}).catch(()=>{_isRecreating=false;});}
 function tryAutoPlay(){return createFreshAudioAndPlay();}
 attachAudioListeners();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&wasPlayingBeforeHide&&radioEl.paused&&!userPaused&&!window._pausedForPopup&&!window._pausedForPlaylist){tryAutoPlay();}});
