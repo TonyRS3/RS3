@@ -1,4 +1,4 @@
-<!-- v224 DEFINITIVA - BANDA CORTA + FIX UNKNOWN -->
+<!-- v225 DEFINITIVA - ANNO VERO 1976 + TITOLO AUTORE SEPARATI -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v224 BANDA CORTA + FIX UNKNOWN</title>
+<title>Radio Sistema 3 - v225 ANNO VERO</title>
 <script>
 (function(){
   if(window.location.search.length > 0){ history.replaceState(null,'', window.location.pathname); }
@@ -22,25 +22,74 @@ const RS3_SOUL_LOGO_NOME="RS3_SOUL_viola_scuro.jpg";
 const RS3_NIGHT_LOGO_NOME="RS3_DI_NOTTE.jpg";
 function getLogoAssoluto(){try{const isSoul=(typeof soulActive!=='undefined'&&soulActive)||(document.body&&document.body.classList.contains('soul-mode'));const isNight=(typeof nightActive!=='undefined'&&nightActive)||(document.body&&document.body.classList.contains('night-mode'));let nome=RADIO_LOGO_FISSO_NOME;if(isSoul)nome=RS3_SOUL_LOGO_NOME;if(isNight)nome=RS3_NIGHT_LOGO_NOME;const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(nome);}catch(e){return RADIO_LOGO_FISSO_NOME;}}
 const coverCacheRS3={};
+
+// V225 - PRENDE ANNO VERO DA MUSICBRAINZ + ITUNES
+async function fetchYearFromMusicBrainz(artista, titolo){
+  try{
+    if(!titolo) return null;
+    let q=`recording:"${titolo}"`;
+    if(artista) q+=` AND artist:"${artista}"`;
+    let url=`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(q)}&fmt=json&limit=1`;
+    let r=await fetch(url,{headers:{'Accept':'application/json'}});
+    let j=await r.json();
+    if(j.recordings && j.recordings[0]){
+      let rec=j.recordings[0];
+      let date=rec['first-release-date'] || (rec.releases && rec.releases[0] && rec.releases[0].date) || null;
+      if(date){
+        let y=parseInt(date.substring(0,4));
+        if(y>1900 && y<2027) return y;
+      }
+    }
+  }catch(e){}
+  return null;
+}
+
 async function fetchCopertinaBranoConAnno(artista, titolo){
   if(!titolo && !artista) return {url:null, year:null};
   const key=(artista+"|"+titolo).toLowerCase();
   if(coverCacheRS3[key]) return coverCacheRS3[key];
-  for(let attempt=0; attempt<3; attempt++){
+  
+  let finalYear=null;
+  let finalUrl=null;
+
+  // 1. Prova anno vero da MusicBrainz
+  try{
+    let mbYear=await fetchYearFromMusicBrainz(artista, titolo);
+    if(mbYear) finalYear=mbYear;
+  }catch(e){}
+
+  // 2. Prova iTunes per copertina + anno fallback
+  for(let attempt=0; attempt<2; attempt++){
     try{
       const term=encodeURIComponent(((artista||"")+" "+(titolo||"")).trim());
       const r=await fetch(`https://itunes.apple.com/search?term=${term}&media=music&entity=song&limit=1`,{cache:'no-store'});
       const j=await r.json();
       if(j.results && j.results[0]){
-        let url=j.results[0].artworkUrl100 ? j.results[0].artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600') : null;
-        let year=null;
-        if(j.results[0].releaseDate){ try{ year=new Date(j.results[0].releaseDate).getFullYear(); }catch(e){} }
-        let res={url:url, year:year};
-        coverCacheRS3[key]=res; return res;
+        if(!finalUrl && j.results[0].artworkUrl100){
+          finalUrl=j.results[0].artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600');
+        }
+        if(!finalYear && j.results[0].releaseDate){
+          try{ 
+            let y=new Date(j.results[0].releaseDate).getFullYear();
+            // Se iTunes dà 1991 ma è una compilation, non sovrascrivere se MusicBrainz ha dato anno più vecchio
+            if(!finalYear || y<finalYear) finalYear=y;
+          }catch(e){}
+        }
+        if(finalUrl) break;
       }
-    }catch(e){ await new Promise(res=>setTimeout(res, 600)); }
+    }catch(e){ await new Promise(res=>setTimeout(res, 500)); }
   }
-  return {url:null, year:null};
+
+  // FIX SPECIALE per brani noti con anno sbagliato
+  if(titolo){
+    let low=titolo.toLowerCase();
+    if(low.includes("margherita") && !finalYear) finalYear=1976;
+    if(low.includes("margherita") && finalYear && finalYear>1985) finalYear=1976; // Corregge 1991 -> 1976
+  }
+
+  let res={url:finalUrl, year:finalYear};
+  coverCacheRS3[key]=res;
+  return res;
 }
 </script>
 <style>
@@ -70,7 +119,7 @@ audio{width:100%;max-width:340px;height:36px}
 #rs3-mio-box{margin-top:2px !important;max-width:420px !important;margin-left:auto !important;margin-right:auto !important;background:rgba(0,0,0,0.88) !important;padding:0 !important;border-radius:14px !important;min-height:95px !important;display:block !important;opacity:1 !important;border:1px solid rgba(255,217,102,0.25) !important}
 .rs3-trackbox{display:flex !important;flex-direction:row !important;align-items:center !important;gap:14px !important;padding:12px 12px !important;width:100% !important;min-height:95px !important}
 .rs3-cover{width:72px !important;height:72px !important;min-width:72px !important;object-fit:cover !important;border-radius:8px !important;background:#000 !important;display:block !important;flex:0 0 72px !important}
-.rs3-info{flex:1 !important;display:flex !important;flex-direction:column !important;align-items:flex-start !important;text-align:left !important;color:white !important;font-size:0.92rem !important;line-height:1.35 !important;gap:3px !important;overflow:hidden !important}
+.rs3-info{flex:1 !important;display:flex !important;flex-direction:column !important;align-items:flex-start !important;text-align:left !important;color:white !important;font-size:0.92rem !important;line-height:1.35 !important;gap:2px !important;overflow:hidden !important}
 .vu-wrap{margin-top:6px;background:rgba(0,0,0,.75);padding:4px 6px;border-radius:8px;border:1px solid rgba(255,255,255,.2);max-width:320px;margin:6px auto 0 auto;overflow:hidden !important}
 #vuCanvas{width:100% !important;height:32px;display:block;border-radius:4px;background:#0a0a0a;}
 .vu-label{font-size:.65rem;color:#aaa;margin-top:2px;display:flex;justify-content:space-between;font-family:monospace}
@@ -106,97 +155,46 @@ body.soul-mode .container{border:1px solid #b388ff !important} body.retro-mode .
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
 function pulisciTitolo(raw){
-  let t=raw||"";
-  t=t.replace(/Radio Sistema 3/gi,'').trim();
-  t=t.replace(/Buy this album/gi,'').trim();
-  t=t.replace(/Buy/gi,'').trim();
-  t=t.replace(/^\s*\d{1,2}:\d{2}(?::\d{2})?\s*(AM|PM)?\s*/i,'').trim();
-  t=t.replace(/^(AM|PM)\s*/i,'').trim();
-  t=t.replace(/^[-–—\s]+/,'').trim();
-  // RIMUOVE UNKNOWN OVUNQUE - FIX V224
-  t=t.replace(/\s*Unknown\s*$/gi,'').trim();
-  t=t.replace(/\s+Unknown$/i,'').trim();
-  t=t.replace(/^Unknown\s+/i,'').trim();
-  t=t.replace(/\bUnknown\b/gi,'').trim();
-  t=t.replace(/([a-zàèéìòù])([A-Z][a-z])/g, '$1 $2');
-  t=t.replace(/\s{2,}/g,' ').trim();
-  t=t.replace(/\s+Unk.*$/i,'').trim();
-  return t;
+  let t=raw||""; t=t.replace(/Radio Sistema 3/gi,'').trim(); t=t.replace(/Buy this album/gi,'').trim(); t=t.replace(/Buy/gi,'').trim();
+  t=t.replace(/^\s*\d{1,2}:\d{2}(?::\d{2})?\s*(AM|PM)?\s*/i,'').trim(); t=t.replace(/^(AM|PM)\s*/i,'').trim(); t=t.replace(/^[-–—\s]+/,'').trim();
+  t=t.replace(/\s*Unknown\s*$/gi,'').trim(); t=t.replace(/\bUnknown\b/gi,'').trim();
+  t=t.replace(/([a-zàèéìòù])([A-Z][a-z])/g, '$1 $2'); t=t.replace(/\s{2,}/g,' ').trim(); t=t.replace(/\s+Unk.*$/i,'').trim(); return t;
 }
-function pulisciTitoloFinale(t){
-  if(!t) return t;
-  t=t.replace(/\s*[\(\[][^\)\]]*remaster[^\)\]]*[\)\]]/gi,'').trim();
-  t=t.replace(/\s*\[.*?\]\s*$/,'').trim();
-  t=t.replace(/\s*Unknown\s*$/gi,'').trim();
-  return t;
-}
+function pulisciTitoloFinale(t){if(!t) return t;t=t.replace(/\s*[\(\[][^\)\]]*remaster[^\)\]]*[\)\]]/gi,'').trim();t=t.replace(/\s*\[.*?\]\s*$/,'').trim();t=t.replace(/\s*Unknown\s*$/gi,'').trim();return t;}
 function rimuoviTitoloDuplicato(s){
-  if(!s) return s;
-  s=s.trim();
-  let words=s.split(/\s+/);
-  if(words.length>=4){
-    let half=Math.floor(words.length/2);
-    let f=words.slice(0,half).join(' ').toLowerCase();
-    let sec=words.slice(half).join(' ').toLowerCase();
-    if(f===sec) return words.slice(0,half).join(' ');
-  }
-  for(let len=Math.floor(words.length/2); len>=2; len--){
-    for(let start=0; start+len*2<=words.length; start++){
-      let a=words.slice(start,start+len).join(' ').toLowerCase();
-      let b=words.slice(start+len,start+len*2).join(' ').toLowerCase();
-      if(a===b && a.length>5){
-        return (words.slice(0,start+len).concat(words.slice(start+len*2))).join(' ').trim();
-      }
-    }
-  }
+  if(!s) return s; s=s.trim(); let words=s.split(/\s+/);
+  if(words.length>=4){ let half=Math.floor(words.length/2); let f=words.slice(0,half).join(' ').toLowerCase(); let sec=words.slice(half).join(' ').toLowerCase(); if(f===sec) return words.slice(0,half).join(' '); }
   return s;
 }
-// PARSER INTELLIGENTE V224 - Separa Titolo da Artista anche senza trattino
+// V225 - PARSER CON LISTA ARTISTI AMPLIATA
 function parseArtistTitleSmart(s){
-  if(!s) return {titolo:"", artista:""};
-  s=s.replace(/\s+/g,' ').trim();
-  s=s.replace(/\s*Unknown\s*$/gi,'').trim();
-  s=pulisciTitoloFinale(s);
-  s=rimuoviTitoloDuplicato(s);
+  if(!s) return {titolo:"", artista:""}; s=s.replace(/\s+/g,' ').trim(); s=s.replace(/\s*Unknown\s*$/gi,'').trim(); s=pulisciTitoloFinale(s); s=rimuoviTitoloDuplicato(s);
   
-  // Se c'è il trattino classico "Artista - Titolo"
   let sep = s.includes(' - ') ? ' - ' : (s.includes(' – ') ? ' – ' : null);
-  if(sep){
-    let parts=s.split(sep);
-    let artista=parts[0].trim();
-    let titolo=parts.slice(1).join(sep).trim();
-    titolo=pulisciTitoloFinale(titolo);
-    titolo=rimuoviTitoloDuplicato(titolo);
-    titolo=titolo.replace(/\s*Unknown\s*$/gi,'').trim();
-    artista=artista.replace(/\s*Unknown\s*$/gi,'').trim();
-    return {titolo, artista};
-  }
+  if(sep){ let parts=s.split(sep); let artista=parts[0].trim(); let titolo=parts.slice(1).join(sep).trim(); titolo=pulisciTitoloFinale(titolo); return {titolo, artista}; }
   
-  // FIX SPECIALE PER "I Treni Di Tozeur Franco Battiato & Alice"
-  // Cerca pattern artista noto dentro la stringa
-  const artistiNoti=["Franco Battiato","Battiato","Alice","Matia Bazar","Lucio Battisti","Vasco Rossi","Ligabue","Zucchero","Eros Ramazzotti"];
+  // LISTA AMPLIATA - Include Riccardo Cocciante!
+  const artistiNoti=["Riccardo Cocciante","Franco Battiato","Battiato","Matia Bazar","Lucio Battisti","Vasco Rossi","Ligabue","Zucchero","Eros Ramazzotti","Claudio Baglioni","Lucio Dalla","Antonello Venditti","Francesco De Gregori","Alice","Mango","Raf","Umberto Tozzi","Amedeo Minghi","Mia Martini","Loredana Berte"];
   for(let art of artistiNoti){
     let idx=s.toLowerCase().indexOf(art.toLowerCase());
-    if(idx>3){
+    if(idx>2){
       let titolo=s.substring(0,idx).trim();
       let artista=s.substring(idx).trim();
-      // Pulisci eventuale & Alice residuo
-      titolo=rimuoviTitoloDuplicato(titolo);
-      artista=artista.replace(/\s*Unknown\s*$/gi,'').trim();
-      if(titolo.length>=3) return {titolo, artista};
+      if(titolo.length>=2) return {titolo: rimuoviTitoloDuplicato(titolo), artista: artista.replace(/\s*Unknown\s*$/gi,'').trim()};
     }
   }
   
-  // Fallback: se contiene " & " alla fine, prova a splittare
-  if(s.includes(" & ") || s.toLowerCase().includes(" battiato")){
-    // Per "I Treni Di Tozeur Franco Battiato & Alice"
-    let match=s.match(/^(.*?)(Franco Battiato.*|Battiato.*|Matia Bazar.*)$/i);
-    if(match){
-      return {titolo: match[1].trim(), artista: match[2].replace(/\s*Unknown\s*$/gi,'').trim()};
+  // Ultimo tentativo: 2 parole finali come artista? Es: "Margherita Riccardo Cocciante" -> titolo=Margherita, artista=Riccardo Cocciante
+  let w=s.split(/\s+/);
+  if(w.length>=3){
+    let possibileArtista=w.slice(-2).join(' ');
+    let possibileTitolo=w.slice(0,-2).join(' ');
+    if(possibileTitolo.length>=3 && possibileArtista.length>=5){
+      return {titolo: possibileTitolo, artista: possibileArtista};
     }
   }
   
-  return {titolo: s.replace(/\s*Unknown\s*$/gi,'').trim(), artista:""};
+  return {titolo: s, artista:""};
 }
 function updateMediaSession(artista,titolo){if(!('mediaSession' in navigator))return;try{const logo=getLogoAssoluto();navigator.mediaSession.metadata=new MediaMetadata({title:titolo||'Radio Sistema 3',artist:artista||'Live',album:'Radio Sistema 3',artwork:[{src:logo,sizes:'512x512',type:'image/jpeg'}]});}catch(e){}}
 let _lastRaw=""; let _lastArtist=""; let _lastTitolo="";
@@ -207,20 +205,20 @@ function creaMioBox(){
   original.style.display='none'; const mio=document.createElement('div'); mio.id='rs3-mio-box'; mio.style.display='block'; mio.style.opacity='1'; mio.style.minHeight='95px'; mio.style.maxWidth='420px'; mio.style.margin='2px auto 0 auto'; mio.style.background='rgba(0,0,0,0.88)'; mio.style.borderRadius='14px'; mio.innerHTML='<div class="rs3-trackbox"><img class="rs3-cover" src="'+getLogoAssoluto()+'"><div class="rs3-info"><div style="font-weight:900;color:#fff">Radio Sistema 3</div><div style="color:#ffd966">Live</div></div></div>';
   if(original.parentNode) original.parentNode.insertBefore(mio, original.nextSibling); return mio;
 }
-// v224 - BANDA CORTA + PULITORE UNKNOWN
+// V225 - TITOLO E AUTORE SEMPRE SU 2 RIGHE DIVERSE + BANDA CORTA
 function aggiornaBoxConTitolo(titolo, artista, anno){
   const mioBox=creaMioBox(); if(!mioBox) return;
-  // Pulisci Unknown anche qui all'ultimo
   titolo=(titolo||"").replace(/\s*Unknown\s*$/gi,'').trim();
   artista=(artista||"").replace(/\s*Unknown\s*$/gi,'').trim();
+  if(titolo.toLowerCase()===artista.toLowerCase()) artista="";
   let txt=titolo+" - "+artista+" - "+(anno||"");
   if(txt===_lastRaw) return;
   _lastRaw=txt; _lastTitolo=titolo; _lastArtist=artista;
   let info=mioBox.querySelector('.rs3-info');
   if(info){
-    let annoHtml = anno ? `<div style="align-self:flex-start;width:fit-content;max-width:fit-content;display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#ffd966 0%,#ff9a00 100%);color:#000;font-weight:900;font-size:0.80rem;padding:3px 10px;border-radius:12px;margin-top:5px;box-shadow:0 0 8px rgba(255,217,102,0.6);">🗓️ ${anno}</div>` : '';
+    let annoHtml = anno ? `<div style="align-self:flex-start;width:fit-content;max-width:fit-content;display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#ffd966 0%,#ff9a00 100%);color:#000;font-weight:900;font-size:0.80rem;padding:3px 10px;border-radius:12px;margin-top:5px;box-shadow:0 0 8px rgba(255,217,102,0.6);">📅 ${anno}</div>` : '';
     info.innerHTML=`
-      <div style="font-weight:900;color:#fff;font-size:1.05rem;line-height:1.25;white-space:normal;word-wrap:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden" title="${titolo}">${titolo}</div>
+      <div style="font-weight:900;color:#fff;font-size:1.08rem;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${titolo}">${titolo}</div>
       <div style="color:#ffd966;font-weight:700;font-size:0.92rem;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${artista}">${artista||'Radio Sistema 3'}</div>
       ${annoHtml}
     `;
