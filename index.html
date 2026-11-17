@@ -1,4 +1,4 @@
-<!-- v225 DEFINITIVA - ANNO VERO 1976 + TITOLO AUTORE SEPARATI -->
+<!-- v227 AUTOMATICA - ANNO PIU VECCHIO DA MUSICBRAINZ - 2 RIGHE OK -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v225 ANNO VERO</title>
+<title>Radio Sistema 3 - v227 ANNO AUTOMATICO</title>
 <script>
 (function(){
   if(window.location.search.length > 0){ history.replaceState(null,'', window.location.pathname); }
@@ -23,22 +23,39 @@ const RS3_NIGHT_LOGO_NOME="RS3_DI_NOTTE.jpg";
 function getLogoAssoluto(){try{const isSoul=(typeof soulActive!=='undefined'&&soulActive)||(document.body&&document.body.classList.contains('soul-mode'));const isNight=(typeof nightActive!=='undefined'&&nightActive)||(document.body&&document.body.classList.contains('night-mode'));let nome=RADIO_LOGO_FISSO_NOME;if(isSoul)nome=RS3_SOUL_LOGO_NOME;if(isNight)nome=RS3_NIGHT_LOGO_NOME;const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(nome);}catch(e){return RADIO_LOGO_FISSO_NOME;}}
 const coverCacheRS3={};
 
-// V225 - PRENDE ANNO VERO DA MUSICBRAINZ + ITUNES
+// V227 - ANNO AUTOMATICO - PRENDE ANNO PIU VECCHIO DA MUSICBRAINZ
 async function fetchYearFromMusicBrainz(artista, titolo){
   try{
     if(!titolo) return null;
     let q=`recording:"${titolo}"`;
     if(artista) q+=` AND artist:"${artista}"`;
-    let url=`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(q)}&fmt=json&limit=1`;
-    let r=await fetch(url,{headers:{'Accept':'application/json'}});
+    // Cerca recording con releases
+    let url=`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(q)}&fmt=json&limit=5`;
+    let r=await fetch(url);
     let j=await r.json();
-    if(j.recordings && j.recordings[0]){
-      let rec=j.recordings[0];
-      let date=rec['first-release-date'] || (rec.releases && rec.releases[0] && rec.releases[0].date) || null;
-      if(date){
-        let y=parseInt(date.substring(0,4));
-        if(y>1900 && y<2027) return y;
+    if(!j.recordings || j.recordings.length===0) return null;
+    
+    let anni=[];
+    for(let rec of j.recordings.slice(0,3)){
+      // 1. first-release-date
+      if(rec['first-release-date']){
+        let y=parseInt(rec['first-release-date'].substring(0,4));
+        if(y>1900 && y<2027) anni.push(y);
       }
+      // 2. Tutte le releases
+      if(rec.releases){
+        for(let rel of rec.releases){
+          if(rel.date){
+            let y=parseInt(rel.date.substring(0,4));
+            if(y>1900 && y<2027) anni.push(y);
+          }
+        }
+      }
+    }
+    if(anni.length>0){
+      // Prende ANNO PIU VECCHIO - quello originale, non ristampa!
+      anni.sort((a,b)=>a-b);
+      return anni[0];
     }
   }catch(e){}
   return null;
@@ -52,13 +69,13 @@ async function fetchCopertinaBranoConAnno(artista, titolo){
   let finalYear=null;
   let finalUrl=null;
 
-  // 1. Prova anno vero da MusicBrainz
+  // 1. ANNO VERO - MusicBrainz anno più vecchio (AUTOMATICO)
   try{
     let mbYear=await fetchYearFromMusicBrainz(artista, titolo);
     if(mbYear) finalYear=mbYear;
   }catch(e){}
 
-  // 2. Prova iTunes per copertina + anno fallback
+  // 2. Copertina da iTunes (SOLO copertina, NON anno)
   for(let attempt=0; attempt<2; attempt++){
     try{
       const term=encodeURIComponent(((artista||"")+" "+(titolo||"")).trim());
@@ -68,23 +85,17 @@ async function fetchCopertinaBranoConAnno(artista, titolo){
         if(!finalUrl && j.results[0].artworkUrl100){
           finalUrl=j.results[0].artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600');
         }
+        // iTunes anno SOLO se MusicBrainz non ha trovato nulla
         if(!finalYear && j.results[0].releaseDate){
           try{ 
             let y=new Date(j.results[0].releaseDate).getFullYear();
-            // Se iTunes dà 1991 ma è una compilation, non sovrascrivere se MusicBrainz ha dato anno più vecchio
-            if(!finalYear || y<finalYear) finalYear=y;
+            // Evita anni troppo recenti per brani vecchi
+            if(y>1900 && y<2027) finalYear=y;
           }catch(e){}
         }
         if(finalUrl) break;
       }
     }catch(e){ await new Promise(res=>setTimeout(res, 500)); }
-  }
-
-  // FIX SPECIALE per brani noti con anno sbagliato
-  if(titolo){
-    let low=titolo.toLowerCase();
-    if(low.includes("margherita") && !finalYear) finalYear=1976;
-    if(low.includes("margherita") && finalYear && finalYear>1985) finalYear=1976; // Corregge 1991 -> 1976
   }
 
   let res={url:finalUrl, year:finalYear};
@@ -154,6 +165,7 @@ body.soul-mode .container{border:1px solid #b388ff !important} body.retro-mode .
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
+// PULITORI - IDENTICI A v226 - NON TOCCO 2 RIGHE
 function pulisciTitolo(raw){
   let t=raw||""; t=t.replace(/Radio Sistema 3/gi,'').trim(); t=t.replace(/Buy this album/gi,'').trim(); t=t.replace(/Buy/gi,'').trim();
   t=t.replace(/^\s*\d{1,2}:\d{2}(?::\d{2})?\s*(AM|PM)?\s*/i,'').trim(); t=t.replace(/^(AM|PM)\s*/i,'').trim(); t=t.replace(/^[-–—\s]+/,'').trim();
@@ -161,39 +173,17 @@ function pulisciTitolo(raw){
   t=t.replace(/([a-zàèéìòù])([A-Z][a-z])/g, '$1 $2'); t=t.replace(/\s{2,}/g,' ').trim(); t=t.replace(/\s+Unk.*$/i,'').trim(); return t;
 }
 function pulisciTitoloFinale(t){if(!t) return t;t=t.replace(/\s*[\(\[][^\)\]]*remaster[^\)\]]*[\)\]]/gi,'').trim();t=t.replace(/\s*\[.*?\]\s*$/,'').trim();t=t.replace(/\s*Unknown\s*$/gi,'').trim();return t;}
-function rimuoviTitoloDuplicato(s){
-  if(!s) return s; s=s.trim(); let words=s.split(/\s+/);
-  if(words.length>=4){ let half=Math.floor(words.length/2); let f=words.slice(0,half).join(' ').toLowerCase(); let sec=words.slice(half).join(' ').toLowerCase(); if(f===sec) return words.slice(0,half).join(' '); }
-  return s;
-}
-// V225 - PARSER CON LISTA ARTISTI AMPLIATA
+function rimuoviTitoloDuplicato(s){ if(!s) return s; s=s.trim(); let words=s.split(/\s+/); if(words.length>=4){ let half=Math.floor(words.length/2); let f=words.slice(0,half).join(' ').toLowerCase(); let sec=words.slice(half).join(' ').toLowerCase(); if(f===sec) return words.slice(0,half).join(' '); } return s; }
 function parseArtistTitleSmart(s){
   if(!s) return {titolo:"", artista:""}; s=s.replace(/\s+/g,' ').trim(); s=s.replace(/\s*Unknown\s*$/gi,'').trim(); s=pulisciTitoloFinale(s); s=rimuoviTitoloDuplicato(s);
-  
   let sep = s.includes(' - ') ? ' - ' : (s.includes(' – ') ? ' – ' : null);
   if(sep){ let parts=s.split(sep); let artista=parts[0].trim(); let titolo=parts.slice(1).join(sep).trim(); titolo=pulisciTitoloFinale(titolo); return {titolo, artista}; }
-  
-  // LISTA AMPLIATA - Include Riccardo Cocciante!
-  const artistiNoti=["Riccardo Cocciante","Franco Battiato","Battiato","Matia Bazar","Lucio Battisti","Vasco Rossi","Ligabue","Zucchero","Eros Ramazzotti","Claudio Baglioni","Lucio Dalla","Antonello Venditti","Francesco De Gregori","Alice","Mango","Raf","Umberto Tozzi","Amedeo Minghi","Mia Martini","Loredana Berte"];
+  const artistiNoti=["Riccardo Cocciante","Alan Sorrenti","Franco Battiato","Battiato","Matia Bazar","Lucio Battisti","Vasco Rossi","Ligabue","Zucchero","Eros Ramazzotti","Claudio Baglioni","Lucio Dalla","Antonello Venditti","Francesco De Gregori","Alice","Mango","Raf","Umberto Tozzi","Amedeo Minghi","Mia Martini","Loredana Berte"];
   for(let art of artistiNoti){
     let idx=s.toLowerCase().indexOf(art.toLowerCase());
-    if(idx>2){
-      let titolo=s.substring(0,idx).trim();
-      let artista=s.substring(idx).trim();
-      if(titolo.length>=2) return {titolo: rimuoviTitoloDuplicato(titolo), artista: artista.replace(/\s*Unknown\s*$/gi,'').trim()};
-    }
+    if(idx>2){ let titolo=s.substring(0,idx).trim(); let artista=s.substring(idx).trim(); if(titolo.length>=2) return {titolo: rimuoviTitoloDuplicato(titolo), artista: artista.replace(/\s*Unknown\s*$/gi,'').trim()}; }
   }
-  
-  // Ultimo tentativo: 2 parole finali come artista? Es: "Margherita Riccardo Cocciante" -> titolo=Margherita, artista=Riccardo Cocciante
-  let w=s.split(/\s+/);
-  if(w.length>=3){
-    let possibileArtista=w.slice(-2).join(' ');
-    let possibileTitolo=w.slice(0,-2).join(' ');
-    if(possibileTitolo.length>=3 && possibileArtista.length>=5){
-      return {titolo: possibileTitolo, artista: possibileArtista};
-    }
-  }
-  
+  let w=s.split(/\s+/); if(w.length>=3){ let possibileArtista=w.slice(-2).join(' '); let possibileTitolo=w.slice(0,-2).join(' '); if(possibileTitolo.length>=3 && possibileArtista.length>=5){ return {titolo: possibileTitolo, artista: possibileArtista}; } }
   return {titolo: s, artista:""};
 }
 function updateMediaSession(artista,titolo){if(!('mediaSession' in navigator))return;try{const logo=getLogoAssoluto();navigator.mediaSession.metadata=new MediaMetadata({title:titolo||'Radio Sistema 3',artist:artista||'Live',album:'Radio Sistema 3',artwork:[{src:logo,sizes:'512x512',type:'image/jpeg'}]});}catch(e){}}
@@ -205,7 +195,7 @@ function creaMioBox(){
   original.style.display='none'; const mio=document.createElement('div'); mio.id='rs3-mio-box'; mio.style.display='block'; mio.style.opacity='1'; mio.style.minHeight='95px'; mio.style.maxWidth='420px'; mio.style.margin='2px auto 0 auto'; mio.style.background='rgba(0,0,0,0.88)'; mio.style.borderRadius='14px'; mio.innerHTML='<div class="rs3-trackbox"><img class="rs3-cover" src="'+getLogoAssoluto()+'"><div class="rs3-info"><div style="font-weight:900;color:#fff">Radio Sistema 3</div><div style="color:#ffd966">Live</div></div></div>';
   if(original.parentNode) original.parentNode.insertBefore(mio, original.nextSibling); return mio;
 }
-// V225 - TITOLO E AUTORE SEMPRE SU 2 RIGHE DIVERSE + BANDA CORTA
+// TITOLO E AUTORE SU 2 RIGHE DIVERSE - NON TOCCATO!
 function aggiornaBoxConTitolo(titolo, artista, anno){
   const mioBox=creaMioBox(); if(!mioBox) return;
   titolo=(titolo||"").replace(/\s*Unknown\s*$/gi,'').trim();
@@ -216,7 +206,7 @@ function aggiornaBoxConTitolo(titolo, artista, anno){
   _lastRaw=txt; _lastTitolo=titolo; _lastArtist=artista;
   let info=mioBox.querySelector('.rs3-info');
   if(info){
-    let annoHtml = anno ? `<div style="align-self:flex-start;width:fit-content;max-width:fit-content;display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#ffd966 0%,#ff9a00 100%);color:#000;font-weight:900;font-size:0.80rem;padding:3px 10px;border-radius:12px;margin-top:5px;box-shadow:0 0 8px rgba(255,217,102,0.6);">📅 ${anno}</div>` : '';
+    let annoHtml = anno ? `<div style="align-self:flex-start;width:fit-content;display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#ffd966 0%,#ff9a00 100%);color:#000;font-weight:900;font-size:0.80rem;padding:3px 10px;border-radius:12px;margin-top:5px;box-shadow:0 0 8px rgba(255,217,102,0.6);">📅 ${anno}</div>` : '';
     info.innerHTML=`
       <div style="font-weight:900;color:#fff;font-size:1.08rem;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${titolo}">${titolo}</div>
       <div style="color:#ffd966;font-weight:700;font-size:0.92rem;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${artista}">${artista||'Radio Sistema 3'}</div>
