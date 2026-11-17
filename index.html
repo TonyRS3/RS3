@@ -1,4 +1,4 @@
-<!-- v229 FIX TITOLO AUTORE 2 RIGHE + ANNO 1984 -->
+<!-- v230 FIX GIANNI TOGNI 2 PAROLE -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -7,64 +7,15 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Radio Sistema 3 - v229 FIX 2 RIGHE</title>
-<script>
-(function(){
-  if(window.location.search.length > 0){ history.replaceState(null,'', window.location.pathname); }
-})();
-</script>
+<title>Radio Sistema 3 - v230 FIX GIANNI TOGNI</title>
+<script>(function(){if(window.location.search.length>0){history.replaceState(null,'', window.location.pathname);}})();</script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
-const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";
-const RS3_SOUL_LOGO_NOME="RS3_SOUL_viola_scuro.jpg";
-const RS3_NIGHT_LOGO_NOME="RS3_DI_NOTTE.jpg";
+const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";const RS3_SOUL_LOGO_NOME="RS3_SOUL_viola_scuro.jpg";const RS3_NIGHT_LOGO_NOME="RS3_DI_NOTTE.jpg";
 function getLogoAssoluto(){try{const isSoul=(typeof soulActive!=='undefined'&&soulActive)||(document.body&&document.body.classList.contains('soul-mode'));const isNight=(typeof nightActive!=='undefined'&&nightActive)||(document.body&&document.body.classList.contains('night-mode'));let nome=RADIO_LOGO_FISSO_NOME;if(isSoul)nome=RS3_SOUL_LOGO_NOME;if(isNight)nome=RS3_NIGHT_LOGO_NOME;const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(nome);}catch(e){return RADIO_LOGO_FISSO_NOME;}}
 const coverCacheRS3={};
-async function fetchYearFromMusicBrainz(artista, titolo){
-  try{
-    if(!titolo) return null;
-    let queries=[`recording:"${titolo}" AND artist:"${artista}"`,`recording:"${titolo}"`];
-    let tuttiAnni=[];
-    for(let q of queries){
-      try{
-        let url=`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(q)}&fmt=json&limit=8`;
-        let r=await fetch(url);
-        let j=await r.json();
-        if(!j.recordings) continue;
-        for(let rec of j.recordings){
-          if(rec['first-release-date']){let y=parseInt(rec['first-release-date'].substring(0,4)); if(y>1950 && y<2027) tuttiAnni.push(y);}
-          if(rec.releases){for(let rel of rec.releases){if(rel.date){let y=parseInt(rel.date.substring(0,4)); if(y>1950 && y<2027) tuttiAnni.push(y);}}}
-        }
-      }catch(e){}
-    }
-    if(tuttiAnni.length>0){tuttiAnni.sort((a,b)=>a-b); return tuttiAnni[0];}
-  }catch(e){}
-  return null;
-}
-async function fetchCopertinaBranoConAnno(artista, titolo){
-  if(!titolo && !artista) return {url:null, year:null};
-  const key=(artista+"|"+titolo).toLowerCase();
-  if(coverCacheRS3[key]) return coverCacheRS3[key];
-  let finalYear=null; let finalUrl=null;
-  try{let mbYear=await fetchYearFromMusicBrainz(artista, titolo); if(mbYear) finalYear=mbYear;}catch(e){}
-  try{
-    const term=encodeURIComponent(((artista||"")+" "+(titolo||"")).trim());
-    const r=await fetch(`https://itunes.apple.com/search?term=${term}&media=music&entity=song&limit=1`,{cache:'no-store'});
-    const j=await r.json();
-    if(j.results && j.results[0]){
-      if(j.results[0].artworkUrl100){finalUrl=j.results[0].artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600');}
-      if(!finalYear && j.results[0].releaseDate){let y=new Date(j.results[0].releaseDate).getFullYear(); if(y>1950 && y<2027) finalYear=y;}
-    }
-  }catch(e){}
-  if(finalYear && finalYear>=2000){
-    let low=(titolo||"").toLowerCase();
-    if(low.includes("slave to love")) finalYear=1985;
-    if(low.includes("regalami un sorriso")) finalYear=1984;
-  }
-  let res={url:finalUrl, year:finalYear};
-  coverCacheRS3[key]=res;
-  return res;
-}
+async function fetchYearFromMusicBrainz(artista,titolo){try{if(!titolo)return null;let queries=[`recording:"${titolo}" AND artist:"${artista}"`,`recording:"${titolo}"`];let tuttiAnni=[];for(let q of queries){try{let url=`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(q)}&fmt=json&limit=8`;let r=await fetch(url);let j=await r.json();if(!j.recordings)continue;for(let rec of j.recordings){if(rec['first-release-date']){let y=parseInt(rec['first-release-date'].substring(0,4));if(y>1950&&y<2027)tuttiAnni.push(y);}if(rec.releases){for(let rel of rec.releases){if(rel.date){let y=parseInt(rel.date.substring(0,4));if(y>1950&&y<2027)tuttiAnni.push(y);}}}}}catch(e){}}if(tuttiAnni.length>0){tuttiAnni.sort((a,b)=>a-b);return tuttiAnni[0];}}catch(e){}return null;}
+async function fetchCopertinaBranoConAnno(artista,titolo){if(!titolo&&!artista)return{url:null,year:null};const key=(artista+"|"+titolo).toLowerCase();if(coverCacheRS3[key])return coverCacheRS3[key];let finalYear=null;let finalUrl=null;try{let mbYear=await fetchYearFromMusicBrainz(artista,titolo);if(mbYear)finalYear=mbYear;}catch(e){}try{const term=encodeURIComponent(((artista||"")+" "+(titolo||"")).trim());const r=await fetch(`https://itunes.apple.com/search?term=${term}&media=music&entity=song&limit=1`,{cache:'no-store'});const j=await r.json();if(j.results&&j.results[0]){if(j.results[0].artworkUrl100){finalUrl=j.results[0].artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600');}if(!finalYear&&j.results[0].releaseDate){let y=new Date(j.results[0].releaseDate).getFullYear();if(y>1950&&y<2027)finalYear=y;}}}catch(e){}let res={url:finalUrl,year:finalYear};coverCacheRS3[key]=res;return res;}
 </script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}body{font-family:Segoe UI,Arial,sans-serif;color:white;text-align:center;background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),url("studio-radio.jpeg");background-size:cover;background-position:center;background-attachment:fixed;overflow-x:hidden}
@@ -128,7 +79,7 @@ body.soul-mode .container{border:1px solid #b388ff !important} body.retro-mode .
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
-// V229 - PARSER FIX 2 RIGHE - AGGIUNTO DRUPI E TANTI ALTRI
+// V230 - FIX GIANNI TOGNI - CERCA 2 PAROLE PRIMA DI 1
 function pulisciTitolo(raw){
   let t=raw||""; t=t.replace(/Radio Sistema 3/gi,'').trim(); t=t.replace(/Buy this album/gi,'').trim(); t=t.replace(/Buy/gi,'').trim();
   t=t.replace(/^\s*\d{1,2}:\d{2}(?::\d{2})?\s*(AM|PM)?\s*/i,'').trim(); t=t.replace(/^(AM|PM)\s*/i,'').trim(); t=t.replace(/^[-–—\s]+/,'').trim();
@@ -145,7 +96,6 @@ function parseArtistTitleSmart(s){
   s=pulisciTitoloFinale(s); 
   s=rimuoviTitoloDuplicato(s);
 
-  // 1. Se c'è trattino - caso perfetto
   let sep = s.includes(' - ') ? ' - ' : (s.includes(' – ') ? ' – ' : null);
   if(sep){ 
     let parts=s.split(sep); 
@@ -155,61 +105,53 @@ function parseArtistTitleSmart(s){
     return {titolo, artista}; 
   }
 
-  // 2. Lista artisti COMPLETA con Drupi!
   const artistiNoti=[
-    "Bryan Ferry","Riccardo Cocciante","Alan Sorrenti","Franco Battiato","Matia Bazar","Lucio Battisti","Vasco Rossi","Ligabue","Zucchero","Eros Ramazzotti","Claudio Baglioni","Lucio Dalla","Antonello Venditti","Francesco De Gregori","Alice","Mango","Raf","Umberto Tozzi","Amedeo Minghi","Mia Martini","Loredana Berte",
-    "Drupi","Toto Cutugno","Pupo","Albano","Romina Power","Adriano Celentano","Mina","Ornella Vanoni","Patty Pravo","Gianni Morandi","Massimo Ranieri","Peppino Di Capo","Little Tony","Rita Pavone","Nada","Marcella Bella","Gianni Bella","Ricchi E Poveri","Al Bano","Fausto Leali","Iva Zanicchi","Orietta Berti","Donatella Rettore","Loretta Goggi","Heather Parisi","Ivana Spagna","Fiordaliso","Anna Oxa","Donatella Milani","Tiziana Rivale","Righeira","Gazebo","Ryan Paris","Ivana Spagna","Tullio De Piscopo","Tony Esposito","Pino Daniele","Eduardo Bennato","Enzo Jannacci","Giorgio Gaber","Gino Paoli","Sergio Endrigo","Domenico Modugno","Adriano Pappalardo","Umberto Balsamo","Alan Sorrenti","Loredana Berte","Marcella","Gianna Nannini","Rettore"
+    "Gianni Togni","Riccardo Cocciante","Alan Sorrenti","Franco Battiato","Matia Bazar","Lucio Battisti","Vasco Rossi","Ligabue","Zucchero","Eros Ramazzotti","Claudio Baglioni","Lucio Dalla","Antonello Venditti","Francesco De Gregori","Umberto Tozzi","Amedeo Minghi","Mia Martini","Loredana Berte","Bryan Ferry","Drupi","Toto Cutugno","Pupo","Albano","Adriano Celentano","Mina","Patty Pravo","Gianni Morandi","Ricchi E Poveri","Fausto Leali","Iva Zanicchi","Donatella Rettore","Anna Oxa","Righeira","Gazebo","Pino Daniele","Eduardo Bennato","Domenico Modugno","Gianna Nannini","Alice","Mango","Raf","Loretta Goggi","Heather Parisi","Ivana Spagna","Fiordaliso","Marcella Bella","Gianni Bella","Orietta Berti","Little Tony","Peppino Di Capo","Massimo Ranieri","Rita Pavone","Nada","Al Bano","Romina Power"
   ];
-
-  // Ordina per lunghezza decrescente - così "Riccardo Cocciante" prima di "Cocciante"
   artistiNoti.sort((a,b)=>b.length-a.length);
-
   let low=s.toLowerCase();
   for(let art of artistiNoti){
     let artLow=art.toLowerCase();
-    // Se la stringa finisce con l'artista
-    if(low.endsWith(" "+artLow) || low===artLow){
-      let idx=s.toLowerCase().lastIndexOf(artLow);
-      if(idx>2){
+    if(low.endsWith(" "+artLow) || low===artLow || low.includes(" "+artLow)){
+      let idx=low.lastIndexOf(artLow);
+      if(idx>1){
         let titolo=s.substring(0,idx).trim();
         let artista=s.substring(idx).trim();
-        // Titolo deve essere almeno 3 caratteri
-        if(titolo.length>=2){
-          return {titolo: rimuoviTitoloDuplicato(titolo), artista: artista};
-        }
-      }
-    }
-    // Se contiene l'artista in mezzo
-    let idxContains=low.indexOf(artLow);
-    if(idxContains>2){
-      let titolo=s.substring(0,idxContains).trim();
-      let artista=s.substring(idxContains).trim();
-      if(titolo.length>=2 && artista.length>=2){
-        return {titolo: rimuoviTitoloDuplicato(titolo), artista: artista};
+        if(titolo.length>=1){return {titolo: rimuoviTitoloDuplicato(titolo), artista: artista};}
       }
     }
   }
 
-  // 3. Fallback ultima parola come artista se è una sola parola corta tipo Drupi
+  // FIX: Prova 3,2,1 parole come artista (prima 3 poi 2 poi 1)
   let w=s.split(/\s+/); 
-  if(w.length>=3){ 
-    // Prova ultime 1,2,3 parole come artista
-    for(let n=1;n<=3;n++){
+  if(w.length>=2){
+    for(let n=3;n>=1;n--){ // IMPORTANTE: da 3 a 1, non da 1 a 3!
+      if(w.length<=n) continue;
       let possibileArtista=w.slice(-n).join(' ');
       let possibileTitolo=w.slice(0,-n).join(' ');
-      if(possibileTitolo.length>=3 && possibileArtista.length>=2){
-        // Se possibile artista è corto tipo Drupi e titolo lungo
-        if(possibileArtista.length<=12 && possibileTitolo.length>possibileArtista.length){
+      if(possibileTitolo.length>=1 && possibileArtista.length>=2){
+        // Se artista ha 2 parole tipo Gianni Togni, privilegia!
+        if(n===2 && possibileTitolo.length>=1){
+          return {titolo: possibileTitolo, artista: possibileArtista};
+        }
+        if(n===1 && possibileTitolo.length>possibileArtista.length*2){
+          return {titolo: possibileTitolo, artista: possibileArtista};
+        }
+        if(n===3){
           return {titolo: possibileTitolo, artista: possibileArtista};
         }
       }
+    }
+    // Fallback vecchio: 2 parole se titolo corto
+    if(w.length===3){
+      return {titolo: w[0], artista: w.slice(1).join(' ')};
     }
   }
 
   return {titolo: s, artista:""};
 }
 function updateMediaSession(artista,titolo){if(!('mediaSession' in navigator))return;try{const logo=getLogoAssoluto();navigator.mediaSession.metadata=new MediaMetadata({title:titolo||'Radio Sistema 3',artist:artista||'Live',album:'Radio Sistema 3',artwork:[{src:logo,sizes:'512x512',type:'image/jpeg'}]});}catch(e){}}
-let _lastRaw=""; let _lastArtist=""; let _lastTitolo="";
+let _lastRaw="";
 function creaMioBox(){
   const existing=document.getElementById('rs3-mio-box');if(existing&&existing.innerHTML.trim().length>50) return existing;
   if(existing){existing.style.display='block';existing.innerHTML='<div class="rs3-trackbox"><img class="rs3-cover" src="'+getLogoAssoluto()+'"><div class="rs3-info"><div style="font-weight:900;color:#fff">Radio Sistema 3</div><div style="color:#ffd966">Live</div></div></div>';return existing;}
@@ -224,7 +166,7 @@ function aggiornaBoxConTitolo(titolo, artista, anno){
   if(titolo.toLowerCase()===artista.toLowerCase()) artista="";
   let txt=titolo+" - "+artista+" - "+(anno||"");
   if(txt===_lastRaw) return;
-  _lastRaw=txt; _lastTitolo=titolo; _lastArtist=artista;
+  _lastRaw=txt;
   let info=mioBox.querySelector('.rs3-info');
   if(info){
     let annoHtml = anno ? `<div style="align-self:flex-start;width:fit-content;display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#ffd966 0%,#ff9a00 100%);color:#000;font-weight:900;font-size:0.80rem;padding:3px 10px;border-radius:12px;margin-top:5px;box-shadow:0 0 8px rgba(255,217,102,0.6);">📅 ${anno}</div>` : '';
@@ -274,7 +216,6 @@ function caricaMeteo(){if(document.documentElement.classList.contains('is-popup'
 const vuCanvas=document.getElementById('vuCanvas');const vuCtx=vuCanvas.getContext('2d');const vuPeakEl=document.getElementById('vuPeak');
 let isPlaying=false,lL=0,lR=0; let radioEl=document.getElementById('radioAudio'); let userPaused=true;let wasPlayingBeforeHide=false;let _isRecreating=false;
 function attachAudioListeners(){radioEl.addEventListener('pause',()=>{if(_isRecreating) return;isPlaying=false;vuPeakEl.textContent="STOP";vuPeakEl.style.color="#ff4444";if(window._pausedForPopup)return;if(document.hidden){wasPlayingBeforeHide=!userPaused;return;}userPaused=true;});radioEl.addEventListener('play', ()=>{if(_isRecreating) return;isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;});}
-function createFreshAudioAndPlay(){_isRecreating=true;const old=document.getElementById('radioAudio');const fresh=document.createElement('audio');fresh.id='radioAudio';fresh.controls=true;fresh.preload='none';fresh.playsInline=true;fresh.crossOrigin='anonymous';fresh.src="https://listentomystream.com:8046/stream?_t="+Date.now();try{old.parentNode.replaceChild(fresh, old);}catch(e){}radioEl=fresh;attachAudioListeners();return fresh.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;setTimeout(()=>{_isRecreating=false;},600);}).catch(()=>{_isRecreating=false;});}
 attachAudioListeners();
 function draw(){const W=vuCanvas.width,H=vuCanvas.height;vuCtx.clearRect(0,0,W,H);vuCtx.fillStyle='#0a0a0a';vuCtx.fillRect(0,0,W,H);let bars=36,barW=W/bars,gap=1.5,rowH=H/2-2;let aL=Math.floor((lL/100)*bars);for(let i=0;i<bars;i++){let x=i*barW;let lit=i<aL;vuCtx.fillStyle=lit?(i<21?'#00ff2a':i<30?'#ffea00':'#ff1a1a'):'#1a1a1a';vuCtx.fillRect(x+gap,1+(rowH-(lit?rowH-1:rowH*0.4))/2,barW-gap*2,lit?rowH-1:rowH*0.4);}vuCtx.fillStyle='#333';vuCtx.fillRect(0,H/2-0.5,W,1);let aR=Math.floor((lR/100)*bars);for(let i=0;i<bars;i++){let x=i*barW;let lit=i<aR;vuCtx.fillStyle=lit?(i<21?'#00d4ff':i<30?'#ffea00':'#ff1a1a'):'#1a1a1a';vuCtx.fillRect(x+gap,H/2+1+(rowH-(lit?rowH-1:rowH*0.4))/2,barW-gap*2,lit?rowH-1:rowH*0.4);}requestAnimationFrame(draw);}
 function upd(){if(!isPlaying){let idle=8+Math.random()*10;let tL=idle+Math.random()*4;let tR=idle+Math.random()*4;lL+=(tL-lL)*0.08;lR+=(tR-lR)*0.08;return;}let base=18+Math.random()*38;let isPeak=Math.random()<0.16;let tL=isPeak?74+Math.random()*22:base+Math.random()*10;let tR=isPeak?72+Math.random()*22:base+Math.random()*10;lL+=(tL-lL)*0.38;lR+=(tR-lR)*0.38;}
