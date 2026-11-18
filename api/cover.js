@@ -2,26 +2,30 @@ export default async function handler(req, res) {
   const { artista, titolo } = req.query;
   if (!artista || !titolo) return res.status(400).json({ error: "Manca artista o titolo" });
 
-  const query = `${artista} ${titolo}`;
+  const clean = (s) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/['’`]/g, " ").replace(/\s+/g, " ").trim();
   
-  // 1. Prova iTunes
-  try {
-    const it = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&entity=song&limit=1`).then(r=>r.json());
-    if (it.results?.[0]?.artworkUrl100) {
-      return res.status(200).json({ cover: it.results[0].artworkUrl100.replace('100x100','600x600') });
-    }
-  } catch {}
+  const queries = [
+    `${artista} ${titolo}`,
+    `${clean(artista)} ${clean(titolo)}`,
+    `${titolo} ${artista}`,
+    titolo
+  ];
 
-  // 2. Prova Deezer (qui trova anche jazz raro come Claudia!)
-  try {
-    const dz = await fetch(`https://api.deezer.com/search?q=${encodeURIComponent(query)}`).then(r=>r.json());
-    if (dz.data?.[0]?.album?.cover_big) {
-      return res.status(200).json({ cover: dz.data[0].album.cover_big });
-    }
-    if (dz.data?.[0]?.album?.cover_xl) {
-      return res.status(200).json({ cover: dz.data[0].album.cover_xl });
-    }
-  } catch {}
-
+  for (const q of queries) {
+    try {
+      const r = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&media=music&entity=song&limit=1`).then(x=>x.json());
+      if (r.results?.[0]?.artworkUrl100) {
+        return res.status(200).json({ cover: r.results[0].artworkUrl100.replace('100x100','600x600') });
+      }
+    } catch {}
+  }
+  for (const q of queries) {
+    try {
+      const d = await fetch(`https://api.deezer.com/search?q=${encodeURIComponent(q)}`).then(x=>x.json());
+      if (d.data?.[0]?.album?.cover_big) {
+        return res.status(200).json({ cover: d.data[0].album.cover_big });
+      }
+    } catch {}
+  }
   return res.status(404).json({ error: "Cover non trovata" });
 }
