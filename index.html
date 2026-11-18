@@ -1,4 +1,4 @@
-<!-- v255 FIX IMMAGINE ROTTA - MAI PIU' ? - 17:20 -->
+<!-- v256 CLEAN DEFINITIVA - FIX ACCENTI APOSTROFI + COVER - 22:15 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -30,46 +30,55 @@ const ANNI_REALI_OVERRIDE={
 "stessa spiaggia stesso mare|piero foccaccia":1963,
 "uno tranquillo|riccardo cocciante":1991,
 "uno tranquillo - live|riccardo cocciante":1991,
-"black is black|los bravos":1966
+"black is black|los bravos":1966,
+"c'e chi dice no|vasco rossi":1987,
+"ce chi dice no|vasco rossi":1987,
+"l'emozione non ha voce|adriano celentano":1999,
+"citta vuota|mina":1963,
+"strada facendo|claudio baglioni":1981
 };
 function pulisciTitoloFinaleAntiRemaster(t){if(!t)return t;t=t.replace(/\s*[\(\[][^\)\]]*remaster[^\)\]]*[\)\]]/gi,'').trim();t=t.replace(/\s*-\s*\d{4}\s*-\s*remaster.*$/gi,'').trim();t=t.replace(/\s*-\s*.*remaster.*$/gi,'').trim();t=t.replace(/\s+\d{4}\s+Remaster(ed)?/gi,'').trim();t=t.replace(/\s+Remaster(ed)?(\s+\d{4})?/gi,'').trim();t=t.replace(/\s*\[ga R\]\s*/gi,'').trim();t=t.replace(/\s*\[.*?R\]\s*$/gi,'').trim();t=t.replace(/\s*\[.*?\]\s*$/,'').trim();return t;}
 async function fetchYearFromMusicBrainz(artista,titolo){try{if(!titolo)return null;let keyCheck=(titolo+"|"+artista).toLowerCase().trim();let keyCheck2=(titolo.toLowerCase().trim()+"|"+artista.toLowerCase().trim());if(ANNI_REALI_OVERRIDE[keyCheck])return ANNI_REALI_OVERRIDE[keyCheck];if(ANNI_REALI_OVERRIDE[keyCheck2])return ANNI_REALI_OVERRIDE[keyCheck2];for(let k in ANNI_REALI_OVERRIDE){let parts=k.split("|");if(parts[0]&&artista&&keyCheck.includes(parts[0])&&artista.toLowerCase().includes(parts[1]||"")){return ANNI_REALI_OVERRIDE[k];}if(keyCheck.includes(k.split("|")[0])&&artista&&k.includes(artista.toLowerCase())){return ANNI_REALI_OVERRIDE[k];}}let titoloPulito=pulisciTitoloFinaleAntiRemaster(titolo);let q=`recording:"${titoloPulito}"${artista?` AND artist:"${artista}"`:""}`;let anni=[];try{let url=`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(q)}&fmt=json&limit=15`;let r=await fetch(url);let j=await r.json();if(j.recordings){for(let rec of j.recordings){let skipLive=false;if(rec.releases){for(let rel of rec.releases){let tLow=(rel.title||"").toLowerCase();if(tLow.includes("live")||tLow.includes("concerto")||tLow.includes("dal vivo")){skipLive=true;break;}}}if(skipLive)continue;if(rec['first-release-date']){let y=parseInt(rec['first-release-date'].substring(0,4));if(y>1950&&y<2027)anni.push(y);}if(rec.releases){for(let rel of rec.releases){if(rel.date){let y=parseInt(rel.date.substring(0,4));if(y>1950&&y<2027)anni.push(y);}}}}} }catch(e){}try{let url=`https://musicbrainz.org/ws/2/release-group/?query=${encodeURIComponent(q)}&fmt=json&limit=15`;let r=await fetch(url);let j=await r.json();if(j['release-groups']){for(let rg of j['release-groups']){let tLow=(rg.title||"").toLowerCase();if(tLow.includes("live")||tLow.includes("concerto")||tLow.includes("dal vivo"))continue;if(rg['first-release-date']){let y=parseInt(rg['first-release-date'].substring(0,4));if(y>1950&&y<2027)anni.push(y);}}}}catch(e){}if(anni.length>0){anni.sort((a,b)=>a-b);return anni[0];}}catch(e){}return null;}
+function normalizzaPerITunes(s){if(!s) return ""; return s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/['’`]/g," ").replace(/\s+/g," ").trim();}
 async function searchItunes(term, artistaHint){
   try{
-    let url=`https://itunes.apple.com/search?term=${encodeURIComponent(term)}&media=music&entity=song&limit=5`;
+    let cleanTerm=normalizzaPerITunes(term);
+    if(!cleanTerm) cleanTerm=term;
+    let url=`https://itunes.apple.com/search?term=${encodeURIComponent(cleanTerm)}&media=music&entity=album&limit=6`;
     let r=await fetch(url,{cache:'no-store'});
     let j=await r.json();
     if(j.results && j.results.length>0){
-      if(artistaHint){
-        let hint=artistaHint.toLowerCase();
-        for(let res of j.results){
-          let aName=(res.artistName||"").toLowerCase();
-          if(aName.includes(hint) || hint.includes(aName)){
-            return {url:res.artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600'), album:res.collectionName||null};
-          }
-        }
+      for(let res of j.results){
+        if(res.artworkUrl100) return {url:res.artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600'), album:res.collectionName||null};
       }
-      let first=j.results[0];
-      if(first.artworkUrl100) return {url:first.artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600'), album:first.collectionName||null};
     }
-  }catch(e){}
+    url=`https://itunes.apple.com/search?term=${encodeURIComponent(cleanTerm)}&media=music&entity=song&limit=6`;
+    r=await fetch(url,{cache:'no-store'});
+    j=await r.json();
+    if(j.results && j.results.length>0){
+      for(let res of j.results){
+        if(res.artworkUrl100) return {url:res.artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600'), album:res.collectionName||null};
+      }
+    }
+  }catch(e){ console.log("iTunes err",e); }
   return {url:null, album:null};
 }
 async function fetchCoverSmart(artista,titolo){
   if(!titolo && !artista) return {url:null, album:null};
-  let isShort = titolo && titolo.trim().length <= 3;
-  let res = await searchItunes((artista+" "+titolo).trim(), artista);
-  if(res.url) return res;
-  if(artista){
-    res = await searchItunes((titolo+" "+artista).trim(), artista);
-    if(res.url) return res;
-  }
-  if(!isShort){
-    res = await searchItunes(titolo.trim(), artista);
-    if(res.url) return res;
-  }
-  if(isShort && artista){
-    res = await searchItunes(artista.trim(), artista);
+  let cleanTitolo=normalizzaPerITunes(titolo);
+  let cleanArtista=normalizzaPerITunes(artista);
+  let origTitolo=titolo.trim();
+  let origArtista=artista.trim();
+  let tries=[
+    (origArtista+" "+origTitolo).trim(),
+    (cleanArtista+" "+cleanTitolo).trim(),
+    cleanTitolo,
+    origTitolo,
+    cleanArtista
+  ];
+  for(let t of tries){
+    if(!t || t.length<2) continue;
+    let res=await searchItunes(t, cleanArtista);
     if(res.url) return res;
   }
   return {url:null, album:null};
@@ -205,7 +214,7 @@ body.night-mode #rs3-mio-box{border:1.5px solid #c9a86a !important}
 <div class="meteo-side center-left"><div class="meteo-side-title">CENTRO SUD</div><div id="meteo-right" class="meteo-side-grid"></div></div>
 <div class="left-double-wide">
 <div class="news-box-side" id="infoBranoSottoMeteo">
-<div class="news-title" style="color:#ffd966">💿 INFO BRANO <span style="font-size:0.55rem;color:#00ff88">v255 FIX ?</span></div>
+<div class="news-title" style="color:#ffd966">💿 INFO BRANO</div>
 <div id="infoBranoContentLeft"><div style="color:#888;text-align:center;padding:8px">🎵 In attesa brano...</div></div>
 </div>
 </div>
@@ -238,7 +247,7 @@ const DB_LOCALE={
 function getInfoLocale(titolo,artista){let key=(titolo+"|"+artista).toLowerCase();if(DB_LOCALE[key])return DB_LOCALE[key];let tLow=titolo.toLowerCase();for(let k in DB_LOCALE){if(tLow.includes(k.split("|")[0]))return DB_LOCALE[k];}return null;}
 function pulisciWikiTesto(txt){if(!txt)return null;let t=txt.trim();let sentences=t.split(/\. +/);let result="";for(let s of sentences){if((result+s).length>650)break;result+=s+". ";if(result.length>320)break;}result=result.trim();if(result.length<30)result=t.substring(0,600);result=result.replace(/\s+/g,' ').trim();let o=(result.match(/\(/g)||[]).length;let c=(result.match(/\)/g)||[]).length;if(o>c)result+=" )".repeat(o-c);result=result.replace(/,\s*\)/g,')').replace(/\(\s*\)/g,'').trim();if(result.length>650)result=result.substring(0,630).trim()+"...";return result;}
 async function fetchWikipediaAuto(artista,titolo){const cacheKey=(artista+"|"+titolo).toLowerCase()+"_wiki";if(window._wikiCache&&window._wikiCache[cacheKey])return window._wikiCache[cacheKey];if(!window._wikiCache)window._wikiCache={};try{let sq=`${titolo} ${artista}`;let su=`https://it.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(sq)}&format=json&origin=*&srlimit=2`;let r=await fetch(su,{cache:'no-store'});let j=await r.json();if(j.query&&j.query.search&&j.query.search[0]){let pt=j.query.search[0].title;let sum=`https://it.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(pt)}`;let r2=await fetch(sum,{cache:'no-store'});let d2=await r2.json();if(d2.extract&&d2.extract.length>30){let p=pulisciWikiTesto(d2.extract);if(p){window._wikiCache[cacheKey]=p;return p;}}}}catch(e){}return null;}
-async function aggiornaInfoBranoSottoMeteo(artista,titolo,data){const box=document.getElementById('infoBranoContentLeft');if(!box)return;let album=data&&data.album?data.album:null;let year=data&&data.year?data.year:null;let cur=getInfoLocale(titolo,artista);let isLocal=true;if(!cur){isLocal=false;box.innerHTML=`<div class="info-riga-left">🎵 <b style="color:#ffd966">${titolo}</b> - ${artista}</div><div style="padding:8px;color:#aaa;font-size:0.75rem">🔍 Cerco curiosità...</div>`;let wiki=await fetchWikipediaAuto(artista,titolo);if(wiki)cur=wiki;}let html='';html+=`<div class="info-riga-left">🎵 <b style="color:#ffd966">${titolo}</b> - ${artista}</div>`;if(album||year){html+=`<div class="info-riga-left" style="font-size:0.70rem;color:#aaa">💿 ${album||''} ${year?'('+year+')':''}</div>`;}if(cur){let badge=isLocal?'<span style="background:#ffd966;color:#000;font-size:0.55rem;padding:1px 5px;border-radius:8px;margin-left:6px">LOCALE</span>':'<span style="background:#00ff88;color:#000;font-size:0.55rem;padding:1px 5px;border-radius:8px;margin-left:6px">AUTO</span>';html+=`<div style="margin-top:8px;padding:10px;background:${isLocal?'rgba(255,217,102,.10)':'rgba(0,255,136,.08)'};border-left:3px solid ${isLocal?'#ffd966':'#00ff88'};border-radius:6px;font-size:0.85rem;line-height:1.6;color:#fff">${cur} ${badge}</div>`;}else{let fb=album?`Dall'album "${album}"${year?' del '+year:''}.`:`Brano ${year||''} in rotazione!`;html+=`<div style="margin-top:8px;padding:8px;background:rgba(255,255,255,.05);border-radius:6px;font-size:0.80rem;color:#ccc">✨ ${fb}</div>`;}box.innerHTML=html;}
+async function aggiornaInfoBranoSottoMeteo(artista,titolo,data){const box=document.getElementById('infoBranoContentLeft');if(!box)return;let album=data&&data.album?data.album:null;let year=data&&data.year?data.year:null;let cur=getInfoLocale(titolo,artista);let isLocal=true;if(!cur){isLocal=false;box.innerHTML=`<div class="info-riga-left">🎵 <b style="color:#ffd966">${titolo}</b> - ${artista}</div><div style="padding:8px;color:#aaa;font-size:0.75rem">🔍 Cerco curiosità...</div>`;let wiki=await fetchWikipediaAuto(artista,titolo);if(wiki)cur=wiki;}let html='';html+=`<div class="info-riga-left">🎵 <b style="color:#ffd966">${titolo}</b> - ${artista}</div>`;if(album||year){html+=`<div class="info-riga-left" style="font-size:0.70rem;color:#aaa">💿 ${album||''} ${year?'('+year+')':''}</div>`;}if(cur){html+=`<div style="margin-top:8px;padding:10px;background:rgba(255,217,102,.10);border-left:3px solid #ffd966;border-radius:6px;font-size:0.85rem;line-height:1.6;color:#fff">${cur}</div>`;}else{let fb=album?`Dall'album "${album}"${year?' del '+year:''}.`:`Brano ${year||''} in rotazione!`;html+=`<div style="margin-top:8px;padding:8px;background:rgba(255,255,255,.05);border-radius:6px;font-size:0.80rem;color:#ccc">✨ ${fb}</div>`;}box.innerHTML=html;}
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay(true);}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
