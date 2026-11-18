@@ -1,4 +1,4 @@
-<!-- v253 BANDA SOPRA - PARTE 1/2 - 09.42 del 18-11-2026 -->
+<!-- v254 con RS3-EIGHT - 18-11-2026 - by Met per Capitano -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -32,9 +32,64 @@ const ANNI_REALI_OVERRIDE={
 "uno tranquillo - live|riccardo cocciante":1991,
 "black is black|los bravos":1966
 };
+// --- MOTORE NUOVO RS3-EIGHT ---
+const RS3_API_BASE = "https://rs3-eight.vercel.app";
+async function fetchFromRS3_Eight(artista,titolo){
+  try{
+    let urls = [
+      `${RS3_API_BASE}/api/canzone?artista=${encodeURIComponent(artista||'')}&titolo=${encodeURIComponent(titolo||'')}`,
+      `${RS3_API_BASE}/api/track?artist=${encodeURIComponent(artista||'')}&title=${encodeURIComponent(titolo||'')}`,
+      `${RS3_API_BASE}/api/search?q=${encodeURIComponent((artista+' '+titolo).trim())}`
+    ];
+    for(let u of urls){
+      try{
+        let r = await fetch(u, {cache:'no-store'});
+        if(!r.ok) continue;
+        let d = await r.json();
+        let item = Array.isArray(d) ? d[0] : (d.data || d.result || d);
+        if(!item) continue;
+        let cover = item.cover || item.immagine || item.image || item.artwork || item.coverUrl || null;
+        let year = item.year || item.anno || item.date || item.anno_brano || null;
+        if(year) year = parseInt(String(year).substring(0,4));
+        let album = item.album || item.albumName || null;
+        if(cover || year){
+          if(cover && cover.startsWith('/')) cover = RS3_API_BASE + cover;
+          return {url: cover, year: year, album: album, source: 'rs3-eight'};
+        }
+      }catch(e){ continue; }
+    }
+  }catch(e){}
+  return null;
+}
 function pulisciTitoloFinaleAntiRemaster(t){if(!t)return t;t=t.replace(/\s*[\(\[][^\)\]]*remaster[^\)\]]*[\)\]]/gi,'').trim();t=t.replace(/\s*-\s*\d{4}\s*-\s*remaster.*$/gi,'').trim();t=t.replace(/\s*-\s*.*remaster.*$/gi,'').trim();t=t.replace(/\s+\d{4}\s+Remaster(ed)?/gi,'').trim();t=t.replace(/\s+Remaster(ed)?(\s+\d{4})?/gi,'').trim();t=t.replace(/\s*\[ga R\]\s*/gi,'').trim();t=t.replace(/\s*\[.*?R\]\s*$/gi,'').trim();t=t.replace(/\s*\[.*?\]\s*$/,'').trim();return t;}
 async function fetchYearFromMusicBrainz(artista,titolo){try{if(!titolo)return null;let keyCheck=(titolo+"|"+artista).toLowerCase().trim();let keyCheck2=(titolo.toLowerCase().trim()+"|"+artista.toLowerCase().trim());if(ANNI_REALI_OVERRIDE[keyCheck])return ANNI_REALI_OVERRIDE[keyCheck];if(ANNI_REALI_OVERRIDE[keyCheck2])return ANNI_REALI_OVERRIDE[keyCheck2];for(let k in ANNI_REALI_OVERRIDE){let parts=k.split("|");if(parts[0]&&artista&&keyCheck.includes(parts[0])&&artista.toLowerCase().includes(parts[1]||"")){return ANNI_REALI_OVERRIDE[k];}if(keyCheck.includes(k.split("|")[0])&&artista&&k.includes(artista.toLowerCase())){return ANNI_REALI_OVERRIDE[k];}}let titoloPulito=pulisciTitoloFinaleAntiRemaster(titolo);let q=`recording:"${titoloPulito}"${artista?` AND artist:"${artista}"`:""}`;let anni=[];try{let url=`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(q)}&fmt=json&limit=15`;let r=await fetch(url);let j=await r.json();if(j.recordings){for(let rec of j.recordings){let skipLive=false;if(rec.releases){for(let rel of rec.releases){let tLow=(rel.title||"").toLowerCase();if(tLow.includes("live")||tLow.includes("concerto")||tLow.includes("dal vivo")){skipLive=true;break;}}}if(skipLive)continue;if(rec['first-release-date']){let y=parseInt(rec['first-release-date'].substring(0,4));if(y>1950&&y<2027)anni.push(y);}if(rec.releases){for(let rel of rec.releases){if(rel.date){let y=parseInt(rel.date.substring(0,4));if(y>1950&&y<2027)anni.push(y);}}}}} }catch(e){}try{let url=`https://musicbrainz.org/ws/2/release-group/?query=${encodeURIComponent(q)}&fmt=json&limit=15`;let r=await fetch(url);let j=await r.json();if(j['release-groups']){for(let rg of j['release-groups']){let tLow=(rg.title||"").toLowerCase();if(tLow.includes("live")||tLow.includes("concerto")||tLow.includes("dal vivo"))continue;if(rg['first-release-date']){let y=parseInt(rg['first-release-date'].substring(0,4));if(y>1950&&y<2027)anni.push(y);}}}}catch(e){}if(anni.length>0){anni.sort((a,b)=>a-b);return anni[0];}}catch(e){}return null;}
-async function fetchCopertinaBranoConAnno(artista,titolo){if(!titolo&&!artista)return{url:null,year:null,album:null};const key=(artista+"|"+titolo).toLowerCase();let cached=coverCacheRS3[key];if(cached&&cached.url&&cached.year){return cached;}let finalYear=cached&&cached.year?cached.year:null;let finalUrl=cached&&cached.url?cached.url:null;let finalAlbum=cached&&cached.album?cached.album:null;try{let mbYear=await fetchYearFromMusicBrainz(artista,titolo);if(mbYear)finalYear=mbYear;}catch(e){}try{if(!finalUrl){const term1=encodeURIComponent(((artista||"")+" "+(titolo||"")).trim());let r=await fetch(`https://itunes.apple.com/search?term=${term1}&media=music&entity=song&limit=1`,{cache:'no-store'});let j=await r.json();if(j.results&&j.results[0]&&j.results[0].artworkUrl100){finalUrl=j.results[0].artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600');if(j.results[0].collectionName)finalAlbum=j.results[0].collectionName;}if(!finalUrl){const term2=encodeURIComponent((titolo||"").trim());let r2=await fetch(`https://itunes.apple.com/search?term=${term2}&media=music&entity=song&limit=1`,{cache:'no-store'});let j2=await r2.json();if(j2.results&&j2.results[0]&&j2.results[0].artworkUrl100){finalUrl=j2.results[0].artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600');if(j2.results[0].collectionName)finalAlbum=j2.results[0].collectionName;}}}}catch(e){}let res={url:finalUrl,year:finalYear,album:finalAlbum};if(finalUrl||finalYear){coverCacheRS3[key]=res;}return res;}
+async function fetchCopertinaBranoConAnno(artista,titolo){
+  if(!titolo&&!artista)return{url:null,year:null,album:null};
+  const key=(artista+"|"+titolo).toLowerCase();
+  let cached=coverCacheRS3[key];
+  if(cached&&cached.url&&cached.year){return cached;}
+  let finalYear=cached&&cached.year?cached.year:null;
+  let finalUrl=cached&&cached.url?cached.url:null;
+  let finalAlbum=cached&&cached.album?cached.album:null;
+  try{
+    let rs3 = await fetchFromRS3_Eight(artista,titolo);
+    if(rs3){
+      if(rs3.url) finalUrl = rs3.url;
+      if(rs3.year) finalYear = rs3.year;
+      if(rs3.album) finalAlbum = rs3.album;
+      if(finalUrl && finalYear){
+         let res={url:finalUrl,year:finalYear,album:finalAlbum};
+         coverCacheRS3[key]=res;
+         return res;
+      }
+    }
+  }catch(e){}
+  try{let mbYear=await fetchYearFromMusicBrainz(artista,titolo);if(mbYear)finalYear=mbYear;}catch(e){}
+  try{if(!finalUrl){const term1=encodeURIComponent(((artista||"")+" "+(titolo||"")).trim());let r=await fetch(`https://itunes.apple.com/search?term=${term1}&media=music&entity=song&limit=1`,{cache:'no-store'});let j=await r.json();if(j.results&&j.results[0]&&j.results[0].artworkUrl100){finalUrl=j.results[0].artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600');if(j.results[0].collectionName)finalAlbum=j.results[0].collectionName;}if(!finalUrl){const term2=encodeURIComponent((titolo||"").trim());let r2=await fetch(`https://itunes.apple.com/search?term=${term2}&media=music&entity=song&limit=1`,{cache:'no-store'});let j2=await r2.json();if(j2.results&&j2.results[0]&&j2.results[0].artworkUrl100){finalUrl=j2.results[0].artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600');if(j2.results[0].collectionName)finalAlbum=j2.results[0].collectionName;}}}}catch(e){}
+  let res={url:finalUrl,year:finalYear,album:finalAlbum};
+  if(finalUrl||finalYear){coverCacheRS3[key]=res;}
+  return res;
+}
 const BRANI_NOVITA=[{id:"ZPV7WNHJ0g8",artista:"Chloe Qisha",titolo:"Question Of The Day"},{id:"DPEodkHzH-s",artista:"Tate McRae",titolo:"Housewife"},{id:"FC1FW1vp8eY",artista:"Cioffi",titolo:"Superstar"},{id:"0xuFBG6o6EU",artista:"Gaia",titolo:"Senz'allegria"},{id:"ofywN3NgGqY",artista:"Sombr",titolo:"My body isn't ready"},{id:"PshqcQwshdU",artista:"Sfera Ebbasta",titolo:"Lontano"},{id:"2r1njyfmREA",artista:"SOFI TUKKER & OneRepublic",titolo:"TSUNAMI"},{id:"0xuFBG6o6EU",artista:"Gaia",titolo:"Senz'Allegria"},{id:"pzvhHsEqMzo",artista:"Marco Mengoni",titolo:"Giornate Perse"},{id:"fRIhCiUVaKs",artista:"Karol G",titolo:"Bby Wow"}];
 function normalizzaBrano(b){if(typeof b==='string')return{id:b,artista:'',titolo:b};return b;}
 const PLACEHOLDER_HTML=`<div style="text-align:center"><div style="color:#fff;font-weight:bold">Scegli un brano</div><div style="font-size:2rem">👇</div></div>`;
@@ -175,25 +230,7 @@ const DB_LOCALE={
 function getInfoLocale(titolo,artista){let key=(titolo+"|"+artista).toLowerCase();if(DB_LOCALE[key])return DB_LOCALE[key];let tLow=titolo.toLowerCase();for(let k in DB_LOCALE){if(tLow.includes(k.split("|")[0]))return DB_LOCALE[k];}return null;}
 function pulisciWikiTesto(txt){if(!txt)return null;let t=txt.trim();let sentences=t.split(/\. +/);let result="";for(let s of sentences){if((result+s).length>650)break;result+=s+". ";if(result.length>320)break;}result=result.trim();if(result.length<30)result=t.substring(0,600);result=result.replace(/\s+/g,' ').trim();let o=(result.match(/\(/g)||[]).length;let c=(result.match(/\)/g)||[]).length;if(o>c)result+=" )".repeat(o-c);result=result.replace(/,\s*\)/g,')').replace(/\(\s*\)/g,'').trim();if(result.length>650)result=result.substring(0,630).trim()+"...";return result;}
 async function fetchWikipediaAuto(artista,titolo){const cacheKey=(artista+"|"+titolo).toLowerCase()+"_wiki";if(window._wikiCache&&window._wikiCache[cacheKey])return window._wikiCache[cacheKey];if(!window._wikiCache)window._wikiCache={};try{let sq=`${titolo} ${artista}`;let su=`https://it.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(sq)}&format=json&origin=*&srlimit=2`;let r=await fetch(su,{cache:'no-store'});let j=await r.json();if(j.query&&j.query.search&&j.query.search[0]){let pt=j.query.search[0].title;let sum=`https://it.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(pt)}`;let r2=await fetch(sum,{cache:'no-store'});let d2=await r2.json();if(d2.extract&&d2.extract.length>30){let p=pulisciWikiTesto(d2.extract);if(p){window._wikiCache[cacheKey]=p;return p;}}}}catch(e){}return null;}
-async function aggiornaInfoBranoSottoMeteo(artista,titolo,data){
-  const box=document.getElementById('infoBranoContentLeft');if(!box)return;
-  let album=data&&data.album?data.album:null;let year=data&&data.year?data.year:null;
-  let cur=getInfoLocale(titolo,artista);
-  if(!cur){
-    box.innerHTML=`<div class="info-riga-left">🎵 <b style="color:#ffd966">${titolo}</b> - ${artista}</div><div style="padding:8px;color:#aaa;font-size:0.75rem">🔍 Cerco curiosità...</div>`;
-    let wiki=await fetchWikipediaAuto(artista,titolo);if(wiki)cur=wiki;
-  }
-  let html='';
-  html+=`<div class="info-riga-left">🎵 <b style="color:#ffd966">${titolo}</b> - ${artista}</div>`;
-  if(album||year){html+=`<div class="info-riga-left" style="font-size:0.70rem;color:#aaa">💿 ${album||''} ${year?'('+year+')':''}</div>`;}
-  if(cur){
-    html+=`<div style="margin-top:8px;padding:10px;background:rgba(255,217,102,.10);border-left:3px solid #ffd966;border-radius:6px;font-size:0.85rem;line-height:1.6;color:#fff">${cur}</div>`;
-  }else{
-    let fb=album?`Dall'album "${album}"${year?' del '+year:''}.`:`Brano ${year||''} in rotazione!`;
-    html+=`<div style="margin-top:8px;padding:8px;background:rgba(255,255,255,.05);border-radius:6px;font-size:0.80rem;color:#ccc">✨ ${fb}</div>`;
-  }
-  box.innerHTML=html;
-}
+async function aggiornaInfoBranoSottoMeteo(artista,titolo,data){const box=document.getElementById('infoBranoContentLeft');if(!box)return;let album=data&&data.album?data.album:null;let year=data&&data.year?data.year:null;let cur=getInfoLocale(titolo,artista);if(!cur){box.innerHTML=`<div class="info-riga-left">🎵 <b style="color:#ffd966">${titolo}</b> - ${artista}</div><div style="padding:8px;color:#aaa;font-size:0.75rem">🔍 Cerco curiosità...</div>`;let wiki=await fetchWikipediaAuto(artista,titolo);if(wiki)cur=wiki;}let html='';html+=`<div class="info-riga-left">🎵 <b style="color:#ffd966">${titolo}</b> - ${artista}</div>`;if(album||year){html+=`<div class="info-riga-left" style="font-size:0.70rem;color:#aaa">💿 ${album||''} ${year?'('+year+')':''}</div>`;}if(cur){html+=`<div style="margin-top:8px;padding:10px;background:rgba(255,217,102,.10);border-left:3px solid #ffd966;border-radius:6px;font-size:0.85rem;line-height:1.6;color:#fff">${cur}</div>`;}else{let fb=album?`Dall'album "${album}"${year?' del '+year:''}.`:`Brano ${year||''} in rotazione!`;html+=`<div style="margin-top:8px;padding:8px;background:rgba(255,255,255,.05);border-radius:6px;font-size:0.80rem;color:#ccc">✨ ${fb}</div>`;}box.innerHTML=html;}
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
 function chiudiNovita(){document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;document.getElementById('novitaList').innerHTML="";document.getElementById('novitaList').dataset.done="0";document.getElementById('novitaSection').style.display='none';document.getElementById('btnNovita').style.display='inline-block';if(window._pausedForPlaylist){window._pausedForPlaylist=false;tryAutoPlay(true);}}
 function playNovita(id,el){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.querySelectorAll('.novita-row').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('novitaPlayerMain').innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';}
