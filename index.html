@@ -1,4 +1,4 @@
-<!-- v256 FIX BOOM REFRESH by Met - PARTE 1/2 - FIX CYNDI LAUPER -->
+<!-- v253 BANDA SOPRA - PARTE 1/2 - 09.42 del 18-11-2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -9,72 +9,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Radio Sistema 3</title>
 <script>
-(function(){if(window.location.search.length>0){history.replaceState(null,'',window.location.pathname);}})();
+(function(){if(window.location.search.length>0){history.replaceState(null,'',window.location.pathname);}var vSalvata=localStorage.getItem('rs3_version');if(vSalvata){localStorage.clear();sessionStorage.clear();}})();
 </script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
 const RADIO_LOGO_FISSO_NOME="RADIO SISTEMA 3.jpeg";const RS3_SOUL_LOGO_NOME="RS3_SOUL_viola_scuro.jpg";const RS3_NIGHT_LOGO_NOME="RS3_DI_NOTTE.jpg";
 function getLogoAssoluto(){try{const isSoul=(typeof soulActive!=='undefined'&&soulActive)||(document.body&&document.body.classList.contains('soul-mode'));const isNight=(typeof nightActive!=='undefined'&&nightActive)||(document.body&&document.body.classList.contains('night-mode'));let nome=RADIO_LOGO_FISSO_NOME;if(isSoul)nome=RS3_SOUL_LOGO_NOME;if(isNight)nome=RS3_NIGHT_LOGO_NOME;const base=window.location.href.substring(0,window.location.href.lastIndexOf('/')+1);return base+encodeURI(nome);}catch(e){if(typeof nightActive!=='undefined'&&nightActive)return RS3_NIGHT_LOGO_NOME;return (typeof soulActive!=='undefined'&&soulActive)?RS3_SOUL_LOGO_NOME:RADIO_LOGO_FISSO_NOME;}}
-let coverCacheRS3={}; try{let s=localStorage.getItem('rs3_cover_cache_v256'); if(s) coverCacheRS3=JSON.parse(s);}catch(e){}
-function saveCoverCache(){try{localStorage.setItem('rs3_cover_cache_v256', JSON.stringify(coverCacheRS3));}catch(e){}}
+const coverCacheRS3={};
 const ANNI_REALI_OVERRIDE={
-"cuore matto|little tony":1967,"deborah|fausto leali":1968,"debora|fausto leali":1968,"a chi|fausto leali":1967,"a chi|fausto leali - a chi":1967,"24 mila baci|adriano celentano":1961,"il tuo bacio e come un rock|adriano celentano":1959,"volare|domenico modugno":1958,"nel blu dipinto di blu|domenico modugno":1958,"roma nun fa la stupida stasera|nino manfredi":1958,"stessa spiaggia stesso mare|piero foccaccia":1963,"uno tranquillo|riccardo cocciante":1991,"uno tranquillo - live|riccardo cocciante":1991,"black is black|los bravos":1966,"girls just want to have fun|cyndi lauper":1983,"girls just want to have fun|cyndi lauper (1983)":1983
+"cuore matto|little tony":1967,
+"deborah|fausto leali":1968,
+"debora|fausto leali":1968,
+"a chi|fausto leali":1967,
+"a chi|fausto leali - a chi":1967,
+"24 mila baci|adriano celentano":1961,
+"il tuo bacio e come un rock|adriano celentano":1959,
+"volare|domenico modugno":1958,
+"nel blu dipinto di blu|domenico modugno":1958,
+"roma nun fa la stupida stasera|nino manfredi":1958,
+"stessa spiaggia stesso mare|piero foccaccia":1963,
+"uno tranquillo|riccardo cocciante":1991,
+"uno tranquillo - live|riccardo cocciante":1991,
+"black is black|los bravos":1966
 };
-function cleanForCover(s){if(!s) return ""; return s.replace(/[\(\[]?\b(19|20)\d{2}\b[\)\]]?/g,"").replace(/\s*-\s*\b(19|20)\d{2}\b/g,"").replace(/\s+/g," ").trim();}
-const RS3_API_BASE = "https://rs3-eight.vercel.app";
-async function fetchFromRS3_Eight(artista,titolo){
-  try{
-    let a = cleanForCover(artista); let t = cleanForCover(titolo);
-    let url = `${RS3_API_BASE}/api/cover?artista=${encodeURIComponent(a||artista||'')}&titolo=${encodeURIComponent(t||titolo||'')}`;
-    let r = await fetch(url, {cache:'no-store'});
-    if(r.ok){ let d = await r.json(); return {url:d.cover||null, year:d.year||null, album:d.album||null}; }
-  }catch(e){}
-  return null;
-}
-async function fetchDeezerCover(artista,titolo){
-  try{
-    let a=cleanForCover(artista).replace(/'/g," "); let t=cleanForCover(titolo).replace(/'/g," ");
-    let url=`https://api.deezer.com/search?q=artist:"${encodeURIComponent(a)}" track:"${encodeURIComponent(t)}"`;
-    let prox=`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-    let r=await fetch(prox,{cache:'no-store'}); let j=await r.json(); let data=JSON.parse(j.contents);
-    if(data.data&&data.data[0]&&data.data[0].album&&data.data[0].album.cover_big) return data.data[0].album.cover_big;
-  }catch(e){}
-  try{
-    let a=cleanForCover(artista).replace(/'/g," "); let t=cleanForCover(titolo).replace(/'/g," ");
-    let url=`https://api.deezer.com/search?q=${encodeURIComponent(a+" "+t)}`;
-    let prox=`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-    let r=await fetch(prox,{cache:'no-store'}); let j=await r.json(); let data=JSON.parse(j.contents);
-    if(data.data&&data.data[0]&&data.data[0].album&&data.data[0].album.cover_big) return data.data[0].album.cover_big;
-    if(data.data&&data.data[0]&&data.data[0].album&&data.data[0].album.cover_medium) return data.data[0].album.cover_medium;
-  }catch(e){}
-  return null;
-}
 function pulisciTitoloFinaleAntiRemaster(t){if(!t)return t;t=t.replace(/\s*[\(\[][^\)\]]*remaster[^\)\]]*[\)\]]/gi,'').trim();t=t.replace(/\s*-\s*\d{4}\s*-\s*remaster.*$/gi,'').trim();t=t.replace(/\s*-\s*.*remaster.*$/gi,'').trim();t=t.replace(/\s+\d{4}\s+Remaster(ed)?/gi,'').trim();t=t.replace(/\s+Remaster(ed)?(\s+\d{4})?/gi,'').trim();t=t.replace(/\s*\[ga R\]\s*/gi,'').trim();t=t.replace(/\s*\[.*?R\]\s*$/gi,'').trim();t=t.replace(/\s*\[.*?\]\s*$/,'').trim();return t;}
-async function fetchYearFromMusicBrainz(artista,titolo){try{if(!titolo)return null;let keyCheck=(titolo+"|"+artista).toLowerCase().trim();let keyCheck2=(titolo.toLowerCase().trim()+"|"+artista.toLowerCase().trim());if(ANNI_REALI_OVERRIDE[keyCheck])return ANNI_REALI_OVERRIDE[keyCheck];if(ANNI_REALI_OVERRIDE[keyCheck2])return ANNI_REALI_OVERRIDE[keyCheck2];for(let k in ANNI_REALI_OVERRIDE){let parts=k.split("|");if(parts[0]&&artista&&keyCheck.includes(parts[0])&&artista.toLowerCase().includes(parts[1]||"")){return ANNI_REALI_OVERRIDE[k];}}let titoloPulito=pulisciTitoloFinaleAntiRemaster(titolo);let q=`recording:"${titoloPulito}"${artista?` AND artist:"${artista}"`:""}`;let anni=[];try{let url=`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(q)}&fmt=json&limit=10`;let r=await fetch(url);let j=await r.json();if(j.recordings){for(let rec of j.recordings){if(rec['first-release-date']){let y=parseInt(rec['first-release-date'].substring(0,4));if(y>1950&&y<2027)anni.push(y);}}}}catch(e){}if(anni.length>0){anni.sort((a,b)=>a-b);return anni[0];}}catch(e){}return null;}
-async function fetchCopertinaBranoConAnno(artista,titolo){
-  if(!titolo&&!artista)return{url:null,year:null,album:null};
-  let tAnti=pulisciTitoloFinaleAntiRemaster(titolo||"");let aAnti=artista||"";let tClean=cleanForCover(tAnti);let aClean=cleanForCover(aAnti);if(!tClean)tClean=tAnti;
-  const key=(aClean+"|"+tClean).toLowerCase();let cached=coverCacheRS3[key];
-  if(cached&&cached.url&&cached.year){return cached;}
-  let finalYear=cached&&cached.year?cached.year:null;let finalUrl=cached&&cached.url?cached.url:null;let finalAlbum=cached&&cached.album?cached.album:null;
-  try{let rs3=await fetchFromRS3_Eight(aClean,tClean);if(rs3){if(rs3.year) finalYear=rs3.year; if(rs3.album) finalAlbum=rs3.album; if(rs3.url){finalUrl=rs3.url; let res={url:finalUrl,year:finalYear,album:finalAlbum};coverCacheRS3[key]=res;saveCoverCache();return res;}}}catch(e){}
-  try{if(!finalYear){let mbYear=await fetchYearFromMusicBrainz(aClean,tClean);if(mbYear)finalYear=mbYear;}}catch(e){}
-  try{
-    if(!finalUrl){
-      let safeTerm=(aClean+" "+tClean).replace(/'/g," ");
-      const term1=encodeURIComponent(safeTerm.trim());
-      let r=await fetch(`https://itunes.apple.com/search?term=${term1}&media=music&entity=song&limit=1`,{cache:'no-store'});let j=await r.json();
-      if(j.results&&j.results[0]&&j.results[0].artworkUrl100){finalUrl=j.results[0].artworkUrl100.replace('100x100bb','600x600bb');if(j.results[0].collectionName)finalAlbum=j.results[0].collectionName;}
-    }
-    if(!finalUrl){let dz=await fetchDeezerCover(aClean,tClean);if(dz) finalUrl=dz;}
-    if(!finalUrl&&aClean){
-      const term3=encodeURIComponent(aClean.replace(/'/g," "));
-      let r3=await fetch(`https://itunes.apple.com/search?term=${term3}&media=music&entity=song&limit=1`,{cache:'no-store'});let j3=await r3.json();
-      if(j3.results&&j3.results[0]&&j3.results[0].artworkUrl100){finalUrl=j3.results[0].artworkUrl100.replace('100x100bb','600x600bb');}
-    }
-  }catch(e){}
-  let res={url:finalUrl,year:finalYear,album:finalAlbum};if(finalUrl||finalYear){coverCacheRS3[key]=res;saveCoverCache();}return res;
-}
+async function fetchYearFromMusicBrainz(artista,titolo){try{if(!titolo)return null;let keyCheck=(titolo+"|"+artista).toLowerCase().trim();let keyCheck2=(titolo.toLowerCase().trim()+"|"+artista.toLowerCase().trim());if(ANNI_REALI_OVERRIDE[keyCheck])return ANNI_REALI_OVERRIDE[keyCheck];if(ANNI_REALI_OVERRIDE[keyCheck2])return ANNI_REALI_OVERRIDE[keyCheck2];for(let k in ANNI_REALI_OVERRIDE){let parts=k.split("|");if(parts[0]&&artista&&keyCheck.includes(parts[0])&&artista.toLowerCase().includes(parts[1]||"")){return ANNI_REALI_OVERRIDE[k];}if(keyCheck.includes(k.split("|")[0])&&artista&&k.includes(artista.toLowerCase())){return ANNI_REALI_OVERRIDE[k];}}let titoloPulito=pulisciTitoloFinaleAntiRemaster(titolo);let q=`recording:"${titoloPulito}"${artista?` AND artist:"${artista}"`:""}`;let anni=[];try{let url=`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(q)}&fmt=json&limit=15`;let r=await fetch(url);let j=await r.json();if(j.recordings){for(let rec of j.recordings){let skipLive=false;if(rec.releases){for(let rel of rec.releases){let tLow=(rel.title||"").toLowerCase();if(tLow.includes("live")||tLow.includes("concerto")||tLow.includes("dal vivo")){skipLive=true;break;}}}if(skipLive)continue;if(rec['first-release-date']){let y=parseInt(rec['first-release-date'].substring(0,4));if(y>1950&&y<2027)anni.push(y);}if(rec.releases){for(let rel of rec.releases){if(rel.date){let y=parseInt(rel.date.substring(0,4));if(y>1950&&y<2027)anni.push(y);}}}}} }catch(e){}try{let url=`https://musicbrainz.org/ws/2/release-group/?query=${encodeURIComponent(q)}&fmt=json&limit=15`;let r=await fetch(url);let j=await r.json();if(j['release-groups']){for(let rg of j['release-groups']){let tLow=(rg.title||"").toLowerCase();if(tLow.includes("live")||tLow.includes("concerto")||tLow.includes("dal vivo"))continue;if(rg['first-release-date']){let y=parseInt(rg['first-release-date'].substring(0,4));if(y>1950&&y<2027)anni.push(y);}}}}catch(e){}if(anni.length>0){anni.sort((a,b)=>a-b);return anni[0];}}catch(e){}return null;}
+async function fetchCopertinaBranoConAnno(artista,titolo){if(!titolo&&!artista)return{url:null,year:null,album:null};const key=(artista+"|"+titolo).toLowerCase();let cached=coverCacheRS3[key];if(cached&&cached.url&&cached.year){return cached;}let finalYear=cached&&cached.year?cached.year:null;let finalUrl=cached&&cached.url?cached.url:null;let finalAlbum=cached&&cached.album?cached.album:null;try{let mbYear=await fetchYearFromMusicBrainz(artista,titolo);if(mbYear)finalYear=mbYear;}catch(e){}try{if(!finalUrl){const term1=encodeURIComponent(((artista||"")+" "+(titolo||"")).trim());let r=await fetch(`https://itunes.apple.com/search?term=${term1}&media=music&entity=song&limit=1`,{cache:'no-store'});let j=await r.json();if(j.results&&j.results[0]&&j.results[0].artworkUrl100){finalUrl=j.results[0].artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600');if(j.results[0].collectionName)finalAlbum=j.results[0].collectionName;}if(!finalUrl){const term2=encodeURIComponent((titolo||"").trim());let r2=await fetch(`https://itunes.apple.com/search?term=${term2}&media=music&entity=song&limit=1`,{cache:'no-store'});let j2=await r2.json();if(j2.results&&j2.results[0]&&j2.results[0].artworkUrl100){finalUrl=j2.results[0].artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600');if(j2.results[0].collectionName)finalAlbum=j2.results[0].collectionName;}}}}catch(e){}let res={url:finalUrl,year:finalYear,album:finalAlbum};if(finalUrl||finalYear){coverCacheRS3[key]=res;}return res;}
 const BRANI_NOVITA=[{id:"ZPV7WNHJ0g8",artista:"Chloe Qisha",titolo:"Question Of The Day"},{id:"DPEodkHzH-s",artista:"Tate McRae",titolo:"Housewife"},{id:"FC1FW1vp8eY",artista:"Cioffi",titolo:"Superstar"},{id:"0xuFBG6o6EU",artista:"Gaia",titolo:"Senz'allegria"},{id:"ofywN3NgGqY",artista:"Sombr",titolo:"My body isn't ready"},{id:"PshqcQwshdU",artista:"Sfera Ebbasta",titolo:"Lontano"},{id:"2r1njyfmREA",artista:"SOFI TUKKER & OneRepublic",titolo:"TSUNAMI"},{id:"0xuFBG6o6EU",artista:"Gaia",titolo:"Senz'Allegria"},{id:"pzvhHsEqMzo",artista:"Marco Mengoni",titolo:"Giornate Perse"},{id:"fRIhCiUVaKs",artista:"Karol G",titolo:"Bby Wow"}];
 function normalizzaBrano(b){if(typeof b==='string')return{id:b,artista:'',titolo:b};return b;}
 const PLACEHOLDER_HTML=`<div style="text-align:center"><div style="color:#fff;font-weight:bold">Scegli un brano</div><div style="font-size:2rem">👇</div></div>`;
@@ -223,9 +183,15 @@ async function aggiornaInfoBranoSottoMeteo(artista,titolo,data){
     box.innerHTML=`<div class="info-riga-left">🎵 <b style="color:#ffd966">${titolo}</b> - ${artista}</div><div style="padding:8px;color:#aaa;font-size:0.75rem">🔍 Cerco curiosità...</div>`;
     let wiki=await fetchWikipediaAuto(artista,titolo);if(wiki)cur=wiki;
   }
-  let html='';html+=`<div class="info-riga-left">🎵 <b style="color:#ffd966">${titolo}</b> - ${artista}</div>`;
+  let html='';
+  html+=`<div class="info-riga-left">🎵 <b style="color:#ffd966">${titolo}</b> - ${artista}</div>`;
   if(album||year){html+=`<div class="info-riga-left" style="font-size:0.70rem;color:#aaa">💿 ${album||''} ${year?'('+year+')':''}</div>`;}
-  if(cur){html+=`<div style="margin-top:8px;padding:10px;background:rgba(255,217,102,.10);border-left:3px solid #ffd966;border-radius:6px;font-size:0.85rem;line-height:1.6;color:#fff">${cur}</div>`;}else{let fb=album?`Dall'album "${album}"${year?' del '+year:''}.`:`Brano ${year||''} in rotazione!`;html+=`<div style="margin-top:8px;padding:8px;background:rgba(255,255,255,.05);border-radius:6px;font-size:0.80rem;color:#ccc">✨ ${fb}</div>`;}
+  if(cur){
+    html+=`<div style="margin-top:8px;padding:10px;background:rgba(255,217,102,.10);border-left:3px solid #ffd966;border-radius:6px;font-size:0.85rem;line-height:1.6;color:#fff">${cur}</div>`;
+  }else{
+    let fb=album?`Dall'album "${album}"${year?' del '+year:''}.`:`Brano ${year||''} in rotazione!`;
+    html+=`<div style="margin-top:8px;padding:8px;background:rgba(255,255,255,.05);border-radius:6px;font-size:0.80rem;color:#ccc">✨ ${fb}</div>`;
+  }
   box.innerHTML=html;
 }
 function apriNovita(){var a=document.getElementById('radioAudio');if(a){try{a.pause();}catch(e){}window._pausedForPlaylist=true;}document.getElementById('novitaSection').style.display='block';document.getElementById('btnNovita').style.display='none';document.getElementById('novitaPlayerMain').innerHTML=PLACEHOLDER_HTML;renderNovita();}
@@ -241,7 +207,7 @@ async function caricaCalcio(){const box=document.getElementById('newsListCalcio'
 function pulisciTitolo(raw){let t=raw||"";t=t.replace(/Radio Sistema 3/gi,'').trim();t=t.replace(/Buy this album/gi,'').trim();t=t.replace(/Buy/gi,'').trim();t=t.replace(/^\s*\d{1,2}:\d{2}(?::\d{2})?\s*(AM|PM)?\s*/i,'').trim();t=t.replace(/^(AM|PM)\s*/i,'').trim();t=t.replace(/^[-–—\s]+/,'').trim();t=t.replace(/([a-zàèéìòù])([A-Z][a-z])/g,'$1 $2');t=t.replace(/\]([A-Za-z])/g,'] $1');t=t.replace(/\)([A-Z])/g,') $1');t=t.replace(/\s{2,}/g,' ').trim();t=t.replace(/\s+Unk.*$/i,'').trim();return t;}
 function pulisciTitoloFinale(t){if(!t)return t;t=t.replace(/\s*[\(\[][^\)\]]*remaster[^\)\]]*[\)\]]/gi,'').trim();t=t.replace(/\s*-\s*\d{4}\s*-\s*remaster.*$/gi,'').trim();t=t.replace(/\s*-\s*.*remaster.*$/gi,'').trim();t=t.replace(/\s+\d{4}\s+Remaster(ed)?/gi,'').trim();t=t.replace(/\s+Remaster(ed)?(\s+\d{4})?/gi,'').trim();t=t.replace(/\s*\[ga R\]\s*/gi,'').trim();t=t.replace(/\s*\[.*?R\]\s*$/gi,'').trim();t=t.replace(/\s*\[.*?\]\s*$/,'').trim();return t;}
 function rimuoviTitoloDuplicato(s){if(!s)return s;let w=s.trim().split(/\s+/);if(w.length<5)return s;for(let len=3;len>=2;len--){if(w.length>len*2){let first=w.slice(0,len).join(' ').toLowerCase();let last=w.slice(-len).join(' ').toLowerCase();if(first===last){return w.slice(0,-len).join(' ').trim();}}}return s;}
-function parseArtistTitleSmart(s){if(!s)return{titolo:"",artista:""};s=s.replace(/\s+/g,' ').trim();s=pulisciTitoloFinale(s);s=rimuoviTitoloDuplicato(s);let sep=s.includes(' - ')?' - ':(s.includes(' – ')?' – ':(s.includes(' — ')?' — ':null));if(sep){let parts=s.split(sep);let artista=parts[0].trim();let titolo=parts.slice(1).join(sep).trim();titolo=pulisciTitoloFinale(titolo);if(titolo&&artista&&titolo.toLowerCase().indexOf(artista.toLowerCase())!==-1){try{let re=new RegExp(artista.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi');titolo=titolo.replace(re,'').trim();titolo=titolo.replace(/\s{2,}/g,' ').replace(/^[-–—\s]+/,'').replace(/[-–—\s]+$/,'').trim();}catch(e){}}return{titolo,artista};}const artistiNoti=["Gianni Togni","Riccardo Cocciante","Alan Sorrenti","Franco Battiato","Matia Bazar","Lucio Battisti","Vasco Rossi","Ligabue","Zucchero","Eros Ramazzotti","Claudio Baglioni","Lucio Dalla","Antonello Venditti","Francesco De Gregori","Umberto Tozzi","Amedeo Minghi","Mia Martini","Loredana Berte","Bryan Ferry","Drupi","Toto Cutugno","Pupo","Albano","Adriano Celentano","Mina","Patty Pravo","Gianni Morandi","Ricchi E Poveri","Fausto Leali","Iva Zanicchi","Donatella Rettore","Anna Oxa","Righeira","Gazebo","Pino Daniele","Eduardo Bennato","Domenico Modugno","Gianna Nannini","Alice","Mango","Raf","Loretta Goggi","Ivana Spagna","Fiordaliso","Marcella Bella","Gianni Bella","Orietta Berti","Little Tony","Massimo Ranieri","Rita Pavone","Nada","Al Bano","Depeche Mode","883","Max Pezzali","Gli 883","Jovanotti"];artistiNoti.sort((a,b)=>b.length-a.length);let low=s.toLowerCase();for(let art of artistiNoti){let artLow=art.toLowerCase();if(low.includes(artLow)){let idx=low.lastIndexOf(artLow);if(idx>0){let titolo=s.substring(0,idx).trim();let artista=s.substring(idx).trim();if(titolo.length>=1){return{titolo:rimuoviTitoloDuplicato(titolo),artista:artista};}}}}let w=s.split(/\s+/);if(w.length>=2){for(let n=3;n>=1;n--){if(w.length<=n)continue;let possibileArtista=w.slice(-n).join(' ');let possibileTitolo=w.slice(0,-n).join(' ');if(possibileTitolo.length>=1&&possibileArtista.length>=2){if(n>=2)return{titolo:possibileTitolo,artista:possibileArtista};}}if(w.length===2)return{titolo:w[0],artista:w[1]};if(w.length===3)return{titolo:w[0],artista:w.slice(1).join(' ')};}return{titolo:pulisciTitoloFinale(s),artista:""};}
+function parseArtistTitleSmart(s){if(!s)return{titolo:"",artista:""};s=s.replace(/\s+/g,' ').trim();s=pulisciTitoloFinale(s);s=rimuoviTitoloDuplicato(s);let sep=s.includes(' - ')?' - ':(s.includes(' – ')?' – ':(s.includes(' — ')?' — ':null));if(sep){let parts=s.split(sep);let artista=parts[0].trim();let titolo=parts.slice(1).join(sep).trim();titolo=pulisciTitoloFinale(titolo);if(titolo&&artista&&titolo.toLowerCase().indexOf(artista.toLowerCase())!==-1){try{let re=new RegExp(artista.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi');titolo=titolo.replace(re,'').trim();titolo=titolo.replace(/\s{2,}/g,' ').replace(/^[-–—\s]+/,'').replace(/[-–—\s]+$/,'').trim();}catch(e){}}return{titolo,artista};}const artistiNoti=["Gianni Togni","Riccardo Cocciante","Alan Sorrenti","Franco Battiato","Matia Bazar","Lucio Battisti","Vasco Rossi","Ligabue","Zucchero","Eros Ramazzotti","Claudio Baglioni","Lucio Dalla","Antonello Venditti","Francesco De Gregori","Umberto Tozzi","Amedeo Minghi","Mia Martini","Loredana Berte","Bryan Ferry","Drupi","Toto Cutugno","Pupo","Albano","Adriano Celentano","Mina","Patty Pravo","Gianni Morandi","Ricchi E Poveri","Fausto Leali","Iva Zanicchi","Donatella Rettore","Anna Oxa","Righeira","Gazebo","Pino Daniele","Eduardo Bennato","Domenico Modugno","Gianna Nannini","Alice","Mango","Raf","Loretta Goggi","Ivana Spagna","Fiordaliso","Marcella Bella","Gianni Bella","Orietta Berti","Little Tony","Massimo Ranieri","Rita Pavone","Nada","Al Bano","Depeche Mode","883","Max Pezzali","Gli 883"];artistiNoti.sort((a,b)=>b.length-a.length);let low=s.toLowerCase();for(let art of artistiNoti){let artLow=art.toLowerCase();if(low.includes(artLow)){let idx=low.lastIndexOf(artLow);if(idx>0){let titolo=s.substring(0,idx).trim();let artista=s.substring(idx).trim();if(titolo.length>=1){return{titolo:rimuoviTitoloDuplicato(titolo),artista:artista};}}}}let w=s.split(/\s+/);if(w.length>=2){for(let n=3;n>=1;n--){if(w.length<=n)continue;let possibileArtista=w.slice(-n).join(' ');let possibileTitolo=w.slice(0,-n).join(' ');if(possibileTitolo.length>=1&&possibileArtista.length>=2){if(n>=2)return{titolo:possibileTitolo,artista:possibileArtista};}}if(w.length===2)return{titolo:w[0],artista:w[1]};if(w.length===3)return{titolo:w[0],artista:w.slice(1).join(' ')};}return{titolo:pulisciTitoloFinale(s),artista:""};}
 function updateMediaSession(artista,titolo){if(!('mediaSession' in navigator))return;try{const logo=getLogoAssoluto();navigator.mediaSession.metadata=new MediaMetadata({title:titolo||'Radio Sistema 3',artist:artista||'Live',album:'Radio Sistema 3',artwork:[{src:logo,sizes:'512x512',type:'image/jpeg'},{src:logo,sizes:'256x256',type:'image/jpeg'}]});navigator.mediaSession.setActionHandler('play',()=>{tryAutoPlay(true);});navigator.mediaSession.setActionHandler('pause',()=>{document.getElementById('radioAudio').pause();});}catch(e){}}
 let _lastRaw="";let _lastDisplayedYear=null;let _lastValidTime=0;let _lastValidArtistaTitolo="";let _lastArtist="";let _lastTitolo="";
 function creaMioBox(){const existing=document.getElementById('rs3-mio-box');if(existing){if(existing.innerHTML&&existing.innerHTML.trim().length>50)return existing;existing.style.display='block';existing.style.opacity='1';existing.style.minHeight='95px';existing.style.maxWidth='400px';existing.style.margin='2px auto 0 auto';existing.style.background='rgba(0,0,0,0.85)';existing.style.borderRadius='14px';existing.style.padding='0';existing.innerHTML='<div class="rs3-trackbox"><img class="rs3-cover" src="'+getLogoAssoluto()+'"><div class="rs3-info"><div style="font-weight:900;color:#fff">Radio Sistema 3</div><div style="color:#ffd966">Live</div></div></div>';return existing;}const original=document.querySelector('.cc_recenttracks_list');if(!original)return null;original.style.display='none';original.style.opacity='0';original.style.height='0';original.style.minHeight='0';original.style.maxHeight='0';original.style.margin='0';original.style.padding='0';original.style.overflow='hidden';original.style.pointerEvents='none';const mio=document.createElement('div');mio.id='rs3-mio-box';mio.className='rs3-ready';mio.style.display='block';mio.style.opacity='1';mio.style.minHeight='95px';mio.style.maxWidth='400px';mio.style.margin='2px auto 0 auto';mio.style.background='rgba(0,0,0,0.85)';mio.style.borderRadius='14px';mio.style.padding='0';mio.innerHTML='<div class="rs3-trackbox"><img class="rs3-cover" src="'+getLogoAssoluto()+'"><div class="rs3-info"><div style="font-weight:900;color:#fff">Radio Sistema 3</div><div style="color:#ffd966">Live</div></div></div>';if(original.parentNode){original.parentNode.insertBefore(mio,original.nextSibling);}else{document.body.appendChild(mio);}return mio;}
