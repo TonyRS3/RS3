@@ -1,1 +1,65 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Test Copertina MP3 - Radio Sistema 3</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+<style>
+body{font-family:Arial;background:#111;color:#fff;text-align:center;padding:20px}
+.box{max-width:500px;margin:20px auto;background:#222;padding:20px;border-radius:15px;border:2px solid #ffd700}
+#cover{width:250px;height:250px;background:#000;border-radius:10px;margin:10px auto;display:block;object-fit:cover}
+.info{margin-top:10px;padding:10px;background:#333;border-radius:8px;text-align:left}
+b{color:#ffd700}
+input{margin:10px}
+</style>
+</head>
+<body>
+<h1>🎵 Test Copertina MP3</h1>
+<p>Seleziona un tuo MP3 e vediamo cosa c'è dentro</p>
+<input type="file" id="fileInput" accept=".mp3">
+<div class="box" id="result" style="display:none">
+<img id="cover" src="">
+<div class="info" id="details"></div>
+</div>
 
+<script>
+document.getElementById('fileInput').addEventListener('change', function(e){
+ const file = e.target.files[0];
+ if(!file) return;
+ document.getElementById('result').style.display='block';
+ document.getElementById('details').innerHTML = '⏳ Leggo... ' + file.name;
+ 
+ jsmediatags.read(file, {
+  onSuccess: function(tag){
+   const tags = tag.tags;
+   let title = tags.title || 'Senza titolo';
+   let artist = tags.artist || 'Senza artista';
+   let album = tags.album || '';
+   
+   let html = `<b>📁 File:</b> ${file.name}<br>`;
+   html += `<b>🎵 Titolo:</b> ${title}<br>`;
+   html += `<b>👤 Autore:</b> ${artist}<br>`;
+   html += `<b>💿 Album:</b> ${album}<br>`;
+   
+   if(tags.picture){
+     let base64String = "";
+     for(let i=0; i < tags.picture.data.length; i++){
+       base64String += String.fromCharCode(tags.picture.data[i]);
+     }
+     let base64 = "data:" + tags.picture.format + ";base64," + window.btoa(base64String);
+     document.getElementById('cover').src = base64;
+     html += `<b>🖼️ Copertina:</b> <span style="color:#0f0">TROVATA! ✅ ${tags.picture.data.length} byte</span><br>`;
+   } else {
+     document.getElementById('cover').src = '';
+     html += `<b>🖼️ Copertina:</b> <span style="color:#f00">NON C'È ❌</span><br>`;
+   }
+   document.getElementById('details').innerHTML = html;
+  },
+  onError: function(error){
+   document.getElementById('details').innerHTML = '❌ Errore: ' + error.info;
+  }
+ });
+});
+</script>
+</body>
+</html>
