@@ -2,13 +2,22 @@ export default async function handler(req, res) {
   const { artista, titolo } = req.query;
   if (!artista || !titolo) return res.status(400).json({ error: "Manca artista o titolo" });
 
-  const clean = (s) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/['’`]/g, " ").replace(/\s+/g, " ").trim();
+  const clean = (s) => s
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/['’`]/g, " ")
+    .replace(/[\(\[]?\b(19|20)\d{2}\b[\)\]]?/g, "") // TOGLIE (1989) [1989] 1989
+    .replace(/\s*-\s*\b(19|20)\d{2}\b/g, "") // TOGLIE - 1989
+    .replace(/\s+/g, " ")
+    .trim();
   
+  const titoloPulito = clean(titolo);
+  const artistaPulito = clean(artista);
+
   const queries = [
     `${artista} ${titolo}`,
-    `${clean(artista)} ${clean(titolo)}`,
-    `${titolo} ${artista}`,
-    titolo
+    `${artistaPulito} ${titoloPulito}`,
+    `${titoloPulito} ${artistaPulito}`,
+    titoloPulito
   ];
 
   for (const q of queries) {
