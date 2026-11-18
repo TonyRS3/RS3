@@ -2,20 +2,24 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Test Copertina MP3 - Radio Sistema 3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Copertina + Anno MP3 - Radio Sistema 3</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
 <style>
-body{font-family:Arial;background:#111;color:#fff;text-align:center;padding:20px}
-.box{max-width:500px;margin:20px auto;background:#222;padding:20px;border-radius:15px;border:2px solid #ffd700}
-#cover{width:250px;height:250px;background:#000;border-radius:10px;margin:10px auto;display:block;object-fit:cover}
-.info{margin-top:10px;padding:10px;background:#333;border-radius:8px;text-align:left}
+body{font-family:Arial, sans-serif;background:#111;color:#fff;text-align:center;padding:20px;margin:0}
+h1{color:#ffd700}
+.box{max-width:550px;margin:20px auto;background:#222;padding:20px;border-radius:15px;border:2px solid #ffd700;box-shadow:0 0 20px rgba(255,215,0,0.3)}
+#cover{width:300px;height:300px;background:#000;border-radius:12px;margin:10px auto;display:block;object-fit:cover;border:2px solid #444}
+.info{margin-top:15px;padding:15px;background:#333;border-radius:10px;text-align:left;line-height:1.8;font-size:15px}
 b{color:#ffd700}
-input{margin:10px}
+input{margin:15px;padding:10px;background:#333;color:#fff;border:1px solid #ffd700;border-radius:8px}
+.ok{color:#0f0;font-weight:bold}
+.ko{color:#f55;font-weight:bold}
 </style>
 </head>
 <body>
-<h1>🎵 Test Copertina MP3</h1>
-<p>Seleziona un tuo MP3 e vediamo cosa c'è dentro</p>
+<h1>🎵 Test MP3 Completo</h1>
+<p>Seleziona un tuo MP3 - Vediamo Titolo, Autore, Album, Anno e Copertina Vera</p>
 <input type="file" id="fileInput" accept=".mp3">
 <div class="box" id="result" style="display:none">
 <img id="cover" src="">
@@ -27,19 +31,31 @@ document.getElementById('fileInput').addEventListener('change', function(e){
  const file = e.target.files[0];
  if(!file) return;
  document.getElementById('result').style.display='block';
- document.getElementById('details').innerHTML = '⏳ Leggo... ' + file.name;
+ document.getElementById('details').innerHTML = '⏳ Sto leggendo il tuo MP3... ' + file.name;
  
  jsmediatags.read(file, {
   onSuccess: function(tag){
    const tags = tag.tags;
+   console.log(tags); // per debug
+   
    let title = tags.title || 'Senza titolo';
    let artist = tags.artist || 'Senza artista';
-   let album = tags.album || '';
+   let album = tags.album || 'Senza album';
+   // ANNO - proviamo tutti i campi possibili
+   let year = tags.year || tags.TDRC || tags.TYER || tags.TDAT || '';
+   if(typeof year === 'object' && year.data) year = year.data;
+   year = String(year).substring(0,4); // prendiamo solo anno 1978 da 1978-01-01
    
    let html = `<b>📁 File:</b> ${file.name}<br>`;
    html += `<b>🎵 Titolo:</b> ${title}<br>`;
    html += `<b>👤 Autore:</b> ${artist}<br>`;
    html += `<b>💿 Album:</b> ${album}<br>`;
+   
+   if(year && year != 'undefined' && year != ''){
+     html += `<b>📅 Anno:</b> <span class="ok">${year} ✅</span><br>`;
+   } else {
+     html += `<b>📅 Anno:</b> <span class="ko">NON PRESENTE ❌</span><br>`;
+   }
    
    if(tags.picture){
      let base64String = "";
@@ -48,15 +64,20 @@ document.getElementById('fileInput').addEventListener('change', function(e){
      }
      let base64 = "data:" + tags.picture.format + ";base64," + window.btoa(base64String);
      document.getElementById('cover').src = base64;
-     html += `<b>🖼️ Copertina:</b> <span style="color:#0f0">TROVATA! ✅ ${tags.picture.data.length} byte</span><br>`;
+     html += `<b>🖼️ Copertina:</b> <span class="ok">TROVATA! ✅ ${tags.picture.data.length} byte</span><br>`;
+     html += `<b>📐 Formato:</b> ${tags.picture.format}<br>`;
    } else {
-     document.getElementById('cover').src = '';
-     html += `<b>🖼️ Copertina:</b> <span style="color:#f00">NON C'È ❌</span><br>`;
+     document.getElementById('cover').src = 'https://via.placeholder.com/300x300/000000/ffd700?text=No+Cover';
+     html += `<b>🖼️ Copertina:</b> <span class="ko">NON C'È ❌</span><br>`;
    }
+   
+   // Info extra se ci sono
+   if(tags.genre) html += `<b>🎸 Genere:</b> ${tags.genre}<br>`;
+   
    document.getElementById('details').innerHTML = html;
   },
   onError: function(error){
-   document.getElementById('details').innerHTML = '❌ Errore: ' + error.info;
+   document.getElementById('details').innerHTML = '❌ Errore lettura: ' + error.info + '<br>Prova con un altro MP3';
   }
  });
 });
