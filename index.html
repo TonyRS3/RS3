@@ -1,4 +1,4 @@
-<!-- v252 FIX FINALE - COMPLETO - COVER+UNKNOWN+883+REFRESH - 17:20 -->
+<!-- v254 FIX COVER TITOLI CORTI - TU FIX - 17:20 --> <!-- v252 FIX FINALE - COMPLETO - COVER+UNKNOWN+883+REFRESH - 17:20 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -34,7 +34,89 @@ const ANNI_REALI_OVERRIDE={
 };
 function pulisciTitoloFinaleAntiRemaster(t){if(!t)return t;t=t.replace(/\s*[\(\[][^\)\]]*remaster[^\)\]]*[\)\]]/gi,'').trim();t=t.replace(/\s*-\s*\d{4}\s*-\s*remaster.*$/gi,'').trim();t=t.replace(/\s*-\s*.*remaster.*$/gi,'').trim();t=t.replace(/\s+\d{4}\s+Remaster(ed)?/gi,'').trim();t=t.replace(/\s+Remaster(ed)?(\s+\d{4})?/gi,'').trim();t=t.replace(/\s*\[ga R\]\s*/gi,'').trim();t=t.replace(/\s*\[.*?R\]\s*$/gi,'').trim();t=t.replace(/\s*\[.*?\]\s*$/,'').trim();return t;}
 async function fetchYearFromMusicBrainz(artista,titolo){try{if(!titolo)return null;let keyCheck=(titolo+"|"+artista).toLowerCase().trim();let keyCheck2=(titolo.toLowerCase().trim()+"|"+artista.toLowerCase().trim());if(ANNI_REALI_OVERRIDE[keyCheck])return ANNI_REALI_OVERRIDE[keyCheck];if(ANNI_REALI_OVERRIDE[keyCheck2])return ANNI_REALI_OVERRIDE[keyCheck2];for(let k in ANNI_REALI_OVERRIDE){let parts=k.split("|");if(parts[0]&&artista&&keyCheck.includes(parts[0])&&artista.toLowerCase().includes(parts[1]||"")){return ANNI_REALI_OVERRIDE[k];}if(keyCheck.includes(k.split("|")[0])&&artista&&k.includes(artista.toLowerCase())){return ANNI_REALI_OVERRIDE[k];}}let titoloPulito=pulisciTitoloFinaleAntiRemaster(titolo);let q=`recording:"${titoloPulito}"${artista?` AND artist:"${artista}"`:""}`;let anni=[];try{let url=`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(q)}&fmt=json&limit=15`;let r=await fetch(url);let j=await r.json();if(j.recordings){for(let rec of j.recordings){let skipLive=false;if(rec.releases){for(let rel of rec.releases){let tLow=(rel.title||"").toLowerCase();if(tLow.includes("live")||tLow.includes("concerto")||tLow.includes("dal vivo")){skipLive=true;break;}}}if(skipLive)continue;if(rec['first-release-date']){let y=parseInt(rec['first-release-date'].substring(0,4));if(y>1950&&y<2027)anni.push(y);}if(rec.releases){for(let rel of rec.releases){if(rel.date){let y=parseInt(rel.date.substring(0,4));if(y>1950&&y<2027)anni.push(y);}}}}} }catch(e){}try{let url=`https://musicbrainz.org/ws/2/release-group/?query=${encodeURIComponent(q)}&fmt=json&limit=15`;let r=await fetch(url);let j=await r.json();if(j['release-groups']){for(let rg of j['release-groups']){let tLow=(rg.title||"").toLowerCase();if(tLow.includes("live")||tLow.includes("concerto")||tLow.includes("dal vivo"))continue;if(rg['first-release-date']){let y=parseInt(rg['first-release-date'].substring(0,4));if(y>1950&&y<2027)anni.push(y);}}}}catch(e){}if(anni.length>0){anni.sort((a,b)=>a-b);return anni[0];}}catch(e){}return null;}
-async function fetchCopertinaBranoConAnno(artista,titolo){if(!titolo&&!artista)return{url:null,year:null,album:null};const key=(artista+"|"+titolo).toLowerCase();let cached=coverCacheRS3[key];if(cached&&cached.url&&cached.year){return cached;}let finalYear=cached&&cached.year?cached.year:null;let finalUrl=cached&&cached.url?cached.url:null;let finalAlbum=cached&&cached.album?cached.album:null;try{let mbYear=await fetchYearFromMusicBrainz(artista,titolo);if(mbYear)finalYear=mbYear;}catch(e){}try{if(!finalUrl){const term1=encodeURIComponent(((artista||"")+" "+(titolo||"")).trim());let r=await fetch(`https://itunes.apple.com/search?term=${term1}&media=music&entity=song&limit=1`,{cache:'no-store'});let j=await r.json();if(j.results&&j.results[0]&&j.results[0].artworkUrl100){finalUrl=j.results[0].artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600');if(j.results[0].collectionName)finalAlbum=j.results[0].collectionName;}if(!finalUrl){const term2=encodeURIComponent((titolo||"").trim());let r2=await fetch(`https://itunes.apple.com/search?term=${term2}&media=music&entity=song&limit=1`,{cache:'no-store'});let j2=await r2.json();if(j2.results&&j2.results[0]&&j2.results[0].artworkUrl100){finalUrl=j2.results[0].artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600');if(j2.results[0].collectionName)finalAlbum=j2.results[0].collectionName;}}}}catch(e){}let res={url:finalUrl,year:finalYear,album:finalAlbum};if(finalUrl||finalYear){coverCacheRS3[key]=res;}return res;}
+async function searchItunes(term, artistaHint){
+  try{
+    let url=`https://itunes.apple.com/search?term=${encodeURIComponent(term)}&media=music&entity=song&limit=5`;
+    let r=await fetch(url,{cache:'no-store'});
+    let j=await r.json();
+    if(j.results && j.results.length>0){
+      if(artistaHint){
+        let hint=artistaHint.toLowerCase();
+        for(let res of j.results){
+          let aName=(res.artistName||"").toLowerCase();
+          if(aName.includes(hint) || hint.includes(aName)){
+            return {url:res.artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600'), album:res.collectionName||null};
+          }
+        }
+      }
+      let first=j.results[0];
+      if(first.artworkUrl100) return {url:first.artworkUrl100.replace('100x100bb','600x600bb').replace('100x100','600x600'), album:first.collectionName||null};
+    }
+  }catch(e){}
+  return {url:null, album:null};
+}
+async function fetchCoverFromCoverArtArchive(artista,titolo){
+  try{
+    let titoloPulito=pulisciTitoloFinaleAntiRemaster(titolo);
+    let q=`recording:"${titoloPulito}"${artista?` AND artist:"${artista}"`:""}`;
+    let url=`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(q)}&fmt=json&limit=3`;
+    let r=await fetch(url); let j=await r.json();
+    if(j.recordings){
+      for(let rec of j.recordings){
+        if(rec.releases && rec.releases[0] && rec.releases[0].id){
+          let mbid=rec.releases[0].id;
+          let coverUrl=`https://coverartarchive.org/release/${mbid}/front-500`;
+          return {url:coverUrl, album:null};
+        }
+      }
+    }
+  }catch(e){}
+  return {url:null, album:null};
+}
+async function fetchCoverSmart(artista,titolo){
+  if(!titolo && !artista) return {url:null, album:null};
+  let isShort = titolo && titolo.trim().length <= 3;
+  let res = await searchItunes((artista+" "+titolo).trim(), artista);
+  if(res.url) return res;
+  if(artista){
+    res = await searchItunes((titolo+" "+artista).trim(), artista);
+    if(res.url) return res;
+  }
+  if(!isShort){
+    res = await searchItunes(titolo.trim(), artista);
+    if(res.url) return res;
+  }
+  if(isShort && artista){
+    res = await searchItunes(artista.trim(), artista);
+    if(res.url) return res;
+  }
+  res = await fetchCoverFromCoverArtArchive(artista,titolo);
+  if(res.url) return res;
+  return {url:null, album:null};
+}
+async function fetchCopertinaBranoConAnno(artista,titolo){
+  if(!titolo&&!artista)return{url:null,year:null,album:null};
+  const key=(artista+"|"+titolo).toLowerCase();
+  let cached=coverCacheRS3[key];
+  if(cached && cached.url && cached.year) return cached;
+  if(cached && cached.url && !cached.year){
+    try{let y=await fetchYearFromMusicBrainz(artista,titolo); if(y){cached.year=y; coverCacheRS3[key]=cached;}}catch(e){}
+    return cached;
+  }
+  let finalYear=cached&&cached.year?cached.year:null;
+  let finalUrl=cached&&cached.url?cached.url:null;
+  let finalAlbum=cached&&cached.album?cached.album:null;
+  let pYear = finalYear ? Promise.resolve(finalYear) : fetchYearFromMusicBrainz(artista,titolo);
+  let pCover = finalUrl ? Promise.resolve({url:finalUrl, album:finalAlbum}) : fetchCoverSmart(artista,titolo);
+  let yRes = null; let cRes = null;
+  try{ yRes = await pYear; }catch(e){}
+  try{ cRes = await pCover; }catch(e){}
+  if(yRes) finalYear=yRes;
+  if(cRes && cRes.url){ finalUrl=cRes.url; if(cRes.album) finalAlbum=cRes.album; }
+  let res={url:finalUrl,year:finalYear,album:finalAlbum};
+  if(finalUrl||finalYear){ coverCacheRS3[key]=res; }
+  return res;
+}
 const BRANI_NOVITA=[{id:"ZPV7WNHJ0g8",artista:"Chloe Qisha",titolo:"Question Of The Day"},{id:"DPEodkHzH-s",artista:"Tate McRae",titolo:"Housewife"},{id:"FC1FW1vp8eY",artista:"Cioffi",titolo:"Superstar"},{id:"0xuFBG6o6EU",artista:"Gaia",titolo:"Senz'allegria"},{id:"ofywN3NgGqY",artista:"Sombr",titolo:"My body isn't ready"},{id:"PshqcQwshdU",artista:"Sfera Ebbasta",titolo:"Lontano"},{id:"2r1njyfmREA",artista:"SOFI TUKKER & OneRepublic",titolo:"TSUNAMI"},{id:"0xuFBG6o6EU",artista:"Gaia",titolo:"Senz'Allegria"},{id:"pzvhHsEqMzo",artista:"Marco Mengoni",titolo:"Giornate Perse"},{id:"fRIhCiUVaKs",artista:"Karol G",titolo:"Bby Wow"}];
 function normalizzaBrano(b){if(typeof b==='string')return{id:b,artista:'',titolo:b};return b;}
 const PLACEHOLDER_HTML=`<div style="text-align:center"><div style="color:#fff;font-weight:bold">Scegli un brano</div><div style="font-size:2rem">👇</div></div>`;
@@ -143,7 +225,7 @@ body.night-mode #rs3-mio-box{border:1.5px solid #c9a86a !important}
 <div class="meteo-side center-left"><div class="meteo-side-title">CENTRO SUD</div><div id="meteo-right" class="meteo-side-grid"></div></div>
 <div class="left-double-wide">
 <div class="news-box-side" id="infoBranoSottoMeteo">
-<div class="news-title" style="color:#ffd966">💿 INFO BRANO <span style="font-size:0.55rem;color:#00ff88">v252 FIX FINALE</span></div>
+<div class="news-title" style="color:#ffd966">💿 INFO BRANO <span style="font-size:0.55rem;color:#00ff88">v254 FIX TITOLI CORTI</span></div>
 <div id="infoBranoContentLeft"><div style="color:#888;text-align:center;padding:8px">🎵 In attesa brano...</div></div>
 </div>
 </div>
