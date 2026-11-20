@@ -1,4 +1,4 @@
-<!-- v263 FIX POPUP VERO - NON CANCELLA PIU ?popup=1 - PARTE 1/2 - 20-11-2026 -->
+<!-- v264 ACCORCIA DI SOTTO - FINISCE A POCHI MM DAL BOX BRANO - PARTE 1/2 - 20-11-2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -40,7 +40,7 @@ if(window._isPopupPage||window.location.search.includes('popup=1')){document.doc
 .meteo-mini b{font-size:0.70rem;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .meteo-mini img{width:22px;height:22px;margin:0 4px;flex:0 0 22px}
 .meteo-mini .temp{font-size:0.85rem;font-weight:900;color:#ffd966;min-width:32px;text-align:right}
-.container{max-width:900px;margin:0 auto;padding:28px;background:rgba(255,255,255,.08);backdrop-filter:blur(8px);border-radius:25px;border:1px solid rgba(255,255,255,.15);grid-column:3;grid-row:1 / span 3}
+.container{max-width:900px;margin:0 auto;padding:28px 28px 4px 28px;background:rgba(255,255,255,.08);backdrop-filter:blur(8px);border-radius:25px;border:1px solid rgba(255,255,255,.15);grid-column:3;grid-row:1 / span 3}
 .logo-wrap{display:inline-block;padding:5px;border-radius:26px;background:linear-gradient(135deg,#ff512f,#dd2476,#ffd966,#00d4ff,#ff512f);background-size:300% 300%;animation:gradientMove 4s ease infinite}
 @keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 .logo{width:260px;height:260px;object-fit:cover;border-radius:20px;display:block;background:#fff}
@@ -52,12 +52,12 @@ h1{margin-top:20px;font-size:3rem}
 audio{width:100%;max-width:340px;height:36px}
 .btn-popup{margin-top:6px;background:#222;color:#ffd966;border:1px solid #ffd966;padding:6px 14px;border-radius:20px;font-weight:900;font-size:0.80rem;cursor:pointer}
 .cc_recenttracks_list{display:none !important;height:0 !important;min-height:0 !important;max-height:0 !important;margin:0 !important;padding:0 !important;overflow:hidden !important;opacity:0 !important;pointer-events:none !important;border:none !important}
-#rs3-mio-box{margin-top:2px !important;margin-bottom:0 !important;top:0 !important;position:relative !important;transform:none !important;max-width:400px !important;margin-left:auto !important;margin-right:auto !important;background:rgba(0,0,0,0.85) !important;padding:0 !important;border-radius:14px !important;min-height:95px !important;overflow:hidden !important;display:block !important;opacity:1 !important}
+#rs3-mio-box{margin-top:2px !important;margin-bottom:2px !important;top:0 !important;position:relative !important;transform:none !important;max-width:400px !important;margin-left:auto !important;margin-right:auto !important;background:rgba(0,0,0,0.85) !important;padding:0 !important;border-radius:14px !important;min-height:95px !important;overflow:hidden !important;display:block !important;opacity:1 !important}
 .rs3-trackbox{display:flex !important;flex-direction:row !important;align-items:center !important;gap:14px !important;padding:12px 12px !important;width:100% !important;min-height:95px !important}
 .rs3-cover{width:72px !important;height:72px !important;min-width:72px !important;object-fit:cover !important;border-radius:8px !important;background:#000 !important;display:block !important;flex:0 0 72px !important}
 .rs3-info{flex:1 !important;display:flex !important;flex-direction:column !important;text-align:left !important;color:white !important;font-size:0.92rem !important;line-height:1.4 !important;gap:4px !important;overflow:hidden !important}
 .btn-novita{margin-top:8px !important;background:#ff0033 !important;color:#fff !important;font-weight:900 !important;padding:12px 26px !important;border:none !important;border-radius:50px !important;font-size:1.1rem !important;cursor:pointer !important;display:inline-block !important}
-#novitaSection{display:none;margin-top:10px;background:rgba(0,0,0,.6);padding:15px;border-radius:20px}
+#novitaSection{display:none;margin-top:0 !important;margin-bottom:0 !important;padding:0 !important;background:transparent !important}
 #novitaPlayerMain{width:65%;max-width:340px;aspect-ratio:16/9;background:#1a1a1a;border-radius:12px;margin:0 auto 12px auto;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border:2px dashed #555}
 #novitaPlayerMain iframe{width:100%;height:100%;border:0;position:absolute;top:0;left:0}
 #novitaList{max-height:350px;overflow-y:auto;text-align:left}
@@ -77,18 +77,18 @@ audio{width:100%;max-width:340px;height:36px}
 #infoBranoSottoMeteo{border-color:#ffd966 !important;background:rgba(0,0,0,0.92) !important;box-shadow:0 0 12px rgba(255,217,102,0.25) !important;min-height:380px !important}
 #infoBranoContentLeft{font-size:.82rem;line-height:1.5;color:#eee;text-align:left;min-height:300px}
 .info-riga-left{display:flex;gap:6px;margin-bottom:6px;background:rgba(255,255,255,.06);padding:6px 8px;border-radius:6px;font-size:.78rem}
-html.is-popup{height:100%}
-html.is-popup body{background:#0a1931 !important;min-height:100vh !important;height:auto !important;overflow-y:auto !important;overflow-x:hidden !important}
-html.is-popup .page-layout{display:block !important;min-height:100vh !important}
+html.is-popup{height:auto !important}
+html.is-popup body{background:#0a1931 !important;min-height:0 !important;height:auto !important;overflow-y:auto !important;overflow-x:hidden !important}
+html.is-popup .page-layout{display:block !important;min-height:0 !important}
 html.is-popup .meteo-side, html.is-popup .news-box-side, html.is-popup .left-double-wide, html.is-popup .btn-novita, html.is-popup #novitaSection, html.is-popup .footer-copy, html.is-popup .btn-popup, html.is-popup .logo-wrap{display:none !important}
-html.is-popup .container{max-width:100% !important;width:100% !important;margin:0 !important;border-radius:0 !important;padding:12px 10px 40px 10px !important;background:rgba(10,25,49,0.98) !important;min-height:100vh !important;height:auto !important;overflow:visible !important}
+html.is-popup .container{max-width:100% !important;width:100% !important;margin:0 !important;border-radius:0 !important;padding:12px 10px 4px 10px !important;background:rgba(10,25,49,0.98) !important;min-height:0 !important;height:auto !important;overflow:visible !important}
 @media (max-width:768px){
 .meteo-side,.news-box-side,.left-double-wide{display:none !important}
 .btn-novita,#novitaSection,.btn-popup{display:none !important}
 .logo-wrap{display:none !important}
 body{min-height:100dvh !important;display:flex !important;flex-direction:column !important}
 .page-layout{display:flex !important;flex-direction:column !important;justify-content:center !important;align-items:center !important;flex:1 !important;width:100% !important;grid-template-columns:1fr !important}
-.container{max-width:96% !important;width:96% !important;margin:auto !important;border-radius:18px !important;padding:20px 14px !important}
+.container{max-width:96% !important;width:96% !important;margin:auto !important;border-radius:18px !important;padding:20px 14px 4px 14px !important}
 h1{font-size:2.2rem !important;margin-top:10px !important}
 .cc_recenttracks_list, #rs3-mio-box{max-width:96% !important;width:96% !important;margin:2px auto !important}
 .rs3-trackbox{padding:10px 10px !important;gap:10px !important;min-height:85px !important}
@@ -101,7 +101,7 @@ h1{font-size:2.2rem !important;margin-top:10px !important}
 .logo-wrap{display:none !important}
 body{min-height:100dvh !important;display:flex !important;flex-direction:column !important;overflow-x:hidden !important}
 .page-layout{display:flex !important;flex-direction:column !important;justify-content:center !important;align-items:center !important;flex:1 !important;width:100% !important;padding:4px !important}
-.container{max-width:70% !important;width:70% !important;margin:auto !important;padding:12px 14px !important;border-radius:18px !important}
+.container{max-width:70% !important;width:70% !important;margin:auto !important;padding:12px 14px 4px 14px !important;border-radius:18px !important}
 h1{font-size:1.6rem !important;margin-top:5px !important}
 .live{font-size:1rem !important;margin-top:5px !important}
 .player-box{margin-top:4px !important;padding:8px !important}
