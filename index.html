@@ -1,4 +1,4 @@
-<!-- v270 ONDE A SINISTRA + PLAY A DESTRA STESSA ALTEZZA - NON TOCCARE ALTRO - PARTE 1/2 -->
+<!-- v271 PLAY PIU IN CENTRO + LEVEL VERDE GIALLO ROSSO - NON TOCCARE ALTRO - PARTE 1/2 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -52,7 +52,7 @@ h1{margin-top:20px;font-size:3rem}
 audio{width:100%;max-width:340px;height:36px}
 #radioAudio{display:none !important;width:0 !important;height:0 !important;opacity:0 !important;pointer-events:none !important}
 .rs3-bigplay-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;margin:4px auto 2px auto}
-.rs3-bigplay-row{display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:12px;width:100%;max-width:320px;padding:0 12px}
+.rs3-bigplay-row{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:32px;width:100%;max-width:320px;padding:0 12px}
 #rs3BigPlay{width:64px;height:64px;min-width:64px;min-height:64px;border-radius:50%;border:3px solid #ffd966;background:linear-gradient(135deg,#ffd966,#ff9a00);color:#000;font-size:26px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(255,217,102,.55);-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 #rs3BigPlay:active{transform:scale(.94)}
 #rs3BigPlayLabel{font-size:.78rem;font-weight:900;letter-spacing:2px;color:#ffd966;text-align:center}
@@ -216,7 +216,7 @@ attachAudioListeners();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&wasPlayingBeforeHide&&radioEl.paused&&!userPaused&&!window._pausedForPopup&&!window._pausedForPlaylist){tryAutoPlay();}});
 window.addEventListener('pagehide',()=>{if(!radioEl.paused&&!userPaused)wasPlayingBeforeHide=true;});
 window.addEventListener('pageshow',()=>{if(wasPlayingBeforeHide&&radioEl.paused&&!userPaused)tryAutoPlay();});
-function draw(){const W=vuCanvas.width,H=vuCanvas.height;vuCtx.clearRect(0,0,W,H);vuCtx.fillStyle='#0a0a0a';vuCtx.fillRect(0,0,W,H);let bars=36,barW=W/bars,gap=1.5,rowH=H/2-2;let aL=Math.floor((lL/100)*bars);for(let i=0;i<bars;i++){let x=i*barW;let lit=i<aL;vuCtx.fillStyle=lit?(i<21?'#00ff2a':i<30?'#ffea00':'#ff1a1a'):'#1a1a1a';vuCtx.fillRect(x+gap,1+(rowH-(lit?rowH-1:rowH*0.4))/2,barW-gap*2,lit?rowH-1:rowH*0.4);}vuCtx.fillStyle='#333';vuCtx.fillRect(0,H/2-0.5,W,1);let aR=Math.floor((lR/100)*bars);for(let i=0;i<bars;i++){let x=i*barW;let lit=i<aR;vuCtx.fillStyle=lit?(i<21?'#00d4ff':i<30?'#ffea00':'#ff1a1a'):'#1a1a1a';vuCtx.fillRect(x+gap,H/2+1+(rowH-(lit?rowH-1:rowH*0.4))/2,barW-gap*2,lit?rowH-1:rowH*0.4);}requestAnimationFrame(draw);}
+function draw(){const W=vuCanvas.width,H=vuCanvas.height;vuCtx.clearRect(0,0,W,H);vuCtx.fillStyle='#0a0a0a';vuCtx.fillRect(0,0,W,H);let bars=36,barW=W/bars,gap=1.5,rowH=H/2-2;let aL=Math.floor((lL/100)*bars);for(let i=0;i<bars;i++){let x=i*barW;let lit=i<aL;vuCtx.fillStyle=lit?(i<21?'#00ff2a':i<30?'#ffea00':'#ff1a1a'):'#1a1a1a';vuCtx.fillRect(x+gap,1+(rowH-(lit?rowH-1:rowH*0.4))/2,barW-gap*2,lit?rowH-1:rowH*0.4);}vuCtx.fillStyle='#333';vuCtx.fillRect(0,H/2-0.5,W,1);let aR=Math.floor((lR/100)*bars);for(let i=0;i<bars;i++){let x=i*barW;let lit=i<aR;vuCtx.fillStyle=lit?(i<21?'#00ff2a':i<30?'#ffea00':'#ff1a1a'):'#1a1a1a';vuCtx.fillRect(x+gap,H/2+1+(rowH-(lit?rowH-1:rowH*0.4))/2,barW-gap*2,lit?rowH-1:rowH*0.4);}requestAnimationFrame(draw);}
 function upd(){if(!isPlaying){let idle=8+Math.random()*10;let tL=idle+Math.random()*4;let tR=idle+Math.random()*4;lL+=(tL-lL)*0.08;lR+=(tR-lR)*0.08;return;}if(realMode&&analyser&&dataArray){try{analyser.getByteFrequencyData(dataArray);let sum=0;for(let i=0;i<dataArray.length;i++)sum+=dataArray[i];if(sum<10)throw 'cors';let vol=Math.min(100,(sum/dataArray.length/255)*100*1.9);let tL=vol*(0.97+Math.random()*0.06);let tR=vol*(0.97+Math.random()*0.06);lL+=(tL-lL)*0.52;lR+=(tR-lR)*0.52;return;}catch(e){}}let base=18+Math.random()*38;let isPeak=Math.random()<0.16;let tL=isPeak?74+Math.random()*22:base+Math.random()*10;let tR=isPeak?72+Math.random()*22:base+Math.random()*10;lL+=(tL-lL)*0.38;lR+=(tR-lR)*0.38;}
 draw();setInterval(upd,45);
 document.addEventListener('touchstart',()=>{try{if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();}catch(e){}},{passive:true});
