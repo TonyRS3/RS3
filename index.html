@@ -1,4 +1,4 @@
-<!-- v267 FIX RACCOLTE - NO VERY BEST / GREATEST HITS - PARTE 1/2 -->
+<!-- v268 BOTTONE PLAY GRANDE AL POSTO BARRA - NON TOCCARE ALTRO - PARTE 1/2 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -50,6 +50,11 @@ h1{margin-top:20px;font-size:3rem}
 .player-box{margin-top:8px;margin-bottom:2px !important;background:rgba(255,255,255,.10);padding:10px 12px 8px 12px;border-radius:20px;width:400px;max-width:92%;margin-left:auto;margin-right:auto;overflow:hidden !important}
 .section-title{font-size:1.4rem;margin-bottom:8px;color:#ffd966}
 audio{width:100%;max-width:340px;height:36px}
+#radioAudio{display:none !important;width:0 !important;height:0 !important;opacity:0 !important;pointer-events:none !important}
+.rs3-bigplay-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;margin:4px auto 2px auto}
+#rs3BigPlay{width:64px;height:64px;min-width:64px;min-height:64px;border-radius:50%;border:3px solid #ffd966;background:linear-gradient(135deg,#ffd966,#ff9a00);color:#000;font-size:26px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(255,217,102,.55);-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+#rs3BigPlay:active{transform:scale(.94)}
+#rs3BigPlayLabel{font-size:.78rem;font-weight:900;letter-spacing:2px;color:#ffd966}
 .btn-popup{margin-top:6px;background:#222;color:#ffd966;border:1px solid #ffd966;padding:6px 14px;border-radius:20px;font-weight:900;font-size:0.80rem;cursor:pointer}
 .cc_recenttracks_list{display:none !important;height:0 !important;min-height:0 !important;max-height:0 !important;margin:0 !important;padding:0 !important;overflow:hidden !important;opacity:0 !important;pointer-events:none !important;border:none !important}
 #rs3-mio-box{margin-top:2px !important;margin-bottom:0 !important;top:0 !important;position:relative !important;transform:none !important;max-width:400px !important;margin-left:auto !important;margin-right:auto !important;background:rgba(0,0,0,0.85) !important;padding:0 !important;border-radius:14px !important;min-height:95px !important;overflow:hidden !important;display:block !important;opacity:1 !important}
@@ -94,6 +99,7 @@ h1{font-size:2.2rem !important;margin-top:10px !important}
 .rs3-trackbox{padding:10px 10px !important;gap:10px !important;min-height:85px !important}
 .rs3-cover{width:62px !important;height:62px !important;min-width:62px !important;flex:0 0 62px !important}
 .footer-copy{margin-top:auto !important}
+#rs3BigPlay{width:76px !important;height:76px !important;min-width:76px !important;min-height:76px !important;font-size:30px !important}
 }
 @media (max-width:1024px) and (orientation:landscape){
 .meteo-side,.news-box-side,.left-double-wide{display:none !important}
@@ -140,7 +146,8 @@ body.night-mode #rs3-mio-box{border:1.5px solid #c9a86a !important}
 <div class="live" id="liveText">ON AIR 24/7</div>
 <div class="player-box">
 <div class="section-title">♪ Ascolta in diretta</div>
-<audio id="radioAudio" controls preload="none" playsinline webkit-playsinline crossorigin="anonymous" src="https://listentomystream.com:8046/stream"></audio>
+<audio id="radioAudio" preload="none" playsinline webkit-playsinline crossorigin="anonymous" src="https://listentomystream.com:8046/stream"></audio>
+<div class="rs3-bigplay-wrap"><button id="rs3BigPlay" type="button" aria-label="Play Pausa"><span id="rs3BigPlayIcon">▶</span></button><div id="rs3BigPlayLabel">PREMI PLAY</div></div>
 <div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L R STEREO</span><span id="vuPeak" style="color:#ff4444">STOP</span></div></div>
 <button class="btn-popup" onclick="apriPopup()">⧉ POPUP</button>
 </div>
@@ -191,9 +198,14 @@ function caricaMeteo(){if(document.documentElement.classList.contains('is-popup'
 <script>
 const vuCanvas=document.getElementById('vuCanvas');const vuCtx=vuCanvas.getContext('2d');const vuPeakEl=document.getElementById('vuPeak');
 let isPlaying=false,lL=0,lR=0;let audioCtx=null,analyser=null,dataArray=null,sourceNode=null,realMode=false;let radioEl=document.getElementById('radioAudio');let userPaused=true;let wasPlayingBeforeHide=false;let _lastPauseTs=0;let _isRecreating=false;if(window._isPopupPage||window.location.search.includes('popup=1')){userPaused=false;wasPlayingBeforeHide=true;_lastPauseTs=0;}
+function syncBigPlay(){try{var b=document.getElementById('rs3BigPlay');var ic=document.getElementById('rs3BigPlayIcon');var lb=document.getElementById('rs3BigPlayLabel');if(!b||!ic||!lb)return;var a=document.getElementById('radioAudio');var playing=a&&!a.paused;ic.textContent=playing?'⏸':'▶';lb.textContent=playing?'IN ONDA - PREMI PER PAUSA':'PREMI PLAY';}catch(e){}}
+function onBigPlayClick(){try{var a=document.getElementById('radioAudio');if(!a)return;if(a.paused){tryAutoPlay(true);}else{try{a.pause();}catch(e){}userPaused=true;wasPlayingBeforeHide=false;}setTimeout(syncBigPlay,300);}catch(e){}}
+document.addEventListener('DOMContentLoaded',()=>{var b=document.getElementById('rs3BigPlay');if(b)b.addEventListener('click',onBigPlayClick);syncBigPlay();});
+if(document.readyState!=='loading'){var _b0=document.getElementById('rs3BigPlay');if(_b0)_b0.addEventListener('click',onBigPlayClick);}
+setInterval(syncBigPlay,500);
 function initRealVU(){try{if(/Mobi|Android|iPhone/i.test(navigator.userAgent)){realMode=false;return false;}if(audioCtx){if(audioCtx.state==='suspended')audioCtx.resume();return realMode;}audioCtx=new (window.AudioContext||window.webkitAudioContext)();analyser=audioCtx.createAnalyser();analyser.fftSize=512;analyser.smoothingTimeConstant=0.75;dataArray=new Uint8Array(analyser.frequencyBinCount);sourceNode=audioCtx.createMediaElementSource(radioEl);sourceNode.connect(analyser);analyser.connect(audioCtx.destination);realMode=true;return true;}catch(e){realMode=false;return false;}}
-function attachAudioListeners(){radioEl.addEventListener('pause',()=>{if(_isRecreating)return;isPlaying=false;vuPeakEl.textContent="STOP";vuPeakEl.style.color="#ff4444";_lastPauseTs=Date.now();if(window._pausedForPopup||window._pausedForPlaylist){return;}if(document.hidden){wasPlayingBeforeHide=!userPaused;return;}if(window._isPopupPage||window.location.search.includes('popup=1')){wasPlayingBeforeHide=true;return;}userPaused=true;wasPlayingBeforeHide=false;});radioEl.addEventListener('play',(e)=>{if(_isRecreating)return;if(userPaused&&(Date.now()-_lastPauseTs)>300&&!window._isPopupPage&&!window.location.search.includes('popup=1')){try{e.preventDefault();radioEl.pause();}catch(er){}createFreshAudioAndPlay();return;}isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;try{if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();}catch(e){}try{initRealVU();}catch(e){}});}
-function createFreshAudioAndPlay(){_isRecreating=true;const old=document.getElementById('radioAudio');try{old.pause();old.src='';old.load();}catch(e){}const fresh=document.createElement('audio');fresh.id='radioAudio';fresh.controls=true;fresh.preload='none';fresh.playsInline=true;fresh.crossOrigin='anonymous';fresh.setAttribute('webkit-playsinline','');fresh.src="https://listentomystream.com:8046/stream?_t="+Date.now();try{old.parentNode.replaceChild(fresh,old);}catch(e){document.querySelector('.player-box').prepend(fresh);}radioEl=fresh;attachAudioListeners();try{audioCtx=null;analyser=null;dataArray=null;sourceNode=null;realMode=false;}catch(e){}return fresh.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;setTimeout(()=>{_isRecreating=false;},600);}).catch(()=>{_isRecreating=false;});}
+function attachAudioListeners(){radioEl.addEventListener('pause',()=>{if(_isRecreating)return;isPlaying=false;vuPeakEl.textContent="STOP";vuPeakEl.style.color="#ff4444";_lastPauseTs=Date.now();if(window._pausedForPopup||window._pausedForPlaylist){syncBigPlay();return;}if(document.hidden){wasPlayingBeforeHide=!userPaused;syncBigPlay();return;}if(window._isPopupPage||window.location.search.includes('popup=1')){wasPlayingBeforeHide=true;syncBigPlay();return;}userPaused=true;wasPlayingBeforeHide=false;syncBigPlay();});radioEl.addEventListener('play',(e)=>{if(_isRecreating)return;if(userPaused&&(Date.now()-_lastPauseTs)>300&&!window._isPopupPage&&!window.location.search.includes('popup=1')){try{e.preventDefault();radioEl.pause();}catch(er){}createFreshAudioAndPlay();return;}isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;try{if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();}catch(e){}try{initRealVU();}catch(e){}syncBigPlay();});}
+function createFreshAudioAndPlay(){_isRecreating=true;const old=document.getElementById('radioAudio');try{old.pause();old.src='';old.load();}catch(e){}const fresh=document.createElement('audio');fresh.id='radioAudio';fresh.controls=false;fresh.preload='none';fresh.playsInline=true;fresh.crossOrigin='anonymous';fresh.setAttribute('webkit-playsinline','');fresh.style.display='none';fresh.src="https://listentomystream.com:8046/stream?_t="+Date.now();try{old.parentNode.replaceChild(fresh,old);}catch(e){document.querySelector('.player-box').prepend(fresh);}radioEl=fresh;attachAudioListeners();try{audioCtx=null;analyser=null;dataArray=null;sourceNode=null;realMode=false;}catch(e){}return fresh.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;syncBigPlay();setTimeout(()=>{_isRecreating=false;},600);}).catch(()=>{_isRecreating=false;syncBigPlay();});}
 function tryAutoPlay(isManual){return createFreshAudioAndPlay();}
 attachAudioListeners();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&wasPlayingBeforeHide&&radioEl.paused&&!userPaused&&!window._pausedForPopup&&!window._pausedForPlaylist){tryAutoPlay();}});
