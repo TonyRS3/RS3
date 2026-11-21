@@ -1,4 +1,4 @@
-<!-- v269 PLAY A SINISTRA CENTRO + ONDE A DESTRA - NON TOCCARE ALTRO - PARTE 1/2 -->
+<!-- v270 ONDE A SINISTRA + PLAY A DESTRA STESSA ALTEZZA - NON TOCCARE ALTRO - PARTE 1/2 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -51,12 +51,12 @@ h1{margin-top:20px;font-size:3rem}
 .section-title{font-size:1.4rem;margin-bottom:8px;color:#ffd966}
 audio{width:100%;max-width:340px;height:36px}
 #radioAudio{display:none !important;width:0 !important;height:0 !important;opacity:0 !important;pointer-events:none !important}
-.rs3-bigplay-wrap{display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:12px;max-width:320px;margin:4px auto 2px auto;padding:0 12px}
-.rs3-play-left{display:flex;flex-direction:column;align-items:center;gap:6px;margin-left:28px}
+.rs3-bigplay-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;margin:4px auto 2px auto}
+.rs3-bigplay-row{display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:12px;width:100%;max-width:320px;padding:0 12px}
 #rs3BigPlay{width:64px;height:64px;min-width:64px;min-height:64px;border-radius:50%;border:3px solid #ffd966;background:linear-gradient(135deg,#ffd966,#ff9a00);color:#000;font-size:26px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(255,217,102,.55);-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 #rs3BigPlay:active{transform:scale(.94)}
-#rs3BigPlayLabel{font-size:.78rem;font-weight:900;letter-spacing:2px;color:#ffd966}
-#rs3Onde{width:64px;height:64px;min-width:64px;min-height:64px;object-fit:cover;border-radius:50%;border:2px solid #ffd966;background:#000;opacity:.55}
+#rs3BigPlayLabel{font-size:.78rem;font-weight:900;letter-spacing:2px;color:#ffd966;text-align:center}
+#rs3Onde{width:64px;height:64px;min-width:64px;min-height:64px;object-fit:cover;border-radius:50%;border:2px solid #ffd966;background:#000;opacity:.55;display:block}
 #rs3Onde.rs3-onde-playing{opacity:1;animation:ondePulse 1.4s infinite}
 @keyframes ondePulse{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
 .btn-popup{margin-top:6px;background:#222;color:#ffd966;border:1px solid #ffd966;padding:6px 14px;border-radius:20px;font-weight:900;font-size:0.80rem;cursor:pointer}
@@ -104,7 +104,6 @@ h1{font-size:2.2rem !important;margin-top:10px !important}
 .rs3-cover{width:62px !important;height:62px !important;min-width:62px !important;flex:0 0 62px !important}
 .footer-copy{margin-top:auto !important}
 #rs3BigPlay{width:76px !important;height:76px !important;min-width:76px !important;min-height:76px !important;font-size:30px !important}
-.rs3-play-left{margin-left:32px !important}
 #rs3Onde{width:76px !important;height:76px !important;min-width:76px !important;min-height:76px !important}
 }
 @media (max-width:1024px) and (orientation:landscape){
@@ -153,7 +152,7 @@ body.night-mode #rs3-mio-box{border:1.5px solid #c9a86a !important}
 <div class="player-box">
 <div class="section-title">♪ Ascolta in diretta</div>
 <audio id="radioAudio" preload="none" playsinline webkit-playsinline crossorigin="anonymous" src="https://listentomystream.com:8046/stream"></audio>
-<div class="rs3-bigplay-wrap"><div class="rs3-play-left"><button id="rs3BigPlay" type="button" aria-label="Play Pausa"><span id="rs3BigPlayIcon">▶</span></button><div id="rs3BigPlayLabel">PREMI PLAY</div></div><img id="rs3Onde" src="onde_radio.jpeg" alt="Onde radio"></div>
+<div class="rs3-bigplay-wrap"><div class="rs3-bigplay-row"><img id="rs3Onde" src="onde_radio.jpeg" alt="Onde radio"><button id="rs3BigPlay" type="button" aria-label="Play Pausa"><span id="rs3BigPlayIcon">▶</span></button></div><div id="rs3BigPlayLabel">PREMI PLAY</div></div>
 <div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L R STEREO</span><span id="vuPeak" style="color:#ff4444">STOP</span></div></div>
 <button class="btn-popup" onclick="apriPopup()">⧉ POPUP</button>
 </div>
