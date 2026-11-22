@@ -1,4 +1,4 @@
-<!-- v271 PLAY PIU IN CENTRO + LEVEL VERDE GIALLO ROSSO - NON TOCCARE ALTRO - PARTE 1/2 -->
+<!-- v272 PLAY PAUSA DISEGNATI CSS NO EMOJI - NON TOCCARE ALTRO - PARTE 1/2 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -53,8 +53,12 @@ audio{width:100%;max-width:340px;height:36px}
 #radioAudio{display:none !important;width:0 !important;height:0 !important;opacity:0 !important;pointer-events:none !important}
 .rs3-bigplay-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;margin:4px auto 2px auto}
 .rs3-bigplay-row{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:32px;width:100%;max-width:320px;padding:0 12px}
-#rs3BigPlay{width:64px;height:64px;min-width:64px;min-height:64px;border-radius:50%;border:3px solid #ffd966;background:linear-gradient(135deg,#ffd966,#ff9a00);color:#000;font-size:26px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(255,217,102,.55);-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+#rs3BigPlay{width:64px;height:64px;min-width:64px;min-height:64px;border-radius:50%;border:3px solid #ffd966;background:linear-gradient(135deg,#ffd966,#ff9a00);color:#000;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(255,217,102,.55);-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 #rs3BigPlay:active{transform:scale(.94)}
+#rs3BigPlayIcon{display:flex;align-items:center;justify-content:center}
+#rs3BigPlayIcon.rs3-play{width:0;height:0;border-top:14px solid transparent;border-bottom:14px solid transparent;border-left:24px solid #000;margin-left:5px}
+#rs3BigPlayIcon.rs3-pause{width:24px;height:28px;display:flex;gap:7px}
+#rs3BigPlayIcon.rs3-pause i{display:block;width:8px;height:28px;background:#000;border-radius:2px}
 #rs3BigPlayLabel{font-size:.78rem;font-weight:900;letter-spacing:2px;color:#ffd966;text-align:center}
 #rs3Onde{width:64px;height:64px;min-width:64px;min-height:64px;object-fit:cover;border-radius:50%;border:2px solid #ffd966;background:#000;opacity:.55;display:block}
 #rs3Onde.rs3-onde-playing{opacity:1;animation:ondePulse 1.4s infinite}
@@ -103,7 +107,7 @@ h1{font-size:2.2rem !important;margin-top:10px !important}
 .rs3-trackbox{padding:10px 10px !important;gap:10px !important;min-height:85px !important}
 .rs3-cover{width:62px !important;height:62px !important;min-width:62px !important;flex:0 0 62px !important}
 .footer-copy{margin-top:auto !important}
-#rs3BigPlay{width:76px !important;height:76px !important;min-width:76px !important;min-height:76px !important;font-size:30px !important}
+#rs3BigPlay{width:76px !important;height:76px !important;min-width:76px !important;min-height:76px !important}
 #rs3Onde{width:76px !important;height:76px !important;min-width:76px !important;min-height:76px !important}
 }
 @media (max-width:1024px) and (orientation:landscape){
@@ -152,7 +156,7 @@ body.night-mode #rs3-mio-box{border:1.5px solid #c9a86a !important}
 <div class="player-box">
 <div class="section-title">♪ Ascolta in diretta</div>
 <audio id="radioAudio" preload="none" playsinline webkit-playsinline crossorigin="anonymous" src="https://listentomystream.com:8046/stream"></audio>
-<div class="rs3-bigplay-wrap"><div class="rs3-bigplay-row"><img id="rs3Onde" src="onde_radio.jpeg" alt="Onde radio"><button id="rs3BigPlay" type="button" aria-label="Play Pausa"><span id="rs3BigPlayIcon">▶</span></button></div><div id="rs3BigPlayLabel">PREMI PLAY</div></div>
+<div class="rs3-bigplay-wrap"><div class="rs3-bigplay-row"><img id="rs3Onde" src="onde_radio.jpeg" alt="Onde radio"><button id="rs3BigPlay" type="button" aria-label="Play Pausa"><span id="rs3BigPlayIcon" class="rs3-play"></span></button></div><div id="rs3BigPlayLabel">PREMI PLAY</div></div>
 <div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L R STEREO</span><span id="vuPeak" style="color:#ff4444">STOP</span></div></div>
 <button class="btn-popup" onclick="apriPopup()">⧉ POPUP</button>
 </div>
@@ -203,7 +207,7 @@ function caricaMeteo(){if(document.documentElement.classList.contains('is-popup'
 <script>
 const vuCanvas=document.getElementById('vuCanvas');const vuCtx=vuCanvas.getContext('2d');const vuPeakEl=document.getElementById('vuPeak');
 let isPlaying=false,lL=0,lR=0;let audioCtx=null,analyser=null,dataArray=null,sourceNode=null,realMode=false;let radioEl=document.getElementById('radioAudio');let userPaused=true;let wasPlayingBeforeHide=false;let _lastPauseTs=0;let _isRecreating=false;if(window._isPopupPage||window.location.search.includes('popup=1')){userPaused=false;wasPlayingBeforeHide=true;_lastPauseTs=0;}
-function syncBigPlay(){try{var b=document.getElementById('rs3BigPlay');var ic=document.getElementById('rs3BigPlayIcon');var lb=document.getElementById('rs3BigPlayLabel');if(!b||!ic||!lb)return;var a=document.getElementById('radioAudio');var playing=a&&!a.paused;ic.textContent=playing?'⏸':'▶';lb.textContent=playing?'IN ONDA - PREMI PER PAUSA':'PREMI PLAY';var onde=document.getElementById('rs3Onde');if(onde){if(playing)onde.classList.add('rs3-onde-playing');else onde.classList.remove('rs3-onde-playing');}}catch(e){}}
+function syncBigPlay(){try{var b=document.getElementById('rs3BigPlay');var ic=document.getElementById('rs3BigPlayIcon');var lb=document.getElementById('rs3BigPlayLabel');if(!b||!ic||!lb)return;var a=document.getElementById('radioAudio');var playing=a&&!a.paused;if(playing){ic.className='rs3-pause';ic.innerHTML='<i></i><i></i>';}else{ic.className='rs3-play';ic.innerHTML='';}lb.textContent=playing?'IN ONDA - PREMI PER PAUSA':'PREMI PLAY';var onde=document.getElementById('rs3Onde');if(onde){if(playing)onde.classList.add('rs3-onde-playing');else onde.classList.remove('rs3-onde-playing');}}catch(e){}}
 function onBigPlayClick(){try{var a=document.getElementById('radioAudio');if(!a)return;if(a.paused){tryAutoPlay(true);}else{try{a.pause();}catch(e){}userPaused=true;wasPlayingBeforeHide=false;}setTimeout(syncBigPlay,300);}catch(e){}}
 document.addEventListener('DOMContentLoaded',()=>{var b=document.getElementById('rs3BigPlay');if(b)b.addEventListener('click',onBigPlayClick);syncBigPlay();});
 if(document.readyState!=='loading'){var _b0=document.getElementById('rs3BigPlay');if(_b0)_b0.addEventListener('click',onBigPlayClick);}
