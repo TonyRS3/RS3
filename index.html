@@ -98,7 +98,7 @@ audio{width:100%;max-width:340px;height:36px}
 .news-item.calcio a{color:#aee8ff}
 .news-item a:hover{color:#fff !important;text-decoration:underline !important}
 .footer-copy{margin-top:20px;padding:16px 10px;text-align:center;font-size:0.85rem;color:#ddd;background:rgba(0,0,0,0.85);border-top:1px solid rgba(255,255,255,0.15)}
-.rs3-qr-box{margin-top:10px;background:rgba(0,0,0,.85);border:1px solid rgba(255,217,102,.7);border-radius:14px;padding:16px 18px;display:flex;gap:28px;align-items:center;justify-content:space-between;text-align:left;min-height:132px}
+.rs3-qr-box{margin-top:10px;background:rgba(0,0,0,0.85);border:1px solid rgba(255,217,102,.7);border-radius:14px;padding:16px 18px;display:flex;gap:28px;align-items:center;justify-content:space-between;text-align:left;min-height:132px}
 .rs3-qr-text{flex:1}
 .rs3-qr-text b{color:#ffd966;font-size:.95rem;letter-spacing:1px}
 .rs3-qr-text p{font-size:.80rem;line-height:1.45;color:#eee;margin-top:5px}
@@ -189,7 +189,6 @@ body.night-mode #rs3-mio-box{border:1.5px solid #c9a86a !important}
 <div class="meteo-side right"><div class="news-box-side right-box"><div class="news-title">CRONACA NAZIONALE <span id="newsTime" style="font-size:0.6rem;color:#aaa"></span></div><div id="newsListNord">Carico...</div></div><div class="news-box-side right-box calcio"><div class="news-title calcio">SPORT CALCIO <span id="calcioTime" style="font-size:0.6rem;color:#aaa"></span></div><div id="newsListCalcio">Carico...</div></div></div>
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
-<!-- v285 PARTE 2/2 -->
 <script>
 const DB_LOCALE={"gli altri siamo noi|umberto tozzi":"Sanremo 1991, 4° posto. Inno contro il razzismo scritto con Giancarlo Bigazzi. Titolo ispirato a frase di Madre Teresa. Disco d'oro.","ti amo|umberto tozzi":"1977, scritta con Bigazzi. N°1 per 7 mesi, 8 milioni di copie.","gelato al cioccolato|pupo":"1979, testo Malgioglio e Clara Miozzi. Ispirato da vacanza in Tunisia. 3:32, dall'album Ciao.","africa|toto":"1982, da Toto IV. 6 Grammy, hit n°1 USA. Scritta da Paich e Porcaro.","sultans of swing|dire straits":"1978, singolo d'esordio dei Dire Straits, dall'album Dire Straits. Scritta da Mark Knopfler, con il celebre riff di chitarra. Diventata un classico rock.","immensamente|umberto tozzi":"1987, singolo di Umberto Tozzi dall'album Invisibile. Ballata romantica tra le più amate del repertorio di Tozzi."};
 function getInfoLocale(titolo,artista){let key=(titolo+"|"+artista).toLowerCase();if(DB_LOCALE[key])return DB_LOCALE[key];let tLow=titolo.toLowerCase();for(let k in DB_LOCALE){if(tLow.includes(k.split("|")[0]))return DB_LOCALE[k];}return null;}
@@ -218,9 +217,31 @@ function creaMioBox(){const existing=document.getElementById('rs3-mio-box');if(e
 function rebuildTrackBox(){const mioBox=creaMioBox();const hidden=document.querySelector('.cc_recenttracks_list');if(!mioBox)return;let rawImg=getLogoAssoluto();try{let sourceHTML=hidden?hidden.innerHTML:"";if(!sourceHTML||sourceHTML.length<15)return;let tempScan=document.createElement('div');tempScan.innerHTML=sourceHTML;let coverAutoDJ=null;try{let imgs=tempScan.querySelectorAll('img');for(let im of imgs){let s=im.getAttribute('src')||im.src||"";if(!s)continue;if(s.includes('RADIO SISTEMA 3')||s.includes('RS3_')||s.includes('logo')||s.includes('placeholder')||s.includes('default'))continue;coverAutoDJ=s;break;}}catch(e){}let annoAlbum=null;try{let albumEl=tempScan.querySelector('[class*="album"], .cc_album, [class*="Album"]');if(albumEl){let at=(albumEl.innerText||"").trim();let mA=at.match(/\b(19[5-9]\d|20[0-2]\d)\b/);if(mA)annoAlbum=parseInt(mA[0]);}}catch(e){}let titleEl=tempScan.querySelector('[class*="title"], .cc_title, [class*="song"]');let artistEl=tempScan.querySelector('[class*="artist"], .cc_artist');let righe=[];if(titleEl&&artistEl){let art=artistEl.innerText.trim();let tit=titleEl.innerText.trim();righe=[art+" - "+tit];}else{tempScan.querySelectorAll('script,style').forEach(el=>el.remove());tempScan.querySelectorAll('div, span, p, b').forEach(d=>{let t=pulisciTitolo(d.innerText||"");if(t.length>2&&!t.toLowerCase().includes('radio sistema 3')&&t.toLowerCase()!=='live'&&t.length<300){if(t.toLowerCase().includes('buy this'))return;if(!righe.includes(t))righe.push(t);}});}if(!annoAlbum){for(let r of righe){let tr=r.trim();if(/^\s*(19[5-9]\d|20[0-2]\d)\s*$/.test(tr)){annoAlbum=parseInt(tr);break;}}}righe=righe.filter(r=>!/^\s*(19[5-9]\d|20[0-2]\d)\s*$/.test(r.trim()));if(righe.length>=1){let rawCombined=righe.join(' ');rawCombined=rimuoviTitoloDuplicato(rawCombined);rawCombined=rawCombined.replace(/\b(19[5-9]\d|20[0-2]\d)\b/,'').replace(/\s+-\s*$/,'').trim();let parsed=parseArtistTitleSmart(rawCombined);let titolo=parsed.titolo;let artista=parsed.artista;if(!titolo||titolo.length<2)return;let lowArt=(artista||"").toLowerCase().trim();if(lowArt==="unknown"||lowArt.includes("unknown")||lowArt==="unknown artist"||lowArt===""){if(titolo.toLowerCase().includes("883")||rawCombined.toLowerCase().includes("883")){artista="883";}else{return;}}let txt=titolo+" - "+artista+" - "+(annoAlbum||"");if(txt===_lastRaw)return;_lastRaw=txt;_lastTitolo=titolo;_lastArtist=artista;try{aggiornaTitoloSchedaRS3(titolo);}catch(e){}let info=mioBox.querySelector('.rs3-info');let cov=mioBox.querySelector('.rs3-cover');let coverDaUsare=coverAutoDJ||rawImg;if(cov)cov.src=coverDaUsare;if(info){info.innerHTML=`<div style="font-weight:900;color:#fff;font-size:1.10rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${titolo}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${artista}</div><div style="font-size:0.65rem;color:#888;margin-top:4px">📅 cerco anno...</div>`;}try{updateMediaSession(artista,titolo);if(navigator.mediaSession&&navigator.mediaSession.metadata){navigator.mediaSession.metadata.artwork=[{src:coverDaUsare,sizes:'512x512',type:'image/jpeg'}];}}catch(e){}let myTxt=txt;let myTitolo=titolo;let myArtista=artista;let myAnnoAlbum=annoAlbum;let myCover=coverDaUsare;(async()=>{try{let data=await fetchCopertinaBranoConAnno(myArtista,myTitolo,myAnnoAlbum);if(myTxt!==_lastRaw)return;let info2=mioBox.querySelector('.rs3-info');if(info2){let annoHtml=data.year?`<div style="align-self:flex-start;display:inline-flex;gap:5px;background:linear-gradient(135deg,#ffd966 0%,#ff9a00 100%);color:#000;font-weight:900;font-size:0.80rem;padding:3px 10px;border-radius:12px;margin-top:5px;">📅 ${data.year}</div>`:'<div style="font-size:0.65rem;color:#888;margin-top:4px">📅 cerco anno...</div>';info2.innerHTML=`<div style="font-weight:900;color:#fff;font-size:1.10rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${myTitolo}</div><div style="color:#ffd966;font-weight:700;font-size:0.95rem;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${myArtista}</div>${annoHtml}`;}try{await aggiornaInfoBranoSottoMeteo(myArtista,myTitolo,data);}catch(e){}}catch(e){}})();}}catch(e){}}
 const list=document.querySelector('.cc_recenttracks_list');if(list){const obs=new MutationObserver(()=>{rebuildTrackBox();});obs.observe(list,{childList:true,subtree:true,characterData:true});}
 let _fastInterval=setInterval(()=>{rebuildTrackBox();},500);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden){setTimeout(()=>{try{rebuildTrackBox();}catch(e){}},200);}});
-window.addEventListener('pageshow',()=>{setTimeout(()=>{try{rebuildTrackBox();}catch(e){}},200);});
-window.addEventListener('focus',()=>{setTimeout(()=>{try{rebuildTrackBox();}catch(e){}},200);});
+</script>
+<script>
+/* FIX RS3 - RITORNO SCHEDA - SOLO QUESTO BLOCCO AGGIUNTO - NON TOCCA ALTRO */
+let _rs3UltimoForza=0;
+function rs3ForzaAggiornamentoBrano(){
+  try{
+    var ora=Date.now();
+    if(ora-_rs3UltimoForza<1500) return;
+    _rs3UltimoForza=ora;
+    try{ _lastRaw=""; }catch(e){}
+    try{
+      var vecchio=document.querySelector('script[data-rs3-recent]');
+      if(vecchio) vecchio.remove();
+      var ns=document.createElement('script');
+      ns.setAttribute('data-rs3-recent','1');
+      ns.src='https://manage.myshoutca.st/system/recenttracks.js?_t='+Date.now();
+      document.head.appendChild(ns);
+    }catch(e){}
+    setTimeout(()=>{try{rebuildTrackBox();}catch(e){}},800);
+    setTimeout(()=>{try{rebuildTrackBox();}catch(e){}},2000);
+  }catch(e){}
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){rs3ForzaAggiornamentoBrano();}});
+window.addEventListener('pageshow',()=>{rs3ForzaAggiornamentoBrano();});
+window.addEventListener('focus',()=>{rs3ForzaAggiornamentoBrano();});
 document.addEventListener('DOMContentLoaded',()=>{creaMioBox();rebuildTrackBox();});creaMioBox();rebuildTrackBox();
 const CITIES_COORDS={"Torino":{lat:45.07,lon:7.68},"Milano":{lat:45.46,lon:9.19},"Venezia":{lat:45.44,lon:12.33},"Bologna":{lat:44.49,lon:11.34},"Firenze":{lat:43.77,lon:11.25},"Roma":{lat:41.90,lon:12.49},"Ancona":{lat:43.61,lon:13.51},"Napoli":{lat:40.85,lon:14.26},"Palermo":{lat:38.11,lon:13.36},"Brindisi":{lat:40.63,lon:17.94}};
 const LEFT=[{label:"Torino"},{label:"Milano"},{label:"Venezia"},{label:"Bologna"},{label:"Firenze"}];const RIGHT=[{label:"Roma"},{label:"Ancona"},{label:"Napoli"},{label:"Palermo"},{label:"Brindisi"}];
