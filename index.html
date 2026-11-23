@@ -219,24 +219,44 @@ const list=document.querySelector('.cc_recenttracks_list');if(list){const obs=ne
 let _fastInterval=setInterval(()=>{rebuildTrackBox();},500);
 </script>
 <script>
-/* FIX RS3 - RITORNO SCHEDA - SOLO QUESTO BLOCCO AGGIUNTO - NON TOCCA ALTRO */
-let _rs3UltimoForza=0;
+/* FIX RS3 V2 - RAFFICA RITORNO SCHEDA - SOLO QUESTO BLOCCO CAMBIATO */
+let _rs3RafficaTimer=null;
+let _rs3RafficaConta=0;
+let _rs3BranoAlRitorno="";
+function rs3RicaricaRecentTracks(){
+  try{
+    var vecchio=document.querySelector('script[data-rs3-recent]');
+    if(vecchio) vecchio.remove();
+    var ns=document.createElement('script');
+    ns.setAttribute('data-rs3-recent','1');
+    ns.src='https://manage.myshoutca.st/system/recenttracks.js?_t='+Date.now();
+    document.head.appendChild(ns);
+  }catch(e){}
+}
 function rs3ForzaAggiornamentoBrano(){
   try{
-    var ora=Date.now();
-    if(ora-_rs3UltimoForza<1500) return;
-    _rs3UltimoForza=ora;
-    try{ _lastRaw=""; }catch(e){}
-    try{
-      var vecchio=document.querySelector('script[data-rs3-recent]');
-      if(vecchio) vecchio.remove();
-      var ns=document.createElement('script');
-      ns.setAttribute('data-rs3-recent','1');
-      ns.src='https://manage.myshoutca.st/system/recenttracks.js?_t='+Date.now();
-      document.head.appendChild(ns);
-    }catch(e){}
-    setTimeout(()=>{try{rebuildTrackBox();}catch(e){}},800);
-    setTimeout(()=>{try{rebuildTrackBox();}catch(e){}},2000);
+    if(_rs3RafficaTimer) clearInterval(_rs3RafficaTimer);
+    _rs3BranoAlRitorno="";
+    try{ _rs3BranoAlRitorno=_lastRaw||""; }catch(e){}
+    _rs3RafficaConta=0;
+    rs3RicaricaRecentTracks();
+    try{rebuildTrackBox();}catch(e){}
+    _rs3RafficaTimer=setInterval(()=>{
+      _rs3RafficaConta++;
+      try{rs3RicaricaRecentTracks();}catch(e){}
+      try{rebuildTrackBox();}catch(e){}
+      try{
+        if(_lastRaw && _lastRaw!==_rs3BranoAlRitorno){
+          clearInterval(_rs3RafficaTimer);
+          _rs3RafficaTimer=null;
+          return;
+        }
+      }catch(e){}
+      if(_rs3RafficaConta>=20){
+        clearInterval(_rs3RafficaTimer);
+        _rs3RafficaTimer=null;
+      }
+    },1500);
   }catch(e){}
 }
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){rs3ForzaAggiornamentoBrano();}});
