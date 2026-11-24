@@ -259,6 +259,11 @@ function rs3ForzaAggiornamentoBrano(){
     },1500);
   }catch(e){}
 }
+/* RS3 FIX CUORE - UNICA AGGIUNTA: aggiorna anche restando fermo sulla pagina, senza bisogno di cambiare app/scheda. Non tocca nient'altro. */
+setInterval(()=>{
+  try{ if(!document.hidden){ rs3RicaricaRecentTracks(); } }catch(e){}
+  try{ rebuildTrackBox(); }catch(e){}
+},20000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){rs3ForzaAggiornamentoBrano();}});
 window.addEventListener('pageshow',()=>{rs3ForzaAggiornamentoBrano();});
 window.addEventListener('focus',()=>{rs3ForzaAggiornamentoBrano();});
@@ -310,4 +315,3 @@ applyMode(lastGoodMode,false);setInterval(checkSoulMode,3000);checkSoulMode();
 </script>
 </body>
 </html>
-
