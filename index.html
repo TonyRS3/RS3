@@ -1,4 +1,4 @@
-<!-- v286 BUFFER - SOLO BUFFER AUMENTATO - 24-11-2026 - resto identico a v285 -->
+<!-- v285 CONTROLLO ARTISTA + VELOCE web - 10.15 21-11-2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -175,7 +175,7 @@ body.night-mode #rs3-mio-box{border:1.5px solid #c9a86a !important}
 <div class="live" id="liveText">ON AIR 24/7</div>
 <div class="player-box">
 <div class="section-title">♪ Ascolta in diretta</div>
-<audio id="radioAudio" preload="auto" playsinline webkit-playsinline crossorigin="anonymous" src="https://listentomystream.com:8046/stream"></audio>
+<audio id="radioAudio" preload="none" playsinline webkit-playsinline crossorigin="anonymous" src="https://listentomystream.com:8046/stream"></audio>
 <div class="rs3-bigplay-wrap"><div class="rs3-bigplay-row"><img id="rs3Onde" src="onde_radio.jpeg" alt="Onde radio"><button id="rs3BigPlay" type="button" aria-label="Play Pausa"><span id="rs3BigPlayIcon" class="rs3-play"></span></button></div><div id="rs3BigPlayLabel">PREMI PLAY</div></div>
 <div class="rs3-vol-wrap"><button id="rs3VolBtn" type="button" aria-label="Muto">🔊</button><input id="rs3Vol" type="range" min="0" max="100" value="100" aria-label="Volume"><span id="rs3VolVal">100%</span></div>
 <div class="vu-wrap"><canvas id="vuCanvas" width="600" height="32"></canvas><div class="vu-label"><span>L R STEREO</span><span id="vuPeak" style="color:#ff4444">STOP</span></div></div>
@@ -282,7 +282,7 @@ if(document.readyState!=='loading'){var _b0=document.getElementById('rs3BigPlay'
 setInterval(syncBigPlay,500);
 function initRealVU(){try{if(/Mobi|Android|iPhone/i.test(navigator.userAgent)){realMode=false;return false;}if(audioCtx){if(audioCtx.state==='suspended')audioCtx.resume();return realMode;}audioCtx=new (window.AudioContext||window.webkitAudioContext)();analyser=audioCtx.createAnalyser();analyser.fftSize=512;analyser.smoothingTimeConstant=0.75;dataArray=new Uint8Array(analyser.frequencyBinCount);sourceNode=audioCtx.createMediaElementSource(radioEl);sourceNode.connect(analyser);analyser.connect(audioCtx.destination);realMode=true;return true;}catch(e){realMode=false;return false;}}
 function attachAudioListeners(){radioEl.addEventListener('pause',()=>{if(_isRecreating)return;isPlaying=false;vuPeakEl.textContent="STOP";vuPeakEl.style.color="#ff4444";_lastPauseTs=Date.now();if(window._pausedForPopup||window._pausedForPlaylist){syncBigPlay();return;}if(document.hidden){wasPlayingBeforeHide=!userPaused;syncBigPlay();return;}if(window._isPopupPage||window.location.search.includes('popup=1')){wasPlayingBeforeHide=true;syncBigPlay();return;}userPaused=true;wasPlayingBeforeHide=false;syncBigPlay();});radioEl.addEventListener('play',(e)=>{if(_isRecreating)return;if(userPaused&&(Date.now()-_lastPauseTs)>300&&!window._isPopupPage&&!window.location.search.includes('popup=1')){try{e.preventDefault();radioEl.pause();}catch(er){}createFreshAudioAndPlay();return;}isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;try{if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();}catch(e){}try{initRealVU();}catch(e){}syncBigPlay();});}
-function createFreshAudioAndPlay(){_isRecreating=true;const old=document.getElementById('radioAudio');try{old.pause();old.src='';old.load();}catch(e){}const fresh=document.createElement('audio');fresh.id='radioAudio';fresh.controls=false;fresh.preload='auto';fresh.playsInline=true;fresh.crossOrigin='anonymous';fresh.setAttribute('webkit-playsinline','');fresh.style.display='none';try{fresh.volume=(window.rs3Volume!=null?window.rs3Volume:1);fresh.muted=(window.rs3Volume===0);}catch(e){}fresh.src="https://listentomystream.com:8046/stream?_t="+Date.now();try{old.parentNode.replaceChild(fresh,old);}catch(e){document.querySelector('.player-box').prepend(fresh);}radioEl=fresh;attachAudioListeners();try{audioCtx=null;analyser=null;dataArray=null;sourceNode=null;realMode=false;}catch(e){}return fresh.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;syncBigPlay();setTimeout(()=>{_isRecreating=false;},600);}).catch(()=>{_isRecreating=false;syncBigPlay();});}
+function createFreshAudioAndPlay(){_isRecreating=true;const old=document.getElementById('radioAudio');try{old.pause();old.src='';old.load();}catch(e){}const fresh=document.createElement('audio');fresh.id='radioAudio';fresh.controls=false;fresh.preload='none';fresh.playsInline=true;fresh.crossOrigin='anonymous';fresh.setAttribute('webkit-playsinline','');fresh.style.display='none';try{fresh.volume=(window.rs3Volume!=null?window.rs3Volume:1);fresh.muted=(window.rs3Volume===0);}catch(e){}fresh.src="https://listentomystream.com:8046/stream?_t="+Date.now();try{old.parentNode.replaceChild(fresh,old);}catch(e){document.querySelector('.player-box').prepend(fresh);}radioEl=fresh;attachAudioListeners();try{audioCtx=null;analyser=null;dataArray=null;sourceNode=null;realMode=false;}catch(e){}return fresh.play().then(()=>{isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;syncBigPlay();setTimeout(()=>{_isRecreating=false;},600);}).catch(()=>{_isRecreating=false;syncBigPlay();});}
 function tryAutoPlay(isManual){return createFreshAudioAndPlay();}
 attachAudioListeners();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&wasPlayingBeforeHide&&radioEl.paused&&!userPaused&&!window._pausedForPopup&&!window._pausedForPlaylist){tryAutoPlay();}});
@@ -310,3 +310,4 @@ applyMode(lastGoodMode,false);setInterval(checkSoulMode,3000);checkSoulMode();
 </script>
 </body>
 </html>
+
