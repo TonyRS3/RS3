@@ -157,14 +157,6 @@ body.night-mode .live{color:#c9a86a !important}
 body.night-mode .logo-wrap{background:linear-gradient(135deg,#2a1e0f,#c9a86a,#e8d5a3,#c9a86a,#2a1e0f) !important;background-size:300% 300% !important;box-shadow:0 0 25px rgba(201,168,106,.45) !important}
 body.night-mode #rs3-mio-box{border:1.5px solid #c9a86a !important}
 #soulBtn, #mainBtn, #btnSoul, #btnMain, .dual-stream, .two-streams, #streamSelector {display:none !important;height:0 !important;overflow:hidden !important;}
-/* RS3 ONDE - SINUSOIDE CONTINUA - FIX LINEA SPEZZATA - NO MASCHERA */
-.rs3-waves-back{position:fixed;left:0;top:50%;width:100%;height:220px;pointer-events:none;z-index:1;overflow:hidden;opacity:.35}
-.rs3-waves-front{position:fixed;left:0;top:50%;width:100%;height:220px;pointer-events:none;z-index:5;overflow:hidden;opacity:1}
-.rs3-wave{position:absolute;left:0;top:0;width:200%;height:100%;animation:rs3WaveRTL 12s linear infinite}
-.rs3-waves-front .rs3-wave{filter:drop-shadow(0 0 4px rgba(168,208,240,.8))}
-.rs3-waves-back .rs3-wave{animation-duration:16s}
-@keyframes rs3WaveRTL{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-html.is-popup .rs3-waves-back, html.is-popup .rs3-waves-front{display:none !important}
 </style>
 </head>
 <body>
@@ -323,11 +315,5 @@ function normalizeMode(m){if(!m)return null;m=String(m).toLowerCase();if(m.inclu
 async function checkSoulMode(){try{let r=await fetch(NPOINT_URL+"?t="+Date.now(),{cache:'no-store'});if(!r.ok)throw 0;let data=await r.json();let mode=normalizeMode(data.mode||(data.soul===true?'soul':(data.gold===true?'gold':(data.night===true?'night':'classic'))));if(!mode)throw 0;applyMode(mode,true);}catch(e){applyMode(lastGoodMode,false);}}
 applyMode(lastGoodMode,false);setInterval(checkSoulMode,3000);checkSoulMode();
 </script>
-<div class="rs3-waves-back">
-  <svg class="rs3-wave" viewBox="0 0 1200 200" preserveAspectRatio="none"><path d="M0,100 Q300,20 600,100 T1200,100" fill="none" stroke="#7fa3c0" stroke-width="2.5"/></svg>
-</div>
-<div class="rs3-waves-front">
-  <svg class="rs3-wave" viewBox="0 0 1200 200" preserveAspectRatio="none"><path d="M0,100 Q300,20 600,100 T1200,100" fill="none" stroke="#a8d0f0" stroke-width="2.5"/></svg>
-</div>
 </body>
 </html>
