@@ -157,13 +157,13 @@ body.night-mode .live{color:#c9a86a !important}
 body.night-mode .logo-wrap{background:linear-gradient(135deg,#2a1e0f,#c9a86a,#e8d5a3,#c9a86a,#2a1e0f) !important;background-size:300% 300% !important;box-shadow:0 0 25px rgba(201,168,106,.45) !important}
 body.night-mode #rs3-mio-box{border:1.5px solid #c9a86a !important}
 #soulBtn, #mainBtn, #btnSoul, #btnMain, .dual-stream, .two-streams, #streamSelector {display:none !important;height:0 !important;overflow:hidden !important;}
-/* RS3 ONDE - META SCHERMO + TRASPARENTI + SOPRA RUBRICHE - SOLO AGGIUNTA */
-.rs3-waves-wrap{position:fixed;left:0;top:50%;bottom:0;width:100%;height:50vh;pointer-events:none;z-index:4;overflow:hidden;opacity:1}
-.rs3-wave{position:absolute;left:0;bottom:0;width:200%;height:100%;animation:rs3WaveMove 12s linear infinite;opacity:.35}
-.rs3-wave.w2{bottom:30px;opacity:.28;animation-duration:18s}
-.rs3-wave.w3{bottom:60px;opacity:.22;animation-duration:24s}
-.rs3-wave.w4{bottom:90px;opacity:.18;animation-duration:30s}
-@keyframes rs3WaveMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* RS3 ONDE - LINEE SOTTILI DA DESTRA A SINISTRA - META SCHERMO - SOLO AGGIUNTA */
+.rs3-waves-wrap{position:fixed;left:0;top:50%;width:100%;height:220px;pointer-events:none;z-index:4;overflow:hidden;opacity:1}
+.rs3-wave{position:absolute;left:0;top:0;width:200%;height:100%;animation:rs3WaveRTL 14s linear infinite;opacity:.9}
+.rs3-wave.w2{top:18px;opacity:.65;animation-duration:19s}
+.rs3-wave.w3{top:36px;opacity:.45;animation-duration:25s}
+.rs3-wave.w4{top:54px;opacity:.30;animation-duration:32s}
+@keyframes rs3WaveRTL{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 html.is-popup .rs3-waves-wrap{display:none !important}
 </style>
 </head>
@@ -324,10 +324,10 @@ async function checkSoulMode(){try{let r=await fetch(NPOINT_URL+"?t="+Date.now()
 applyMode(lastGoodMode,false);setInterval(checkSoulMode,3000);checkSoulMode();
 </script>
 <div class="rs3-waves-wrap">
-  <svg class="rs3-wave" viewBox="0 0 1200 100" preserveAspectRatio="none"><path d="M0,50 Q150,0 300,50 T600,50 T900,50 T1200,50 V100 H0 Z" fill="#ffd966" fill-opacity="0.35"/></svg>
-  <svg class="rs3-wave w2" viewBox="0 0 1200 100" preserveAspectRatio="none"><path d="M0,60 Q150,20 300,60 T600,60 T900,60 T1200,60 V100 H0 Z" fill="#ff9a00" fill-opacity="0.30"/></svg>
-  <svg class="rs3-wave w3" viewBox="0 0 1200 100" preserveAspectRatio="none"><path d="M0,55 Q150,10 300,55 T600,55 T900,55 T1200,55 V100 H0 Z" fill="#dd2476" fill-opacity="0.25"/></svg>
-  <svg class="rs3-wave w4" viewBox="0 0 1200 100" preserveAspectRatio="none"><path d="M0,65 Q150,30 300,65 T600,65 T900,65 T1200,65 V100 H0 Z" fill="#00d4ff" fill-opacity="0.20"/></svg>
+  <svg class="rs3-wave" viewBox="0 0 1200 200" preserveAspectRatio="none"><path d="M0,100 Q300,20 600,100 T1200,100" fill="none" stroke="#7fa3c0" stroke-width="2.5"/></svg>
+  <svg class="rs3-wave w2" viewBox="0 0 1200 200" preserveAspectRatio="none"><path d="M0,110 Q300,50 600,110 T1200,110" fill="none" stroke="#8fb0cc" stroke-width="1.8"/></svg>
+  <svg class="rs3-wave w3" viewBox="0 0 1200 200" preserveAspectRatio="none"><path d="M0,120 Q300,80 600,120 T1200,120" fill="none" stroke="#a8c2da" stroke-width="1.3"/></svg>
+  <svg class="rs3-wave w4" viewBox="0 0 1200 200" preserveAspectRatio="none"><path d="M0,130 Q300,100 600,130 T1200,130" fill="none" stroke="#c0d4e6" stroke-width="1"/></svg>
 </div>
 </body>
 </html>
