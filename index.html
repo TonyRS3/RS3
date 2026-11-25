@@ -157,12 +157,12 @@ body.night-mode .live{color:#c9a86a !important}
 body.night-mode .logo-wrap{background:linear-gradient(135deg,#2a1e0f,#c9a86a,#e8d5a3,#c9a86a,#2a1e0f) !important;background-size:300% 300% !important;box-shadow:0 0 25px rgba(201,168,106,.45) !important}
 body.night-mode #rs3-mio-box{border:1.5px solid #c9a86a !important}
 #soulBtn, #mainBtn, #btnSoul, #btnMain, .dual-stream, .two-streams, #streamSelector {display:none !important;height:0 !important;overflow:hidden !important;}
-/* RS3 ONDE - SINUSOIDE CHE SI AVVOLGE DAVANTI / DIETRO - SOLO AGGIUNTA */
+/* RS3 ONDE - SINUSOIDE CONTINUA - FIX LINEA SPEZZATA - NO MASCHERA */
 .rs3-waves-back{position:fixed;left:0;top:50%;width:100%;height:220px;pointer-events:none;z-index:1;overflow:hidden;opacity:.35}
 .rs3-waves-front{position:fixed;left:0;top:50%;width:100%;height:220px;pointer-events:none;z-index:5;overflow:hidden;opacity:1}
 .rs3-wave{position:absolute;left:0;top:0;width:200%;height:100%;animation:rs3WaveRTL 12s linear infinite}
-.rs3-waves-front .rs3-wave{-webkit-mask-image:repeating-linear-gradient(90deg,#000 0 140px,transparent 140px 280px);mask-image:repeating-linear-gradient(90deg,#000 0 140px,transparent 140px 280px)}
-.rs3-waves-back .rs3-wave{-webkit-mask-image:repeating-linear-gradient(90deg,transparent 0 140px,#000 140px 280px);mask-image:repeating-linear-gradient(90deg,transparent 0 140px,#000 140px 280px)}
+.rs3-waves-front .rs3-wave{filter:drop-shadow(0 0 4px rgba(168,208,240,.8))}
+.rs3-waves-back .rs3-wave{animation-duration:16s}
 @keyframes rs3WaveRTL{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 html.is-popup .rs3-waves-back, html.is-popup .rs3-waves-front{display:none !important}
 </style>
