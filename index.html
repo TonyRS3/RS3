@@ -1,4 +1,4 @@
-<!-- v294 QR PIU PICCOLO PC + FIX QR TELEFONINO NO TAGLIO - 26-11-2026 --> 
+<!-- v295 QR PIU PICCOLO PC + FIX QR TELEFONINO + SVEGLIA TELEFONINO COVER - 26-11-2026 --> 
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -11,15 +11,15 @@
 <link id="rs3Favicon" rel="icon" type="image/jpeg" href="RADIO SISTEMA 3.jpeg">
 <link rel="shortcut icon" type="image/jpeg" href="RADIO SISTEMA 3.jpeg">
 <script>
-// RS3 AUTO-UPDATE v294 - se chi ascolta ha la vecchia, si ricarica da solo
-var RS3_VERSION=294;
-(function(){try{if(window.location.search.includes('popup=1'))return;var gia=sessionStorage.getItem('rs3_autoupd');if(gia==='294')return;fetch('rs3-version.txt?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){var v=parseInt(String(t).trim(),10);if(v&&v>RS3_VERSION){sessionStorage.setItem('rs3_autoupd',String(v));var u=window.location.pathname+'?v='+v+'&_t='+Date.now();window.location.replace(u);}}).catch(function(){});}catch(e){}})();
+// RS3 AUTO-UPDATE v295 - se chi ascolta ha la vecchia, si ricarica da solo
+var RS3_VERSION=295;
+(function(){try{if(window.location.search.includes('popup=1'))return;var gia=sessionStorage.getItem('rs3_autoupd');if(gia==='295')return;fetch('rs3-version.txt?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){var v=parseInt(String(t).trim(),10);if(v&&v>RS3_VERSION){sessionStorage.setItem('rs3_autoupd',String(v));var u=window.location.pathname+'?v='+v+'&_t='+Date.now();window.location.replace(u);}}).catch(function(){});}catch(e){}})();
 </script>
 <script>
 function aggiornaTitoloSchedaRS3(titolo){try{if(!titolo||!titolo.trim()){document.title="Radio Sistema 3";return;}var t=titolo.trim();if(t.length>45)t=t.substring(0,42).trim()+"...";document.title=t+" - RS3";}catch(e){}}
 </script>
 <script>
-(function(){window._isPopupPage=window.location.search.includes('popup=1');if(!window._isPopupPage&&window.location.search.length>0){/* v294: NON cancelliamo piu la query ?v= perche serve all'auto-update */}var vSalvata=localStorage.getItem('rs3_version');if(vSalvata){localStorage.clear();sessionStorage.clear();}})();
+(function(){window._isPopupPage=window.location.search.includes('popup=1');if(!window._isPopupPage&&window.location.search.length>0){/* v295: NON cancelliamo piu la query ?v= perche serve all'auto-update */}var vSalvata=localStorage.getItem('rs3_version');if(vSalvata){localStorage.clear();sessionStorage.clear();}})();
 </script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
@@ -125,7 +125,7 @@ audio{width:100%;max-width:340px;height:36px}
 .rs3-qr-text p{font-size:.80rem;line-height:1.45;color:#eee;margin-top:5px}
 .rs3-qr-text small{font-size:.72rem;color:#aaa}
 #rs3QrImg{width:96px;height:96px;min-width:96px;background:#fff;padding:8px;border-radius:10px;display:block;margin-left:14px;box-sizing:border-box !important;flex-shrink:0 !important}
-/* v294 QR PIU PICCOLO PC: solo testo + QR 96px */
+/* v295 QR PIU PICCOLO PC: solo testo + QR 96px */
 .meteo-side.right .rs3-qr-box{margin-top:0 !important;width:100% !important;flex-direction:column !important;gap:10px !important;padding:14px 12px !important;text-align:center !important;align-items:center !important;justify-content:center !important}
 .meteo-side.right .rs3-qr-text{flex:none !important;width:100% !important;text-align:center !important}
 .meteo-side.right .rs3-qr-box .logo-wrap{display:none !important}
@@ -161,7 +161,7 @@ h1{font-size:2.2rem !important;margin-top:0px !important}
 .rs3-qr-box .logo{display:none !important}
 .rs3-qr-text{width:100% !important;text-align:center !important}
 #rs3QrImg{width:92px !important;height:92px !important;min-width:92px !important;margin-left:0 !important;padding:6px !important}
-/* v294 TELEFONINO: colonna destra visibile SOLO per il QR, notizie restano nascoste - QR IN COLONNA, NO TAGLIO */
+/* v295 TELEFONINO: colonna destra visibile SOLO per il QR, notizie restano nascoste - QR IN COLONNA, NO TAGLIO */
 .meteo-side.right{display:flex !important;position:static !important;width:96% !important;max-width:96% !important;margin:10px auto !important;padding:0 !important;background:transparent !important;border:none !important}
 .meteo-side.right .news-box-side{display:none !important}
 .meteo-side.right .rs3-qr-box{display:flex !important;flex-direction:column !important;text-align:center !important;align-items:center !important;justify-content:center !important}
@@ -179,7 +179,7 @@ h1{font-size:1.6rem !important;margin-top:0px !important}
 .player-box{margin-top:4px !important;padding:8px !important}
 .rs3-qr-box .logo-wrap{display:none !important}
 .rs3-qr-box .logo{display:none !important}
-/* v294 LANDSCAPE: colonna destra visibile SOLO per il QR - QR IN COLONNA, NO TAGLIO */
+/* v295 LANDSCAPE: colonna destra visibile SOLO per il QR - QR IN COLONNA, NO TAGLIO */
 .meteo-side.right{display:flex !important;position:static !important;width:70% !important;max-width:70% !important;margin:8px auto !important;padding:0 !important;background:transparent !important;border:none !important}
 .meteo-side.right .news-box-side{display:none !important}
 .meteo-side.right .rs3-qr-box{display:flex !important;flex-direction:column !important;text-align:center !important;align-items:center !important;justify-content:center !important}
@@ -228,10 +228,10 @@ body.night-mode #rs3-mio-box{border:1.5px solid #c9a86a !important}
 <div class="section-title" style="margin-top:2px !important;margin-bottom:3px !important;font-size:1.15rem !important">♪ Brano in onda</div>
 <div class="cc_recenttracks_list" data-username="bomyydij"></div>
 <div id="novitaSection"><div id="novitaPlayerMain"></div><div id="novitaList"></div><button style="background:#333;color:#fff;margin-top:12px;padding:8px 18px;border:none;border-radius:20px;cursor:pointer" onclick="chiudiNovita()">X Chiudi</button></div>
-<!-- v294: QR TOLTO DA QUI, ora è a destra senza cover -->
+<!-- v295: QR TOLTO DA QUI, ora è a destra senza cover -->
 </div>
 <div class="meteo-side right"><div class="news-box-side right-box"><div class="news-title">CRONACA NAZIONALE <span id="newsTime" style="font-size:0.6rem;color:#aaa"></span></div><div id="newsListNord">Carico...</div></div><div class="news-box-side right-box calcio"><div class="news-title calcio">SPORT CALCIO <span id="calcioTime" style="font-size:0.6rem;color:#aaa"></span></div><div id="newsListCalcio">Carico...</div></div>
-<!-- v294 QR A DESTRA SENZA COVER RS3 - QR PIU PICCOLO -->
+<!-- v295 QR A DESTRA SENZA COVER RS3 - QR PIU PICCOLO -->
 <div class="rs3-qr-box"><div class="rs3-qr-text"><b>📱 SCANSIONA E ASCOLTA</b><p>Inquadra il codice con la fotocamera.<br>Si apre Radio Sistema 3, premi PLAY.</p><small>Puoi aggiungerla alla Home come un'app, senza store.</small></div><img id="rs3QrImg" alt="QR Radio Sistema 3"></div>
 </div>
 </div>
@@ -309,9 +309,26 @@ setInterval(()=>{
   try{ if(!document.hidden){ rs3RicaricaRecentTracks(); } }catch(e){}
   try{ rebuildTrackBox(); }catch(e){}
 },20000);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden){rs3ForzaAggiornamentoBrano();}});
-window.addEventListener('pageshow',()=>{rs3ForzaAggiornamentoBrano();});
-window.addEventListener('focus',()=>{rs3ForzaAggiornamentoBrano();});
+// v295 SVEGLIA TELEFONINO - quando riapri lo schermo, ricarica subito la cover nuova
+function rs3SvegliaTelefonino(){
+  try{
+    _lastRaw="";
+    _lastTitolo="";
+    _lastArtist="";
+    try{var _box=document.getElementById('rs3-mio-box');if(_box){var _inf=_box.querySelector('.rs3-info');if(_inf){_inf.innerHTML='<div style="font-weight:900;color:#fff">Radio Sistema 3</div><div style="color:#ffd966">🔄 Aggiorno brano...</div>';}}}catch(e){}
+    rs3ForzaAggiornamentoBrano();
+    var _conta=0;
+    var _iv=setInterval(function(){
+      _conta++;
+      try{rs3RicaricaRecentTracks();}catch(e){}
+      try{rebuildTrackBox();}catch(e){}
+      if(_conta>=10){clearInterval(_iv);}
+    },2000);
+  }catch(e){}
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){rs3SvegliaTelefonino();}});
+window.addEventListener('pageshow',()=>{rs3SvegliaTelefonino();});
+window.addEventListener('focus',()=>{rs3SvegliaTelefonino();});
 document.addEventListener('DOMContentLoaded',()=>{creaMioBox();rebuildTrackBox();});creaMioBox();rebuildTrackBox();
 const CITIES_COORDS={"Torino":{lat:45.07,lon:7.68},"Milano":{lat:45.46,lon:9.19},"Venezia":{lat:45.44,lon:12.33},"Bologna":{lat:44.49,lon:11.34},"Firenze":{lat:43.77,lon:11.25},"Roma":{lat:41.90,lon:12.49},"Ancona":{lat:43.61,lon:13.51},"Napoli":{lat:40.85,lon:14.26},"Palermo":{lat:38.11,lon:13.36},"Brindisi":{lat:40.63,lon:17.94}};
 const LEFT=[{label:"Torino"},{label:"Milano"},{label:"Venezia"},{label:"Bologna"},{label:"Firenze"}];const RIGHT=[{label:"Roma"},{label:"Ancona"},{label:"Napoli"},{label:"Palermo"},{label:"Brindisi"}];
