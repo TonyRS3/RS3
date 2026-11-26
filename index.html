@@ -1,4 +1,4 @@
-<!-- v291 COPERTINA HD v5 iTunes+Album+Deezer+CoverArt + AUTO-UPDATE + FIX NOEMI + FIX POPUP - 26-11-2026 9:13--> 
+<!-- v292 QR A DESTRA + CALCIO 2 VISIBILI CON SCROLL + COPERTINA HD v5 iTunes+Album+Deezer+CoverArt + AUTO-UPDATE + FIX NOEMI + FIX POPUP - 26-11-2026 --> 
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -11,15 +11,15 @@
 <link id="rs3Favicon" rel="icon" type="image/jpeg" href="RADIO SISTEMA 3.jpeg">
 <link rel="shortcut icon" type="image/jpeg" href="RADIO SISTEMA 3.jpeg">
 <script>
-// RS3 AUTO-UPDATE v291 - se chi ascolta ha la vecchia, si ricarica da solo
-var RS3_VERSION=291;
-(function(){try{if(window.location.search.includes('popup=1'))return;var gia=sessionStorage.getItem('rs3_autoupd');if(gia==='291')return;fetch('rs3-version.txt?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){var v=parseInt(String(t).trim(),10);if(v&&v>RS3_VERSION){sessionStorage.setItem('rs3_autoupd',String(v));var u=window.location.pathname+'?v='+v+'&_t='+Date.now();window.location.replace(u);}}).catch(function(){});}catch(e){}})();
+// RS3 AUTO-UPDATE v292 - se chi ascolta ha la vecchia, si ricarica da solo
+var RS3_VERSION=292;
+(function(){try{if(window.location.search.includes('popup=1'))return;var gia=sessionStorage.getItem('rs3_autoupd');if(gia==='292')return;fetch('rs3-version.txt?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){var v=parseInt(String(t).trim(),10);if(v&&v>RS3_VERSION){sessionStorage.setItem('rs3_autoupd',String(v));var u=window.location.pathname+'?v='+v+'&_t='+Date.now();window.location.replace(u);}}).catch(function(){});}catch(e){}})();
 </script>
 <script>
 function aggiornaTitoloSchedaRS3(titolo){try{if(!titolo||!titolo.trim()){document.title="Radio Sistema 3";return;}var t=titolo.trim();if(t.length>45)t=t.substring(0,42).trim()+"...";document.title=t+" - RS3";}catch(e){}}
 </script>
 <script>
-(function(){window._isPopupPage=window.location.search.includes('popup=1');if(!window._isPopupPage&&window.location.search.length>0){/* v291: NON cancelliamo piu la query ?v= perche serve all'auto-update */}var vSalvata=localStorage.getItem('rs3_version');if(vSalvata){localStorage.clear();sessionStorage.clear();}})();
+(function(){window._isPopupPage=window.location.search.includes('popup=1');if(!window._isPopupPage&&window.location.search.length>0){/* v292: NON cancelliamo piu la query ?v= perche serve all'auto-update */}var vSalvata=localStorage.getItem('rs3_version');if(vSalvata){localStorage.clear();sessionStorage.clear();}})();
 </script>
 <script src="https://manage.myshoutca.st/system/recenttracks.js"></script>
 <script>
@@ -114,6 +114,11 @@ audio{width:100%;max-width:340px;height:36px}
 .news-item a{color:#ffd966;text-decoration:none;display:block;font-weight:600;cursor:pointer}
 .news-item.calcio a{color:#aee8ff}
 .news-item a:hover{color:#fff !important;text-decoration:underline !important}
+/* v292 CALCIO: 2 visibili, le altre scorrendo */
+#newsListCalcio{max-height:178px !important;overflow-y:auto !important;overflow-x:hidden !important;padding-right:4px !important;scrollbar-width:thin !important;scrollbar-color:#00d4ff #111 !important}
+#newsListCalcio::-webkit-scrollbar{width:6px !important}
+#newsListCalcio::-webkit-scrollbar-track{background:#111 !important;border-radius:6px !important}
+#newsListCalcio::-webkit-scrollbar-thumb{background:#00d4ff !important;border-radius:6px !important}
 .footer-copy{margin-top:20px;padding:16px 10px;text-align:center;font-size:0.85rem;color:#ddd;background:rgba(0,0,0,0.85);border-top:1px solid rgba(255,255,255,0.15)}
 .rs3-qr-box{margin-top:10px;background:rgba(0,0,0,0.85);border:1px solid rgba(255,217,102,.7);border-radius:14px;padding:16px 18px;display:flex;gap:28px;align-items:center;justify-content:space-between;text-align:left;min-height:132px}
 .rs3-qr-text{flex:1}
@@ -121,6 +126,11 @@ audio{width:100%;max-width:340px;height:36px}
 .rs3-qr-text p{font-size:.80rem;line-height:1.45;color:#eee;margin-top:5px}
 .rs3-qr-text small{font-size:.72rem;color:#aaa}
 #rs3QrImg{width:110px;height:110px;min-width:110px;background:#fff;padding:8px;border-radius:10px;display:block;margin-left:14px}
+/* v292 QR A DESTRA: verticale e compatto */
+.meteo-side.right .rs3-qr-box{margin-top:0 !important;width:100% !important;flex-direction:column !important;gap:10px !important;padding:14px 12px !important;text-align:center !important;align-items:center !important;justify-content:center !important}
+.meteo-side.right .rs3-qr-text{flex:none !important;width:100% !important;text-align:center !important}
+.meteo-side.right .rs3-qr-box .logo-wrap{margin:0 !important}
+.meteo-side.right #rs3QrImg{margin-left:0 !important;width:100px !important;height:100px !important;min-width:100px !important}
 #infoBranoSottoMeteo{border-color:#ffd966 !important;background:rgba(0,0,0,0.92) !important;box-shadow:0 0 12px rgba(255,217,102,0.25) !important;min-height:380px !important}
 #infoBranoContentLeft{font-size:.82rem;line-height:1.5;color:#eee;text-align:left;min-height:300px}
 .info-riga-left{display:flex;gap:6px;margin-bottom:6px;background:rgba(255,255,255,.06);padding:6px 8px;border-radius:6px;font-size:.78rem}
@@ -150,6 +160,12 @@ h1{font-size:2.2rem !important;margin-top:0px !important}
 .rs3-qr-box .logo-wrap{display:inline-block !important;margin:0 8px !important}
 .rs3-qr-box .logo{width:70px !important;height:70px !important}
 #rs3QrImg{width:90px !important;height:90px !important;min-width:90px !important;margin-left:8px !important;padding:6px !important}
+/* v292 TELEFONINO: colonna destra visibile SOLO per il QR, notizie restano nascoste */
+.meteo-side.right{display:flex !important;position:static !important;width:96% !important;max-width:96% !important;margin:10px auto !important;padding:0 !important;background:transparent !important;border:none !important}
+.meteo-side.right .news-box-side{display:none !important}
+.meteo-side.right .rs3-qr-box{display:flex !important;flex-direction:row !important;text-align:left !important}
+.meteo-side.right .rs3-qr-text{text-align:left !important}
+.meteo-side.right #rs3QrImg{margin-left:8px !important}
 }
 @media (max-width:1024px) and (orientation:landscape){
 .meteo-side,.news-box-side,.left-double-wide{display:none !important}
@@ -162,6 +178,11 @@ h1{font-size:1.6rem !important;margin-top:0px !important}
 .player-box{margin-top:4px !important;padding:8px !important}
 .rs3-qr-box .logo-wrap{display:inline-block !important}
 .rs3-qr-box .logo{width:70px !important;height:70px !important}
+/* v292 LANDSCAPE: colonna destra visibile SOLO per il QR */
+.meteo-side.right{display:flex !important;position:static !important;width:70% !important;max-width:70% !important;margin:8px auto !important;padding:0 !important;background:transparent !important;border:none !important}
+.meteo-side.right .news-box-side{display:none !important}
+.meteo-side.right .rs3-qr-box{display:flex !important;flex-direction:row !important;text-align:left !important}
+.meteo-side.right .rs3-qr-text{text-align:left !important}
 }
 body.soul-mode{background: linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),url("studio-radio.jpeg") !important;background-size:cover !important;background-position:center !important;background-attachment:fixed !important}
 body.soul-mode .container{background: rgba(255,255,255,.08) !important;border: 1px solid #b388ff !important}
@@ -205,9 +226,12 @@ body.night-mode #rs3-mio-box{border:1.5px solid #c9a86a !important}
 <div class="section-title" style="margin-top:2px !important;margin-bottom:3px !important;font-size:1.15rem !important">♪ Brano in onda</div>
 <div class="cc_recenttracks_list" data-username="bomyydij"></div>
 <div id="novitaSection"><div id="novitaPlayerMain"></div><div id="novitaList"></div><button style="background:#333;color:#fff;margin-top:12px;padding:8px 18px;border:none;border-radius:20px;cursor:pointer" onclick="chiudiNovita()">X Chiudi</button></div>
+<!-- v292: QR TOLTO DA QUI, ora è a destra -->
+</div>
+<div class="meteo-side right"><div class="news-box-side right-box"><div class="news-title">CRONACA NAZIONALE <span id="newsTime" style="font-size:0.6rem;color:#aaa"></span></div><div id="newsListNord">Carico...</div></div><div class="news-box-side right-box calcio"><div class="news-title calcio">SPORT CALCIO <span id="calcioTime" style="font-size:0.6rem;color:#aaa"></span></div><div id="newsListCalcio">Carico...</div></div>
+<!-- v292 QR A DESTRA -->
 <div class="rs3-qr-box"><div class="rs3-qr-text"><b>📱 SCANSIONA E ASCOLTA</b><p>Inquadra il codice con la fotocamera.<br>Si apre Radio Sistema 3, premi PLAY.</p><small>Puoi aggiungerla alla Home come un'app, senza store.</small></div><div class="logo-wrap"><img src="RADIO SISTEMA 3.jpeg" alt="Radio Sistema 3" class="logo" id="mainLogo"></div><img id="rs3QrImg" alt="QR Radio Sistema 3"></div>
 </div>
-<div class="meteo-side right"><div class="news-box-side right-box"><div class="news-title">CRONACA NAZIONALE <span id="newsTime" style="font-size:0.6rem;color:#aaa"></span></div><div id="newsListNord">Carico...</div></div><div class="news-box-side right-box calcio"><div class="news-title calcio">SPORT CALCIO <span id="calcioTime" style="font-size:0.6rem;color:#aaa"></span></div><div id="newsListCalcio">Carico...</div></div></div>
 </div>
 <div class="footer-copy">© Radio Sistema 3 - Tutti i Diritti Riservati - SIAE n°202600000389</div>
 <script>
