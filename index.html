@@ -1,5 +1,5 @@
-<!-- v285 CONTROLLO ARTISTA + VELOCE web + COMPRESSORE BASSI 13.00 24-11-2026 --> 
-<!DOCTYPE html>....
+<!-- v285 COPIA 2 CON EFFETTO COPERTINA GRANDE - 24-11-2026 --> 
+<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
@@ -157,6 +157,11 @@ body.night-mode .live{color:#c9a86a !important}
 body.night-mode .logo-wrap{background:linear-gradient(135deg,#2a1e0f,#c9a86a,#e8d5a3,#c9a86a,#2a1e0f) !important;background-size:300% 300% !important;box-shadow:0 0 25px rgba(201,168,106,.45) !important}
 body.night-mode #rs3-mio-box{border:1.5px solid #c9a86a !important}
 #soulBtn, #mainBtn, #btnSoul, #btnMain, .dual-stream, .two-streams, #streamSelector {display:none !important;height:0 !important;overflow:hidden !important;}
+/* COPIA 2 - EFFETTO COPERTINA GRANDE - UNICA AGGIUNTA */
+.rs3-cover{transition:transform 0.35s ease, box-shadow 0.35s ease !important;cursor:pointer !important;position:relative !important;z-index:5 !important}
+#rs3-mio-box:hover{overflow:visible !important}
+.rs3-cover:hover{transform:scale(1.9) !important;box-shadow:0 0 25px rgba(255,217,102,.9) !important;z-index:20 !important}
+.rs3-cover:active{transform:scale(1.9) !important}
 </style>
 </head>
 <body>
@@ -219,7 +224,6 @@ const list=document.querySelector('.cc_recenttracks_list');if(list){const obs=ne
 let _fastInterval=setInterval(()=>{rebuildTrackBox();},500);
 </script>
 <script>
-/* FIX RS3 V2 - RAFFICA RITORNO SCHEDA - SOLO QUESTO BLOCCO CAMBIATO */
 let _rs3RafficaTimer=null;
 let _rs3RafficaConta=0;
 let _rs3BranoAlRitorno="";
@@ -259,7 +263,6 @@ function rs3ForzaAggiornamentoBrano(){
     },1500);
   }catch(e){}
 }
-/* RS3 FIX CUORE - UNICA AGGIUNTA: aggiorna anche restando fermo sulla pagina, senza bisogno di cambiare app/scheda. Non tocca nient'altro. */
 setInterval(()=>{
   try{ if(!document.hidden){ rs3RicaricaRecentTracks(); } }catch(e){}
   try{ rebuildTrackBox(); }catch(e){}
@@ -285,7 +288,6 @@ function onBigPlayClick(){try{var a=document.getElementById('radioAudio');if(!a)
 document.addEventListener('DOMContentLoaded',()=>{var b=document.getElementById('rs3BigPlay');if(b)b.addEventListener('click',onBigPlayClick);syncBigPlay();rs3InitVolume();});
 if(document.readyState!=='loading'){var _b0=document.getElementById('rs3BigPlay');if(_b0)_b0.addEventListener('click',onBigPlayClick);rs3InitVolume();}
 setInterval(syncBigPlay,500);
-/* RS3 AUDIO CALDO 144 - BASSI +5 - COMPRESSORE STEREO SEPARATO L/R */
 function rs3MakeComp(ctx){var c=ctx.createDynamicsCompressor();c.threshold.value=-18;c.knee.value=20;c.ratio.value=3;c.attack.value=0.01;c.release.value=0.25;return c;}
 function initRealVU(){try{if(audioCtx){if(audioCtx.state==='suspended')audioCtx.resume();return realMode;}audioCtx=new (window.AudioContext||window.webkitAudioContext)();analyser=audioCtx.createAnalyser();analyser.fftSize=512;analyser.smoothingTimeConstant=0.75;dataArray=new Uint8Array(analyser.frequencyBinCount);sourceNode=audioCtx.createMediaElementSource(radioEl);var rs3Bass=audioCtx.createBiquadFilter();rs3Bass.type='lowshelf';rs3Bass.frequency.value=120;rs3Bass.gain.value=5;var rs3Mid=audioCtx.createBiquadFilter();rs3Mid.type='peaking';rs3Mid.frequency.value=350;rs3Mid.Q.value=0.8;rs3Mid.gain.value=1.2;var rs3Treble=audioCtx.createBiquadFilter();rs3Treble.type='highshelf';rs3Treble.frequency.value=8500;rs3Treble.gain.value=-2.5;var rs3Split=audioCtx.createChannelSplitter(2);var rs3Merge=audioCtx.createChannelMerger(2);var rs3CompL=rs3MakeComp(audioCtx);var rs3CompR=rs3MakeComp(audioCtx);sourceNode.connect(rs3Bass);rs3Bass.connect(rs3Mid);rs3Mid.connect(rs3Treble);rs3Treble.connect(rs3Split);rs3Split.connect(rs3CompL,0);rs3Split.connect(rs3CompR,1);rs3CompL.connect(rs3Merge,0,0);rs3CompR.connect(rs3Merge,0,1);rs3Merge.connect(analyser);analyser.connect(audioCtx.destination);realMode=true;return true;}catch(e){realMode=false;return false;}}
 function attachAudioListeners(){radioEl.addEventListener('pause',()=>{if(_isRecreating)return;isPlaying=false;vuPeakEl.textContent="STOP";vuPeakEl.style.color="#ff4444";_lastPauseTs=Date.now();if(window._pausedForPopup||window._pausedForPlaylist){syncBigPlay();return;}if(document.hidden){wasPlayingBeforeHide=!userPaused;syncBigPlay();return;}if(window._isPopupPage||window.location.search.includes('popup=1')){wasPlayingBeforeHide=true;syncBigPlay();return;}userPaused=true;wasPlayingBeforeHide=false;syncBigPlay();});radioEl.addEventListener('play',(e)=>{if(_isRecreating)return;if(userPaused&&(Date.now()-_lastPauseTs)>300&&!window._isPopupPage&&!window.location.search.includes('popup=1')){try{e.preventDefault();radioEl.pause();}catch(er){}createFreshAudioAndPlay();return;}isPlaying=true;vuPeakEl.textContent="LIVE";vuPeakEl.style.color="#00ff2a";userPaused=false;wasPlayingBeforeHide=true;try{if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();}catch(e){}try{initRealVU();}catch(e){}syncBigPlay();});}
@@ -317,4 +319,3 @@ applyMode(lastGoodMode,false);setInterval(checkSoulMode,3000);checkSoulMode();
 </script>
 </body>
 </html>
-
