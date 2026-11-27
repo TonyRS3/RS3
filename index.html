@@ -1,4 +1,4 @@
-<!-- v321 FINALE - PLAY AL CENTRO COPERTINA - CERCHIO BIANCO TRASPARENTE - TRIANGOLO / PAUSA - 27-11-2026 -->
+<!-- v322 FINALE - PLAY GRANDE SOTTO NEL POPUP - OCCUPA SPAZIO VUOTO - 27-11-2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -11,14 +11,14 @@
 <link id="rs3Favicon" rel="icon" type="image/jpeg" href="RADIO SISTEMA 3.jpeg">
 <link rel="shortcut icon" type="image/jpeg" href="RADIO SISTEMA 3.jpeg">
 <script>
-var RS3_VERSION=321;
-(function(){try{if(window.location.search.includes('popup=1'))return;var gia=sessionStorage.getItem('rs3_autoupd');if(gia==='321')return;fetch('rs3-version.txt?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){var v=parseInt(String(t).trim(),10);if(v&&v>RS3_VERSION){sessionStorage.setItem('rs3_autoupd',String(v));var u=window.location.pathname+'?v='+v+'&_t='+Date.now();window.location.replace(u);}}).catch(function(){});}catch(e){}})();
+var RS3_VERSION=322;
+(function(){try{if(window.location.search.includes('popup=1'))return;var gia=sessionStorage.getItem('rs3_autoupd');if(gia==='322')return;fetch('rs3-version.txt?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){var v=parseInt(String(t).trim(),10);if(v&&v>RS3_VERSION){sessionStorage.setItem('rs3_autoupd',String(v));var u=window.location.pathname+'?v='+v+'&_t='+Date.now();window.location.replace(u);}}).catch(function(){});}catch(e){}})();
 </script>
 <script>
 function aggiornaTitoloSchedaRS3(titolo){try{if(!titolo||!titolo.trim()){document.title="Radio Sistema 3";return;}var t=titolo.trim();if(t.length>45)t=t.substring(0,42).trim()+"...";document.title=t+" - RS3";}catch(e){}}
 </script>
 <script>
-(function(){window._isPopupPage=window.location.search.includes('popup=1');window._isSyncMasterWin=false;window._isGenerale=false;var vSalvata=localStorage.getItem('rs3_version');if(vSalvata!=='321'){try{localStorage.clear();sessionStorage.clear();}catch(e){}try{localStorage.setItem('rs3_version','321');}catch(e){}}})();
+(function(){window._isPopupPage=window.location.search.includes('popup=1');window._isSyncMasterWin=false;window._isGenerale=false;var vSalvata=localStorage.getItem('rs3_version');if(vSalvata!=='322'){try{localStorage.clear();sessionStorage.clear();}catch(e){}try{localStorage.setItem('rs3_version','322');}catch(e){}}})();
 </script>
 <script>
 var RS3_IS_MOBILE_SYNC = false;
@@ -72,10 +72,10 @@ function rs3PreloadHD(url){return new Promise((resolve)=>{try{let im=new Image()
 function rs3PreloadArtist(url){return new Promise((resolve)=>{try{let im=new Image();let done=false;let to=setTimeout(()=>{if(!done){done=true;resolve(false);}},8000);im.onload=()=>{if(done)return;done=true;clearTimeout(to);resolve(!!(im.naturalWidth&&im.naturalWidth>=150));};im.onerror=()=>{if(done)return;done=true;clearTimeout(to);resolve(false);};im.src=url;}catch(e){resolve(false);}});}
 function rs3ArtistaStretto(artistN,artista){if(!artistN||!artista)return false;let aN=artistN.toLowerCase().trim();let aL=artista.toLowerCase().trim();if(aN.includes("various"))return false;if(aN.includes("morricone")&&!aL.includes("morricone"))return false;if(aN.includes("sky box")||aN.includes("sky radio"))return false;if(aN===aL)return true;if(aN.includes(aL)||aL.includes(aN))return true;let toks=aL.split(/[\s&\/,]+/).filter(p=>p.length>2);if(toks.length===0)return false;let ok=0;for(let t of toks){if(aN.includes(t))ok++;}if(toks.length>=2&&ok>=2)return true;if(toks.length===1&&ok===1)return true;return false;}
 function rs3ArtistaOk(artistN,artista){let titCorrente="";try{titCorrente=(window._lastTitolo||"").toLowerCase().trim();}catch(e){}let principale=RS3_ARTISTA_PRINCIPALE[titCorrente];if(principale&&!String(artistN||"").toLowerCase().includes(principale))return false;return rs3ArtistaStretto(artistN,artista);}
-function rs3GetCoverLS(key){try{let raw=localStorage.getItem('rs3_cover_cache_v321');if(!raw)return null;let o=JSON.parse(raw);return o[key]||null;}catch(e){return null;}}
-function rs3SetCoverLS(key,url){try{let o={};try{o=JSON.parse(localStorage.getItem('rs3_cover_cache_v321')||"{}");}catch(e){o={};}o[key]=url;let keys=Object.keys(o);if(keys.length>80){delete o[keys[0]];}localStorage.setItem('rs3_cover_cache_v321',JSON.stringify(o));}catch(e){}}
-function rs3GetArtistLS(key){try{let raw=localStorage.getItem('rs3_artist_cache_v321');if(!raw)return null;let o=JSON.parse(raw);return o[key]||null;}catch(e){return null;}}
-function rs3SetArtistLS(key,url){try{let o={};try{o=JSON.parse(localStorage.getItem('rs3_artist_cache_v321')||"{}");}catch(e){o={};}o[key]=url;let keys=Object.keys(o);if(keys.length>80){delete o[keys[0]];}localStorage.setItem('rs3_artist_cache_v321',JSON.stringify(o));}catch(e){}}
+function rs3GetCoverLS(key){try{let raw=localStorage.getItem('rs3_cover_cache_v322');if(!raw)return null;let o=JSON.parse(raw);return o[key]||null;}catch(e){return null;}}
+function rs3SetCoverLS(key,url){try{let o={};try{o=JSON.parse(localStorage.getItem('rs3_cover_cache_v322')||"{}");}catch(e){o={};}o[key]=url;let keys=Object.keys(o);if(keys.length>80){delete o[keys[0]];}localStorage.setItem('rs3_cover_cache_v322',JSON.stringify(o));}catch(e){}}
+function rs3GetArtistLS(key){try{let raw=localStorage.getItem('rs3_artist_cache_v322');if(!raw)return null;let o=JSON.parse(raw);return o[key]||null;}catch(e){return null;}}
+function rs3SetArtistLS(key,url){try{let o={};try{o=JSON.parse(localStorage.getItem('rs3_artist_cache_v322')||"{}");}catch(e){o={};}o[key]=url;let keys=Object.keys(o);if(keys.length>80){delete o[keys[0]];}localStorage.setItem('rs3_artist_cache_v322',JSON.stringify(o));}catch(e){}}
 async function rs3CercaFotoArtista(artista,force){try{if(!artista)return null;let keyArt=artista.toLowerCase().trim();if(!force){if(rs3ArtistPhotoCache[keyArt])return rs3ArtistPhotoCache[keyArt];let lsA=rs3GetArtistLS(keyArt);if(lsA){rs3ArtistPhotoCache[keyArt]=lsA;return lsA;}}
 try{let r=await fetch(`https://api.deezer.com/search/artist?q=${encodeURIComponent(artista)}&limit=5`);let j=await r.json();if(j.data){for(let a of j.data){let n=(a.name||"").toLowerCase();if(!rs3ArtistaStretto(n,artista))continue;let pics=[a.picture_xl,a.picture_big,a.picture_medium,a.picture_small];for(let pic of pics){if(!pic)continue;let ok=await rs3PreloadArtist(pic);if(ok){rs3ArtistPhotoCache[keyArt]=pic;rs3SetArtistLS(keyArt,pic);return pic;}}}}}catch(e){}
 try{let r=await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(artista)}&media=music&entity=musicArtist&limit=5`);let j=await r.json();if(j.results){for(let a of j.results){let n=(a.artistName||"").toLowerCase();if(!rs3ArtistaStretto(n,artista))continue;if(!a.artworkUrl100)continue;let pics=[a.artworkUrl100.replace('100x100bb.jpg','600x600bb.jpg'),a.artworkUrl100.replace('100x100bb.jpg','300x300bb.jpg'),a.artworkUrl100];for(let pic of pics){let ok=await rs3PreloadArtist(pic);if(ok){rs3ArtistPhotoCache[keyArt]=pic;rs3SetArtistLS(keyArt,pic);return pic;}}}}}catch(e){}
@@ -185,7 +185,7 @@ function apriPopup(){if(window.innerWidth<=768)return;window._pausedForPopup=tru
 if(window._isPopupPage||window.location.search.includes('popup=1')){document.documentElement.classList.add('is-popup');window._isPopupAuto=true;document.addEventListener('DOMContentLoaded',()=>{var a=document.getElementById('radioAudio');if(a){a.autoplay=true;a.muted=false;try{a.volume=(window.rs3Volume!=null?window.rs3Volume:1);}catch(e){}var _tenta=0;var _iv=setInterval(()=>{if(!a.paused){clearInterval(_iv);return;}try{a.play().catch(()=>{});}catch(e){} _tenta++;if(_tenta>40)clearInterval(_iv);},500);var _sblocca=()=>{try{a.play().catch(()=>{});}catch(e){}};document.addEventListener('pointerdown',_sblocca);document.addEventListener('keydown',_sblocca);document.addEventListener('touchstart',_sblocca,{passive:true});}function _adattaPopup(){try{var c=document.querySelector('.container');if(!c)return;var h=c.offsetHeight+78;if(h>280&&h<620){window.resizeTo(400,Math.round(h));}}catch(e){}}setTimeout(_adattaPopup,600);setTimeout(_adattaPopup,1500);setTimeout(_adattaPopup,3000);});}
 </script>
 <style>
-/* v321 PLAY AL CENTRO COPERTINA - CERCHIO BIANCO TRASPARENTE - TRIANGOLO / PAUSA */
+/* v322 PLAY AL CENTRO COPERTINA + PLAY GRANDE SOTTO NEL POPUP */
 .rs3-vol-wrap{display:none !important;height:0 !important;overflow:hidden !important}
 .rs3-cover-wrap{position:relative !important;width:420px !important;height:420px !important;margin:0 auto !important;overflow:visible !important}
 .rs3-cover-wrap .rs3-cover{width:100% !important;height:100% !important;min-width:0 !important}
@@ -276,12 +276,16 @@ html.is-popup body{background:#0a1931 !important;min-height:0 !important;height:
 html.is-popup .page-layout{display:block !important;min-height:0 !important;height:auto !important}
 html.is-popup .meteo-side, html.is-popup .news-box-side, html.is-popup .left-double-wide, html.is-popup .btn-novita, html.is-popup #novitaSection, html.is-popup .footer-copy, html.is-popup .btn-popup, html.is-popup .logo-wrap, html.is-popup .rs3-qr-box{display:none !important}
 html.is-popup .container{max-width:100% !important;width:100% !important;margin:0 !important;border-radius:0 !important;padding:12px 10px 2px 10px !important;background:rgba(10,25,49,0.98) !important;min-height:0 !important;height:auto !important;overflow:visible !important}
-html.is-popup #rs3-mio-box{overflow:visible !important;background:rgba(10,25,49,0.98) !important}
+html.is-popup #rs3-mio-box{overflow:visible !important;background:rgba(10,25,49,0.98) !important;padding-bottom:155px !important;margin-bottom:6px !important}
 html.is-popup .rs3-trackbox{flex-direction:row !important;padding:10px !important;align-items:center !important;overflow:visible !important;gap:10px !important;justify-content:flex-start !important}
-html.is-popup .rs3-cover-wrap{display:block !important;width:72px !important;height:72px !important;flex:0 0 72px !important;margin:0 !important;overflow:visible !important}
+html.is-popup .rs3-cover-wrap{display:block !important;position:static !important;width:72px !important;height:72px !important;flex:0 0 72px !important;margin:0 !important;overflow:visible !important}
 html.is-popup .rs3-cover{width:72px !important;height:72px !important;min-width:72px !important;flex:0 0 72px !important;border-radius:8px !important}
 html.is-popup .rs3-vol-side{display:none !important}
-html.is-popup #rs3BigPlay{display:none !important}
+html.is-popup #rs3BigPlay{position:absolute !important;top:calc(100% + 18px) !important;left:50% !important;transform:translateX(-50%) !important;width:120px !important;height:120px !important;min-width:120px !important;min-height:120px !important;border-width:4px !important;display:flex !important;z-index:30 !important}
+html.is-popup #rs3BigPlay:active{transform:translateX(-50%) scale(.94) !important}
+html.is-popup #rs3BigPlayIcon.rs3-play{border-top-width:26px !important;border-bottom-width:26px !important;border-left-width:44px !important;margin-left:9px !important}
+html.is-popup #rs3BigPlayIcon.rs3-pause{width:44px !important;height:50px !important;gap:12px !important}
+html.is-popup #rs3BigPlayIcon.rs3-pause i{width:14px !important;height:50px !important}
 html.is-popup .rs3-info{flex:1 !important;min-width:0 !important;width:auto !important;align-items:flex-start !important;text-align:left !important}
 html.is-popup .rs3-info div:first-child{font-size:0.92rem !important;line-height:1.15 !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;max-width:100% !important}
 html.is-popup .rs3-info div:nth-child(2){font-size:0.82rem !important}
