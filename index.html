@@ -1,4 +1,4 @@
-<!-- v319 FINALE - FIX FOTO NON BLOCCA COPERTINA - SOLO ICONA VOLUME - 27-11-2026 - FIX VOL FUORI + CURSORE NERO -->
+<!-- v319 FINALE - FIX FOTO NON BLOCCA COPERTINA - SOLO ICONA VOLUME - 27-11-2026 - FIX VOL FUORI + BARRA BIANCA + QUADRATINO NERO VICINO -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -177,22 +177,22 @@ function apriPopup(){if(window.innerWidth<=768)return;window._pausedForPopup=tru
 if(window._isPopupPage||window.location.search.includes('popup=1')){document.documentElement.classList.add('is-popup');window._isPopupAuto=true;document.addEventListener('DOMContentLoaded',()=>{var a=document.getElementById('radioAudio');if(a){a.autoplay=true;a.muted=false;try{a.volume=(window.rs3Volume!=null?window.rs3Volume:1);}catch(e){}var _tenta=0;var _iv=setInterval(()=>{if(!a.paused){clearInterval(_iv);return;}try{a.play().catch(()=>{});}catch(e){} _tenta++;if(_tenta>40)clearInterval(_iv);},500);var _sblocca=()=>{try{a.play().catch(()=>{});}catch(e){}};document.addEventListener('pointerdown',_sblocca);document.addEventListener('keydown',_sblocca);document.addEventListener('touchstart',_sblocca,{passive:true});}function _adattaPopup(){try{var c=document.querySelector('.container');if(!c)return;var h=c.offsetHeight+78;if(h>280&&h<620){window.resizeTo(400,Math.round(h));}}catch(e){}}setTimeout(_adattaPopup,600);setTimeout(_adattaPopup,1500);setTimeout(_adattaPopup,3000);});}
 </script>
 <style>
-/* v319 FIX VOLUME - ICONA TUTTA FUORI + CURSORE NERO + STRISCIA SOPRA */
+/* v319 FIX VOLUME - ICONA FUORI + BARRA BIANCA + QUADRATINO NERO CHE SCORRE + VICINO AL SIMBOLO */
 .rs3-vol-wrap{display:none !important;height:0 !important;overflow:hidden !important}
 .rs3-cover-wrap{position:relative !important;width:420px !important;height:420px !important;margin:0 auto !important;overflow:visible !important}
 .rs3-cover-wrap .rs3-cover{width:100% !important;height:100% !important;min-width:0 !important}
 .rs3-vol-side{position:absolute !important;top:50% !important;right:-95px !important;transform:translateY(-50%) !important;width:84px !important;height:84px !important;z-index:20 !important;display:flex !important;align-items:center !important;justify-content:center !important;overflow:visible !important}
-.rs3-vol-float-panel{position:absolute !important;bottom:calc(100% + 6px) !important;top:auto !important;left:50% !important;transform:translateX(-50%) !important;background:transparent !important;border:none !important;outline:none !important;border-radius:0 !important;box-shadow:none !important;padding:0 !important;display:none !important;flex-direction:column !important;align-items:center !important;gap:4px !important;z-index:30 !important;width:20px !important;height:170px !important}
+.rs3-vol-float-panel{position:absolute !important;bottom:calc(100% + 2px) !important;top:auto !important;left:50% !important;transform:translateX(-50%) !important;background:transparent !important;border:none !important;outline:none !important;border-radius:0 !important;box-shadow:none !important;padding:0 !important;display:none !important;flex-direction:column !important;align-items:center !important;gap:2px !important;z-index:30 !important;width:22px !important;height:160px !important}
 .rs3-vol-side:hover .rs3-vol-float-panel{display:flex !important}
 .rs3-vol-float-panel.rs3-open{display:flex !important}
 .rs3-vol-float{position:relative !important;width:84px !important;height:84px !important;background:transparent !important;border:none !important;outline:none !important;box-shadow:none !important;font-size:3.2rem !important;line-height:1 !important;cursor:pointer !important;z-index:2 !important;display:flex !important;align-items:center !important;justify-content:center !important;text-shadow:0 2px 6px rgba(0,0,0,.6) !important;padding:0 !important}
-.rs3-vol-float-panel input{writing-mode:vertical-lr !important;direction:rtl !important;appearance:slider-vertical !important;-webkit-appearance:slider-vertical !important;width:8px !important;height:130px !important;accent-color:#000000 !important;background:#000000 !important;cursor:pointer !important;border:none !important;outline:none !important;box-shadow:none !important}
-.rs3-vol-float-panel input::-webkit-slider-runnable-track{background:#000000 !important;border:none !important}
-.rs3-vol-float-panel input::-webkit-slider-thumb{background:#000000 !important;border:none !important;box-shadow:none !important;width:16px !important;height:16px !important;border-radius:50% !important}
-.rs3-vol-float-panel input::-moz-range-track{background:#000000 !important;border:none !important}
-.rs3-vol-float-panel input::-moz-range-thumb{background:#000000 !important;border:none !important;width:16px !important;height:16px !important;border-radius:50% !important}
+.rs3-vol-float-panel input{writing-mode:vertical-lr !important;direction:rtl !important;appearance:slider-vertical !important;-webkit-appearance:slider-vertical !important;width:10px !important;height:130px !important;accent-color:#ffffff !important;background:#ffffff !important;cursor:pointer !important;border:none !important;outline:none !important;box-shadow:0 1px 4px rgba(0,0,0,.4) !important}
+.rs3-vol-float-panel input::-webkit-slider-runnable-track{background:#ffffff !important;border:none !important;width:10px !important}
+.rs3-vol-float-panel input::-webkit-slider-thumb{-webkit-appearance:none !important;appearance:none !important;background:#000000 !important;border:none !important;box-shadow:none !important;width:16px !important;height:16px !important;border-radius:2px !important;cursor:pointer !important}
+.rs3-vol-float-panel input::-moz-range-track{background:#ffffff !important;border:none !important;width:10px !important}
+.rs3-vol-float-panel input::-moz-range-thumb{background:#000000 !important;border:none !important;border-radius:2px !important;width:16px !important;height:16px !important;cursor:pointer !important}
 #rs3VolFloatVal{font-size:.85rem !important;font-weight:900 !important;color:#000000 !important;text-shadow:0 1px 2px rgba(255,255,255,.9) !important;min-width:0 !important}
-@media (max-width:768px){ .rs3-cover-wrap{width:340px !important;height:340px !important} .rs3-vol-side{right:-78px !important} .rs3-vol-float-panel{height:160px !important} }
+@media (max-width:768px){ .rs3-cover-wrap{width:340px !important;height:340px !important} .rs3-vol-side{right:-78px !important} .rs3-vol-float-panel{height:150px !important} }
 html.is-popup .rs3-cover-wrap{display:none !important}
 *{margin:0;padding:0;box-sizing:border-box;}body{font-family:Segoe UI,Arial,sans-serif;color:white;text-align:center;background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),url("studio-radio.jpeg");background-size:cover;background-position:center;background-attachment:fixed;overflow-x:hidden}
 .page-layout{display:grid;grid-template-columns:150px 150px minmax(0,900px) 310px;gap:8px;max-width:1520px;margin:0 auto;padding:0px;align-items:start;justify-content:center;}
