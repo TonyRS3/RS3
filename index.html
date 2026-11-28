@@ -1,4 +1,4 @@
-<!-- v343 - FIX SFONDO NERO + COPERTINA v342 INTACTA - 28-11-2026 - PARTE 1/2 -->
+<!-- v344 - FIX VERO NERO: tolto !important da opacity + velo più leggero + COPERTINA INTACTA - 28-11-2026 - PARTE 1/2 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -11,20 +11,19 @@
 <link id="rs3Favicon" rel="icon" type="image/jpeg" href="RADIO SISTEMA 3.jpeg">
 <link rel="shortcut icon" type="image/jpeg" href="RADIO SISTEMA 3.jpeg">
 <script>
-var RS3_VERSION=343;
-(function(){try{if(window.location.search.includes('popup=1'))return;var gia=sessionStorage.getItem('rs3_autoupd');if(gia==='343')return;fetch('rs3-version.txt?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){var v=parseInt(String(t).trim(),10);if(v&&v>RS3_VERSION){sessionStorage.setItem('rs3_autoupd',String(v));var u=window.location.pathname+'?v='+v+'&_t='+Date.now();window.location.replace(u);}}).catch(function(){});}catch(e){}})();
+var RS3_VERSION=344;
+(function(){try{if(window.location.search.includes('popup=1'))return;var gia=sessionStorage.getItem('rs3_autoupd');if(gia==='344')return;fetch('rs3-version.txt?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){var v=parseInt(String(t).trim(),10);if(v&&v>RS3_VERSION){sessionStorage.setItem('rs3_autoupd',String(v));var u=window.location.pathname+'?v='+v+'&_t='+Date.now();window.location.replace(u);}}).catch(function(){});}catch(e){}})();
 </script>
 <script>
 function aggiornaTitoloSchedaRS3(titolo){try{if(!titolo||!titolo.trim()){document.title="Radio Sistema 3";return;}var t=titolo.trim();if(t.length>45)t=t.substring(0,42).trim();document.title=t+" - RS3";}catch(e){}}
 </script>
 <script>
-// v343: NON cancello più localStorage. Aggiorno solo il numero versione.
-(function(){window._isPopupPage=window.location.search.includes('popup=1');window._isSyncMasterWin=false;window._isGenerale=false;try{localStorage.setItem('rs3_version','343');}catch(e){}})();
+(function(){window._isPopupPage=window.location.search.includes('popup=1');window._isSyncMasterWin=false;window._isGenerale=false;try{localStorage.setItem('rs3_version','344');}catch(e){}})();
 </script>
 <script>
-// ===== v343 SFONDO CARPLAY NON UNIFORME - si accende SOLO dopo che la copertina è apparsa =====
+// ===== v344 SFONDO CARPLAY - FIX: uso setProperty important perchè prima opacity !important bloccava JS =====
 var _rs3BgUltimo='';
-function rs3SetSfondoCopertina(url){try{if(document.documentElement.classList.contains('is-popup'))return;if(!url||url.includes('RADIO SISTEMA 3')||url.includes('RS3_')||url.includes('logo'))return;if(url===_rs3BgUltimo)return;_rs3BgUltimo=url;var a=document.getElementById('rs3BgBlurA');var b=document.getElementById('rs3BgBlurB');if(!a||!b)return;var mostra=(a.style.opacity==='1')?b:a;var nascondi=(mostra===a)?b:a;mostra.style.backgroundImage='url("'+url+'")';mostra.style.opacity='1';nascondi.style.opacity='0';}catch(e){}}
+function rs3SetSfondoCopertina(url){try{if(document.documentElement.classList.contains('is-popup'))return;if(!url||url.includes('RADIO SISTEMA 3')||url.includes('RS3_')||url.includes('logo'))return;if(url===_rs3BgUltimo)return;_rs3BgUltimo=url;var a=document.getElementById('rs3BgBlurA');var b=document.getElementById('rs3BgBlurB');if(!a||!b)return;var mostra=(a.style.opacity==='1')?b:a;var nascondi=(mostra===a)?b:a;mostra.style.backgroundImage='url("'+url+'")';mostra.style.setProperty('opacity','1','important');nascondi.style.setProperty('opacity','0','important');}catch(e){}}
 </script>
 <script>
 var RS3_IS_MOBILE_SYNC = false;
@@ -206,11 +205,11 @@ function apriPopup(){if(window.innerWidth<=768)return;window._pausedForPopup=tru
 if(window._isPopupPage||window.location.search.includes('popup=1')){document.documentElement.classList.add('is-popup');window._isPopupAuto=true;document.addEventListener('DOMContentLoaded',()=>{var a=document.getElementById('radioAudio');if(a){a.autoplay=true;a.muted=false;try{a.volume=(window.rs3Volume!=null?window.rs3Volume:1);}catch(e){}var _tenta=0;var _iv=setInterval(()=>{if(!a.paused){clearInterval(_iv);return;}try{a.play().catch(()=>{});}catch(e){} _tenta++;if(_tenta>40)clearInterval(_iv);},500);var _sblocca=()=>{try{a.play().catch(()=>{});}catch(e){}};document.addEventListener('pointerdown',_sblocca);document.addEventListener('keydown',_sblocca);document.addEventListener('touchstart',_sblocca,{passive:true});}function _adattaPopup(){try{var c=document.querySelector('.container');if(!c)return;var h=c.offsetHeight+95;if(h<430)h=430;if(h>500)h=500;window.resizeTo(400,Math.round(h));}catch(e){}}setTimeout(_adattaPopup,600);setTimeout(_adattaPopup,1500);setTimeout(_adattaPopup,3000);setTimeout(_adattaPopup,5000);});}
 </script>
 <style>
-/* v343 FIX NERO: nero su html, body trasparente, sfumato con z-index 0/1 davanti al nero ma dietro alla radio */
+/* v344 FIX VERO: opacity SENZA !important così JS la può cambiare + velo più leggero */
 html{background:#050a14 !important}
-#rs3BgBlurA{position:fixed !important;inset:-60px !important;width:calc(100% + 120px) !important;height:calc(100% + 120px) !important;background-size:cover !important;background-position:center 30% !important;background-repeat:no-repeat !important;filter:blur(70px) saturate(1.7) brightness(0.9) !important;-webkit-filter:blur(70px) saturate(1.7) brightness(0.9) !important;transform:scale(1.2) !important;opacity:0 !important;transition:opacity 1.2s ease !important;pointer-events:none !important;z-index:0 !important}
-#rs3BgBlurB{position:fixed !important;inset:-60px !important;width:calc(100% + 120px) !important;height:calc(100% + 120px) !important;background-size:130% 130% !important;background-position:80% 70% !important;background-repeat:no-repeat !important;filter:blur(35px) saturate(1.9) brightness(1.05) !important;-webkit-filter:blur(35px) saturate(1.9) brightness(1.05) !important;transform:scale(1.1) rotate(2deg) !important;opacity:0 !important;transition:opacity 1.2s ease !important;pointer-events:none !important;z-index:0 !important}
-#rs3BgVelo{position:fixed !important;inset:0 !important;background:radial-gradient(ellipse at 50% 35%, rgba(0,0,0,.18) 0%, rgba(5,10,20,.55) 55%, rgba(3,5,12,.82) 100%) !important;pointer-events:none !important;z-index:1 !important}
+#rs3BgBlurA{position:fixed !important;inset:-60px !important;width:calc(100% + 120px) !important;height:calc(100% + 120px) !important;background-size:cover !important;background-position:center 30% !important;background-repeat:no-repeat !important;filter:blur(70px) saturate(1.7) brightness(1.05) !important;-webkit-filter:blur(70px) saturate(1.7) brightness(1.05) !important;transform:scale(1.2) !important;opacity:0;transition:opacity 1.2s ease !important;pointer-events:none !important;z-index:0 !important}
+#rs3BgBlurB{position:fixed !important;inset:-60px !important;width:calc(100% + 120px) !important;height:calc(100% + 120px) !important;background-size:130% 130% !important;background-position:80% 70% !important;background-repeat:no-repeat !important;filter:blur(35px) saturate(1.9) brightness(1.15) !important;-webkit-filter:blur(35px) saturate(1.9) brightness(1.15) !important;transform:scale(1.1) rotate(2deg) !important;opacity:0;transition:opacity 1.2s ease !important;pointer-events:none !important;z-index:0 !important}
+#rs3BgVelo{position:fixed !important;inset:0 !important;background:radial-gradient(ellipse at 50% 35%, rgba(0,0,0,.08) 0%, rgba(5,10,20,.30) 55%, rgba(3,5,12,.55) 100%) !important;pointer-events:none !important;z-index:1 !important}
 html.is-popup #rs3BgBlurA,html.is-popup #rs3BgBlurB,html.is-popup #rs3BgVelo{display:none !important}
 .rs3-vol-wrap{display:none !important;height:0 !important;overflow:hidden !important}
 .rs3-cover-wrap{position:relative !important;width:420px !important;height:420px !important;margin:0 auto !important;overflow:visible !important}
